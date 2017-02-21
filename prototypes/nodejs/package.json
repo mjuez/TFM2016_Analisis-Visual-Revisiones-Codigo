@@ -1,0 +1,38 @@
+{
+  "name": "codereviewdataextractor",
+  "version": "0.0.1",
+  "description": "This application extracts code reviews data from tools like Github or Gerrit Code Review.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node release/index.js"
+  },
+  "keywords": [
+    "code",
+    "review",
+    "data",
+    "extraction",
+    "github",
+    "gerrit",
+    "code",
+    "review"
+  ],
+  "author": "Mario Juez",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "debug": "^2.6.1",
+    "express": "^4.14.1",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.5",
+    "morgan": "^1.8.1",
+    "typescript": "^2.1.6"
+  },
+  "devDependencies": {
+    "@types/debug": "0.0.29",
+    "@types/express": "^4.0.35",
+    "@types/node": "^7.0.5",
+    "@types/body-parser": "0.0.34",
+    "@types/morgan": "^1.7.32"
+  }
+}
