@@ -1,83 +1,31 @@
 \capitulo{3}{Conceptos teóricos}
 
-En aquellos proyectos que necesiten para su comprensión y desarrollo de unos conceptos teóricos de una determinada materia o de un determinado dominio de conocimiento, debe existir un apartado que sintetice dichos conceptos.
+En este apartado se exponen una serie de conceptos teóricos relacionados con las revisiones de código. Se define cada concepto así como su relación con el presente trabajo.
 
-Algunos conceptos teóricos de \LaTeX \footnote{Créditos a los proyectos de Álvaro López Cantero: Configurador de Presupuestos y Roberto Izquierdo Amo: PLQuiz}.
+\section{Revisión de código}
+La revisión de código es un proceso de ingeniería a través del cual se realiza una inspección del código fuente por otros desarrolladores diferentes al autor del mismo. Resulta útil para reducir los defectos de código así como mejorar la calidad del software \cite{28121}.
 
-\section{Secciones}
+Frente a las revisiones de código altamente estructuradas propuestas por Fagan \cite{5388086}, hoy en día se están adoptando metodologías más livianas con el fin de solventar las ineficiencias de las inspecciones de código. Las denominadas \emph{Modern Code Reviews} son informales, hacen uso de herramientas, y se utilizan regularmente.
 
-Las secciones se incluyen con el comando section.
+Mediante el uso de estas nuevas metodologías, las revisiones de código ofrecen un mayor número de beneficios a los equipos de desarrollo como transferencia de conocimientos, visión de equipo, o mejores soluciones a los problemas \cite{Bacchelli:2013:EOC:2486788.2486882}.
 
-\subsection{Subsecciones}
+Las revisiones de código son el elemento principal de este trabajo, donde se van a obtener datos de las mismas realizadas en diversos repositorios de software.
 
-Además de secciones tenemos subsecciones.
+\subsection{Inspecciones de código}
 
-\subsubsection{Subsubsecciones}
-
-Y subsecciones. 
-
-
-\section{Referencias}
-
-Las referencias se incluyen en el texto usando cite \cite{wiki:latex}. Para citar webs, artículos o libros \cite{koza92}.
-
-
-\section{Imágenes}
-
-Se pueden incluir imágenes con los comandos standard de \LaTeX, pero esta plantilla dispone de comandos propios como por ejemplo el siguiente:
-
-\imagen{escudoInfor}{Autómata para una expresión vacía}
-
-
-
-\section{Listas de items}
-
-Existen tres posibilidades:
-
-\begin{itemize}
-	\item primer item.
-	\item segundo item.
-\end{itemize}
-
-\begin{enumerate}
-	\item primer item.
-	\item segundo item.
-\end{enumerate}
-
-\begin{description}
-	\item[Primer item] más información sobre el primer item.
-	\item[Segundo item] más información sobre el segundo item.
-\end{description}
-	
-\begin{itemize}
-\item 
-\end{itemize}
-
-\section{Tablas}
-
-Igualmente se pueden usar los comandos específicos de \LaTeX o bien usar alguno de los comandos de la plantilla.
-
-\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
-{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-HTML5 & X & & &\\
-CSS3 & X & & &\\
-BOOTSTRAP & X & & &\\
-JavaScript & X & & &\\
-AngularJS & X & & &\\
-Bower & X & & &\\
-PHP & & X & &\\
-Karma + Jasmine & X & & &\\
-Slim framework & & X & &\\
-Idiorm & & X & &\\
-Composer & & X & &\\
-JSON & X & X & &\\
-PhpStorm & X & X & &\\
-MySQL & & & X &\\
-PhpMyAdmin & & & X &\\
-Git + BitBucket & X & X & X & X\\
-Mik\TeX{} & & & & X\\
-\TeX{}Maker & & & & X\\
-Astah & & & & X\\
-Balsamiq Mockups & X & & &\\
-VersionOne & X & X & X & X\\
-} 
+\subsection{Revisión automática de código}
+\section{Revisor de código}
+\subsection{Tipos de revisores}
+\section{Control de versiones}
+\subsection{Git}
+\subsection{Repositorio}
+\subsection{Cambio (diff)}
+\subsection{Rama (branch)}
+\subsection{Integración (merge)}
+\subsection{Revision}
+\subsection{Version (blob)}
+\subsection{Árbol (tree)}
+\subsection{Cambio (commit)}
+\subsection{Etiqueta (tag)}
+\subsection{Pull request}
+\section{Integración contínua}
