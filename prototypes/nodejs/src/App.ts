@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 import GerritRouter from './routes/GerritRouter';
+import GithubRouter from './routes/GithubRouter';
 
 class App {
 
@@ -29,6 +30,7 @@ class App {
     });
     this.express.use('/', router);
     this.express.use('/api/gerrit', GerritRouter);
+    this.express.use('/api/github', GithubRouter);
   }
   
 }
