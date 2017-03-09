@@ -12,18 +12,49 @@ Mediante el uso de estas nuevas metodologías, las revisiones de código ofrecen
 Las revisiones de código son el elemento principal de este trabajo, donde se van a obtener datos de las mismas realizadas en diversos repositorios de software.
 
 \subsection{Inspección de software}
-La inspección de software, también conocida como inspección de Fagan.
+La inspección de software, también conocida como inspección de Fagan, consiste en la búsqueda de defectos en documentos de desarrollo (código, especificaciones, diseño, etc.) por parte de personas con diversos roles mediante un proceso estructurado y bien definido, con el fin de disminuir el número de errores y aumentar la calidad del producto final \cite{5388086}.
 
-\imagen{fagan_inspection}{Operaciones de la inspección de software}
+Las fases de dicho proceso son las siguientes \cite{Fagan:1986:ASI:10677.2412491}:
 
-\subsection{Revisión por pares}
+\begin{description}
+	\item[Planificación] En esta fase, los materiales que van a ser inspeccionados deben coincidir con los criterios de entrada de la inspección. Tiene lugar la elección de los participantes de la inspección. También se realiza la organización de las reuniones (hora y lugar).
+	\item[Información general] En esta fase se comunica a los participantes cuales son los resultados esperados. También se realiza la asignación de roles.
+	\item[Preparación] En esta fase tiene lugar el estudio del material por parte de los participantes y su preparación para cumplir sus roles.
+	\item[Reunión de inspección] Esta es la fase donde se lleva a cabo la búsqueda de defectos.
+	\item[Repetición del trabajo] El autor debe solucionar los defectos detectados, tras ello todo el proceso vuelve a comenzar desde la fase de planificación.
+	\item[Seguimiento] El moderador o equipo completo de inspección debe verificar que todos los cambios son correctos y no introducen nuevos defectos.
+\end{description}
 
-\subsection{Revisión automática de código}
+\imagen{faganInspection}{Operaciones de la inspección de software}
+
+Además, durante el proceso de inspección de software intervienen los siguientes roles:
+
+\begin{description}
+	\item[Autor] Responsable del desarrollo del documento a inspeccionar (código).
+	\item[Lector] Responsable de leer el documento como si fuese a desarrollarlo él mismo.
+	\item[Revisor] Responsable de examinar e inspeccionar el documento con el fin de identificar posibles defectos.
+	\item[Moderador] Responsable de coordinar la reunión de inspección.
+\end{description}
 
 \section{Revisor de código}
-\subsection{Tipos de revisores}
+
+El revisor de código tiene como responsabilidad principal examinar el código y detectar posibles defectos, ofreciendo comentarios y sugerencias de cambio al autor del código que permitan la mejora de la calidad del mismo.
+
+Los aportes del revisor de código también pueden proporcionar nuevos conocimientos al autor del código revisado, mejorando así sus habilidades lo cual se puede traducir en una mejora progresiva de la calidad del software que desarrolle.
+
+Se pueden distinguir dos tipos de revisores de código:
+
+\begin{description}
+	\item[Revisor experto] Es una persona, idealmente con experiencia y amplios conocimientos (aunque no es estrictamente necesario).
+	\item[Robot revisor] Son herramientas que permiten la revisión automática de código mediante la comprobación del código fuente para garantizar que cumpla un conjunto de reglas predefinidas, así como detectar errores \cite{wiki:001}.
+\end{description}
+
+Actualmente es común que las revisiones cuenten con ambos tipos de revisores, en primer lugar se realiza una revisión automática, y los resultados son utilizados por el revisor experto para ofrecer una mejor revisión con un mayor nivel de detalle.
+
 \section{Control de versiones}
-\subsection{Git}
+
+
+
 \subsection{Repositorio}
 \subsection{Cambio (diff)}
 \subsection{Rama (branch)}
