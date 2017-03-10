@@ -51,16 +51,35 @@ Se pueden distinguir dos tipos de revisores de código:
 
 Actualmente es común que las revisiones cuenten con ambos tipos de revisores, en primer lugar se realiza una revisión automática, y los resultados son utilizados por el revisor experto para ofrecer una mejor revisión con un mayor nivel de detalle.
 
-\section{Control de versiones}
+El revisor de código es una figura importante de este trabajo. Nos interesa extraer los comentarios que registra en cada cambio puesto que pueden resultar útiles para obtener métricas que podrían permitir evaluar la calidad de los comentarios o incluso del propio revisor.
 
+\section{Sistema de control de versiones}
 
+Un sistema de control de versiones se encarga de registrar los diferentes cambios de un fichero o un conjunto de ficheros a lo largo del tiempo, permitiendo así recuperar versiones específicas en cualquier momento \cite{Chacon:2014:PG:2695634}.
+
+Gracias a este tipo de sistemas es posible revertir los cambios realizados en un fichero o incluso en un proyecto completo a un estado anterior, comparar los cambios, comprobar la autoría de los mismos, etc.
+
+Los sistemas de control de versiones están en constante evolución, actualmente herramientas como Github están empezando a implementar funcionalidades para el uso de revisiones de código, es decir, estos sistemas son la fuente de los datos que se van a extraer en el presente trabajo.
 
 \subsection{Repositorio}
+
+El repositorio es la parte central de un sistema de control de versiones, es el lugar donde se almacenan los datos del sistema, normalmente estructurados en forma de árbol de ficheros \cite{Pilato:2008:VCS:1435405}.
+
+La característica principal de un repositorio es que mantiene todas las versiones de cada fichero, permitiendo al cliente recuperar estados previos de los mismos.
+
 \subsection{Cambio (diff)}
+
+Un cambio es una modificación concreta de un fichero alojado en en un repositorio de un control de versiones \cite{wiki:002}.
+
+Resulta útil para comparar dos versiones del mismo archivo.
+
 \subsection{Rama (branch)}
+
+
+
 \subsection{Integración (merge)}
-\subsection{Revision}
-\subsection{Version (blob)}
+\subsection{Revisión}
+\subsection{Versión (blob)}
 \subsection{Árbol (tree)}
 \subsection{Cambio (commit)}
 \subsection{Etiqueta (tag)}
