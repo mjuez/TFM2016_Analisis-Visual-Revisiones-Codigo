@@ -1,7 +1,7 @@
 \documentclass[a4paper,11pt,oneside]{memoir}
 
 % Castellano
-\usepackage[spanish]{babel}
+\usepackage[spanish,es-tabla]{babel}
 \selectlanguage{spanish}
 \usepackage[utf8]{inputenc}
 \usepackage{placeins}
@@ -271,6 +271,20 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \graphicspath{ {./img/} }
 
 % Capítulos
@@ -311,7 +325,7 @@
     \begin{minipage}{.8\textwidth}
       \vspace{.5cm}\Large
       \begin{center}
-      \textbf{TFG del Grado en Ingeniería Informática}\vspace{.6cm}\\
+      \textbf{TFM del Máster en Ingeniería Informática}\vspace{.6cm}\\
       \textbf{\LARGE\@title{}}
       \end{center}
       \vspace{.2cm}
@@ -336,11 +350,12 @@
   }
 \makeatother
 
+\newcommand{\nombre}{Mario Juez Gil} %%% cambio de comando
 
 % Datos de portada
-\title{título del TFG \\Documentación Técnica}
-\author{nombre alumno}
-\tutor{nombre tutor}
+\title{Análisis Visual de Revisiones de Código}
+\author{\nombre}
+\tutor{Carlos López Nozal}
 \date{\today}
 
 \begin{document}
@@ -348,17 +363,83 @@
 \maketitle
 
 
-
-\cleardoublepage
-
+\newpage\null\thispagestyle{empty}\newpage
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+
+
+\noindent\includegraphics[width=\textwidth]{cabecera}\vspace{1cm}
+
+\noindent D. Carlos López Nozal, profesor del departamento de Ingeniería Civil, área de Lenguajes y Sistemas Informáticos.
+
+\noindent Expone:
+
+\noindent Que el alumno D. \nombre, con DNI 71308224J, ha realizado el Trabajo final de Máster en Ingeniería Informática titulado Análisis Visual de Revisiones de Código. 
+
+\noindent Y que dicho trabajo ha sido realizado por el alumno bajo la dirección del que suscribe, en virtud de lo cual se autoriza su presentación y defensa.
+
+\begin{center} %\large
+En Burgos, {\large \today}
+\end{center}
+
+\vfill\vfill\vfill
+
+% Author and supervisor
+\begin{minipage}{0.45\textwidth}
+\begin{flushleft} %\large
+Vº. Bº. del Tutor:\\[2cm]
+D. Carlos López Nozal
+\end{flushleft}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\begin{flushleft} %\large
+Vº. Bº. del co-tutor:\\[2cm]
+D. Raúl Marticorena Sánchez
+\end{flushleft}
+\end{minipage}
+\hfill
+
+\vfill
+
+% para casos con solo un tutor comentar lo anterior
+% y descomentar lo siguiente
+%Vº. Bº. del Tutor:\\[2cm]
+%D. nombre tutor
+
+
+\newpage\null\thispagestyle{empty}\newpage
+
 
 
 
 \frontmatter
 
+% Abstract en castellano
+\renewcommand*\abstractname{Resumen}
+\begin{abstract}
+En este primer apartado se hace una \textbf{breve} presentación del tema que se aborda en el proyecto.
+\end{abstract}
+
+\renewcommand*\abstractname{Descriptores}
+\begin{abstract}
+Palabras separadas por comas que identifiquen el contenido del proyecto Ej: servidor web, buscador de vuelos, android \ldots
+\end{abstract}
+
+\clearpage
+
+% Abstract en inglés
+\renewcommand*\abstractname{Abstract}
+\begin{abstract}
+A \textbf{brief} presentation of the topic addressed in the project.
+\end{abstract}
+
+\renewcommand*\abstractname{Keywords}
+\begin{abstract}
+keywords separated by commas.
+\end{abstract}
 
 \clearpage
 
@@ -371,22 +452,20 @@
 
 \clearpage
 
-%\listoftables
-
-%\clearpage
+\listoftables
+\clearpage
 
 \mainmatter
-
-\appendix
-
-\include{./tex/A_Plan_proyecto}
-\include{./tex/B_Requisitos}
-\include{./tex/C_Diseno}
-\include{./tex/D_Manual_programador}
-\include{./tex/E_Manual_usuario}
+\include{./tex/1_Introduccion}
+\include{./tex/2_Objetivos_del_proyecto}
+\include{./tex/3_Conceptos_teoricos}
+\include{./tex/4_Tecnicas_y_herramientas}
+\include{./tex/5_Aspectos_relevantes_del_desarrollo_del_proyecto}
+\include{./tex/6_Trabajos_relacionados}
+\include{./tex/7_Conclusiones_Lineas_de_trabajo_futuras}
 
 
 \bibliographystyle{plain}
-\bibliography{bibliografiaAnexos}
+\bibliography{bibliografia}
 
 \end{document}
