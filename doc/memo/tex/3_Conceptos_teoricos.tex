@@ -80,6 +80,14 @@ Una rama es un apuntador a una confirmación. Por cada confirmación realizada, 
 Crear otras ramas sirve para abrir nuevas líneas de desarrollo, por ejemplo una rama de pruebas, evitando así desordenar la principal.
 
 \subsection{Integración (merge)}
+
+Se entiende por integración a la unión de los cambios de dos ramas en una. Existen dos patrones de uso de esta operación \cite{sbf5:git3}:
+
+\begin{itemize}
+	\item Añadir los cambios realizados en una rama donde se están implementando nuevas características a la rama principal.
+	\item Añadir los cambios de la rama principal en una rama donde se están implementando nuevas características con el fin de mantener la rama actualizada con los últimos parches y características. Esta práctica permite reducir el riesgo de conflictos\footnote{Existe un conflicto cuando al integrar dos ramas, un mismo fichero ha sido modificado en ambas y por ello es necesario decidir que cambios deben mantenerse en la versión final.} al unir la rama de desarrollo con la principal.
+\end{itemize}
+
 \subsection{Revisión}
 \subsection{Versión (blob)}
 \subsection{Árbol (tree)}
