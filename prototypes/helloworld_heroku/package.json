@@ -1,0 +1,21 @@
+{
+  "name": "heroku_helloworld",
+  "version": "1.0.0",
+  "description": "A hello world to try heroku PaaS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hello",
+    "world",
+    "heroku"
+  ],
+  "author": "Mario Juez",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^7.0.8",
+    "typescript": "^2.2.1"
+  }
+}
