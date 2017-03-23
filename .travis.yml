@@ -1,12 +1,11 @@
 language: node_js
 node_js:
 - '7'
-# safelist
 branches:
   only:
   - prototypes
 before_script:
-- cd heroku
+- cd prototypes/heroku
 - npm install -g gulp
 - npm install --save-dev gulp
 script: gulp
