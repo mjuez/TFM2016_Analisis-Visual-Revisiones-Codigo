@@ -2,9 +2,10 @@ language: node_js
 node_js:
 - '7'
 before_script:
+- cd heroku
 - npm install -g gulp
 - npm install --save-dev gulp
-script: gulp --gulpfile ./heroku/gulpfile.js
+script: gulp
 deploy:
   provider: heroku
   api_key:
