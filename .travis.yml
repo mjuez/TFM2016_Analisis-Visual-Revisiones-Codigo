@@ -6,8 +6,8 @@ branches:
   - prototypes
 before_script:
 - cd prototypes/heroku
-- npm install -g gulp
 - npm install --save-dev gulp
+- npm install --save-dev gulp-typescript
 script: gulp
 deploy:
   provider: heroku
