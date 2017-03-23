@@ -3,6 +3,7 @@ node_js:
 - '7'
 before_script:
 - npm install -g gulp
+- npm install --save-dev gulp
 script: gulp --gulpfile ./heroku/gulpfile.js
 deploy:
   provider: heroku
