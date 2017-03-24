@@ -6,8 +6,11 @@ branches:
   - prototypes
 before_script:
 - cd prototypes/heroku
+install:
 - npm install
-script: gulp
+script: 
+- gulp
+- npm test
 deploy:
   provider: heroku
   api_key:
