@@ -65,5 +65,7 @@ release/
 *.out
 *.synctex.gz
 *.toc
+*.bbl
+*.blg
 
 .gitignore~
