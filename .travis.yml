@@ -4,7 +4,7 @@ node_js:
 branches:
   only:
   - prototypes
-before_script:
+before_install:
 - cd prototypes/heroku
 install:
 - npm install
