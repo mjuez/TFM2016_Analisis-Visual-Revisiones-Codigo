@@ -68,4 +68,5 @@ release/
 *.bbl
 *.blg
 
+.gitignore
 .gitignore~
