@@ -29,7 +29,7 @@ Las fases de dicho proceso son las siguientes \cite{Fagan:1986:ASI:10677.2412491
 	\item[Seguimiento] El moderador o equipo completo de inspección debe verificar que todos los cambios son correctos y no introducen nuevos defectos.
 \end{description}
 
-\imagen{faganInspection}{Operaciones de la inspección de software}
+\imagen{faganInspection}{Operaciones de la inspección de software.}
 
 Además, durante el proceso de inspección de software intervienen los siguientes roles:
 
@@ -64,6 +64,10 @@ Un sistema de control de versiones se encarga de registrar los diferentes cambio
 Gracias a este tipo de sistemas es posible revertir los cambios realizados en un fichero o incluso en un proyecto completo a un estado anterior, comparar los cambios, comprobar la autoría de los mismos, etc.
 
 Los sistemas de control de versiones están en constante evolución, actualmente herramientas como Github están empezando a implementar funcionalidades para facilitar  las revisiones de código. Por tanto, en este trabajo vamos a utilizar este tipo de sistemas como fuente de datos a extraer.
+
+A continuación se muestra un diagrama donde se muestra la figura de la revisión de código y su relación con diferentes elementos de los sistemas de control de versiones (concretamente git).
+
+\imagen{diagramaRevisionCodigo}{Revisiones de código en git.}
 
 \subsubsection{Repositorio}
 
@@ -102,9 +106,13 @@ Cada confirmación lleva asociados uno o varios ficheros modificados, un identif
 
 La finalidad del etiquetado es dar nombre a alguna versión para que pueda ser localizada facilmente en el futuro, es decir, permite identificar de forma sencilla revisiones importantes del proyecto \cite{wiki:002}.
 
+\subsubsection{Issue (bug tracker)}
+
+Las ``Issues'' son una funcionalidad que ofrece la herramienta Github que permiten mantener la trazabilidad de las diferentes tareas, mejoras o fallos de los proyectos .
+
 \subsubsection{Pull request}
 
-Las "Pull Requests" son una característica concreta de la herramienta Github. Sirven para mantener conversaciones sobre los cambios donde se pueden exponer ideas, asignar tareas, tratar detalles y hacer revisiones de código \cite{github:features}.
+Las ``Pull Requests'' son una característica concreta de la herramienta Github. Sirven para mantener conversaciones sobre los cambios donde se pueden exponer ideas, asignar tareas, tratar detalles y hacer revisiones de código \cite{github:features}.
 
 \section{Conceptos relacionados con buenas prácticas ágiles}
 
@@ -140,9 +148,9 @@ Por construcción se entiende al proceso de convertir ficheros y otros elementos
 	\item Crear o actualizar el esquema o los datos de la base de datos.
 \end{itemize}
 
-\subsection{Diagrama "Burn Down"}
+\subsection{Diagrama ``Burn Down''}
 
-Un diagrama "Burn Down" permite relacionar la cantidad de trabajo restante (en el eje vertical) con el tiempo transcurrido desde el inicio del proyecto —burn down del producto— o un hito —burn down del sprint— (en el eje horizontal).
+Un diagrama ``Burn Down'' permite relacionar la cantidad de trabajo restante (en el eje vertical) con el tiempo transcurrido desde el inicio del proyecto —burn down del producto— o un hito —burn down del sprint— (en el eje horizontal).
 
 \subsection{Desarrollo iterativo e incremental}
 
@@ -158,11 +166,11 @@ La retrospectiva requiere que el equipo tenga reuniones regulares, normalmente d
 
 \subsection{Tablero de tareas}
 
-El tablero de tareas es una herramienta donde éste se divide en varias columnas, normalmente tres, cuyo fin es categorizar las diferentes tareas, por ejemplo en "pendientes", "en progreso", y "finalizadas".
+El tablero de tareas es una herramienta donde éste se divide en varias columnas, normalmente tres, cuyo fin es categorizar las diferentes tareas, por ejemplo en ``pendientes'', ``en progreso'', y ``finalizadas''.
 
 El tablero de tareas se debe actualizar con frecuencia para mantener cada tarea en su estado real. Normalmente al inicio de cada iteración el tablero se vuelve a poner en un estado inicial para reflejar la planificación de la iteración.
 
 \subsection{Pruebas unitarias}
 
-Una prueba unitaria es un pequeño fragmento de programa escrito y mantenido por el equipo de desarrollo, su misión es ejecutar una parte del código y comparar el resultado de la ejecución con el resultado esperado. La salida de una prueba unitaria es binaria, indicando que la prueba ha pasado si cumple las expectativas, o que ha fallado en caso contrario. Comúnmente se debe desarrollar un número de pruebas unitarias acorde al tamaño del código que va a ser probado, dichas pruebas son agrupadas en lo que se denomina conjunto de pruebas unitarias o "test suite".
+Una prueba unitaria es un pequeño fragmento de programa escrito y mantenido por el equipo de desarrollo, su misión es ejecutar una parte del código y comparar el resultado de la ejecución con el resultado esperado. La salida de una prueba unitaria es binaria, indicando que la prueba ha pasado si cumple las expectativas, o que ha fallado en caso contrario. Comúnmente se debe desarrollar un número de pruebas unitarias acorde al tamaño del código que va a ser probado, dichas pruebas son agrupadas en lo que se denomina conjunto de pruebas unitarias o ``test suite''.
 
