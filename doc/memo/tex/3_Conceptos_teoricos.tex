@@ -1,8 +1,10 @@
 \capitulo{3}{Conceptos teóricos}
 
+En este apartado se van a exponer una serie de conceptos teóricos relacionados con las revisiones de código y con buenas prácticas de desarrollo ágil. Cada concepto contiene una definición y una breve descripción de su relación con el trabajo.
+
 \section{Conceptos relacionados con las revisiones de código}
 
-En este apartado se exponen una serie de conceptos teóricos relacionados con las revisiones de código. Se define cada concepto así como su relación con el presente trabajo.
+A continuación se definen diversos conceptos relacionados con las revisiones de código, las cuales son la base de este trabajo.
 
 \subsection{Revisión de código}
 La revisión de código es un proceso de ingeniería a través del cual se realiza una inspección del código fuente por otros desarrolladores diferentes al autor del mismo. Resulta útil para reducir los defectos de código así como mejorar la calidad del software \cite{28121}.
@@ -106,16 +108,46 @@ Las "Pull Requests" son una característica concreta de la herramienta Github. S
 
 \section{Conceptos relacionados con buenas prácticas ágiles}
 
+Esta parte de conceptos teóricos está dedicada a buenas prácticas ágiles que se van a utilizar a lo largo del desarrollo del presente proyecto.
+
+Para la definición de los siguientes conceptos se ha seguido el glosario de términos de Agile Alliance \cite{agilealliance:glossary}.
+
 \subsection{Integración continua}
 
 La integración continua es una práctica de desarrollo software donde los miembros de un equipo integran su trabajo frecuentemente, normalmente como mínimo una integración diaria \cite{fowler2006continuous}.
 
-Cada integración se verifica mediante la automatización de ciertos procesos como construcción, pruebas y despliegue. Mediante este tipo de verificación se busca detectar errores de integración tan rápido como sea posible.
+Tiene dos objetivos principales:
 
-Para el desarrollo de este trabajo se utilizarán técnicas de integración continua.
+\begin{itemize}
+	\item Minimizar la duración y el esfuerzo requerido por cada tarea de integración.
+	\item Permitir la creación de una versión del producto candidata a ser publicada en cualquier momento.
+\end{itemize}
 
-\subsubsection{Despliegue continuo}
+Para la consecución de estos objetivos se requiere un proceso de integración reproducible y altamente automatizado. Para tal fin se pueden utilizar herramientas de control de versiones, diversas políticas y convenciones, así como las propias herramientas de integración contínua.
 
-\subsubsection{Construcción automática}
+\subsection{Despliegue continuo}
+
+El despliegue contínuo se puede entender como una parte de la integración contínua que busca minimizar el tiempo que va desde el inicio del desarrollo de una característica, hasta que dicha característica es utilizada por el usuario final en un entorno de producción.
+
+\subsection{Construcción automática}
+
+Por construcción se entiende al proceso de convertir ficheros y otros elementos en el producto final. La construcción puede incluir:
+
+\begin{itemize}
+	\item Compilar ficheros fuente.
+	\item Empaquetar ficheros compilados.
+	\item Crear de instaladores.
+	\item Crear o actualizar el esquema o los datos de la base de datos.
+\end{itemize}
 
 \subsection{Diagrama "Burn Down"}
+
+\subsection{Desarrollo iterativo}
+
+\subsection{Desarrollo incremental}
+
+\subsection{Retrospectiva}
+
+\subsection{Tablero de tareas}
+
+\subsection{Pruebas unitarias}
