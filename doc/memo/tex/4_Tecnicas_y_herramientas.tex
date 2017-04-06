@@ -90,6 +90,14 @@ Google Drive es un servicio de almacenamiento en la nube, ofrece 15 GB de almace
 	\item \url{https://drive.google.com}
 \end{itemize}
 
+\subsection{Grive2}
+
+Grive2 (fork de grive) permite sincronizar el contenido de la carpeta Google Drive desde linux, plataforma para la que actualmente no existe cliente oficial.
+
+\begin{itemize}
+	\item \url{https://github.com/vitalif/grive2}
+\end{itemize}
+
 \section{MongoDB}
 
 MongoDB es un sistema gestor de base de datos NoSQL. Ofrece escalabilidad, rendimiento y gran disponibilidad. El motivo de uso de este tipo de SGBD sobre uno de tipo SQL en este trabajo es que MongoDB utiliza documentos JSON para almacenar los registros, el mismo formato en que se obtienen los datos que deseamos almacenar desde la API de Github.
@@ -112,11 +120,19 @@ Travis CI es un sistema de integración continua. Permite automatizar tareas com
 
 \subsection{Gulp}
 
-TODO
+Gulp es una librería que permite automatizar diversas tareas comunes en el desarrollo de aplicaciones, como por ejemplo la compilación de código fuente. En este trabajo una de las tareas será compilar TypeScript a JavaScript.
+
+\begin{itemize}
+	\item \url{http://gulpjs.com/}
+\end{itemize}
 
 \subsubsection{Alternativas estudiadas}
 
-TODO - Grunt
+Grunt es la alternativa principal a Gulp como método de automatización de tareas.
+
+\begin{itemize}
+	\item \url{https://gruntjs.com/}
+\end{itemize}
 
 \subsection{Codebeat}
 
@@ -146,19 +162,34 @@ ZenHub añade funcionalidades que permiten la gestión de proyectos utilizando m
 
 \subsection{Mocha + Chai}
 
-TODO - pruebas unitarias
+Mocha es un framework de pruebas unitarias para Node.js y para navegadores que simplifica el desarrollo de pruebas para aplicaciones asíncronas.
+
+Chai es una librería de aserciones con una sintaxis similar al lenguaje natural, facilitando la comprensión de las pruebas. También cuenta con un sistema de plugins que le permite aumentar su funcionalidad, un ejemplo es el plugin chai-http que permite probar aplicaciones que funcionen mediante peticiones http (por ejemplo aplicaciones REST).
+
+\begin{itemize}
+	\item Mocha: \url{https://mochajs.org/}
+	\item Chai: \url{http://chaijs.com/}
+\end{itemize}
 
 \section{Heroku}
 
-TODO - Heroku
+Heroku es una herramienta de la familia PaaS (platform as a service). Permite a los desarrolladores construir, ejecutar y operar con aplicaciones completamente en la nube. Soporta diferentes lenguajes como Java, Node.js, Scala, Clojure, Python, PHP o GO.
+
+\begin{itemize}
+	\item \url{https://www.heroku.com}
+\end{itemize}
 
 \subsection{Alternativas estudiadas}
 
-TODO - Openshift
+Como alternativa a Heroku se ha estudiado OpenShift, herramienta creada por Red Hat que hace uso de Docker. Actualmente los nuevos registros están deshabilitados y únicamente permite fases de prueba de un mes de duración.
+
+\begin{itemize}
+	\item \url{https://www.openshift.com/}
+\end{itemize}
 
 \section{LaTeX}
 
-LaTeX es un sistema de composición de textos orientado a la producción de documentación técnica y científica. Está formado por un conjunto de macros TeX.
+\LaTeX\ es un sistema de composición de textos orientado a la producción de documentación técnica y científica. Está formado por un conjunto de macros \TeX.
 
 \begin{itemize}
 	\item \url{https://www.latex-project.org/}
@@ -166,11 +197,19 @@ LaTeX es un sistema de composición de textos orientado a la producción de docu
 
 \subsection{Texmaker}
 
-TODO
+Texmaker es un editor multiplataforma de \LaTeX\ que integra todas las herramientas necesarias para desarrollar este tipo de documentos.
+
+\begin{itemize}
+	\item \url{http://www.xm1math.net/texmaker/}
+\end{itemize}
 
 \subsubsection{Alternativas estudiadas}
 
-TODO - LaTeXila
+Como editor \LaTeX\ alternativo a Texmaker se valoró el uso de LaTeXila.
+
+\begin{itemize}
+	\item \url{https://wiki.gnome.org/Apps/LaTeXila}
+\end{itemize}
 
 \section{Skype empresarial}
 
@@ -182,4 +221,8 @@ Como herramienta de comunicación para llevar a cabo las reuniones en cada sprin
 
 \section{Postman}
 
-Prueba de APIs
+Postman es una aplicación que permite la prueba y monitorización de API's mediante una interfaz que permite hacer peticiones de diferente tipo (GET, POST, PUT...), modificar las cabeceras, etc.
+
+\begin{itemize}
+	\item \url{https://www.getpostman.com/}
+\end{itemize}
