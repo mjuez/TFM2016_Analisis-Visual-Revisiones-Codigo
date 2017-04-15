@@ -1,27 +1,19 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { AbstractController } from './AbstractController';
-import { IPullRequestDocument, IPullRequestSchema } from '../model/IPullRequestModel';
-export { IPullRequestDocument, IPullRequestSchema };
+import { PullRequestDocument } from "../models/documents/PullRequestDocument";
+import { PullRequestEntity } from "../models/PullRequestEntity";
+import { PullRequestRepository } from "../data/PullRequestRepository";
 import * as request from 'request';
 import * as mongoose from 'mongoose';
 
 export class PullRequestController extends AbstractController {
 
-    PullRequestModel: mongoose.Model<IPullRequestDocument>;
+    private readonly _repository: PullRequestRepository;
 
-    constructor(PullRequestModel) {
+    constructor(repository) {
         super();
-        this.PullRequestModel = PullRequestModel;
+        this._repository = repository;
         this.init();
-    }
-
-    public save(pullRequest: Object) {
-        const pullRequestModel = new this.PullRequestModel(pullRequest);
-        pullRequestModel.save((error) => {
-            if (error) {
-                console.log(error);
-            }
-        });
     }
 
     protected init(): void {
@@ -50,9 +42,14 @@ export class PullRequestController extends AbstractController {
                 callback(error);
             } else {
                 if (response.statusCode === 200) {
-                    this.save(JSON.parse(body));
+                    let pullRequest = new PullRequestEntity(<PullRequestDocument>JSON.parse(body));
+                    /*this._repository.model.create(body,(error, response) => {
+                        callback(body);
+                    });*/
+                    this._repository.create(pullRequest, (error, response) => {
+                        callback(body);
+                    });
                 }
-                callback();
             }
         });
     }

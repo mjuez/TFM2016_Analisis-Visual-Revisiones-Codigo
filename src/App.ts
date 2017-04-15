@@ -2,8 +2,9 @@ import * as path from 'path';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as mongoose from 'mongoose';
-import { IController } from './controller/AbstractController';
-import { PullRequestController, IPullRequestDocument, IPullRequestSchema } from './controller/PullRequestController';
+import { IController } from './controllers/AbstractController';
+import { PullRequestController } from './controllers/PullRequestController';
+import { PullRequestRepository } from "./data/PullRequestRepository";
 
 class App {
 
@@ -21,10 +22,8 @@ class App {
 
   // Maybe use a factory?
   private configurePullRequestController() {
-    let pullRequestSchema: mongoose.Schema = new mongoose.Schema(IPullRequestSchema);
-    let pullRequestModel: mongoose.Model<IPullRequestDocument>
-      = mongoose.model<IPullRequestDocument>("pullRequest", pullRequestSchema);
-    this.pullRequestController = new PullRequestController(pullRequestModel);
+    let pullRequestRepository:PullRequestRepository = new PullRequestRepository();
+    this.pullRequestController = new PullRequestController(pullRequestRepository);
   }
 
   private configureMiddleware(): void {
