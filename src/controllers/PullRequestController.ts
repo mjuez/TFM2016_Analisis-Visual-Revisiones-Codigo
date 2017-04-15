@@ -30,11 +30,9 @@ export class PullRequestController extends AbstractController {
         let repository: string = req.params.repository;
 
         let uri: string = `${this.API_URL}/repos/${owner}/${repository}/pulls/${pullRequestId}?${this.API_CREDENTIALS}`;
-        
+
         let requestOptions: request.CoreOptions = {
-            headers: {
-                "User-Agent": `anvireco`, //hardcoded string
-            }
+            headers: this.API_HEADERS
         }
 
         request(uri, requestOptions, (error: any, response: request.RequestResponse, body: any) => {
@@ -42,10 +40,8 @@ export class PullRequestController extends AbstractController {
                 callback(error);
             } else {
                 if (response.statusCode === 200) {
-                    let pullRequest = new PullRequestEntity(<PullRequestDocument>JSON.parse(body));
-                    /*this._repository.model.create(body,(error, response) => {
-                        callback(body);
-                    });*/
+                    let bodyObject = JSON.parse(body);
+                    let pullRequest = new PullRequestEntity(<PullRequestDocument>bodyObject);
                     this._repository.create(pullRequest, (error, response) => {
                         callback(body);
                     });

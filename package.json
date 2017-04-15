@@ -4,7 +4,7 @@
   "description": "A tool for analysing Github code reviews.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Warning: no test specified\" && exit 0",
     "start": "node release/index.js"
   },
   "repository": {
