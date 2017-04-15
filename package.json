@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Warning: no test specified\" && exit 0",
     "start": "node release/index.js",
-    "postinstall": "gulp"
+    "postinstall": "gulp compile"
   },
   "repository": {
     "type": "git",
