@@ -2,28 +2,31 @@ import * as path from 'path';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as mongoose from 'mongoose';
-import { IController } from './controllers/AbstractController';
-import { PullRequestController } from './controllers/PullRequestController';
-import { PullRequestRepository } from "./data/PullRequestRepository";
+import { IPullRequestController, PullRequestController } from './controllers/PullRequestController';
+import { IPullRequestService, PullRequestService } from "./app/services/PullRequestService";
+import { IPullRequestRepository, PullRequestRepository } from "./app/data/PullRequestRepository";
+import { PullRequestRoutes } from "./routes/PullRequestRoutes";
 
 class App {
 
   public express: express.Application;
 
-  private pullRequestController: IController;
+  private _pullRequestRoutes: PullRequestRoutes;
 
   constructor() {
     this.express = express();
     mongoose.connect(process.env.MONGO_CONNSTRING);
-    this.configurePullRequestController();
+    this.wirePullRequestRoutes();
     this.configureMiddleware();
     this.setRoutes();
   }
 
-  // Maybe use a factory?
-  private configurePullRequestController() {
-    let pullRequestRepository:PullRequestRepository = new PullRequestRepository();
-    this.pullRequestController = new PullRequestController(pullRequestRepository);
+  // maybe use a factory?
+  private wirePullRequestRoutes() {
+    let pullRequestRepository: IPullRequestRepository = new PullRequestRepository();
+    let pullRequestService: IPullRequestService = new PullRequestService(pullRequestRepository);
+    let pullRequestController: IPullRequestController = new PullRequestController(pullRequestService);
+    this._pullRequestRoutes = new PullRequestRoutes(pullRequestController);
   }
 
   private configureMiddleware(): void {
@@ -39,7 +42,7 @@ class App {
       });
     });
     this.express.use('/', router);
-    this.express.use('/api', this.pullRequestController.router);
+    this.express.use('/', this._pullRequestRoutes.routes);
   }
 
 }

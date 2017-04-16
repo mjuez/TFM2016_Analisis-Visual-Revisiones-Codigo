@@ -1,52 +1,51 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { AbstractController } from './AbstractController';
-import { PullRequestDocument } from "../models/documents/PullRequestDocument";
-import { PullRequestEntity } from "../models/PullRequestEntity";
-import { PullRequestRepository } from "../data/PullRequestRepository";
+import { Router, Request, Response, NextFunction } from "express";
+import { IGitHubController, GitHubController, RequestData } from "./GitHubController";
+import { IPullRequestService } from "../app/services/PullRequestService";
+import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
+import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
 import * as request from 'request';
 import * as mongoose from 'mongoose';
 
-export class PullRequestController extends AbstractController {
+export interface IPullRequestController extends IGitHubController {
+    retrieve(req: Request, res: Response): void;
+}
 
-    private readonly _repository: PullRequestRepository;
+export class PullRequestController extends GitHubController implements IPullRequestController {
 
-    constructor(repository) {
+    private readonly _service: IPullRequestService;
+
+    constructor(service: IPullRequestService) {
         super();
-        this._repository = repository;
-        this.init();
+        this._service = service;
     }
 
-    protected init(): void {
-        this.router.get('/owner/:owner/repo/:repository/pull/:pullId',
-            (req: Request, res: Response, callback: NextFunction) => {
-                this.handlePullRequestRequest(req, res, callback);
-            });
-    }
-
-    private handlePullRequestRequest(req: Request, res: Response, callback: NextFunction) {
-
-        let pullRequestId: string = req.params.pullId;
+    public retrieve(req: Request, res: Response): void {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-
+        let pullRequestId: string = req.params.pull_id;
         let uri: string = `${this.API_URL}/repos/${owner}/${repository}/pulls/${pullRequestId}?${this.API_CREDENTIALS}`;
 
-        let requestOptions: request.CoreOptions = {
-            headers: this.API_HEADERS
-        }
-
-        request(uri, requestOptions, (error: any, response: request.RequestResponse, body: any) => {
+        request(uri, this.API_OPTIONS, (error: any, response: request.RequestResponse, body: any) => {
             if (error) {
-                callback(error);
+                res.send({ "error": error });
             } else {
-                if (response.statusCode === 200) {
-                    let bodyObject = JSON.parse(body);
-                    let pullRequest = new PullRequestEntity(<PullRequestDocument>bodyObject);
-                    this._repository.create(pullRequest, (error, response) => {
-                        callback(body);
-                    });
+                let reqData: RequestData = {
+                    response: response,
+                    body: body
                 }
+                this.handleResponse(reqData, res, () => {
+                    let bodyObject: Object = JSON.parse(body);
+                    let pullRequest: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>bodyObject);
+                    this._service.createOrUpdate(pullRequest, (err: any, result: IPullRequestEntity) => {
+                        if (!err) {
+                            res.send(result.document);
+                        } else {
+                            res.send({ "error": err });
+                        }
+                    });
+                });
             }
         });
     }
+
 }

@@ -1,9 +1,9 @@
 import * as mongoose from "mongoose";
 import { IRepository } from "./IRepository";
-import { AbstractEntity } from "../models/AbstractEntity";
+import { IEntity } from "../entities/IEntity";
 import { GenericFactory } from "../util/GenericFactory";
 
-export abstract class AbstractRepository<T extends AbstractEntity<E>, E extends mongoose.Document> implements IRepository<T, E> {
+export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoose.Document> implements IRepository<T, E> {
 
     private _model: mongoose.Model<E>;
 
@@ -21,6 +21,8 @@ export abstract class AbstractRepository<T extends AbstractEntity<E>, E extends 
     public create(item: T, callback: (error: any, result: any) => void): void {
         this.model.create(item.document, callback);
     }
+
+    public abstract update(item: T, callback: (error: any, result: any) => void): void;
 
     public retrieve(callback: (error: any, result: any) => void): void {
         this.model.find({}, callback);
