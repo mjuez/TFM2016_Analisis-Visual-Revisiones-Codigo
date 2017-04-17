@@ -7,33 +7,64 @@ import { IPullRequestService, PullRequestService } from "./app/services/PullRequ
 import { IPullRequestRepository, PullRequestRepository } from "./app/data/PullRequestRepository";
 import { PullRequestRoutes } from "./routes/PullRequestRoutes";
 
+/**
+ * Application main class.
+ * It sets up an express instance.
+ * @author Mario Juez <mario@mjuez.com>
+ */
 class App {
 
-  public express: express.Application;
+  /**
+   * Express application.
+   */
+  private _express: express.Application;
 
+  /**
+   * GitHub Pull Requests routes.
+   */
   private _pullRequestRoutes: PullRequestRoutes;
 
+  /**
+   * Creates an application.
+   * Database connection and express instance configuration.
+   */
   constructor() {
-    this.express = express();
     mongoose.connect(process.env.MONGO_CONNSTRING);
+    this._express = express();
     this.wirePullRequestRoutes();
     this.configureMiddleware();
     this.setRoutes();
   }
 
-  // maybe use a factory?
-  private wirePullRequestRoutes() {
+  /**
+   * Gets express application instance.
+   */
+  public get express(): express.Application {
+    return this._express;
+  }
+
+  /**
+   * Creates a Pull Request routes class by injecting its dependencies.
+   */
+  private wirePullRequestRoutes(): void {
     let pullRequestRepository: IPullRequestRepository = new PullRequestRepository();
     let pullRequestService: IPullRequestService = new PullRequestService(pullRequestRepository);
     let pullRequestController: IPullRequestController = new PullRequestController(pullRequestService);
-    this._pullRequestRoutes = new PullRequestRoutes(pullRequestController);
+    let router: express.Router = express.Router();
+    this._pullRequestRoutes = new PullRequestRoutes(pullRequestController, router);
   }
 
+  /**
+   * Configures express middleware.
+   */
   private configureMiddleware(): void {
-    this.express.use(bodyParser.json());
-    this.express.use(bodyParser.urlencoded({ extended: false }));
+    this._express.use(bodyParser.json());
+    this._express.use(bodyParser.urlencoded({ extended: false }));
   }
 
+  /**
+   * Sets express routes.
+   */
   private setRoutes(): void {
     let router = express.Router();
     router.get('/', (req, res, next) => {
@@ -41,8 +72,8 @@ class App {
         message: 'Welcome to ANVIRECO public API.'
       });
     });
-    this.express.use('/', router);
-    this.express.use('/', this._pullRequestRoutes.routes);
+    this._express.use('/', router);
+    this._express.use('/', this._pullRequestRoutes.routes);
   }
 
 }

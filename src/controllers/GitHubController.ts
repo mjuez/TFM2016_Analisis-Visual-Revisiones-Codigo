@@ -36,6 +36,12 @@ export abstract class GitHubController implements IGitHubController{
         return this._API_OPTIONS;
     }
 
+    /**
+     * 
+     * @param reqData 
+     * @param expressResponse 
+     * @param ok 
+     */
     protected handleResponse(reqData: RequestData, expressResponse: Response, ok: { (): void }): void {
         let res: RequestResponse = reqData.response;
         let body: Object = JSON.parse(reqData.body);

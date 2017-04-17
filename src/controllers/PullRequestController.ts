@@ -6,19 +6,46 @@ import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullReque
 import * as request from 'request';
 import * as mongoose from 'mongoose';
 
+/**
+ * Pull Request controller interface.
+ * @author Mario Juez <mario@mjuez.com>
+ */
 export interface IPullRequestController extends IGitHubController {
+
+    /**
+     * Retrieves a Pull Request from GitHub given an owner, a repository
+     * and a pull request id.
+     * It creates (if not exist) or updates the pull request in our database.
+     * Then, the pull request object is returned as response.
+     * @param req   API request.
+     * @param res   API response.
+     */
     retrieve(req: Request, res: Response): void;
 }
 
+/**
+ * Pull Request controller.
+ * Defines Pull Request requests handling.
+ * @extends GitHubController.
+ * @implements IPullRequestController.
+ */
 export class PullRequestController extends GitHubController implements IPullRequestController {
 
+    /**
+     * Pull Request service.
+     */
     private readonly _service: IPullRequestService;
 
+    /**
+     * Class constructor. Injects Pull Request service dependency.
+     * @param service   Pull Request service.
+     */
     constructor(service: IPullRequestService) {
         super();
         this._service = service;
     }
 
+    /** @inheritdoc */
     public retrieve(req: Request, res: Response): void {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
@@ -27,7 +54,7 @@ export class PullRequestController extends GitHubController implements IPullRequ
 
         request(uri, this.API_OPTIONS, (error: any, response: request.RequestResponse, body: any) => {
             if (error) {
-                res.send({ "error": error });
+                res.json({ "error": error });
             } else {
                 let reqData: RequestData = {
                     response: response,
@@ -38,9 +65,9 @@ export class PullRequestController extends GitHubController implements IPullRequ
                     let pullRequest: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>bodyObject);
                     this._service.createOrUpdate(pullRequest, (err: any, result: IPullRequestEntity) => {
                         if (!err) {
-                            res.send(result.document);
+                            res.json(result.document);
                         } else {
-                            res.send({ "error": err });
+                            res.json({ "error": err });
                         }
                     });
                 });
