@@ -1,5 +1,10 @@
 import * as mongoose from "mongoose";
 
+/**
+ * Pull Request mongoose document.
+ * Maps a GitHub Pull Request.
+ * @author Mario Juez <mario@mjuez.com>
+ */
 export interface PullRequestDocument extends mongoose.Document {
     id: number,
     url: string,

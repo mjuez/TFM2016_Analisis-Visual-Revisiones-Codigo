@@ -1,8 +1,8 @@
-import * as path from 'path';
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as mongoose from 'mongoose';
-import { IPullRequestController, PullRequestController } from './controllers/PullRequestController';
+import * as path from "path";
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as mongoose from "mongoose";
+import { IPullRequestController, PullRequestController } from "./controllers/PullRequestController";
 import { IPullRequestService, PullRequestService } from "./app/services/PullRequestService";
 import { IPullRequestRepository, PullRequestRepository } from "./app/data/PullRequestRepository";
 import { PullRequestRoutes } from "./routes/PullRequestRoutes";
@@ -14,14 +14,10 @@ import { PullRequestRoutes } from "./routes/PullRequestRoutes";
  */
 class App {
 
-  /**
-   * Express application.
-   */
+  /** Express application. */
   private _express: express.Application;
 
-  /**
-   * GitHub Pull Requests routes.
-   */
+  /** GitHub Pull Requests routes. */
   private _pullRequestRoutes: PullRequestRoutes;
 
   /**

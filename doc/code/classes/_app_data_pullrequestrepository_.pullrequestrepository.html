@@ -69,6 +69,18 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Pull Request Repository class.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>author</dt>
+						<dd><p>Mario Juez <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x6d;&#97;&#x72;&#x69;&#x6f;&#x40;&#109;&#x6a;&#x75;&#101;&#x7a;&#46;&#99;&#111;&#x6d;">&#x6d;&#97;&#x72;&#x69;&#x6f;&#x40;&#109;&#x6a;&#x75;&#101;&#x7a;&#46;&#99;&#111;&#x6d;</a></p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -137,9 +149,15 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/a1349a9/src/app/data/PullRequestRepository.ts#L13">app/data/PullRequestRepository.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/app/data/PullRequestRepository.ts#L30">app/data/PullRequestRepository.ts:30</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Class constructor.
+									Creates the repository using the collection name and the Pull Request schema.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_app_data_pullrequestrepository_.pullrequestrepository.html" class="tsd-signature-type">PullRequestRepository</a></h4>
 						</li>
 					</ul>
@@ -153,9 +171,14 @@
 					<div class="tsd-signature tsd-kind-icon">_NAME<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"pullRequest"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;pullRequest&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/a1349a9/src/app/data/PullRequestRepository.ts#L13">app/data/PullRequestRepository.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/app/data/PullRequestRepository.ts#L30">app/data/PullRequestRepository.ts:30</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>MongoDB collection name.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
@@ -171,9 +194,14 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#model">model</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/a1349a9/src/app/data/AbstractRepository.ts#L17">app/data/AbstractRepository.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/app/data/AbstractRepository.ts#L31">app/data/AbstractRepository.ts:31</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the Mongoose Model.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_documents_pullrequestdocument_.pullrequestdocument.html" class="tsd-signature-type">PullRequestDocument</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
@@ -192,16 +220,28 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#create">create</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/a1349a9/src/app/data/AbstractRepository.ts#L21">app/data/AbstractRepository.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/app/data/AbstractRepository.ts#L41">app/data/AbstractRepository.ts:41</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates an item into database.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>item: <a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Item to create.</p>
+									</div>
 								</li>
 								<li>
 									<h5>callback: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Callback function to retrieve the created item
+										or an error if something goes wrong.</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -240,19 +280,34 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#findby">findBy</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/a1349a9/src/app/data/AbstractRepository.ts#L31">app/data/AbstractRepository.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/app/data/AbstractRepository.ts#L69">app/data/AbstractRepository.ts:69</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Finds items that one of its keys match with a specific value.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>key to compare value.</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>value to compare</p>
+									</div>
 								</li>
 								<li>
 									<h5>callback: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Callback function to retrieve the items
+										or an error if something goes wrong.</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -290,16 +345,28 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/a1349a9/src/app/data/PullRequestRepository.ts#L23">app/data/PullRequestRepository.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/app/data/PullRequestRepository.ts#L56">app/data/PullRequestRepository.ts:56</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves a Pull Request given its GitHub id.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Pull Request GitHub id.</p>
+									</div>
 								</li>
 								<li>
 									<h5>callback: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Callback function to retrieve the Pull Request entity.
+										or an error if something goes wrong.</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -338,13 +405,22 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#retrieve">retrieve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/a1349a9/src/app/data/AbstractRepository.ts#L27">app/data/AbstractRepository.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/app/data/AbstractRepository.ts#L58">app/data/AbstractRepository.ts:58</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves all items of a collection from database.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>callback: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Callback function to retrieve the items
+										or an error if something goes wrong.</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -383,16 +459,28 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#update">update</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/a1349a9/src/app/data/PullRequestRepository.ts#L19">app/data/PullRequestRepository.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/app/data/PullRequestRepository.ts#L46">app/data/PullRequestRepository.ts:46</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Updates a Pull Request from database. Uses its GitHub id.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>item: <a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Pull Request entity with updated data.</p>
+									</div>
 								</li>
 								<li>
 									<h5>callback: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Callback function to retrieve the number of updated
+										items or an error if something goes wrong.</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">

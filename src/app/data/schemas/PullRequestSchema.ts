@@ -1,8 +1,14 @@
 import * as mongoose from "mongoose";
 
+/**
+ * Pull Request Schema class. Defines the schema for
+ * a Pull Request.
+ * @author Mario Juez <mario@mjuez.com>
+ */
 export class PullRequestSchema {
 
-    static get schema() {
+    /** Gets the Pull Request Schema. */
+    public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
             id: Number,
             url: String,

@@ -8,14 +8,10 @@ import { IPullRequestController } from "../controllers/PullRequestController";
  */
 export class PullRequestRoutes {
 
-    /**
-     * Pull Request controller.
-     */
+    /** Pull Request controller. */
     private readonly _controller: IPullRequestController;
 
-    /**
-     * Express Router.
-     */
+    /** Express Router. */
     private readonly _router: express.Router;
 
     /**

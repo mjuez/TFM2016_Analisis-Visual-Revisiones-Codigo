@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { IGitHubController, GitHubController, RequestData } from "./GitHubController";
+import { IGitHubController, GitHubController } from "./GitHubController";
 import { IPullRequestService } from "../app/services/PullRequestService";
 import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
 import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
@@ -31,9 +31,7 @@ export interface IPullRequestController extends IGitHubController {
  */
 export class PullRequestController extends GitHubController implements IPullRequestController {
 
-    /**
-     * Pull Request service.
-     */
+    /** Pull Request service. */
     private readonly _service: IPullRequestService;
 
     /**
@@ -56,11 +54,7 @@ export class PullRequestController extends GitHubController implements IPullRequ
             if (error) {
                 res.json({ "error": error });
             } else {
-                let reqData: RequestData = {
-                    response: response,
-                    body: body
-                }
-                this.handleResponse(reqData, res, () => {
+                this.handleResponse(response, res, () => {
                     let bodyObject: Object = JSON.parse(body);
                     let pullRequest: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>bodyObject);
                     this._service.createOrUpdate(pullRequest, (err: any, result: IPullRequestEntity) => {
