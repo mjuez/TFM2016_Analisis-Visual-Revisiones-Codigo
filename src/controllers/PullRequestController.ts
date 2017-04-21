@@ -21,6 +21,15 @@ export interface IPullRequestController extends IGitHubController {
      * @param res   API response.
      */
     retrieve(req: Request, res: Response): void;
+
+    /**
+     * Counts Pull Request number from GitHub given an ownerand  a repository.
+     * It creates (if not exist) or updates the pull request in our database.
+     * Then, the pull request object is returned as response.
+     * @param req   API request.
+     * @param res   API response.
+     */
+    count(req: Request, res: Response): void;
 }
 
 /**
@@ -55,11 +64,34 @@ export class PullRequestController extends GitHubController implements IPullRequ
                 res.json({ "error": error });
             } else {
                 this.handleResponse(response, res, () => {
-                    let bodyObject: Object = JSON.parse(body);
-                    let pullRequest: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>bodyObject);
+                    let pullRequest: IPullRequestEntity = this._service.toEntity(body);
                     this._service.createOrUpdate(pullRequest, (err: any, result: IPullRequestEntity) => {
                         if (!err) {
                             res.json(result.document);
+                        } else {
+                            res.json({ "error": err });
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    /** @inheritdoc */
+    public count(req: Request, res: Response): void {
+        let owner: string = req.params.owner;
+        let repository: string = req.params.repository;
+        let uri: string = `${this.API_URL}/repos/${owner}/${repository}/pulls?${this.API_CREDENTIALS}`;
+
+        request(uri, this.API_OPTIONS, (error: any, response: request.RequestResponse, body: any) => {
+            if (error) {
+                res.json({ "error": error });
+            } else {
+                this.handleResponse(response, res, () => {
+                    let pullRequestArray: IPullRequestEntity[] = this._service.toEntityArray(body);
+                    this._service.createOrUpdateMultiple(pullRequestArray, (err: any, result: IPullRequestEntity[]) => {
+                        if (!err) {
+                            res.json({ "count": result.length });
                         } else {
                             res.json({ "error": err });
                         }
