@@ -43,6 +43,8 @@ export class PullRequestController extends GitHubController implements IPullRequ
     /** Pull Request service. */
     private readonly _service: IPullRequestService;
 
+    private readonly _PARAMETERS: string = `state=all&per_page=100`;
+
     /**
      * Class constructor. Injects Pull Request service dependency.
      * @param service   Pull Request service.
@@ -81,7 +83,7 @@ export class PullRequestController extends GitHubController implements IPullRequ
     public count(req: Request, res: Response): void {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let uri: string = `${this.API_URL}/repos/${owner}/${repository}/pulls?${this.API_CREDENTIALS}`;
+        let uri: string = `${this.API_URL}/repos/${owner}/${repository}/pulls?${this.API_CREDENTIALS}&${this._PARAMETERS}`;
 
         request(uri, this.API_OPTIONS, (error: any, response: request.RequestResponse, body: any) => {
             if (error) {
@@ -89,13 +91,17 @@ export class PullRequestController extends GitHubController implements IPullRequ
             } else {
                 this.handleResponse(response, res, () => {
                     let pullRequestArray: IPullRequestEntity[] = this._service.toEntityArray(body);
-                    this._service.createOrUpdateMultiple(pullRequestArray, (err: any, result: IPullRequestEntity[]) => {
-                        if (!err) {
-                            res.json({ "count": result.length });
-                        } else {
-                            res.json({ "error": err });
-                        }
-                    });
+                    if (pullRequestArray.length > 0) {
+                        this._service.createOrUpdateMultiple(pullRequestArray, (err: any, result: IPullRequestEntity[]) => {
+                            if (!err) {
+                                res.json({ "count": result.length });
+                            } else {
+                                res.json({ "error": err });
+                            }
+                        });
+                    } else {
+                        res.json({ "count": 0 });
+                    }
                 });
             }
         });
