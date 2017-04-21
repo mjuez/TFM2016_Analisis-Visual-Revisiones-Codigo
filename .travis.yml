@@ -3,16 +3,18 @@ node_js:
 - '7'
 branches:
   only:
-  - prototypes
-before_install:
-- cd prototypes/heroku
+  - master
+  - dev
 install:
 - npm install
-script: 
+script:
 - npm test
 deploy:
   provider: heroku
   api_key:
     secure: o8V/yYy59uVMYoxaIUBoS/WbmveOUapVrI2F2BcI8F2qCqszPm6JcxTK5s6y2Ui4R2QAHsN4tFMf0f3r3QIvhzp8GFkKdyo7MuMCQnPwFDWcjw5PfdJvOG5IlunfLffwYQ0V/IskWa6NGb/n3mu7MtqhYwiPcBLTIGT16YihTGOBhuwD+TsrMeswKsbv3lSAN6kPWloDrVf/iVbdUi8ALOk9uJORip3AV5utFjNPaQDzVt/aJdTrefH6yw9Wo4iLYuDm1z7rrKzmgazVcq9S9vYjUGdieDB1UKZbU9Qnd2XpiwoX8aYHW8OXbbnZrdjKeVClkVmDMoTzEYN6jlM8DzZjusHaKgVrmlfsY8LdYp0ort4Z69PohMhb/Zk9K0X5C6JM7t4kVwz2GyaS6/90D6oGLAyd+xqwMDpQPV9khvkfT6zCuPQFL3vUk5/Eynp4salIP/N2W7xcyv2NW0ru607tHsIZ5v+9X9f6rjy46xVeKsPbGutaBx7PV+Bkk8HbBaBu7MqHz51bhmZLm6fMG6INKDHQBsfMIayPDY3AhNCHuLg7RiKSv7dEfjrbdaWPTTBaRZ1PWrQ9v9JCrhLtIwz+rRVAKW+9nP3dveZCqpFlOOmZzlzhS30faEiiJRHkr8v8pZKS4+28F/IVQnrQbvMYnmRF8j2ddduYnURsq1A=
-  app: p02-tfm2016mjuez
-  on: prototypes
+  app:
+    master: anvireco
+    dev: anvireco-dev
+env:
+  secure: apIr0zg5cAQkfBbsXQwiij5R5PKr9aBEbrbfh7tuMUjlKY9CKn1YyrzXfbtMtf38EOFiCpU63LFgh1GFhv/iDW8O7B5MfGAQGg8Qe/6BL6Pzdn/EToqiJ/7strTcgw4HfCQ9nCjMb+iaiAvAaL/dESV0L9ETgs5BWSIi/FCTrlit/oYNBr1wgL+/XfXU8vA+UqFA0K0eAwv5FIO1aA0CX9ZU+DIOgOGasqGb7VKzLfJAPHZ0vY9DOSNDUzLM2ajCDYf9naCj/13P1H+AdXXrhg3cIpV54YqDKnqi2Sds8AYp/x6b9Mn3FuHwPdMGn+swnFZ9ZT5qGP+Tk3X3psvIVkipq2qoP0MsFUjbOnf8txi0hK9F7y0CfUy6DH/wykH6/9jF1kmpVjANWi9x+eYZIfZkqrnADG8PC9H1hqpBubkuIHOU7ADoQPm9ykm0hZvjWe22kMjUJ1/dVdJIsHjxzvLZd3PpaWv4p5wGuQxhPRvPVoLimQHHPm6ghb935DMJrF8xbSFqltOY4u2kaxFSLxmEeV+0uhwARnPL8yPHZO8IpNeAocNWw+13TE6ZNaXRgyK+lXPVrd8s342eyFr6wIZfoROwZGlmM7nwcRfmvHS1wBR2FAln1YpTvf8tqUJDi+tsNb445tTrj0VTEiXbnzs4AolAPOc8jcx4VwOZ1jQ=

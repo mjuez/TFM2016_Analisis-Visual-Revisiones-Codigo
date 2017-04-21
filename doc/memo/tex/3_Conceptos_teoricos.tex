@@ -1,8 +1,12 @@
 \capitulo{3}{Conceptos teóricos}
 
-En este apartado se exponen una serie de conceptos teóricos relacionados con las revisiones de código. Se define cada concepto así como su relación con el presente trabajo.
+En este apartado se van a exponer una serie de conceptos teóricos relacionados con las revisiones de código y con buenas prácticas de desarrollo ágil. Cada concepto contiene una definición y una breve descripción de su relación con el trabajo.
 
-\section{Revisión de código}
+\section{Conceptos relacionados con las revisiones de código}
+
+A continuación se definen diversos conceptos relacionados con las revisiones de código, las cuales son la base de este trabajo.
+
+\subsection{Revisión de código}
 La revisión de código es un proceso de ingeniería a través del cual se realiza una inspección del código fuente por otros desarrolladores diferentes al autor del mismo. Resulta útil para reducir los defectos de código así como mejorar la calidad del software \cite{28121}.
 
 Frente a las revisiones de código altamente estructuradas propuestas por Fagan \cite{5388086}, hoy en día se están adoptando metodologías más livianas con el fin de solventar las ineficiencias de las inspecciones de código. Las denominadas \emph{Modern Code Reviews} son informales, hacen uso de herramientas, y se utilizan regularmente.
@@ -11,7 +15,7 @@ Mediante el uso de estas nuevas metodologías, las revisiones de código ofrecen
 
 Las revisiones de código son el elemento principal de este trabajo, donde se van a obtener datos de las mismas realizadas en diversos repositorios de software.
 
-\subsection{Inspección de software}
+\subsubsection{Inspección de software}
 La inspección de software, también conocida como inspección de Fagan, consiste en la búsqueda de defectos en documentos de desarrollo (código, especificaciones, diseño, etc.) por parte de personas con diversos roles mediante un proceso estructurado y bien definido, con el fin de disminuir el número de errores y aumentar la calidad del producto final \cite{5388086}.
 
 Las fases de dicho proceso son las siguientes \cite{Fagan:1986:ASI:10677.2412491}:
@@ -25,7 +29,7 @@ Las fases de dicho proceso son las siguientes \cite{Fagan:1986:ASI:10677.2412491
 	\item[Seguimiento] El moderador o equipo completo de inspección debe verificar que todos los cambios son correctos y no introducen nuevos defectos.
 \end{description}
 
-\imagen{faganInspection}{Operaciones de la inspección de software}
+\imagen{faganInspection}{Operaciones de la inspección de software.}
 
 Además, durante el proceso de inspección de software intervienen los siguientes roles:
 
@@ -36,7 +40,7 @@ Además, durante el proceso de inspección de software intervienen los siguiente
 	\item[Moderador] Responsable de coordinar la reunión de inspección.
 \end{description}
 
-\section{Revisor de código}
+\subsection{Revisor de código}
 
 El revisor de código tiene como responsabilidad principal examinar el código y detectar posibles defectos, ofreciendo comentarios y sugerencias de cambio al autor del código que permitan la mejora de la calidad del mismo.
 
@@ -53,7 +57,7 @@ Actualmente es común que las revisiones cuenten con ambos tipos de revisores, e
 
 El revisor de código es una figura importante de este trabajo. Nos interesa extraer los comentarios que registra en cada cambio puesto que pueden resultar útiles para obtener métricas que podrían permitir evaluar la calidad de los comentarios o incluso del propio revisor.
 
-\section{Sistema de control de versiones}
+\subsection{Sistema de control de versiones}
 
 Un sistema de control de versiones se encarga de registrar los diferentes cambios de un fichero o un conjunto de ficheros a lo largo del tiempo, permitiendo así recuperar versiones específicas en cualquier momento \cite{Chacon:2014:PG:2695634}.
 
@@ -61,25 +65,29 @@ Gracias a este tipo de sistemas es posible revertir los cambios realizados en un
 
 Los sistemas de control de versiones están en constante evolución, actualmente herramientas como Github están empezando a implementar funcionalidades para facilitar  las revisiones de código. Por tanto, en este trabajo vamos a utilizar este tipo de sistemas como fuente de datos a extraer.
 
-\subsection{Repositorio}
+A continuación se muestra un diagrama donde se muestra la figura de la revisión de código y su relación con diferentes elementos de los sistemas de control de versiones (concretamente git).
+
+\imagen{diagramaRevisionCodigo}{Revisiones de código en git.}
+
+\subsubsection{Repositorio}
 
 El repositorio es la parte central de un sistema de control de versiones, es el lugar donde se almacenan los datos del sistema, normalmente estructurados en forma de árbol de ficheros \cite{Pilato:2008:VCS:1435405}.
 
 La característica principal de un repositorio es que mantiene todas las versiones de cada fichero, permitiendo al cliente recuperar estados previos de los mismos.
 
-\subsection{Cambio (diff)}
+\subsubsection{Cambio (diff)}
 
 Un cambio es una modificación concreta de un fichero alojado en en un repositorio de un control de versiones \cite{wiki:002}.
 
 Resulta útil para comparar dos versiones del mismo archivo.
 
-\subsection{Rama (branch)}
+\subsubsection{Rama (branch)}
 
 Una rama es un apuntador a una confirmación. Por cada confirmación realizada, la rama avanza hasta la última confirmación. Por defecto existe una rama principal \cite{Chacon:2014:PG:2695634}. 
 
 Crear otras ramas sirve para abrir nuevas líneas de desarrollo, por ejemplo una rama de pruebas, evitando así desordenar la principal.
 
-\subsection{Integración (merge)}
+\subsubsection{Integración (merge)}
 
 Se entiende por integración a la unión de los cambios de dos ramas en una. Existen dos patrones de uso de esta operación \cite{sbf5:git3}:
 
@@ -88,24 +96,81 @@ Se entiende por integración a la unión de los cambios de dos ramas en una. Exi
 	\item Añadir los cambios de la rama principal en una rama donde se están implementando nuevas características con el fin de mantener la rama actualizada con los últimos parches y características. Esta práctica permite reducir el riesgo de conflictos\footnote{Existe un conflicto cuando al integrar dos ramas, un mismo fichero ha sido modificado en ambas y por ello es necesario decidir que cambios deben mantenerse en la versión final.} al unir la rama de desarrollo con la principal.
 \end{itemize}
 
-\subsection{Confirmación (commit)}
+\subsubsection{Confirmación (commit)}
 
 Una confirmación (o commit) supone el almacenamiento en el repositorio de una nueva versión de los ficheros que contiene, en otras palabras, sirve para guardar los cambios \cite{Chacon:2014:PG:2695634}.
 
 Cada confirmación lleva asociados uno o varios ficheros modificados, un identificador denominado revisión y un mensaje donde se describen los cambios realizados.
 
-\subsection{Etiqueta (tag)}
+\subsubsection{Etiqueta (tag)}
 
 La finalidad del etiquetado es dar nombre a alguna versión para que pueda ser localizada facilmente en el futuro, es decir, permite identificar de forma sencilla revisiones importantes del proyecto \cite{wiki:002}.
 
-\subsection{Pull request}
+\subsubsection{Issue (bug tracker)}
 
-Las "Pull Requests" son una característica concreta de la herramienta Github. Sirven para mantener conversaciones sobre los cambios donde se pueden exponer ideas, asignar tareas, tratar detalles y hacer revisiones de código \cite{github:features}.
+Las ``Issues'' son una funcionalidad que ofrece la herramienta Github que permiten mantener la trazabilidad de las diferentes tareas, mejoras o fallos de los proyectos .
 
-\section{Integración contínua}
+\subsubsection{Pull request}
+
+Las ``Pull Requests'' son una característica concreta de la herramienta Github. Sirven para mantener conversaciones sobre los cambios donde se pueden exponer ideas, asignar tareas, tratar detalles y hacer revisiones de código \cite{github:features}.
+
+\section{Conceptos relacionados con buenas prácticas ágiles}
+
+Esta parte de conceptos teóricos está dedicada a buenas prácticas ágiles que se van a utilizar a lo largo del desarrollo del presente proyecto.
+
+Para la definición de los siguientes conceptos se ha seguido el glosario de términos de Agile Alliance \cite{agilealliance:glossary}.
+
+\subsection{Integración continua}
 
 La integración continua es una práctica de desarrollo software donde los miembros de un equipo integran su trabajo frecuentemente, normalmente como mínimo una integración diaria \cite{fowler2006continuous}.
 
-Cada integración se verifica mediante la automatización de ciertos procesos como construcción, pruebas y despliegue. Mediante este tipo de verificación se busca detectar errores de integración tan rápido como sea posible.
+Tiene dos objetivos principales:
 
-Para el desarrollo de este trabajo se utilizarán técnicas de integración contínua.
+\begin{itemize}
+	\item Minimizar la duración y el esfuerzo requerido por cada tarea de integración.
+	\item Permitir la creación de una versión del producto candidata a ser publicada en cualquier momento.
+\end{itemize}
+
+Para la consecución de estos objetivos se requiere un proceso de integración reproducible y altamente automatizado. Para tal fin se pueden utilizar herramientas de control de versiones, diversas políticas y convenciones, así como las propias herramientas de integración contínua.
+
+\subsection{Despliegue continuo}
+
+El despliegue contínuo se puede entender como una parte de la integración contínua que busca minimizar el tiempo que va desde el inicio del desarrollo de una característica, hasta que dicha característica es utilizada por el usuario final en un entorno de producción.
+
+\subsection{Construcción automática}
+
+Por construcción se entiende al proceso de convertir ficheros y otros elementos en el producto final. La construcción puede incluir:
+
+\begin{itemize}
+	\item Compilar ficheros fuente.
+	\item Empaquetar ficheros compilados.
+	\item Crear de instaladores.
+	\item Crear o actualizar el esquema o los datos de la base de datos.
+\end{itemize}
+
+\subsection{Diagrama ``Burn Down''}
+
+Un diagrama ``Burn Down'' permite relacionar la cantidad de trabajo restante (en el eje vertical) con el tiempo transcurrido desde el inicio del proyecto —burn down del producto— o un hito —burn down del sprint— (en el eje horizontal).
+
+\subsection{Desarrollo iterativo e incremental}
+
+Se dice que un proyecto ágil sigue un desarrollo iterativo cuando permite la repetición de actividades relacionadas con el desarrollo de software, así como la revisión del trabajo ya realizado mediante refactorizaciones por ejemplo.
+
+El desarrollo iterativo también se puede caracterizar por contar con una serie de iteraciones con una duración prefijada, aunque el uso de ciertas técnicas de planificación como Kanban no requieren que esta parte se cumpla.
+
+Actualmente, gran parte de los proyectos ágiles además de seguir técnicas de desarrollo iterativo, utilizan técnicas de desarrollo incremental, lo cual supone que cada versión sucesiva del producto debe ser usable y añadir nuevas funcionalidades visibles para el usuario (incrementos verticales).
+
+\subsection{Retrospectiva}
+
+La retrospectiva requiere que el equipo tenga reuniones regulares, normalmente dichas reuniones siguen el ritmo de las iteraciones. En ellas se deben reflejar los cambios más destacados tomando como referencia la anterior reunión, sirviendo como ayuda en la toma de decisiones para 
+
+\subsection{Tablero de tareas}
+
+El tablero de tareas es una herramienta donde éste se divide en varias columnas, normalmente tres, cuyo fin es categorizar las diferentes tareas, por ejemplo en ``pendientes'', ``en progreso'', y ``finalizadas''.
+
+El tablero de tareas se debe actualizar con frecuencia para mantener cada tarea en su estado real. Normalmente al inicio de cada iteración el tablero se vuelve a poner en un estado inicial para reflejar la planificación de la iteración.
+
+\subsection{Pruebas unitarias}
+
+Una prueba unitaria es un pequeño fragmento de programa escrito y mantenido por el equipo de desarrollo, su misión es ejecutar una parte del código y comparar el resultado de la ejecución con el resultado esperado. La salida de una prueba unitaria es binaria, indicando que la prueba ha pasado si cumple las expectativas, o que ha fallado en caso contrario. Comúnmente se debe desarrollar un número de pruebas unitarias acorde al tamaño del código que va a ser probado, dichas pruebas son agrupadas en lo que se denomina conjunto de pruebas unitarias o ``test suite''.
+
