@@ -76,7 +76,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#109;&#97;&#114;&#x69;&#x6f;&#64;&#x6d;&#106;&#x75;&#101;&#122;&#x2e;&#x63;&#x6f;&#x6d;">&#109;&#97;&#114;&#x69;&#x6f;&#64;&#x6d;&#106;&#x75;&#101;&#122;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+						<dd><p>Mario Juez <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x6d;&#x61;&#x72;&#x69;&#111;&#x40;&#x6d;&#x6a;&#x75;&#101;&#x7a;&#46;&#x63;&#111;&#109;">&#x6d;&#x61;&#x72;&#x69;&#111;&#x40;&#x6d;&#x6a;&#x75;&#101;&#x7a;&#46;&#x63;&#111;&#109;</a></p>
 						</dd>
 					</dl>
 				</div>
@@ -115,6 +115,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#count" class="tsd-kind-icon">count</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 							</ul>
 						</section>
@@ -130,7 +131,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_controllers_githubcontroller_.igithubcontroller.html">IGitHubController</a>.<a href="_controllers_githubcontroller_.igithubcontroller.html#api_credentials">API_CREDENTIALS</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/controllers/GitHubController.ts#L18">controllers/GitHubController.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L18">controllers/GitHubController.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -146,7 +147,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_controllers_githubcontroller_.igithubcontroller.html">IGitHubController</a>.<a href="_controllers_githubcontroller_.igithubcontroller.html#api_options">API_OPTIONS</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/controllers/GitHubController.ts#L21">controllers/GitHubController.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L21">controllers/GitHubController.ts:21</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -162,7 +163,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_controllers_githubcontroller_.igithubcontroller.html">IGitHubController</a>.<a href="_controllers_githubcontroller_.igithubcontroller.html#api_url">API_URL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/controllers/GitHubController.ts#L15">controllers/GitHubController.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L15">controllers/GitHubController.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -175,6 +176,45 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="count" class="tsd-anchor"></a>
+					<h3>count</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">count<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/PullRequestController.ts#L32">controllers/PullRequestController.ts:32</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Counts Pull Request number from GitHub given an ownerand  a repository.
+										It creates (if not exist) or updates the pull request in our database.
+									Then, the pull request object is returned as response.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <span class="tsd-signature-type">Request</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>API request.</p>
+									</div>
+								</li>
+								<li>
+									<h5>res: <span class="tsd-signature-type">Response</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>API response.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="retrieve" class="tsd-anchor"></a>
 					<h3>retrieve</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
@@ -184,7 +224,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/9789f2b/src/controllers/PullRequestController.ts#L23">controllers/PullRequestController.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/PullRequestController.ts#L23">controllers/PullRequestController.ts:23</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -290,6 +330,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#api_url" class="tsd-kind-icon">API_<wbr>URL</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#count" class="tsd-kind-icon">count</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#retrieve" class="tsd-kind-icon">retrieve</a>
