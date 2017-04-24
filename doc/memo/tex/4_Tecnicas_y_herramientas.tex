@@ -1,6 +1,228 @@
 \capitulo{4}{Técnicas y herramientas}
 
-Esta parte de la memoria tiene como objetivo presentar las técnicas metodológicas y las herramientas de desarrollo que se han utilizado para llevar a cabo el proyecto. Si se han estudiado diferentes alternativas de metodologías, herramientas, bibliotecas se puede hacer un resumen de los aspectos más destacados de cada alternativa, incluyendo comparativas entre las distintas opciones y una justificación de las elecciones realizadas. 
-No se pretende que este apartado se convierta en un capítulo de un libro dedicado a cada una de las alternativas, sino comentar los aspectos más destacados de cada opción, con un repaso somero a los fundamentos esenciales y referencias bibliográficas para que el lector pueda ampliar su conocimiento sobre el tema.
+En este apartado se definen las diferentes técnicas y herramientas utilizadas a lo largo del desarrollo del trabajo.
 
+\section{Metodologías ágiles}
 
+Frente a las metodologías tradicionales, se ha optado por el uso de metodologías ágiles, las cuales priman \cite{agilealliance:agilemanifesto}:
+
+\begin{itemize}
+	\item Individuos e interacciones sobre procesos y herramientas.
+	\item Software funcional sobre  documentación.
+	\item Colaboración del cliente sobre negociación de contratos.
+	\item Respuesta ante cambios sobre seguimiento de un plan.
+\end{itemize}
+
+\subsection{Scrum}
+
+Concretamente se ha optado por el uso de Scrum como metodología ágil.
+
+Scrum propone seguir un proceso de desarrollo iterativo e incremental a través de iteraciones denominadas sprints y de revisiones. Cada iteración debe finalizar con la entrega de una parte funcional del producto \cite{scrummanager}.
+
+\section{Git}
+
+Git es un sistema de control de versiones distribuido diseñado para manejar proyectos de cualquier tamaño con velocidad y eficiencia.
+
+\begin{itemize}
+	\item \url{https://www.git-scm.com}
+\end{itemize}
+
+\section{Github}
+
+Github es una plataforma que permite alojar proyectos en repositorios de código que utilizan el sistema de control de versiones Git. También cuenta con funcionalidades para realizar revisiones de código. En este trabajo se va a utilizar esta herramienta como repositorio de código y como fuente de datos sobre revisiones de código en diferentes repositorios.
+
+\begin{itemize}
+	\item \url{https://www.github.com}
+\end{itemize}
+
+\subsection{Alternativas estudiadas}
+
+Bitbucket es una alternativa a Github como herramienta de repositorio de código.
+
+\begin{itemize}
+	\item \url{https://bitbucket.org}
+\end{itemize}
+
+En el ámbito de herramienta de revisión de código se estudiaron Gerrit Code Review y Review Board.
+
+\begin{itemize}
+	\item Gerrit Code Review: \url{https://www.gerritcodereview.com/}
+	\item Review Board: \url{https://www.reviewboard.org/}
+\end{itemize}
+
+\section{Node.js}
+
+Node.js es un entorno de ejecución para JavaScript construido con el motor de JavaScript v8 de Chrome. En este trabajo se utiliza para ejecutar código JavaScript en el lado del servidor.
+
+\begin{itemize}
+	\item \url{https://nodejs.org}
+\end{itemize}
+
+\subsection{npm}
+
+Node.js cuenta con npm, un gestor de paquetes con un amplio número de librerías registradas.
+
+\begin{itemize}
+	\item \url{https://www.npmjs.com/}
+\end{itemize}
+
+\section{TypeScript}
+
+TypeScript es un superconjunto tipado de JavaScript que es compilado a JavaScript plano. Está desarrollado por Microsoft, y su uso puede mejorar la legibilidad y el entendimiento del código con respecto a JavaScript.
+
+\begin{itemize}
+	\item \url{https://www.typescriptlang.org/}
+\end{itemize}
+
+\section{Visual Studio Code}
+
+Visual Studio Code es un entorno de desarrollo integrado (IDE) multiplataforma desarrollado por Microsoft, cuenta con una herramienta integrada para el uso de Git, así como un elevado número de extensiones que permiten personalizar el editor para las necesidades concretas de cada proyecto.
+
+\begin{itemize}
+	\item \url{https://code.visualstudio.com/}
+\end{itemize}
+
+\section{Google Drive}
+
+Google Drive es un servicio de almacenamiento en la nube, ofrece 15 GB de almacenamiento gratuito y se utiliza en este trabajo como sistema de copias de seguridad y como medio para mantener el entorno de desarrollo sincronizado en cualquier máquina.
+
+\begin{itemize}
+	\item \url{https://drive.google.com}
+\end{itemize}
+
+\subsection{Grive2}
+
+Grive2 (fork de grive) permite sincronizar el contenido de la carpeta Google Drive desde linux, plataforma para la que actualmente no existe cliente oficial.
+
+\begin{itemize}
+	\item \url{https://github.com/vitalif/grive2}
+\end{itemize}
+
+\section{MongoDB}
+
+MongoDB es un sistema gestor de base de datos NoSQL. Ofrece escalabilidad, rendimiento y gran disponibilidad. El motivo de uso de este tipo de SGBD sobre uno de tipo SQL en este trabajo es que MongoDB utiliza documentos JSON para almacenar los registros, el mismo formato en que se obtienen los datos que deseamos almacenar desde la API de Github.
+
+\begin{itemize}
+	\item \url{https://www.mongodb.com}
+\end{itemize}
+
+\section{Herramientas de integración continua}
+
+Las siguientes herramientas se utilizan en el proceso de integración continua.
+
+\subsection{Travis CI}
+
+Travis CI es un sistema de integración continua. Permite automatizar tareas como la construcción, ejecución de pruebas y despliegue de aplicaciones alojadas en Github.
+
+\begin{itemize}
+	\item \url{https://travis-ci.org/}
+\end{itemize}
+
+\subsection{Gulp}
+
+Gulp es una librería que permite automatizar diversas tareas comunes en el desarrollo de aplicaciones, como por ejemplo la compilación de código fuente. En este trabajo una de las tareas será compilar TypeScript a JavaScript.
+
+\begin{itemize}
+	\item \url{http://gulpjs.com/}
+\end{itemize}
+
+\subsubsection{Alternativas estudiadas}
+
+Grunt es la alternativa principal a Gulp como método de automatización de tareas.
+
+\begin{itemize}
+	\item \url{https://gruntjs.com/}
+\end{itemize}
+
+\subsection{Codebeat}
+
+Codebeat es una herramienta para la ejecución de revisiones automáticas sobre repositorios de código. Tras la evaluación ofrece una puntuación denominada GPA que va de 0 (peor) a 4 (mejor). Esta puntuación se calcula teniendo en cuenta aspectos como complejidad, duplicación y seguimiento de buenas prácticas.
+
+La motivación principal de su uso es que, al contrario que las principales herramientas, cuenta con un motor para el lenguaje TypeScript utilizado en este trabajo.
+
+\begin{itemize}
+	\item \url{https://codebeat.co}
+\end{itemize}
+
+\subsubsection{Alternativas estudiadas}
+
+Se han tenido en cuenta las herramientas SonarQube y Code Climate.
+\begin{itemize}
+	\item SonarQube: \url{https://www.sonarqube.org/}
+	\item Code Climate: \url{https://codeclimate.com/}
+\end{itemize}
+
+\subsection{ZenHub}
+
+ZenHub añade funcionalidades que permiten la gestión de proyectos utilizando metodologías ágiles dentro de Github. En este trabajo se utiliza como tablero de tareas y para generar diagramas burndown de cada sprint.
+
+\begin{itemize}
+	\item \url{https://www.zenhub.com}
+\end{itemize}
+
+\subsection{Mocha + Chai}
+
+Mocha es un framework de pruebas unitarias para Node.js y para navegadores que simplifica el desarrollo de pruebas para aplicaciones asíncronas.
+
+Chai es una librería de aserciones con una sintaxis similar al lenguaje natural, facilitando la comprensión de las pruebas. También cuenta con un sistema de plugins que le permite aumentar su funcionalidad, un ejemplo es el plugin chai-http que permite probar aplicaciones que funcionen mediante peticiones http (por ejemplo aplicaciones REST).
+
+\begin{itemize}
+	\item Mocha: \url{https://mochajs.org/}
+	\item Chai: \url{http://chaijs.com/}
+\end{itemize}
+
+\section{Heroku}
+
+Heroku es una herramienta de la familia PaaS (platform as a service). Permite a los desarrolladores construir, ejecutar y operar con aplicaciones completamente en la nube. Soporta diferentes lenguajes como Java, Node.js, Scala, Clojure, Python, PHP o GO.
+
+\begin{itemize}
+	\item \url{https://www.heroku.com}
+\end{itemize}
+
+\subsection{Alternativas estudiadas}
+
+Como alternativa a Heroku se ha estudiado OpenShift, herramienta creada por Red Hat que hace uso de Docker. Actualmente los nuevos registros están deshabilitados y únicamente permite fases de prueba de un mes de duración.
+
+\begin{itemize}
+	\item \url{https://www.openshift.com/}
+\end{itemize}
+
+\section{LaTeX}
+
+\LaTeX\ es un sistema de composición de textos orientado a la producción de documentación técnica y científica. Está formado por un conjunto de macros \TeX.
+
+\begin{itemize}
+	\item \url{https://www.latex-project.org/}
+\end{itemize}
+
+\subsection{Texmaker}
+
+Texmaker es un editor multiplataforma de \LaTeX\ que integra todas las herramientas necesarias para desarrollar este tipo de documentos.
+
+\begin{itemize}
+	\item \url{http://www.xm1math.net/texmaker/}
+\end{itemize}
+
+\subsubsection{Alternativas estudiadas}
+
+Como editor \LaTeX\ alternativo a Texmaker se valoró el uso de LaTeXila.
+
+\begin{itemize}
+	\item \url{https://wiki.gnome.org/Apps/LaTeXila}
+\end{itemize}
+
+\section{Skype empresarial}
+
+Como herramienta de comunicación para llevar a cabo las reuniones en cada sprint se ha utilizado Skype empresarial, incluida en el paquete de Office 365 ofrecido por la Universidad de Burgos. Permite programar y realizar videoconferencias con funcionalidades añadidas como compartir pantalla o mensajería instantánea.
+
+\begin{itemize}
+	\item \url{https://www.skype.com/es/business/skype-for-business/}
+\end{itemize}
+
+\section{Postman}
+
+Postman es una aplicación que permite la prueba y monitorización de API's mediante una interfaz que permite hacer peticiones de diferente tipo (GET, POST, PUT...), modificar las cabeceras, etc.
+
+\begin{itemize}
+	\item \url{https://www.getpostman.com/}
+\end{itemize}
