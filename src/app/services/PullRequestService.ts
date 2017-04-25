@@ -137,7 +137,7 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
                 owner: owner,
                 repo: repository,
                 state: `all`,
-                per_page: 1,
+                per_page: 100,
                 direction: `asc`
             }).then((result) => {
                 this.getAllPaginatedPullRequests(result).then((entities) => {
