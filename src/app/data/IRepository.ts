@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import { IEntity } from "../entities/IEntity";
+import * as Promise from "bluebird";
 
 /**
  * IRepository interface.
@@ -7,7 +8,7 @@ import { IEntity } from "../entities/IEntity";
  * @author Mario Juez <mario@mjuez.com>
  */
 export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> {
-    
+
     /** Gets the Mongoose Model. */
     model: mongoose.Model<E>;
 
@@ -17,7 +18,7 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      * @param callback  Callback function to retrieve the created item
      *                  or an error if something goes wrong.
      */
-    create(item: T, callback: (error: any, result: any) => void): void;
+    create(item: T): Promise<T>;
 
     /**
      * Updates an item from database.
@@ -25,14 +26,14 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      * @param callback  Callback function to retrieve the number of updated
      *                  items or an error if something goes wrong.
      */
-    update(item: T, callback: (error: any, rowsAffected: number) => void): void;
-    
+    update(item: T): Promise<number>;
+
     /**
      * Retrieves all items of a collection from database.
      * @param callback  Callback function to retrieve the items
      *                  or an error if something goes wrong.
      */
-    retrieve(callback: (error: any, result: any) => void): void;
+    retrieve(): Promise<T[]>;
 
     /**
      * Finds items that one of its keys match with a specific value.
@@ -41,6 +42,6 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      * @param callback  Callback function to retrieve the items
      *                  or an error if something goes wrong.
      */
-    findBy(key: any, value: any, callback: (error: any, result: any) => void): void;
+    findBy(key: any, value: any): Promise<T[]>;
 
 }

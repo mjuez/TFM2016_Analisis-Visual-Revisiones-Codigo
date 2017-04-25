@@ -3,6 +3,7 @@ import { AbstractRepository } from "./AbstractRepository";
 import { IPullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { PullRequestSchema } from "./schemas/PullRequestSchema";
+import * as Promise from "bluebird";
 
 /**
  * IPullRequestRepository interface.
@@ -10,14 +11,14 @@ import { PullRequestSchema } from "./schemas/PullRequestSchema";
  * @author Mario Juez <mario@mjuez.com>
  */
 export interface IPullRequestRepository extends IRepository<IPullRequestEntity, PullRequestDocument> {
-    
+
     /**
      * Retrieves a Pull Request given its GitHub id.
      * @param id        Pull Request GitHub id.
      * @param callback  Callback function to retrieve the Pull Request entity.
      *                  or an error if something goes wrong.
      */
-    findOneByPullId(id: number, callback: (error: any, result: IPullRequestEntity) => void): void;
+    findOneByPullId(id: number): Promise<IPullRequestEntity>;
 }
 
 /**
@@ -43,8 +44,17 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @param callback  Callback function to retrieve the number of updated
      *                  items or an error if something goes wrong.
      */
-    public update(item: IPullRequestEntity, callback: (error: any, rowsAffected: number) => void): void {
-        this.model.update({ id: item.id }, item.document, callback);
+    public update(item: IPullRequestEntity): Promise<number> {
+        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
+            this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
+                if (!error) {
+                    resolve(rowsAffected);
+                } else {
+                    reject(error);
+                }
+            });
+        });
+        return promise;
     }
 
     /**
@@ -53,8 +63,17 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @param callback  Callback function to retrieve the Pull Request entity.
      *                  or an error if something goes wrong.
      */
-    public findOneByPullId(id: number, callback: (error: any, result: IPullRequestEntity) => void): void {
-        this.model.findOne({ id: id }, callback);
+    public findOneByPullId(id: number): Promise<IPullRequestEntity> {
+        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
+            this.model.findOne({ id: id }, (error, result) => {
+                if (!error) {
+                    resolve(result);
+                } else {
+                    reject(error);
+                }
+            });
+        });
+        return promise;
     }
 
 }

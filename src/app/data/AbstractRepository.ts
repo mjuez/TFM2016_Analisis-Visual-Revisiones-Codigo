@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 import { IRepository } from "./IRepository";
 import { IEntity } from "../entities/IEntity";
 import { GenericFactory } from "../util/GenericFactory";
+import * as Promise from "bluebird";
 
 /**
  * Abstract Repository class. Includes all functionality that every
@@ -38,8 +39,8 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param callback  Callback function to retrieve the created item
      *                  or an error if something goes wrong.
      */
-    public create(item: T, callback: (error: any, result: any) => void): void {
-        this.model.create(item.document, callback);
+    public create(item: T): Promise<T> {
+        return this.model.create(item.document);
     }
 
     /**
@@ -48,15 +49,25 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param callback  Callback function to retrieve the number of updated
      *                  items or an error if something goes wrong.
      */
-    public abstract update(item: T, callback: (error: any, result: any) => void): void;
+    public abstract update(item: T): Promise<number>;
 
     /**
      * Retrieves all items of a collection from database.
      * @param callback  Callback function to retrieve the items
      *                  or an error if something goes wrong.
      */
-    public retrieve(callback: (error: any, result: any) => void): void {
-        this.model.find({}, callback);
+    public retrieve(): Promise<T[]> {
+        let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {
+            this.model.find({}, (err, res) => {
+                if (!err) {
+                    resolve(res);
+                } else {
+                    reject(err);
+                }
+            });
+        });
+
+        return promise;
     }
 
     /**
@@ -66,11 +77,19 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param callback  Callback function to retrieve the items
      *                  or an error if something goes wrong.
      */
-    public findBy(key: any, value: any, callback: (error: any, result: any) => void): void {
-        this.model.find({ key: value }, (error, documents) => {
-            let entities: T[] = documents.map(document => new this._genericFactory.createInstance(document));
-            callback(error, entities);
+    public findBy(key: any, value: any): Promise<T[]> {
+        let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {
+            this.model.find({ key: value }, (error, documents) => {
+                if (!error) {
+                    let entities: T[] = documents.map(document => new this._genericFactory.createInstance(document));
+                    resolve(entities);
+                } else {
+                    reject(error);
+                }
+            });
         });
+
+        return promise;
     }
 
 }
