@@ -1,14 +1,23 @@
-import { IService } from "../services/IService";
+import { IPersistenceService } from "../services/IPersistenceService";
 import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
+import { IApiService } from "./IApiService";
+import { GitHubService } from "./GitHubService";
+import * as GitHubAPI from "github";
+import * as Promise from "bluebird";
 
 /**
  * IPullRequestService interface.
  * Describes specific functionality for Pull Request entities.
  * @author Mario Juez <mario@mjuez.com> 
  */
-export interface IPullRequestService extends IService<IPullRequestEntity> {
+export interface IPullRequestService extends IPersistenceService<IPullRequestEntity>, IApiService<GitHubAPI> {
+
+    getRemotePullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
+    
+    getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]>;
+
     /**
      * Transforms raw data to IPullRequestEntity.
      * @param data  raw data.
@@ -26,7 +35,7 @@ export interface IPullRequestService extends IService<IPullRequestEntity> {
  * Pull Request services.
  * @author Mario Juez <mario@mjuez.com>
  */
-export class PullRequestService implements IPullRequestService {
+export class PullRequestService extends GitHubService implements IPullRequestService {
 
     /** Pull Request repository. */
     private readonly _repository: IPullRequestRepository;
@@ -37,6 +46,7 @@ export class PullRequestService implements IPullRequestService {
      * @param repository    Injected Pull Request repository.
      */
     constructor(repository: IPullRequestRepository) {
+        super();
         this._repository = repository;
     }
 
@@ -46,19 +56,32 @@ export class PullRequestService implements IPullRequestService {
      * @param callback  optional callback function to retrieve the created/updated
      *                  Pull Request (or an error if something goes wrong).
      */
-    public createOrUpdate(entity: IPullRequestEntity, callback: (err: any, result: IPullRequestEntity) => void): void {
+    public createOrUpdate(entity: IPullRequestEntity): Promise<IPullRequestEntity> {
         let repository: IPullRequestRepository = this._repository;
-        repository.findOneByPullId(entity.id, (error, result) => {
-            if (!result) {
-                repository.create(entity, (error, result) => {
-                    callback(error, entity);
-                });
-            } else {
-                repository.update(entity, (error, result) => {
-                    callback(error, entity);
-                });
-            }
+
+        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
+            repository.findOneByPullId(entity.id, (error, result) => {
+                if (!result) {
+                    repository.create(entity, (error, result) => {
+                        if (!error) { // SHOULD PROMISIFY REPOSITORIES.
+                            resolve(result);
+                        } else {
+                            reject(error);
+                        }
+                    });
+                } else {
+                    repository.update(entity, (error, result) => {
+                        if (!error) { // SHOULD PROMISIFY REPOSITORIES.
+                            resolve(entity);
+                        } else {
+                            reject(error);
+                        }
+                    });
+                }
+            });
         });
+
+        return promise;
     }
 
     /**
@@ -67,56 +90,112 @@ export class PullRequestService implements IPullRequestService {
      * @param callback  optional callback function to retrieve the created/updated
      *                  Pull Request array (or an error if something goes wrong).
      */
-    public createOrUpdateMultiple(entities: IPullRequestEntity[], callback: (err: any, result: IPullRequestEntity[]) => void): void {
-
-        let mapPromise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
+    public createOrUpdateMultiple(entities: IPullRequestEntity[]): Promise<IPullRequestEntity[]> {
+        let promise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
             let entitiesResult: IPullRequestEntity[] = [];
             entities.map((entity) => {
-                this.createOrUpdate(entity, (err, result) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        let length: number = entitiesResult.push(result);
-                        if (length === entities.length) {
-                            resolve(entitiesResult);
-                        }
+                this.createOrUpdate(entity).then((entity) => {
+                    let length: number = entitiesResult.push(entity);
+                    if (length === entities.length) {
+                        resolve(entitiesResult);
                     }
+                }).catch((reason) => {
+                    reject(reason);
                 });
+            });
+
+            // TRY: resolve(entitiesResult)
+        });
+
+        return promise;
+    }
+
+    public getRemotePullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity> {
+        let api: GitHubAPI = this.API;
+
+        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
+            api.pullRequests.get(<GitHubAPI.PullRequestsGetParams>{
+                owner: owner,
+                repo: repository,
+                number: id
+            }).then((result) => {
+                let entity: IPullRequestEntity = this.toEntity(result.data);
+                resolve(entity);
+            }).catch((reason) => {
+                reject(reason);
             });
         });
 
-        mapPromise.then((entitiesResult) => {
-            callback(null, entitiesResult);
+        return promise;
+    }
+
+    public getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]> {
+        let api: GitHubAPI = this.API;
+
+        let promise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
+            api.pullRequests.getAll(<GitHubAPI.PullRequestsGetAllParams>{
+                owner: owner,
+                repo: repository,
+                state: `all`,
+                per_page: 1,
+                direction: `asc`
+            }).then((result) => {
+                this.getAllPaginatedPullRequests(result).then((entities) => {
+                    resolve(entities);
+                }).catch((reason) => {
+                    reject(reason);
+                });
+            }).catch((reason) => {
+                reject(reason);
+            });
         });
 
-        mapPromise.catch((error) => {
-            callback(error, null);
-        });
+        return promise;
     }
 
     /** @inheritdoc */
-    public toEntity(data: any): IPullRequestEntity {
-        let jsonObject: Object;
-        if (data instanceof Object) {
-            jsonObject = data;
-        } else {
-            jsonObject = JSON.parse(data);
-        }
-        let entity: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>jsonObject);
+    public toEntity(data: Object): IPullRequestEntity {
+        let entity: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>data);
         return entity;
     }
 
     /** @inheritdoc */
-    public toEntityArray(data: any): IPullRequestEntity[] {
-        let jsonArray: Object[] = JSON.parse(data);
+    public toEntityArray(data: Object[]): IPullRequestEntity[] {
+        //console.log(data);
+        //let jsonArray: Object[] = JSON.parse(data);
         let entityArray: IPullRequestEntity[] = [];
-        if (jsonArray.length > 0) {
-            jsonArray.map((jsonObject) => {
+        if (data.length > 0) {
+            data.map((jsonObject) => {
                 let entity: IPullRequestEntity = this.toEntity(jsonObject);
                 entityArray.push(entity);
             });
         }
         return entityArray;
+    }
+
+    private getAllPaginatedPullRequests(pageResult): Promise<IPullRequestEntity[]> {
+        let api: GitHubAPI = this.API;
+
+        let promise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
+            let pullRequests: IPullRequestEntity[] = this.toEntityArray(pageResult.data);
+            if (api.hasNextPage(pageResult)) {
+                api.getNextPage(pageResult).then((nextPageResult) => {
+                    this.getAllPaginatedPullRequests(nextPageResult).then((followingEntities) => {
+                        pullRequests = pullRequests.concat(followingEntities);
+                        resolve(pullRequests);
+                    }).catch((reason) => {
+                        reject(reason);
+                        // MAYBE NO REQUESTS REMAINING
+                        // TO DO: RETURN PAGE NUMBER TO CONTINUE
+                        // WHEN REQUESTS AVAILABLE.
+                    });
+                });
+            } else {
+                resolve(pullRequests);
+            }
+        });
+
+        return promise;
     }
 
 }

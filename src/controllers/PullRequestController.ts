@@ -1,16 +1,17 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { IGitHubController, GitHubController } from "./GitHubController";
 import { IPullRequestService } from "../app/services/PullRequestService";
 import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
 import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
-import * as request from 'request';
+//import * as request from 'request';
 import * as mongoose from 'mongoose';
+import * as GitHubAPI from 'github';
+import * as Promise from 'bluebird';
 
 /**
  * Pull Request controller interface.
  * @author Mario Juez <mario@mjuez.com>
  */
-export interface IPullRequestController extends IGitHubController {
+export interface IPullRequestController {
 
     /**
      * Retrieves a Pull Request from GitHub given an owner, a repository
@@ -38,19 +39,16 @@ export interface IPullRequestController extends IGitHubController {
  * @extends GitHubController.
  * @implements IPullRequestController.
  */
-export class PullRequestController extends GitHubController implements IPullRequestController {
+export class PullRequestController implements IPullRequestController {
 
     /** Pull Request service. */
     private readonly _service: IPullRequestService;
-
-    private readonly _PARAMETERS: string = `state=all&per_page=100`;
 
     /**
      * Class constructor. Injects Pull Request service dependency.
      * @param service   Pull Request service.
      */
     constructor(service: IPullRequestService) {
-        super();
         this._service = service;
     }
 
@@ -58,24 +56,16 @@ export class PullRequestController extends GitHubController implements IPullRequ
     public retrieve(req: Request, res: Response): void {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let pullRequestId: string = req.params.pull_id;
-        let uri: string = `${this.API_URL}/repos/${owner}/${repository}/pulls/${pullRequestId}?${this.API_CREDENTIALS}`;
-
-        request(uri, this.API_OPTIONS, (error: any, response: request.RequestResponse, body: any) => {
-            if (error) {
+        let pullRequestId: number = req.params.pull_id;
+        let service: IPullRequestService = this._service;
+        service.getRemotePullRequest(owner, repository, pullRequestId).then((pull) => {
+            service.createOrUpdate(pull).then((savedPull) => {
+                res.json(savedPull);
+            }).catch((error) => {
                 res.json({ "error": error });
-            } else {
-                this.handleResponse(response, res, () => {
-                    let pullRequest: IPullRequestEntity = this._service.toEntity(body);
-                    this._service.createOrUpdate(pullRequest, (err: any, result: IPullRequestEntity) => {
-                        if (!err) {
-                            res.json(result.document);
-                        } else {
-                            res.json({ "error": err });
-                        }
-                    });
-                });
-            }
+            });
+        }).catch((error) => {
+            res.json({ "error": error });
         });
     }
 
@@ -83,27 +73,16 @@ export class PullRequestController extends GitHubController implements IPullRequ
     public count(req: Request, res: Response): void {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let uri: string = `${this.API_URL}/repos/${owner}/${repository}/pulls?${this.API_CREDENTIALS}&${this._PARAMETERS}`;
+        let service: IPullRequestService = this._service;
 
-        request(uri, this.API_OPTIONS, (error: any, response: request.RequestResponse, body: any) => {
-            if (error) {
+        service.getRemotePullRequests(owner, repository).then((pulls) => {
+            service.createOrUpdateMultiple(pulls).then((savedPulls) => {
+                res.json({ "count": savedPulls.length });
+            }).catch((error) => {
                 res.json({ "error": error });
-            } else {
-                this.handleResponse(response, res, () => {
-                    let pullRequestArray: IPullRequestEntity[] = this._service.toEntityArray(body);
-                    if (pullRequestArray.length > 0) {
-                        this._service.createOrUpdateMultiple(pullRequestArray, (err: any, result: IPullRequestEntity[]) => {
-                            if (!err) {
-                                res.json({ "count": result.length });
-                            } else {
-                                res.json({ "error": err });
-                            }
-                        });
-                    } else {
-                        res.json({ "count": 0 });
-                    }
-                });
-            }
+            });
+        }).catch((error) => {
+            res.json({ "error": error });
         });
     }
 
