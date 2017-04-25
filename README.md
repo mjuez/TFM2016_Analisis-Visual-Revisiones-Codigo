@@ -39,6 +39,7 @@ Anvireco es una herramienta para la extracción y visualización de datos sobre 
 | [TypeScript](https://github.com/Microsoft/TypeScript) | Apache-2.0 | Sí |
 | [ts-node](https://github.com/TypeStrong/ts-node) | MIT | Sí |
 | [tslint](https://github.com/palantir/tslint) | Apache-2.0 | Sí |
+| [bluebird](https://github.com/petkaantonov/bluebird) | MIT | Sí |
 | [gulp](https://github.com/gulpjs/gulp) | MIT | Sí |
 | [gulp-sourcemaps](https://github.com/gulp-sourcemaps/gulp-sourcemaps) | ISC | Sí |
 | [gulp-typescript](https://github.com/ivogabe/gulp-typescript) | MIT | Sí |

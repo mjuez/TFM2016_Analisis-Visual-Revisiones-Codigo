@@ -38,6 +38,7 @@
     "@types/mongoose": "^4.7.9",
     "@types/node": "^7.0.12",
     "@types/request": "0.0.42",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
