@@ -75,14 +75,19 @@ export class PullRequestController implements IPullRequestController {
         let repository: string = req.params.repository;
         let service: IPullRequestService = this._service;
 
-        service.getRemotePullRequests(owner, repository).then((pulls) => {
+        let savePullRequests = (pulls) => {
             service.createOrUpdateMultiple(pulls).then((savedPulls) => {
                 res.json({ "count": savedPulls.length });
             }).catch((error) => {
                 res.json({ "error": error });
             });
-        }).catch((error) => {
-            res.json({ "error": error });
+        }
+
+        service.getRemotePullRequests(owner, repository).then((pulls) => {
+            savePullRequests(pulls);
+        }).catch((rejection) => {
+            let pulls = rejection["pull-requests"];
+            savePullRequests(pulls);
         });
     }
 

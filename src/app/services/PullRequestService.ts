@@ -4,6 +4,7 @@ import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
 import { IApiService } from "./IApiService";
 import { GitHubService } from "./GitHubService";
+import { GitHubUtil } from "../util/GitHubUtil";
 import * as GitHubAPI from "github";
 import * as Promise from "bluebird";
 
@@ -15,7 +16,7 @@ import * as Promise from "bluebird";
 export interface IPullRequestService extends IPersistenceService<IPullRequestEntity>, IApiService<GitHubAPI> {
 
     getRemotePullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
-    
+
     getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]>;
 
     /**
@@ -60,24 +61,22 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
         let repository: IPullRequestRepository = this._repository;
 
         let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
-            repository.findOneByPullId(entity.id, (error, result) => {
-                if (!result) {
-                    repository.create(entity, (error, result) => {
-                        if (!error) { // SHOULD PROMISIFY REPOSITORIES.
-                            resolve(result);
-                        } else {
-                            reject(error);
-                        }
+            repository.findOneByPullId(entity.id).then((foundEntity) => {
+                if (foundEntity) {
+                    repository.update(entity).then((rowsAffected) => {
+                        resolve(entity);
+                    }).catch((error) => {
+                        reject(error);
                     });
                 } else {
-                    repository.update(entity, (error, result) => {
-                        if (!error) { // SHOULD PROMISIFY REPOSITORIES.
-                            resolve(entity);
-                        } else {
-                            reject(error);
-                        }
+                    repository.create(entity).then((result) => {
+                        resolve(result);
+                    }).catch((error) => {
+                        reject(error);
                     });
                 }
+            }).catch((error) => {
+                reject(error);
             });
         });
 
@@ -180,15 +179,23 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
             let pullRequests: IPullRequestEntity[] = this.toEntityArray(pageResult.data);
             if (api.hasNextPage(pageResult)) {
                 api.getNextPage(pageResult).then((nextPageResult) => {
-                    this.getAllPaginatedPullRequests(nextPageResult).then((followingEntities) => {
-                        pullRequests = pullRequests.concat(followingEntities);
+                    this.getAllPaginatedPullRequests(nextPageResult).then((followingPullRequests) => {
+                        pullRequests = pullRequests.concat(followingPullRequests);
                         resolve(pullRequests);
                     }).catch((reason) => {
+                        let partialPullRequests: IPullRequestEntity[] = reason["pull-requests"];
+                        pullRequests = pullRequests.concat(partialPullRequests);
+                        reason["pull-requests"] = pullRequests;
                         reject(reason);
-                        // MAYBE NO REQUESTS REMAINING
-                        // TO DO: RETURN PAGE NUMBER TO CONTINUE
-                        // WHEN REQUESTS AVAILABLE.
                     });
+                }).catch((reason) => {
+                    let links: string = pageResult.meta.link;
+                    let nextPage: number = GitHubUtil.getNextPageNumber(links);
+                    let rejection: Object = {
+                        "pull-requests": pullRequests,
+                        "next-page": nextPage
+                    }
+                    reject(rejection);
                 });
             } else {
                 resolve(pullRequests);
