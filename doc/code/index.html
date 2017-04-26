@@ -64,8 +64,192 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<h1 id="tfm2016_analisis-visual-revisiones-codigo">TFM2016_Analisis-Visual-Revisiones-Codigo</h1>
-				<p>El trabajo tiene como objetivo analizar el uso de revisiones de código de varios proyectos de en repositorios abiertos, extrayendo automáticamente datos de las revisiones de código, para su posterior visualización a través de una aplicación dinámica web.</p>
+				<h1 id="anvireco">Anvireco</h1>
+				<table>
+					<thead>
+						<tr>
+							<th>master build</th>
+							<th>dev build</th>
+							<th>GPA</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><a href="https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo"><img src="https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo.svg?branch=master" alt="travis badge"></a></td>
+							<td><a href="https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo"><img src="https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo.svg?branch=dev" alt="travis badge"></a></td>
+							<td><a href="https://codebeat.co/projects/github-com-mjuez-tfm2016_analisis-visual-revisiones-codigo-master"><img src="https://codebeat.co/badges/07bbfa7d-f5dd-4c96-a20e-a48517dfa89e" alt="codebeat badge"></a></td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="descripci-n">Descripción</h2>
+				<p>Anvireco es una herramienta para la extracción y visualización de datos sobre revisiones de código realizadas en repositorios de código alojados en GitHub.</p>
+				<h3 id="autor">Autor</h3>
+				<ul>
+					<li>Mario Juez - <a href="mailto:mario@mjuez.com">mario@mjuez.com</a></li>
+				</ul>
+				<h3 id="tutores">Tutores</h3>
+				<ul>
+					<li>Carlos López Nozal - <a href="mailto:clopezno@ubu.es">clopezno@ubu.es</a></li>
+					<li>Raúl Marticorena Sánchez - <a href="mailto:rmartico@ubu.es">rmartico@ubu.es</a></li>
+				</ul>
+				<h2 id="requisitos">Requisitos</h2>
+				<h3 id="requisitos-m-nimos">Requisitos mínimos</h3>
+				<ul>
+					<li><a href="https://nodejs.org/en/"><strong>Node.js y npm</strong></a>: La aplicación está desarrollada en Node.js y hace uso del gestor de paquetes npm.</li>
+					<li><a href="https://www.mongodb.com/"><strong>MongoDB</strong></a>: La aplicación está preparada para trabajar con bases de datos NoSQL MongoDB. No es imprescindible tener una instancia local de MongoDB, como alternativa se pueden utilizar servicios en la nube como <a href="https://www.mongodb.com/cloud/atlas">MongoDB Atlas</a> o <a href="https://mlab.com/">mLab</a>.</li>
+				</ul>
+				<h3 id="requisitos-recomendados">Requisitos recomendados</h3>
+				<ul>
+					<li><a href="https://github.com/settings/developers"><strong>GitHub Developer application</strong></a>: Permite aumentar el límite de peticiones/hora a la API de GitHub de 60 a 5000.</li>
+				</ul>
+				<h2 id="dependencias">Dependencias</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Licencia</th>
+							<th>Imprescindible</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><a href="https://github.com/expressjs/express">express</a></td>
+							<td>MIT</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/expressjs/body-parser">body-parser</a></td>
+							<td>MIT</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/mikedeboer/node-github">node-github</a></td>
+							<td>MIT</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/Automattic/mongoose">mongoose</a></td>
+							<td>MIT</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/Microsoft/TypeScript">TypeScript</a></td>
+							<td>Apache-2.0</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/TypeStrong/ts-node">ts-node</a></td>
+							<td>MIT</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/palantir/tslint">tslint</a></td>
+							<td>Apache-2.0</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/petkaantonov/bluebird">bluebird</a></td>
+							<td>MIT</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/gulpjs/gulp">gulp</a></td>
+							<td>MIT</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/gulp-sourcemaps/gulp-sourcemaps">gulp-sourcemaps</a></td>
+							<td>ISC</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/ivogabe/gulp-typescript">gulp-typescript</a></td>
+							<td>MIT</td>
+							<td>Sí</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/rogierschouten/gulp-typedoc">gulp-typedoc</a></td>
+							<td>ISC</td>
+							<td>No</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/chaijs/chai">chai</a></td>
+							<td>MIT</td>
+							<td>No</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/chaijs/chai-http">chai-http</a></td>
+							<td>MIT</td>
+							<td>No</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/mochajs/mocha">mocha</a></td>
+							<td>MIT</td>
+							<td>No</td>
+						</tr>
+						<tr>
+							<td><a href="https://github.com/TypeStrong/typedoc">typedoc</a></td>
+							<td>Apache-2.0</td>
+							<td>No</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2 id="instalaci-n">Instalación</h2>
+				<p>A continuación se muestran los pasos necesarios para la instalación y despliegue de la aplicación (manual de programador) en una máquina local. Las tecnologías utilizadas también son compatibles con sistemas operativos Windows, Linux y Mac OS X.</p>
+				<h3 id="descarga-de-la-aplicaci-n">Descarga de la aplicación</h3>
+				<p>En primer lugar se debe descargar la aplicación. Bien el fichero .zip generado por GitHub, o clonando el repositorio:</p>
+				<pre><code>git <span class="hljs-keyword">clone</span> <span class="hljs-title">https</span>://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo.git
+</code></pre><p>Una vez descargada y descomprimida, es necesario situarse dentro de la carpeta que contiene el fichero <code>package.json</code>.</p>
+				<h3 id="variables-de-entorno">Variables de entorno</h3>
+				<p>Las variables de configuración de la aplicación se deben definir como variables de entorno y son las siguientes:</p>
+				<ul>
+					<li><strong>MONGO_CONNSTRING</strong>: Cadena de conexión a la base de datos MongoDB (<a href="https://docs.mongodb.com/manual/reference/connection-string/">formato</a>).<ul>
+							<li>Ejemplo: <code>mongodb://admin:1234@127.0.0.1:27017/anvireco</code>.</li>
+						</ul>
+					</li>
+					<li><strong>ANVIRECO_APPNAME</strong> (opcional): Nombre de una aplicación <a href="https://github.com/settings/developers">GitHub Developer application</a>.<ul>
+							<li>Ejemplo: <code>Anvireco</code>.</li>
+						</ul>
+					</li>
+					<li><strong>ANVIRECO_ID</strong> (opcional): Client ID de una aplicación <a href="https://github.com/settings/developers">GitHub Developer application</a>.<ul>
+							<li>Ejemplo: <code>00x000x00xxx0x0x0xx0</code>.</li>
+						</ul>
+					</li>
+					<li><strong>ANVIRECO_SECRET</strong> (opcional): Client Secret de una aplicación <a href="https://github.com/settings/developers">GitHub Developer application</a>.<ul>
+							<li>Ejemplo: <code>00x000x00xxx0x0x0xx000x000x00xxx0x0x0xx0</code>.</li>
+						</ul>
+					</li>
+					<li><strong>PORT</strong> (opcional): Puerto donde se va a ejecutar el servidor node.js.<ul>
+							<li>Ejemplo: <code>3000</code>.</li>
+						</ul>
+					</li>
+				</ul>
+				<p><strong>Nota:</strong> La definición de variables de entorno depende del sistema operativo utilizado y no se detalla en este manual.</p>
+				<h3 id="instalaci-n-de-dependencias">Instalación de dependencias</h3>
+				<p>Existen dos formas de instalar las dependencias de la aplicación utilizando el gestor de paquetes npm:</p>
+				<ul>
+					<li><strong>Entorno de producción</strong>: Instala únicamente las dependencias imprescindibles para la ejecución de la aplicación.<pre><code>npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--only=production</span>
+</code></pre></li>
+					<li><strong>Entorno de desarrollo</strong>: Instala todas las dependencias, incluyendo aquellas opcionales como por ejemplo las de testing.<pre><code>npm <span class="hljs-keyword">install</span>
+</code></pre></li>
+				</ul>
+				<h3 id="compilaci-n-de-ficheros-typescript">Compilación de ficheros TypeScript</h3>
+				<p>Los ficheros TypeScript (.ts) dentro del directorio <code>src</code> son compilados a JavaScript (.js) y guardados en el directorio <code>release</code>.
+				La compilación se realiza mediante un objetivo de gulp llamado <code>compile</code>.</p>
+				<pre><code><span class="hljs-attribute">gulp compile</span>
+</code></pre><h3 id="ejecuci-n-de-pruebas-unitarias">Ejecución de pruebas unitarias</h3>
+				<p>La ejecución de las pruebas unitarias solo se puede llevar a cabo si se han instalado todas las dependencias.
+				Mediante el comando <code>npm test</code> se ejecutan las pruebas.</p>
+				<p><strong>Nota:</strong> Para la ejecución de las pruebas no es necesario compilar los ficheros TypeScript.</p>
+				<h3 id="ejecuci-n-de-la-aplicaci-n">Ejecución de la aplicación</h3>
+				<p>La aplicación se ejecuta mediante el comando <code>npm start</code>. La aplicación es accesible desde <a href="http://localhost:puerto">http://localhost:puerto</a> donde <code>puerto</code> es el valor de la variable de entorno <code>PORT</code>.</p>
+				<p><strong>Nota 1:</strong> Si no se ha definido la variable de entorno <code>PORT</code>, la aplicación se desplegará por defecto en el puerto <code>3000</code> y será accesible a través de <a href="http://localhost:3000/">http://localhost:3000/</a>.</p>
+				<p><strong>Nota 2:</strong> Para la ejecución de la aplicación es imprescindible la compilación previa de los ficheros TypeScript.</p>
+				<h2 id="demo">Demo</h2>
+				<ul>
+					<li>Producción: <a href="http://anvireco.herokuapp.com/">http://anvireco.herokuapp.com/</a></li>
+					<li>Desarrollo: <a href="http://anvireco-dev.herokuapp.com/">http://anvireco-dev.herokuapp.com/</a></li>
+				</ul>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -102,7 +286,13 @@
 						<a href="modules/_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_app_services_iservice_.html">"app/services/IService"</a>
+						<a href="modules/_app_services_githubservice_.html">"app/services/<wbr>Git<wbr>Hub<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_app_services_iapiservice_.html">"app/services/IApi<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_app_services_ipersistenceservice_.html">"app/services/IPersistence<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
@@ -111,7 +301,7 @@
 						<a href="modules/_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_controllers_githubcontroller_.html">"controllers/<wbr>Git<wbr>Hub<wbr>Controller"</a>
+						<a href="modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>

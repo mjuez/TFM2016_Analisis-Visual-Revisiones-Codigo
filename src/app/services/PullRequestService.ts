@@ -15,19 +15,34 @@ import * as Promise from "bluebird";
  */
 export interface IPullRequestService extends IPersistenceService<IPullRequestEntity>, IApiService<GitHubAPI> {
 
+    /**
+     * Obtains a remote pull request (from GitHub).
+     * @param owner         repository owner.
+     * @param repository    repository name.
+     * @param id            pull request id.
+     * @returns a promise that returns a pull request entity if resolved.
+     */
     getRemotePullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
 
+    /**
+     * Obtains all remote pull requests (from GitHub).
+     * @param owner         repository owner.
+     * @param repository    repository name.
+     * @returns a promise that returns an array of pull request entities if resolved.
+     */
     getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]>;
 
     /**
      * Transforms raw data to IPullRequestEntity.
      * @param data  raw data.
+     * @returns a pull request entity.
      */
     toEntity(data: any): IPullRequestEntity;
 
     /**
      * Transforms raw data to IPullRequestEntity array.
      * @param data  raw data.
+     * @returns an array of pull request entities.
      */
     toEntityArray(data: any): IPullRequestEntity[];
 }
@@ -54,8 +69,7 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
     /**
      * Saves or updates a Pull Request into database.
      * @param entity    a Pull Request.
-     * @param callback  optional callback function to retrieve the created/updated
-     *                  Pull Request (or an error if something goes wrong).
+     * @returns a promise that returns a pull request entity if resolved.
      */
     public createOrUpdate(entity: IPullRequestEntity): Promise<IPullRequestEntity> {
         let repository: IPullRequestRepository = this._repository;
@@ -86,8 +100,7 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
     /**
      * Saves or updates many Pull Requests into database.
      * @param entity    a Pull Request array.
-     * @param callback  optional callback function to retrieve the created/updated
-     *                  Pull Request array (or an error if something goes wrong).
+     * @returns a promise that returns an array of pull request entities if resolved.
      */
     public createOrUpdateMultiple(entities: IPullRequestEntity[]): Promise<IPullRequestEntity[]> {
         let promise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
@@ -103,12 +116,13 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
                 });
             });
 
-            // TRY: resolve(entitiesResult)
+            // TRY: resolve(entitiesResult) instead comparing lengths ?
         });
 
         return promise;
     }
 
+    /** @inheritdoc */
     public getRemotePullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity> {
         let api: GitHubAPI = this.API;
 
@@ -128,6 +142,7 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
         return promise;
     }
 
+    /** @inheritdoc */
     public getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]> {
         let api: GitHubAPI = this.API;
 
@@ -160,8 +175,6 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
 
     /** @inheritdoc */
     public toEntityArray(data: Object[]): IPullRequestEntity[] {
-        //console.log(data);
-        //let jsonArray: Object[] = JSON.parse(data);
         let entityArray: IPullRequestEntity[] = [];
         if (data.length > 0) {
             data.map((jsonObject) => {
@@ -172,6 +185,16 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
         return entityArray;
     }
 
+    /**
+     * Obtains all pull requests from GitHub, even if they are paginated.
+     * @param pageResult    a response that contains a page or results 
+     *                      from a GitHub API call.
+     * @returns a promise that returns an array of pull request entities if resolved,
+     *          or if rejected, returns an object with an array of a part of remote
+     *          pull requests and the last page that was processed to continue from
+     *          that point in the future. *Note: This can be useful when we run out of
+     *          api calls.
+     */
     private getAllPaginatedPullRequests(pageResult): Promise<IPullRequestEntity[]> {
         let api: GitHubAPI = this.API;
 

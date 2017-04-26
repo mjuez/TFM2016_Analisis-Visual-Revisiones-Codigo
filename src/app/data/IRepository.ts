@@ -15,23 +15,20 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
     /**
      * Creates an item into database.
      * @param item      Item to create.
-     * @param callback  Callback function to retrieve the created item
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns the item created if resolved.
      */
     create(item: T): Promise<T>;
 
     /**
      * Updates an item from database.
      * @param item      Item with updated data.
-     * @param callback  Callback function to retrieve the number of updated
-     *                  items or an error if something goes wrong.
+     * @returns a promise that returns the number of rows affected if resolved.
      */
     update(item: T): Promise<number>;
 
     /**
      * Retrieves all items of a collection from database.
-     * @param callback  Callback function to retrieve the items
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns an array of items if resolved.
      */
     retrieve(): Promise<T[]>;
 
@@ -39,8 +36,7 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      * Finds items that one of its keys match with a specific value.
      * @param key       key to compare value.
      * @param value     value to compare 
-     * @param callback  Callback function to retrieve the items
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns an array of items if resolved.
      */
     findBy(key: any, value: any): Promise<T[]>;
 

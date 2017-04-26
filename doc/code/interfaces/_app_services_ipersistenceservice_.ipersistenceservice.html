@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IGitHubController | anvireco</title>
+	<title>IPersistenceService | anvireco</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_controllers_githubcontroller_.html">&quot;controllers/GitHubController&quot;</a>
+					<a href="../modules/_app_services_ipersistenceservice_.html">&quot;app/services/IPersistenceService&quot;</a>
 				</li>
 				<li>
-					<a href="_controllers_githubcontroller_.igithubcontroller.html">IGitHubController</a>
+					<a href="_app_services_ipersistenceservice_.ipersistenceservice.html">IPersistenceService</a>
 				</li>
 			</ul>
-			<h1>Interface IGitHubController</h1>
+			<h1>Interface IPersistenceService&lt;IEntity&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -72,37 +72,34 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>IGitHubController interface.
-							Every GitHub controller instance will need the github API URL,
-							the API credentials to get up to 5000 requests per hour, and
-							each call to the API must especify an user or application name
-						in the request headers.</p>
+						<p>IPersistenceService interface.</p>
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x6d;&#x61;&#x72;&#105;&#111;&#64;&#109;&#106;&#x75;&#x65;&#x7a;&#x2e;&#x63;&#111;&#x6d;">&#x6d;&#x61;&#x72;&#105;&#111;&#64;&#109;&#106;&#x75;&#x65;&#x7a;&#x2e;&#x63;&#111;&#x6d;</a></p>
+						<dd><p>Mario Juez <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x6d;&#97;&#114;&#x69;&#x6f;&#64;&#109;&#106;&#117;&#101;&#x7a;&#46;&#99;&#111;&#109;">&#x6d;&#97;&#114;&#x69;&#x6f;&#64;&#109;&#106;&#117;&#101;&#x7a;&#46;&#99;&#111;&#109;</a></p>
 						</dd>
 					</dl>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>IEntity</h4>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IGitHubController</span>
+						<span class="target">IPersistenceService</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html" class="tsd-signature-type">IPullRequestController</a>
+								<a href="_app_services_pullrequestservice_.ipullrequestservice.html" class="tsd-signature-type">IPullRequestService</a>
 							</li>
 						</ul>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implemented by</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../classes/_controllers_githubcontroller_.githubcontroller.html" class="tsd-signature-type">GitHubController</a></li>
-					<li><a href="../classes/_controllers_pullrequestcontroller_.pullrequestcontroller.html" class="tsd-signature-type">PullRequestController</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -110,62 +107,80 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_controllers_githubcontroller_.igithubcontroller.html#api_credentials" class="tsd-kind-icon">API_<wbr>CREDENTIALS</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_controllers_githubcontroller_.igithubcontroller.html#api_options" class="tsd-kind-icon">API_<wbr>OPTIONS</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_controllers_githubcontroller_.igithubcontroller.html#api_url" class="tsd-kind-icon">API_<wbr>URL</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_app_services_ipersistenceservice_.ipersistenceservice.html#createorupdate" class="tsd-kind-icon">create<wbr>OrUpdate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_app_services_ipersistenceservice_.ipersistenceservice.html#createorupdatemultiple" class="tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="api_credentials" class="tsd-anchor"></a>
-					<h3>API_<wbr>CREDENTIALS</h3>
-					<div class="tsd-signature tsd-kind-icon">API_<wbr>CREDENTIALS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L18">controllers/GitHubController.ts:18</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Gets GitHub API credentials.</p>
-						</div>
-					</div>
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="createorupdate" class="tsd-anchor"></a>
+					<h3>create<wbr>OrUpdate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/IPersistenceService.ts#L15">app/services/IPersistenceService.ts:15</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Saves or updates an entity into database.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>entity: <span class="tsd-signature-type">IEntity</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an entity.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>a promise that returns an entity if resolved.</p>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="api_options" class="tsd-anchor"></a>
-					<h3>API_<wbr>OPTIONS</h3>
-					<div class="tsd-signature tsd-kind-icon">API_<wbr>OPTIONS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CoreOptions</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L21">controllers/GitHubController.ts:21</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Gets GitHub API options (request header).</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="api_url" class="tsd-anchor"></a>
-					<h3>API_<wbr>URL</h3>
-					<div class="tsd-signature tsd-kind-icon">API_<wbr>URL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L15">controllers/GitHubController.ts:15</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Gets GitHub API URL.</p>
-						</div>
-					</div>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="createorupdatemultiple" class="tsd-anchor"></a>
+					<h3>create<wbr>OrUpdate<wbr>Multiple</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple<span class="tsd-signature-symbol">(</span>entities<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/IPersistenceService.ts#L22">app/services/IPersistenceService.ts:22</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Saves or updates many entities into database.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>entities: <span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>an array of entities.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>a promise that retrns an array of entities if resolved.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -203,7 +218,13 @@
 						<a href="../modules/_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_iservice_.html">"app/services/IService"</a>
+						<a href="../modules/_app_services_githubservice_.html">"app/services/<wbr>Git<wbr>Hub<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_app_services_iapiservice_.html">"app/services/IApi<wbr>Service"</a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="../modules/_app_services_ipersistenceservice_.html">"app/services/IPersistence<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
@@ -211,8 +232,8 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="../modules/_controllers_githubcontroller_.html">"controllers/<wbr>Git<wbr>Hub<wbr>Controller"</a>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>
@@ -227,22 +248,16 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_controllers_githubcontroller_.githubcontroller.html" class="tsd-kind-icon">Git<wbr>Hub<wbr>Controller</a>
-					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_controllers_githubcontroller_.igithubcontroller.html" class="tsd-kind-icon">IGit<wbr>Hub<wbr>Controller</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="_app_services_ipersistenceservice_.ipersistenceservice.html" class="tsd-kind-icon">IPersistence<wbr>Service</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_controllers_githubcontroller_.igithubcontroller.html#api_credentials" class="tsd-kind-icon">API_<wbr>CREDENTIALS</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_app_services_ipersistenceservice_.ipersistenceservice.html#createorupdate" class="tsd-kind-icon">create<wbr>OrUpdate</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_controllers_githubcontroller_.igithubcontroller.html#api_options" class="tsd-kind-icon">API_<wbr>OPTIONS</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_controllers_githubcontroller_.igithubcontroller.html#api_url" class="tsd-kind-icon">API_<wbr>URL</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_app_services_ipersistenceservice_.ipersistenceservice.html#createorupdatemultiple" class="tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple</a>
 							</li>
 						</ul>
 					</li>

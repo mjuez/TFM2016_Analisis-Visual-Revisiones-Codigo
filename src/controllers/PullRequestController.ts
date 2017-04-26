@@ -2,10 +2,9 @@ import { Router, Request, Response, NextFunction } from "express";
 import { IPullRequestService } from "../app/services/PullRequestService";
 import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
 import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
-//import * as request from 'request';
-import * as mongoose from 'mongoose';
-import * as GitHubAPI from 'github';
-import * as Promise from 'bluebird';
+import * as mongoose from "mongoose";
+import * as GitHubAPI from "github";
+import * as Promise from "bluebird";
 
 /**
  * Pull Request controller interface.
@@ -24,7 +23,7 @@ export interface IPullRequestController {
     retrieve(req: Request, res: Response): void;
 
     /**
-     * Counts Pull Request number from GitHub given an ownerand  a repository.
+     * Counts Pull Request number from GitHub given an owner and a repository.
      * It creates (if not exist) or updates the pull request in our database.
      * Then, the pull request object is returned as response.
      * @param req   API request.

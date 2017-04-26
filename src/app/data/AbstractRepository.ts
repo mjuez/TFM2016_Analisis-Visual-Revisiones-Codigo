@@ -12,10 +12,10 @@ import * as Promise from "bluebird";
 export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoose.Document> implements IRepository<T, E> {
 
     /** Mongoose Model (repository). */
-    private _model: mongoose.Model<E>;
+    private readonly _model: mongoose.Model<E>;
 
     /** Generic Factory utility. */
-    private _genericFactory: GenericFactory<T>;
+    private readonly _genericFactory: GenericFactory<T>;
 
     /**
      * Class constructor. Creates a Mongoose Model given
@@ -36,8 +36,7 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
     /**
      * Creates an item into database.
      * @param item      Item to create.
-     * @param callback  Callback function to retrieve the created item
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns the item created if resolved.
      */
     public create(item: T): Promise<T> {
         return this.model.create(item.document);
@@ -46,15 +45,13 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
     /**
      * Updates an item from database.
      * @param item      Item with updated data.
-     * @param callback  Callback function to retrieve the number of updated
-     *                  items or an error if something goes wrong.
+     * @returns a promise that returns the number of rows affected if resolved.
      */
     public abstract update(item: T): Promise<number>;
 
     /**
      * Retrieves all items of a collection from database.
-     * @param callback  Callback function to retrieve the items
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns an array of items if resolved.
      */
     public retrieve(): Promise<T[]> {
         let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {
@@ -74,8 +71,7 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * Finds items that one of its keys match with a specific value.
      * @param key       key to compare value.
      * @param value     value to compare 
-     * @param callback  Callback function to retrieve the items
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns an array of items if resolved.
      */
     public findBy(key: any, value: any): Promise<T[]> {
         let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {

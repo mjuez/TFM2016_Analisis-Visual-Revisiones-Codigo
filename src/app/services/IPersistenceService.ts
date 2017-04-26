@@ -10,17 +10,15 @@ export interface IPersistenceService<IEntity> {
     /**
      * Saves or updates an entity into database.
      * @param entity    an entity.
-     * @param callback  optional callback function to retrieve the created/updated
-     *                  entity (or an error if something goes wrong).
+     * @returns a promise that returns an entity if resolved.
      */
     createOrUpdate(entity: IEntity): Promise<IEntity>;
 
     /**
      * Saves or updates many entities into database.
      * @param entities  an array of entities.
-     * @param callback  optional callback function to retrieve the created/updated
-     *                  entity array (or an error if something goes wrong).
+     * @returns a promise that retrns an array of entities if resolved.
      */
     createOrUpdateMultiple(entities: IEntity[]): Promise<IEntity[]>;
-    
+
 }

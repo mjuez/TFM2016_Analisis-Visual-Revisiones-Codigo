@@ -15,8 +15,7 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
     /**
      * Retrieves a Pull Request given its GitHub id.
      * @param id        Pull Request GitHub id.
-     * @param callback  Callback function to retrieve the Pull Request entity.
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns a pull request entity if resolved.
      */
     findOneByPullId(id: number): Promise<IPullRequestEntity>;
 }
@@ -41,8 +40,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
     /**
      * Updates a Pull Request from database. Uses its GitHub id.
      * @param item      Pull Request entity with updated data.
-     * @param callback  Callback function to retrieve the number of updated
-     *                  items or an error if something goes wrong.
+     * @returns a promise that returns the number of rows affected if resolved.
      */
     public update(item: IPullRequestEntity): Promise<number> {
         let promise: Promise<number> = new Promise<number>((resolve, reject) => {
@@ -60,8 +58,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
     /**
      * Retrieves a Pull Request given its GitHub id.
      * @param id        Pull Request GitHub id.
-     * @param callback  Callback function to retrieve the Pull Request entity.
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns a pull request entity if resolved.
      */
     public findOneByPullId(id: number): Promise<IPullRequestEntity> {
         let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
