@@ -13,9 +13,6 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
     /** Mongoose Model (repository). */
     private readonly _model: mongoose.Model<E>;
 
-    /** Generic Factory utility. */
-    private readonly _genericFactory: GenericFactory<T>;
-
     /**
      * Class constructor. Creates a Mongoose Model given
      * a name and a schema.
@@ -24,7 +21,6 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      */
     constructor(name: string, schema: mongoose.Schema) {
         this._model = mongoose.model<E>(name, schema);
-        this._genericFactory = new GenericFactory<T>();
     }
 
     /** Gets the Mongoose Model. */
