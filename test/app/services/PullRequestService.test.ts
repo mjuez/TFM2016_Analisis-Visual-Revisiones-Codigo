@@ -6,6 +6,7 @@ import * as sinon from "sinon";
 import * as Promise from "bluebird"
 import { IPullRequestService, PullRequestService } from "../../../src/app/services/PullRequestService";
 import { IPullRequestEntity, PullRequestEntity } from "../../../src/app/entities/PullRequestEntity";
+import { PullRequestDocument } from "../../../src/app/entities/documents/PullRequestDocument";
 import { IPullRequestRepository, PullRequestRepository } from "../../../src/app/data/PullRequestRepository";
 
 chai.use(chaiAsPromised);
@@ -14,23 +15,32 @@ const should: Chai.Should = chai.should();
 
 describe("Checking Pull Request services", () => {
 
-    let stubApi: GitHubAPI = sinon.createStubInstance(GitHubAPI);
-    let stubRepo: IPullRequestRepository = sinon.createStubInstance(PullRequestRepository);
-    let service: IPullRequestService = new PullRequestService(stubRepo, stubApi);
-    let sandbox = sinon.sandbox.create();
+    let stubApi;
+    let stubRepo;
+    let service;
+    let findOneByPullIdStub;
+    let fakePullRequestEntity1: IPullRequestEntity;
+    let fakePullRequestEntity2: IPullRequestEntity;
+    let fakePullRequestEntity3: IPullRequestEntity;
 
     beforeEach(() => {
+        stubApi = sinon.createStubInstance(GitHubAPI);
+        stubRepo = sinon.createStubInstance(PullRequestRepository);
+        service = new PullRequestService(stubRepo, stubApi);
         stubApi.pullRequests = sinon.stub();
-    });
-
-    afterEach(() => {
-        sandbox.restore();
+        fakePullRequestEntity1 = new PullRequestEntity(<PullRequestDocument>{ id: 1 });
+        fakePullRequestEntity2 = new PullRequestEntity(<PullRequestDocument>{ id: 2 });
+        fakePullRequestEntity3 = new PullRequestEntity(<PullRequestDocument>{ id: 3 });
+        let createPromise = Promise.resolve(fakePullRequestEntity1);
+        stubRepo.create.returns(createPromise);
+        let updatePromise = Promise.resolve(1);
+        stubRepo.update.returns(updatePromise);
     });
 
     it("Should transform an object to a IPullRequestEntity", () => {
         let data: Object = new Object();
         let entity: IPullRequestEntity = service.toEntity(data);
-        expect(entity).to.be.instanceof(PullRequestEntity);
+        return expect(entity).to.be.instanceof(PullRequestEntity);
     });
 
     it("The IPullRequestEntity document should contain the data of the source object", () => {
@@ -39,13 +49,13 @@ describe("Checking Pull Request services", () => {
             id: id
         };
         let entity: IPullRequestEntity = service.toEntity(data);
-        expect(entity.document.id).to.be.equal(id);
+        return expect(entity.document.id).to.be.equal(id);
     });
 
     it("Should transform an array of objects to a IPullRequestEntity array", () => {
         let data: Object[] = [new Object(), new Object()];
         let entityArray: IPullRequestEntity[] = service.toEntityArray(data);
-        expect(entityArray.length).to.be.equal(2);
+        return expect(entityArray.length).to.be.equal(2);
     });
 
     it("Should obtain a remote Pull Request entity", () => {
@@ -70,6 +80,42 @@ describe("Checking Pull Request services", () => {
         getPullRequestStub.returns(autorejectPromise);
         return expect(service.getRemotePullRequest("owner", "repository", 1))
             .to.eventually.be.rejected;
+    });
+
+    it("Should create pull request into database", (done) => {
+        let notFoundPromise = Promise.resolve(null);
+        stubRepo.findOneByPullId.onCall(0).returns(notFoundPromise);
+        expect(service.createOrUpdate(fakePullRequestEntity1))
+            .to.eventually.be.instanceof(PullRequestEntity)
+            .then(() => {
+                expect(stubRepo.create.called).to.be.true;
+                done();
+            });
+    });
+
+    it("Should update pull request into database", (done) => {
+        let foundPromise = Promise.resolve(fakePullRequestEntity1);
+        stubRepo.findOneByPullId.onCall(0).returns(foundPromise);
+        service.createOrUpdate(fakePullRequestEntity1)
+            .then(() => {
+                expect(stubRepo.update.called).to.be.true;
+                done();
+            });
+    });
+
+    it("Should create or update many pull requests", (done) => {
+        let foundPromise1 = Promise.resolve(fakePullRequestEntity1);
+        stubRepo.findOneByPullId.onCall(0).returns(foundPromise1);
+        let foundPromise2 = Promise.resolve(fakePullRequestEntity2);
+        stubRepo.findOneByPullId.onCall(1).returns(foundPromise2);
+        let foundPromise3 = Promise.resolve(fakePullRequestEntity3);
+        stubRepo.findOneByPullId.onCall(2).returns(foundPromise3);
+        let pullRequestsArray: IPullRequestEntity[]
+            = [fakePullRequestEntity1, fakePullRequestEntity2, fakePullRequestEntity3];
+        service.createOrUpdateMultiple(pullRequestsArray).then((result) => {
+            expect(result.length).to.be.equal(pullRequestsArray.length);
+            done();
+        });
     });
 
 });
