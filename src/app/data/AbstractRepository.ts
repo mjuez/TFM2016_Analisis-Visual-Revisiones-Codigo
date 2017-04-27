@@ -18,9 +18,10 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * a name and a schema.
      * @param name      Mongoose collection name.
      * @param schema    Mongoose entity schema.
+     * @param model     Optional mongoose model dependency injection.
      */
-    constructor(name: string, schema: mongoose.Schema) {
-        this._model = mongoose.model<E>(name, schema);
+    constructor(name: string, schema: mongoose.Schema, model?: mongoose.Model<E>) {
+        this._model = model || mongoose.model<E>(name, schema);
     }
 
     /** Gets the Mongoose Model. */

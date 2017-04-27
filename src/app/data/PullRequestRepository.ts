@@ -4,6 +4,7 @@ import { IPullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { PullRequestSchema } from "./schemas/PullRequestSchema";
 import * as Promise from "bluebird";
+import * as mongoose from "mongoose";
 
 /**
  * IPullRequestRepository interface.
@@ -32,9 +33,10 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
     /**
      * Class constructor.
      * Creates the repository using the collection name and the Pull Request schema.
+     * @param model     Optional mongoose model dependency injection.
      */
-    constructor() {
-        super(PullRequestRepository._NAME, PullRequestSchema.schema);
+    constructor(model?: mongoose.Model<PullRequestDocument>) {
+        super(PullRequestRepository._NAME, PullRequestSchema.schema, model);
     }
 
     /**
