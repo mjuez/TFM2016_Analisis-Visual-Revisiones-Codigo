@@ -32,12 +32,4 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      */
     retrieve(): Promise<T[]>;
 
-    /**
-     * Finds items that one of its keys match with a specific value.
-     * @param key       key to compare value.
-     * @param value     value to compare 
-     * @returns a promise that returns an array of items if resolved.
-     */
-    findBy(key: any, value: any): Promise<T[]>;
-
 }

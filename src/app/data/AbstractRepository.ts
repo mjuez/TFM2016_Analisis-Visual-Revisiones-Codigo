@@ -67,25 +67,4 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
         return promise;
     }
 
-    /**
-     * Finds items that one of its keys match with a specific value.
-     * @param key       key to compare value.
-     * @param value     value to compare 
-     * @returns a promise that returns an array of items if resolved.
-     */
-    public findBy(key: any, value: any): Promise<T[]> {
-        let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {
-            this.model.find({ key: value }, (error, documents) => {
-                if (!error) {
-                    let entities: T[] = documents.map(document => new this._genericFactory.createInstance(document));
-                    resolve(entities);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-
-        return promise;
-    }
-
 }
