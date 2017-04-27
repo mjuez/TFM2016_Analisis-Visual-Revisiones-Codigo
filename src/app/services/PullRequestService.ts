@@ -60,9 +60,11 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
      * Class constructor with Pull Request repository dependency
      * injection.
      * @param repository    Injected Pull Request repository.
+     * @param api           optional GitHub API wrapper dependency injection.
+     * @param apiAuth       optional GitHub API authorization.
      */
-    constructor(repository: IPullRequestRepository) {
-        super();
+    constructor(repository: IPullRequestRepository, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(api, apiAuth);
         this._repository = repository;
     }
 

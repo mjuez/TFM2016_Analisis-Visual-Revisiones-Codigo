@@ -34,10 +34,12 @@ export abstract class GitHubService implements IApiService<GitHubAPI>{
 
     /**
      * Creates the API wrapper and authenticates to it.
+     * @param api       optional GitHub API wrapper dependency injection.
+     * @param apiAuth   optional GitHub API authorization.
      */
-    constructor() {
-        this._api = new GitHubAPI(this._API_OPTIONS);
-        this._api.authenticate(this._API_AUTHENTICATION);
+    constructor(api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        this._api = api || new GitHubAPI(this._API_OPTIONS);
+        //this._api.authenticate(apiAuth || this._API_AUTHENTICATION);
     }
 
     /** Gets the GitHub API wrapper. */
