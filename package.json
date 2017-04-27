@@ -4,7 +4,7 @@
   "description": "A tool for analysing Github code reviews.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Warning: no test specified\" && exit 0",
+    "test": "mocha --reporter spec --compilers ts:ts-node/register test/**/*.test.ts",
     "start": "node release/index.js",
     "postinstall": "gulp compile"
   },
