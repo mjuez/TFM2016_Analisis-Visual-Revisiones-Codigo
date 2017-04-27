@@ -1,7 +1,6 @@
 import * as mongoose from "mongoose";
 import { IRepository } from "./IRepository";
 import { IEntity } from "../entities/IEntity";
-import { GenericFactory } from "../util/GenericFactory";
 import * as Promise from "bluebird";
 
 /**
