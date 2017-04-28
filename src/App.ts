@@ -34,6 +34,7 @@ class App {
 
   /**
    * Gets express application instance.
+   * @returns a express application.
    */
   public get express(): express.Application {
     return this._express;

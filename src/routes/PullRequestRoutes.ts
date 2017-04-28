@@ -17,6 +17,7 @@ export class PullRequestRoutes {
     /**
      * Class constructor. Injects controller and router dependencies.
      * @param controller    Pull Request controller.
+     * @param router        A express router.
      */
     constructor(controller: IPullRequestController, router: express.Router) {
         this._controller = controller;

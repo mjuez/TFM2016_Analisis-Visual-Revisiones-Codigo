@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GitHubController | anvireco</title>
+	<title>GitHubService | anvireco</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_controllers_githubcontroller_.html">&quot;controllers/GitHubController&quot;</a>
+					<a href="../modules/_app_services_githubservice_.html">&quot;app/services/GitHubService&quot;</a>
 				</li>
 				<li>
-					<a href="_controllers_githubcontroller_.githubcontroller.html">GitHubController</a>
+					<a href="_app_services_githubservice_.githubservice.html">GitHubService</a>
 				</li>
 			</ul>
-			<h1>Class GitHubController</h1>
+			<h1>Class GitHubService</h1>
 		</div>
 	</div>
 </header>
@@ -72,12 +72,11 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Abstract GitHub controller class.
-						Defines shared functionality for all descendant GitHub controllers.</p>
+						<p>GitHub API services.</p>
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#109;&#97;&#x72;&#105;&#x6f;&#64;&#109;&#x6a;&#117;&#101;&#122;&#46;&#x63;&#111;&#109;">&#109;&#97;&#x72;&#105;&#x6f;&#64;&#109;&#x6a;&#117;&#101;&#122;&#46;&#x63;&#111;&#109;</a></p>
+						<dd><p>Mario Juez <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#109;&#97;&#114;&#x69;&#x6f;&#64;&#109;&#106;&#x75;&#101;&#x7a;&#46;&#x63;&#x6f;&#x6d;">&#109;&#97;&#114;&#x69;&#x6f;&#64;&#109;&#106;&#x75;&#101;&#x7a;&#46;&#x63;&#x6f;&#x6d;</a></p>
 						</dd>
 					</dl>
 				</div>
@@ -86,10 +85,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">GitHubController</span>
+						<span class="target">GitHubService</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="_controllers_pullrequestcontroller_.pullrequestcontroller.html" class="tsd-signature-type">PullRequestController</a>
+								<a href="_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-signature-type">PullRequestService</a>
 							</li>
 						</ul>
 					</li>
@@ -98,72 +97,114 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/_controllers_githubcontroller_.igithubcontroller.html" class="tsd-signature-type">IGitHubController</a></li>
+					<li><a href="../interfaces/_app_services_iapiservice_.iapiservice.html" class="tsd-signature-type">IApiService</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GitHubAPI</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_app_services_githubservice_.githubservice.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_controllers_githubcontroller_.githubcontroller.html#_api_credentials" class="tsd-kind-icon">_API_<wbr>CREDENTIALS</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_controllers_githubcontroller_.githubcontroller.html#_api_url" class="tsd-kind-icon">_API_<wbr>URL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_app_services_githubservice_.githubservice.html#_api_authentication" class="tsd-kind-icon">_API_<wbr>AUTHENTICATION</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_app_services_githubservice_.githubservice.html#_api" class="tsd-kind-icon">_api</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_controllers_githubcontroller_.githubcontroller.html#api_credentials" class="tsd-kind-icon">API_<wbr>CREDENTIALS</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_controllers_githubcontroller_.githubcontroller.html#api_options" class="tsd-kind-icon">API_<wbr>OPTIONS</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_controllers_githubcontroller_.githubcontroller.html#api_url" class="tsd-kind-icon">API_<wbr>URL</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section tsd-is-private-protected">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="_controllers_githubcontroller_.githubcontroller.html#handleresponse" class="tsd-kind-icon">handle<wbr>Response</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="_app_services_githubservice_.githubservice.html#api" class="tsd-kind-icon">API</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Object literals</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-private"><a href="_controllers_githubcontroller_.githubcontroller.html#_api_options" class="tsd-kind-icon">_API_<wbr>OPTIONS</a></li>
+								<li class="tsd-kind-object-literal tsd-parent-kind-class tsd-is-private"><a href="_app_services_githubservice_.githubservice.html#_api_options" class="tsd-kind-icon">_API_<wbr>OPTIONS</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Git<wbr>Hub<wbr>Service<span class="tsd-signature-symbol">(</span>api<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GitHubAPI</span>, apiAuth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GitHubAPI.Auth</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html" class="tsd-signature-type">GitHubService</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L33">app/services/GitHubService.ts:33</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates the API wrapper and authenticates to it.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> api: <span class="tsd-signature-type">GitHubAPI</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>optional GitHub API wrapper dependency injection.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> apiAuth: <span class="tsd-signature-type">GitHubAPI.Auth</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>optional GitHub API authorization.</p>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html" class="tsd-signature-type">GitHubService</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_api_credentials" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _API_<wbr>CREDENTIALS</h3>
-					<div class="tsd-signature tsd-kind-icon">_API_<wbr>CREDENTIALS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;?client_id&#x3D;${process.env.ANVIRECO_ID}&amp;client_secret&#x3D;${process.env.ANVIRECO_SECRET}&#x60;</span></div>
+					<a name="_api_authentication" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _API_<wbr>AUTHENTICATION</h3>
+					<div class="tsd-signature tsd-kind-icon">_API_<wbr>AUTHENTICATION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">GitHubAPI.Auth</span><span class="tsd-signature-symbol"> =&nbsp;&lt;GitHubAPI.AuthOAuthSecret&gt;{type: &#x60;oauth&#x60;,key: process.env.ANVIRECO_ID,secret: process.env.ANVIRECO_SECRET}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L35">controllers/GitHubController.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L29">app/services/GitHubService.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>GitHub API credentials.</p>
+							<p>GitHub API authentication (using developer applications)</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_api_url" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _API_<wbr>URL</h3>
-					<div class="tsd-signature tsd-kind-icon">_API_<wbr>URL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;https://api.github.com&#x60;</span></div>
+					<a name="_api" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _api</h3>
+					<div class="tsd-signature tsd-kind-icon">_api<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">GitHubAPI</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L32">controllers/GitHubController.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L12">app/services/GitHubService.ts:12</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>GitHub API URL.</p>
+							<p>GitHub API wrapper.</p>
 						</div>
 					</div>
 				</section>
@@ -171,146 +212,24 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="api_credentials" class="tsd-anchor"></a>
-					<h3>API_<wbr>CREDENTIALS</h3>
+					<a name="api" class="tsd-anchor"></a>
+					<h3>API</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> API_CREDENTIALS<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> API<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GitHubAPI</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L50">controllers/GitHubController.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L46">app/services/GitHubService.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Gets GitHub API credentials.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>inheritdoc</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="api_options" class="tsd-anchor"></a>
-					<h3>API_<wbr>OPTIONS</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> API_OPTIONS<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CoreOptions</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L55">controllers/GitHubController.ts:55</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Gets GitHub API options (request header).</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>inheritdoc</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">CoreOptions</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="api_url" class="tsd-anchor"></a>
-					<h3>API_<wbr>URL</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> API_URL<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L45">controllers/GitHubController.ts:45</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Gets GitHub API URL.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>inheritdoc</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-					<a name="handleresponse" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> handle<wbr>Response</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">handle<wbr>Response<span class="tsd-signature-symbol">(</span>res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RequestResponse</span>, expressResponse<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, ok<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L73">controllers/GitHubController.ts:73</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Handles the response of a call to GitHub API.
-										If we get a correct response (status = 200), then we
-										let the descendant handle the result with ok template
-										method.
-										If the response is bad (status != 200), for example if
-										we&#39;ve run out of requests to the API, the response body
-										will contain an error message which will be returned by
-									our API.</p>
+									<p>Gets the GitHub API wrapper.</p>
 								</div>
 							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>res: <span class="tsd-signature-type">RequestResponse</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>GitHub API call response.</p>
-									</div>
-								</li>
-								<li>
-									<h5>expressResponse: <span class="tsd-signature-type">Response</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Our API response (expressjs).</p>
-									</div>
-								</li>
-								<li>
-									<h5>ok: <span class="tsd-signature-type">function</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Template method for handling
-										good responses.</p>
-									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">GitHubAPI</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -323,30 +242,100 @@
 					<div class="tsd-signature tsd-kind-icon">_API_<wbr>OPTIONS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L38">controllers/GitHubController.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L15">app/services/GitHubService.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>GitHub API credentials.</p>
+							<p>GitHub API wrapper options.</p>
 						</div>
 					</div>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="_api_options.promise" class="tsd-anchor"></a>
+						<h3>Promise</h3>
+						<div class="tsd-signature tsd-kind-icon">Promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;Promise</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L23">app/services/GitHubService.ts:23</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="_api_options.debug" class="tsd-anchor"></a>
+						<h3>debug</h3>
+						<div class="tsd-signature tsd-kind-icon">debug<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L16">app/services/GitHubService.ts:16</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="_api_options.followredirects" class="tsd-anchor"></a>
+						<h3>follow<wbr>Redirects</h3>
+						<div class="tsd-signature tsd-kind-icon">follow<wbr>Redirects<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L24">app/services/GitHubService.ts:24</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="_api_options.host" class="tsd-anchor"></a>
+						<h3>host</h3>
+						<div class="tsd-signature tsd-kind-icon">host<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;api.github.com&#x60;</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L18">app/services/GitHubService.ts:18</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="_api_options.pathprefix" class="tsd-anchor"></a>
+						<h3>path<wbr>Prefix</h3>
+						<div class="tsd-signature tsd-kind-icon">path<wbr>Prefix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;&#x60;</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L19">app/services/GitHubService.ts:19</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="_api_options.protocol" class="tsd-anchor"></a>
+						<h3>protocol</h3>
+						<div class="tsd-signature tsd-kind-icon">protocol<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;https&quot;</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L17">app/services/GitHubService.ts:17</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="_api_options.timeout" class="tsd-anchor"></a>
+						<h3>timeout</h3>
+						<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;5000</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L25">app/services/GitHubService.ts:25</a></li>
+							</ul>
+						</aside>
+					</section>
 					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
 						<a name="_api_options.headers" class="tsd-anchor"></a>
 						<h3>headers</h3>
 						<div class="tsd-signature tsd-kind-icon">headers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L39">controllers/GitHubController.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L20">app/services/GitHubService.ts:20</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 							<a name="_api_options.headers.user_agent" class="tsd-anchor"></a>
-							<h3>User-<wbr><wbr>Agent</h3>
-							<div class="tsd-signature tsd-kind-icon">User-<wbr><wbr>Agent<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;process.env.ANVIRECO_APPNAME</span></div>
+							<h3>user-<wbr>agent</h3>
+							<div class="tsd-signature tsd-kind-icon">user-<wbr>agent<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;process.env.ANVIRECO_APPNAME</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/controllers/GitHubController.ts#L40">controllers/GitHubController.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L21">app/services/GitHubService.ts:21</a></li>
 								</ul>
 							</aside>
 						</section>
@@ -387,17 +376,20 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
 					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="../modules/_app_services_githubservice_.html">"app/services/<wbr>Git<wbr>Hub<wbr>Service"</a>
+					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_iservice_.html">"app/services/IService"</a>
+						<a href="../modules/_app_services_iapiservice_.html">"app/services/IApi<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_app_services_ipersistenceservice_.html">"app/services/IPersistence<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
-					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="../modules/_controllers_githubcontroller_.html">"controllers/<wbr>Git<wbr>Hub<wbr>Controller"</a>
+						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>
@@ -415,36 +407,27 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_controllers_githubcontroller_.githubcontroller.html" class="tsd-kind-icon">Git<wbr>Hub<wbr>Controller</a>
+						<a href="_app_services_githubservice_.githubservice.html" class="tsd-kind-icon">Git<wbr>Hub<wbr>Service</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_controllers_githubcontroller_.githubcontroller.html#_api_credentials" class="tsd-kind-icon">_API_<wbr>CREDENTIALS</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="_app_services_githubservice_.githubservice.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_controllers_githubcontroller_.githubcontroller.html#_api_url" class="tsd-kind-icon">_API_<wbr>URL</a>
+								<a href="_app_services_githubservice_.githubservice.html#_api_authentication" class="tsd-kind-icon">_API_<wbr>AUTHENTICATION</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_app_services_githubservice_.githubservice.html#_api" class="tsd-kind-icon">_api</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_controllers_githubcontroller_.githubcontroller.html#api_credentials" class="tsd-kind-icon">API_<wbr>CREDENTIALS</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_controllers_githubcontroller_.githubcontroller.html#api_options" class="tsd-kind-icon">API_<wbr>OPTIONS</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="_controllers_githubcontroller_.githubcontroller.html#api_url" class="tsd-kind-icon">API_<wbr>URL</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-								<a href="_controllers_githubcontroller_.githubcontroller.html#handleresponse" class="tsd-kind-icon">handle<wbr>Response</a>
+								<a href="_app_services_githubservice_.githubservice.html#api" class="tsd-kind-icon">API</a>
 							</li>
 							<li class=" tsd-kind-object-literal tsd-parent-kind-class tsd-is-private">
-								<a href="_controllers_githubcontroller_.githubcontroller.html#_api_options" class="tsd-kind-icon">_API_<wbr>OPTIONS</a>
+								<a href="_app_services_githubservice_.githubservice.html#_api_options" class="tsd-kind-icon">_API_<wbr>OPTIONS</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_controllers_githubcontroller_.igithubcontroller.html" class="tsd-kind-icon">IGit<wbr>Hub<wbr>Controller</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

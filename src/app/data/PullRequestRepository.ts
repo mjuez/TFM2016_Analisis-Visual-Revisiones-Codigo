@@ -3,6 +3,8 @@ import { AbstractRepository } from "./AbstractRepository";
 import { IPullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { PullRequestSchema } from "./schemas/PullRequestSchema";
+import * as Promise from "bluebird";
+import * as mongoose from "mongoose";
 
 /**
  * IPullRequestRepository interface.
@@ -10,14 +12,13 @@ import { PullRequestSchema } from "./schemas/PullRequestSchema";
  * @author Mario Juez <mario@mjuez.com>
  */
 export interface IPullRequestRepository extends IRepository<IPullRequestEntity, PullRequestDocument> {
-    
+
     /**
      * Retrieves a Pull Request given its GitHub id.
      * @param id        Pull Request GitHub id.
-     * @param callback  Callback function to retrieve the Pull Request entity.
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns a pull request entity if resolved.
      */
-    findOneByPullId(id: number, callback: (error: any, result: IPullRequestEntity) => void): void;
+    findOneByPullId(id: number): Promise<IPullRequestEntity>;
 }
 
 /**
@@ -32,29 +33,46 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
     /**
      * Class constructor.
      * Creates the repository using the collection name and the Pull Request schema.
+     * @param model     Optional mongoose model dependency injection.
      */
-    constructor() {
-        super(PullRequestRepository._NAME, PullRequestSchema.schema);
+    constructor(model?: mongoose.Model<PullRequestDocument>) {
+        super(PullRequestRepository._NAME, PullRequestSchema.schema, model);
     }
 
     /**
      * Updates a Pull Request from database. Uses its GitHub id.
      * @param item      Pull Request entity with updated data.
-     * @param callback  Callback function to retrieve the number of updated
-     *                  items or an error if something goes wrong.
+     * @returns a promise that returns the number of rows affected if resolved.
      */
-    public update(item: IPullRequestEntity, callback: (error: any, rowsAffected: number) => void): void {
-        this.model.update({ id: item.id }, item.document, callback);
+    public update(item: IPullRequestEntity): Promise<number> {
+        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
+            this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
+                if (!error) {
+                    resolve(rowsAffected);
+                } else {
+                    reject(error);
+                }
+            });
+        });
+        return promise;
     }
 
     /**
      * Retrieves a Pull Request given its GitHub id.
      * @param id        Pull Request GitHub id.
-     * @param callback  Callback function to retrieve the Pull Request entity.
-     *                  or an error if something goes wrong.
+     * @returns a promise that returns a pull request entity if resolved.
      */
-    public findOneByPullId(id: number, callback: (error: any, result: IPullRequestEntity) => void): void {
-        this.model.findOne({ id: id }, callback);
+    public findOneByPullId(id: number): Promise<IPullRequestEntity> {
+        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
+            this.model.findOne({ id: id }, (error, result) => {
+                if (!error) {
+                    resolve(result);
+                } else {
+                    reject(error);
+                }
+            });
+        });
+        return promise;
     }
 
 }

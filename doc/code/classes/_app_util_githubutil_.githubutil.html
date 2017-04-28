@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;controllers/GitHubController&quot; | anvireco</title>
+	<title>GitHubUtil | anvireco</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,33 +56,86 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_controllers_githubcontroller_.html">&quot;controllers/GitHubController&quot;</a>
+					<a href="../modules/_app_util_githubutil_.html">&quot;app/util/GitHubUtil&quot;</a>
+				</li>
+				<li>
+					<a href="_app_util_githubutil_.githubutil.html">GitHubUtil</a>
 				</li>
 			</ul>
-			<h1>External module &quot;controllers/GitHubController&quot;</h1>
+			<h1>Class GitHubUtil</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>GitHub Utilities.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>author</dt>
+						<dd><p>Mario Juez <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#109;&#97;&#114;&#105;&#x6f;&#x40;&#x6d;&#106;&#117;&#101;&#122;&#46;&#x63;&#x6f;&#109;">&#109;&#97;&#114;&#105;&#x6f;&#x40;&#x6d;&#106;&#117;&#101;&#122;&#46;&#x63;&#x6f;&#109;</a></p>
+						</dd>
+					</dl>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">GitHubUtil</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_controllers_githubcontroller_.githubcontroller.html" class="tsd-kind-icon">Git<wbr>Hub<wbr>Controller</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_controllers_githubcontroller_.igithubcontroller.html" class="tsd-kind-icon">IGit<wbr>Hub<wbr>Controller</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_app_util_githubutil_.githubutil.html#getnextpagenumber" class="tsd-kind-icon">get<wbr>Next<wbr>Page<wbr>Number</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="getnextpagenumber" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Next<wbr>Page<wbr>Number</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Next<wbr>Page<wbr>Number<span class="tsd-signature-symbol">(</span>link<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/util/GitHubUtil.ts#L13">app/util/GitHubUtil.ts:13</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Extracts the next page number from page links string
+									obtained from GitHub API.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>link: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>all links for navigating pages (first, last, previous, next).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>the number of the next page or null if there is no next page.</p>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -93,63 +146,72 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_.html">"<wbr>App"</a>
+						<a href="../modules/_app_.html">"<wbr>App"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_data_abstractrepository_.html">"app/data/<wbr>Abstract<wbr>Repository"</a>
+						<a href="../modules/_app_data_abstractrepository_.html">"app/data/<wbr>Abstract<wbr>Repository"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_data_irepository_.html">"app/data/IRepository"</a>
+						<a href="../modules/_app_data_irepository_.html">"app/data/IRepository"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_data_pullrequestrepository_.html">"app/data/<wbr>Pull<wbr>Request<wbr>Repository"</a>
+						<a href="../modules/_app_data_pullrequestrepository_.html">"app/data/<wbr>Pull<wbr>Request<wbr>Repository"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_data_schemas_pullrequestschema_.html">"app/data/schemas/<wbr>Pull<wbr>Request<wbr>Schema"</a>
+						<a href="../modules/_app_data_schemas_pullrequestschema_.html">"app/data/schemas/<wbr>Pull<wbr>Request<wbr>Schema"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_entities_abstractentity_.html">"app/entities/<wbr>Abstract<wbr>Entity"</a>
+						<a href="../modules/_app_entities_abstractentity_.html">"app/entities/<wbr>Abstract<wbr>Entity"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_entities_ientity_.html">"app/entities/IEntity"</a>
+						<a href="../modules/_app_entities_ientity_.html">"app/entities/IEntity"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_entities_pullrequestentity_.html">"app/entities/<wbr>Pull<wbr>Request<wbr>Entity"</a>
+						<a href="../modules/_app_entities_pullrequestentity_.html">"app/entities/<wbr>Pull<wbr>Request<wbr>Entity"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
+						<a href="../modules/_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_services_iservice_.html">"app/services/IService"</a>
+						<a href="../modules/_app_services_githubservice_.html">"app/services/<wbr>Git<wbr>Hub<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
+						<a href="../modules/_app_services_iapiservice_.html">"app/services/IApi<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
+						<a href="../modules/_app_services_ipersistenceservice_.html">"app/services/IPersistence<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_controllers_githubcontroller_.html">"controllers/<wbr>Git<wbr>Hub<wbr>Controller"</a>
+						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>
+						<a href="../modules/_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_index_.html">"index"</a>
+						<a href="../modules/_index_.html">"index"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_routes_pullrequestroutes_.html">"routes/<wbr>Pull<wbr>Request<wbr>Routes"</a>
+						<a href="../modules/_routes_pullrequestroutes_.html">"routes/<wbr>Pull<wbr>Request<wbr>Routes"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_controllers_githubcontroller_.githubcontroller.html" class="tsd-kind-icon">Git<wbr>Hub<wbr>Controller</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_app_util_githubutil_.githubutil.html" class="tsd-kind-icon">Git<wbr>Hub<wbr>Util</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_app_util_githubutil_.githubutil.html#getnextpagenumber" class="tsd-kind-icon">get<wbr>Next<wbr>Page<wbr>Number</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_controllers_githubcontroller_.igithubcontroller.html" class="tsd-kind-icon">IGit<wbr>Hub<wbr>Controller</a>
-					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>

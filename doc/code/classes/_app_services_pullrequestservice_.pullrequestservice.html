@@ -76,7 +76,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#109;&#97;&#114;&#x69;&#x6f;&#x40;&#109;&#x6a;&#x75;&#101;&#122;&#46;&#99;&#x6f;&#109;">&#109;&#97;&#114;&#x69;&#x6f;&#x40;&#109;&#x6a;&#x75;&#101;&#122;&#46;&#99;&#x6f;&#109;</a></p>
+						<dd><p>Mario Juez <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x6d;&#97;&#x72;&#105;&#111;&#x40;&#109;&#106;&#x75;&#101;&#122;&#46;&#99;&#x6f;&#109;">&#x6d;&#97;&#x72;&#105;&#111;&#x40;&#109;&#106;&#x75;&#101;&#122;&#46;&#99;&#x6f;&#109;</a></p>
 						</dd>
 					</dl>
 				</div>
@@ -85,13 +85,19 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">PullRequestService</span>
+						<a href="_app_services_githubservice_.githubservice.html" class="tsd-signature-type">GitHubService</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">PullRequestService</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/_app_services_iapiservice_.iapiservice.html" class="tsd-signature-type">IApiService</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GitHubAPI</span><span class="tsd-signature-symbol">&gt;</span></li>
 					<li><a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html" class="tsd-signature-type">IPullRequestService</a></li>
 				</ul>
 			</section>
@@ -102,7 +108,7 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_app_services_pullrequestservice_.pullrequestservice.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="_app_services_pullrequestservice_.pullrequestservice.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
@@ -111,11 +117,20 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_app_services_pullrequestservice_.pullrequestservice.html#_repository" class="tsd-kind-icon">_repository</a></li>
 							</ul>
 						</section>
+						<section class="tsd-index-section tsd-is-inherited">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_app_services_pullrequestservice_.pullrequestservice.html#api" class="tsd-kind-icon">API</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_services_pullrequestservice_.pullrequestservice.html#createorupdate" class="tsd-kind-icon">create<wbr>OrUpdate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_services_pullrequestservice_.pullrequestservice.html#createorupdatemultiple" class="tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_app_services_pullrequestservice_.pullrequestservice.html#getallpaginatedpullrequests" class="tsd-kind-icon">get<wbr>All<wbr>Paginated<wbr>Pull<wbr>Requests</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_services_pullrequestservice_.pullrequestservice.html#getremotepullrequest" class="tsd-kind-icon">get<wbr>Remote<wbr>Pull<wbr>Request</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_services_pullrequestservice_.pullrequestservice.html#getremotepullrequests" class="tsd-kind-icon">get<wbr>Remote<wbr>Pull<wbr>Requests</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_services_pullrequestservice_.pullrequestservice.html#toentity" class="tsd-kind-icon">to<wbr>Entity</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_services_pullrequestservice_.pullrequestservice.html#toentityarray" class="tsd-kind-icon">to<wbr>Entity<wbr>Array</a></li>
 							</ul>
@@ -125,17 +140,18 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Pull<wbr>Request<wbr>Service<span class="tsd-signature-symbol">(</span>repository<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html" class="tsd-signature-type">IPullRequestRepository</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-signature-type">PullRequestService</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Pull<wbr>Request<wbr>Service<span class="tsd-signature-symbol">(</span>repository<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html" class="tsd-signature-type">IPullRequestRepository</a>, api<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GitHubAPI</span>, apiAuth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GitHubAPI.Auth</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-signature-type">PullRequestService</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Overrides <a href="_app_services_githubservice_.githubservice.html">GitHubService</a>.<a href="_app_services_githubservice_.githubservice.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/app/services/PullRequestService.ts#L32">app/services/PullRequestService.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L57">app/services/PullRequestService.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -154,6 +170,22 @@
 										</div>
 									</div>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> api: <span class="tsd-signature-type">GitHubAPI</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>optional GitHub API wrapper dependency injection.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> apiAuth: <span class="tsd-signature-type">GitHubAPI.Auth</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>optional GitHub API authorization.</p>
+										</div>
+									</div>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-signature-type">PullRequestService</a></h4>
 						</li>
@@ -168,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">_repository<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html" class="tsd-signature-type">IPullRequestRepository</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/app/services/PullRequestService.ts#L32">app/services/PullRequestService.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L57">app/services/PullRequestService.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -178,19 +210,46 @@
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+					<a name="api" class="tsd-anchor"></a>
+					<h3>API</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> API<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GitHubAPI</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="_app_services_githubservice_.githubservice.html">GitHubService</a>.<a href="_app_services_githubservice_.githubservice.html#api">API</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L46">app/services/GitHubService.ts:46</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the GitHub API wrapper.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">GitHubAPI</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="createorupdate" class="tsd-anchor"></a>
 					<h3>create<wbr>OrUpdate</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#createorupdate">createOrUpdate</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/app/services/PullRequestService.ts#L49">app/services/PullRequestService.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L76">app/services/PullRequestService.ts:76</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -206,36 +265,9 @@
 										<p>a Pull Request.</p>
 									</div>
 								</li>
-								<li>
-									<h5>callback: <span class="tsd-signature-type">function</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>optional callback function to retrieve the created/updated
-										Pull Request (or an error if something goes wrong).</p>
-									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, result<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>err: <span class="tsd-signature-type">any</span></h5>
-														</li>
-														<li>
-															<h5>result: <a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
-								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>a promise that returns a pull request entity if resolved.</p>
 						</li>
 					</ul>
 				</section>
@@ -243,13 +275,14 @@
 					<a name="createorupdatemultiple" class="tsd-anchor"></a>
 					<h3>create<wbr>OrUpdate<wbr>Multiple</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple<span class="tsd-signature-symbol">(</span>entities<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple<span class="tsd-signature-symbol">(</span>entities<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#createorupdatemultiple">createOrUpdateMultiple</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/app/services/PullRequestService.ts#L70">app/services/PullRequestService.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L107">app/services/PullRequestService.ts:107</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -262,36 +295,115 @@
 								<li>
 									<h5>entities: <a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>a promise that returns an array of pull request entities if resolved.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="getallpaginatedpullrequests" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> get<wbr>All<wbr>Paginated<wbr>Pull<wbr>Requests</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Paginated<wbr>Pull<wbr>Requests<span class="tsd-signature-symbol">(</span>pageResult<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L200">app/services/PullRequestService.ts:200</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Obtains all pull requests from GitHub, even if they are paginated.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
 								<li>
-									<h5>callback: <span class="tsd-signature-type">function</span></h5>
+									<h5>pageResult: <span class="tsd-signature-type">any</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>optional callback function to retrieve the created/updated
-										Pull Request array (or an error if something goes wrong).</p>
+										<p>a response that contains a page or results
+										from a GitHub API call.</p>
 									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, result<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>err: <span class="tsd-signature-type">any</span></h5>
-														</li>
-														<li>
-															<h5>result: <a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-												</li>
-											</ul>
-										</li>
-									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>a promise that returns an array of pull request entities if resolved,
+								or if rejected, returns an object with an array of a part of remote
+								pull requests and the last page that was processed to continue from
+								that point in the future. *Note: This can be useful when we run out of
+							api calls.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getremotepullrequest" class="tsd-anchor"></a>
+					<h3>get<wbr>Remote<wbr>Pull<wbr>Request</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Remote<wbr>Pull<wbr>Request<span class="tsd-signature-symbol">(</span>owner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, repository<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#getremotepullrequest">getRemotePullRequest</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L128">app/services/PullRequestService.ts:128</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Obtains a remote pull request (from GitHub).</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>owner: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>repository: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>id: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>a promise that returns a pull request entity if resolved.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getremotepullrequests" class="tsd-anchor"></a>
+					<h3>get<wbr>Remote<wbr>Pull<wbr>Requests</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Remote<wbr>Pull<wbr>Requests<span class="tsd-signature-symbol">(</span>owner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, repository<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#getremotepullrequests">getRemotePullRequests</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L148">app/services/PullRequestService.ts:148</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Obtains all remote pull requests (from GitHub).</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>owner: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>repository: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>a promise that returns an array of pull request entities if resolved.</p>
 						</li>
 					</ul>
 				</section>
@@ -299,25 +411,25 @@
 					<a name="toentity" class="tsd-anchor"></a>
 					<h3>to<wbr>Entity</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Entity<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Entity<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#toentity">toEntity</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/app/services/PullRequestService.ts#L98">app/services/PullRequestService.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L173">app/services/PullRequestService.ts:173</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Transforms raw data to IPullRequestEntity.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>inheritdoc</dt>
+									<dd></dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>data: <span class="tsd-signature-type">any</span></h5>
+									<h5>data: <span class="tsd-signature-type">Object</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a></h4>
@@ -328,25 +440,25 @@
 					<a name="toentityarray" class="tsd-anchor"></a>
 					<h3>to<wbr>Entity<wbr>Array</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>Entity<wbr>Array<span class="tsd-signature-symbol">(</span>dataArray<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">to<wbr>Entity<wbr>Array<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#toentityarray">toEntityArray</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/265d397/src/app/services/PullRequestService.ts#L105">app/services/PullRequestService.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L179">app/services/PullRequestService.ts:179</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Transforms raw data to IPullRequestEntity array.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>inheritdoc</dt>
+									<dd></dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>dataArray: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>data: <span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span></h4>
@@ -389,16 +501,19 @@
 						<a href="../modules/_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_iservice_.html">"app/services/IService"</a>
+						<a href="../modules/_app_services_githubservice_.html">"app/services/<wbr>Git<wbr>Hub<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_app_services_iapiservice_.html">"app/services/IApi<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_app_services_ipersistenceservice_.html">"app/services/IPersistence<wbr>Service"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_controllers_githubcontroller_.html">"controllers/<wbr>Git<wbr>Hub<wbr>Controller"</a>
+						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>
@@ -418,17 +533,29 @@
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-kind-icon">Pull<wbr>Request<wbr>Service</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_app_services_pullrequestservice_.pullrequestservice.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_app_services_pullrequestservice_.pullrequestservice.html#_repository" class="tsd-kind-icon">_repository</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+								<a href="_app_services_pullrequestservice_.pullrequestservice.html#api" class="tsd-kind-icon">API</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_app_services_pullrequestservice_.pullrequestservice.html#createorupdate" class="tsd-kind-icon">create<wbr>OrUpdate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_app_services_pullrequestservice_.pullrequestservice.html#createorupdatemultiple" class="tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="_app_services_pullrequestservice_.pullrequestservice.html#getallpaginatedpullrequests" class="tsd-kind-icon">get<wbr>All<wbr>Paginated<wbr>Pull<wbr>Requests</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_app_services_pullrequestservice_.pullrequestservice.html#getremotepullrequest" class="tsd-kind-icon">get<wbr>Remote<wbr>Pull<wbr>Request</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_app_services_pullrequestservice_.pullrequestservice.html#getremotepullrequests" class="tsd-kind-icon">get<wbr>Remote<wbr>Pull<wbr>Requests</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_app_services_pullrequestservice_.pullrequestservice.html#toentity" class="tsd-kind-icon">to<wbr>Entity</a>
