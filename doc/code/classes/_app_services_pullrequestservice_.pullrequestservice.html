@@ -76,7 +76,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#109;&#x61;&#x72;&#105;&#x6f;&#64;&#109;&#x6a;&#x75;&#x65;&#122;&#46;&#99;&#x6f;&#x6d;">&#109;&#x61;&#x72;&#105;&#x6f;&#64;&#109;&#x6a;&#x75;&#x65;&#122;&#46;&#99;&#x6f;&#x6d;</a></p>
+						<dd><p>Mario Juez <a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x6d;&#97;&#x72;&#105;&#111;&#x40;&#109;&#106;&#x75;&#101;&#122;&#46;&#99;&#x6f;&#109;">&#x6d;&#97;&#x72;&#105;&#111;&#x40;&#109;&#106;&#x75;&#101;&#122;&#46;&#99;&#x6f;&#109;</a></p>
 						</dd>
 					</dl>
 				</div>
@@ -144,14 +144,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Pull<wbr>Request<wbr>Service<span class="tsd-signature-symbol">(</span>repository<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html" class="tsd-signature-type">IPullRequestRepository</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-signature-type">PullRequestService</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Pull<wbr>Request<wbr>Service<span class="tsd-signature-symbol">(</span>repository<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html" class="tsd-signature-type">IPullRequestRepository</a>, api<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GitHubAPI</span>, apiAuth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GitHubAPI.Auth</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-signature-type">PullRequestService</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_app_services_githubservice_.githubservice.html">GitHubService</a>.<a href="_app_services_githubservice_.githubservice.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L57">app/services/PullRequestService.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L57">app/services/PullRequestService.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -170,6 +170,22 @@
 										</div>
 									</div>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> api: <span class="tsd-signature-type">GitHubAPI</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>optional GitHub API wrapper dependency injection.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> apiAuth: <span class="tsd-signature-type">GitHubAPI.Auth</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>optional GitHub API authorization.</p>
+										</div>
+									</div>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-signature-type">PullRequestService</a></h4>
 						</li>
@@ -184,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">_repository<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html" class="tsd-signature-type">IPullRequestRepository</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L57">app/services/PullRequestService.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L57">app/services/PullRequestService.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -207,7 +223,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_app_services_githubservice_.githubservice.html">GitHubService</a>.<a href="_app_services_githubservice_.githubservice.html#api">API</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L44">app/services/GitHubService.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L46">app/services/GitHubService.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,7 +249,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#createorupdate">createOrUpdate</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L74">app/services/PullRequestService.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L76">app/services/PullRequestService.ts:76</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -266,7 +282,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#createorupdatemultiple">createOrUpdateMultiple</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L105">app/services/PullRequestService.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L107">app/services/PullRequestService.ts:107</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -295,7 +311,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L198">app/services/PullRequestService.ts:198</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L200">app/services/PullRequestService.ts:200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -333,7 +349,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#getremotepullrequest">getRemotePullRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L126">app/services/PullRequestService.ts:126</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L128">app/services/PullRequestService.ts:128</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -369,7 +385,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html">IPullRequestService</a>.<a href="../interfaces/_app_services_pullrequestservice_.ipullrequestservice.html#getremotepullrequests">getRemotePullRequests</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L146">app/services/PullRequestService.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L148">app/services/PullRequestService.ts:148</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -401,7 +417,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L171">app/services/PullRequestService.ts:171</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L173">app/services/PullRequestService.ts:173</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -430,7 +446,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/PullRequestService.ts#L177">app/services/PullRequestService.ts:177</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/PullRequestService.ts#L179">app/services/PullRequestService.ts:179</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -495,9 +511,6 @@
 					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>

@@ -77,7 +77,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#109;&#x61;&#x72;&#x69;&#111;&#64;&#x6d;&#106;&#117;&#x65;&#122;&#46;&#99;&#111;&#x6d;">&#109;&#x61;&#x72;&#x69;&#111;&#64;&#x6d;&#106;&#117;&#x65;&#122;&#46;&#99;&#111;&#x6d;</a></p>
+						<dd><p>Mario Juez <a href="&#x6d;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x6d;&#97;&#x72;&#105;&#x6f;&#x40;&#109;&#106;&#117;&#101;&#x7a;&#46;&#99;&#111;&#x6d;">&#x6d;&#97;&#x72;&#105;&#x6f;&#x40;&#109;&#106;&#117;&#101;&#x7a;&#46;&#99;&#111;&#x6d;</a></p>
 						</dd>
 					</dl>
 				</div>
@@ -125,7 +125,6 @@
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_app_data_abstractrepository_.abstractrepository.html#_genericfactory" class="tsd-kind-icon">_generic<wbr>Factory</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_app_data_abstractrepository_.abstractrepository.html#_model" class="tsd-kind-icon">_model</a></li>
 							</ul>
 						</section>
@@ -139,7 +138,6 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_data_abstractrepository_.abstractrepository.html#create" class="tsd-kind-icon">create</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_data_abstractrepository_.abstractrepository.html#findby" class="tsd-kind-icon">find<wbr>By</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_data_abstractrepository_.abstractrepository.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_data_abstractrepository_.abstractrepository.html#update" class="tsd-kind-icon">update</a></li>
 							</ul>
@@ -153,13 +151,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Abstract<wbr>Repository<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Schema</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_data_abstractrepository_.abstractrepository.html" class="tsd-signature-type">AbstractRepository</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Abstract<wbr>Repository<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Schema</span>, model<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_data_abstractrepository_.abstractrepository.html" class="tsd-signature-type">AbstractRepository</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L18">app/data/AbstractRepository.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L14">app/data/AbstractRepository.ts:14</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -186,6 +184,14 @@
 										</div>
 									</div>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> model: <span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Optional mongoose model dependency injection.</p>
+										</div>
+									</div>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_app_data_abstractrepository_.abstractrepository.html" class="tsd-signature-type">AbstractRepository</a></h4>
 						</li>
@@ -195,27 +201,12 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_genericfactory" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _generic<wbr>Factory</h3>
-					<div class="tsd-signature tsd-kind-icon">_generic<wbr>Factory<span class="tsd-signature-symbol">:</span> <a href="_app_util_genericfactory_.genericfactory.html" class="tsd-signature-type">GenericFactory</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L18">app/data/AbstractRepository.ts:18</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Generic Factory utility.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_model" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _model</h3>
 					<div class="tsd-signature tsd-kind-icon">_model<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L15">app/data/AbstractRepository.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L14">app/data/AbstractRepository.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -237,7 +228,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L32">app/data/AbstractRepository.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L28">app/data/AbstractRepository.ts:28</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -263,7 +254,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_app_data_irepository_.irepository.html">IRepository</a>.<a href="../interfaces/_app_data_irepository_.irepository.html#create">create</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L41">app/data/AbstractRepository.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L37">app/data/AbstractRepository.ts:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -286,45 +277,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="findby" class="tsd-anchor"></a>
-					<h3>find<wbr>By</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>By<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_app_data_irepository_.irepository.html">IRepository</a>.<a href="../interfaces/_app_data_irepository_.irepository.html#findby">findBy</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L76">app/data/AbstractRepository.ts:76</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Finds items that one of its keys match with a specific value.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>key: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>key to compare value.</p>
-									</div>
-								</li>
-								<li>
-									<h5>value: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>value to compare</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>a promise that returns an array of items if resolved.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="retrieve" class="tsd-anchor"></a>
 					<h3>retrieve</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -335,7 +287,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_app_data_irepository_.irepository.html">IRepository</a>.<a href="../interfaces/_app_data_irepository_.irepository.html#retrieve">retrieve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L56">app/data/AbstractRepository.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L52">app/data/AbstractRepository.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -359,7 +311,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_app_data_irepository_.irepository.html">IRepository</a>.<a href="../interfaces/_app_data_irepository_.irepository.html#update">update</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L50">app/data/AbstractRepository.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L46">app/data/AbstractRepository.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -429,9 +381,6 @@
 						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -456,9 +405,6 @@
 								<a href="_app_data_abstractrepository_.abstractrepository.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_app_data_abstractrepository_.abstractrepository.html#_genericfactory" class="tsd-kind-icon">_generic<wbr>Factory</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_app_data_abstractrepository_.abstractrepository.html#_model" class="tsd-kind-icon">_model</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
@@ -466,9 +412,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_app_data_abstractrepository_.abstractrepository.html#create" class="tsd-kind-icon">create</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_app_data_abstractrepository_.abstractrepository.html#findby" class="tsd-kind-icon">find<wbr>By</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_app_data_abstractrepository_.abstractrepository.html#retrieve" class="tsd-kind-icon">retrieve</a>

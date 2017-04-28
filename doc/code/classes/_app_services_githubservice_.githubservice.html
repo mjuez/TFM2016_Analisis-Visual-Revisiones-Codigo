@@ -76,7 +76,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#109;&#97;&#x72;&#105;&#x6f;&#x40;&#109;&#106;&#x75;&#101;&#122;&#x2e;&#x63;&#x6f;&#x6d;">&#109;&#97;&#x72;&#105;&#x6f;&#x40;&#109;&#106;&#x75;&#101;&#122;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
+						<dd><p>Mario Juez <a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#109;&#97;&#114;&#x69;&#x6f;&#64;&#109;&#106;&#x75;&#101;&#x7a;&#46;&#x63;&#x6f;&#x6d;">&#109;&#97;&#114;&#x69;&#x6f;&#64;&#109;&#106;&#x75;&#101;&#x7a;&#46;&#x63;&#x6f;&#x6d;</a></p>
 						</dd>
 					</dl>
 				</div>
@@ -138,13 +138,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Git<wbr>Hub<wbr>Service<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html" class="tsd-signature-type">GitHubService</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Git<wbr>Hub<wbr>Service<span class="tsd-signature-symbol">(</span>api<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GitHubAPI</span>, apiAuth<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">GitHubAPI.Auth</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html" class="tsd-signature-type">GitHubService</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L33">app/services/GitHubService.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L33">app/services/GitHubService.ts:33</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -152,6 +152,25 @@
 									<p>Creates the API wrapper and authenticates to it.</p>
 								</div>
 							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> api: <span class="tsd-signature-type">GitHubAPI</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>optional GitHub API wrapper dependency injection.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> apiAuth: <span class="tsd-signature-type">GitHubAPI.Auth</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>optional GitHub API authorization.</p>
+										</div>
+									</div>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html" class="tsd-signature-type">GitHubService</a></h4>
 						</li>
 					</ul>
@@ -165,7 +184,7 @@
 					<div class="tsd-signature tsd-kind-icon">_API_<wbr>AUTHENTICATION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">GitHubAPI.Auth</span><span class="tsd-signature-symbol"> =&nbsp;&lt;GitHubAPI.AuthOAuthSecret&gt;{type: &#x60;oauth&#x60;,key: process.env.ANVIRECO_ID,secret: process.env.ANVIRECO_SECRET}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L29">app/services/GitHubService.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L29">app/services/GitHubService.ts:29</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -180,7 +199,7 @@
 					<div class="tsd-signature tsd-kind-icon">_api<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">GitHubAPI</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L12">app/services/GitHubService.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L12">app/services/GitHubService.ts:12</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -202,7 +221,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L44">app/services/GitHubService.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L46">app/services/GitHubService.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -223,7 +242,7 @@
 					<div class="tsd-signature tsd-kind-icon">_API_<wbr>OPTIONS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L15">app/services/GitHubService.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L15">app/services/GitHubService.ts:15</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -237,7 +256,7 @@
 						<div class="tsd-signature tsd-kind-icon">Promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;Promise</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L23">app/services/GitHubService.ts:23</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L23">app/services/GitHubService.ts:23</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -247,7 +266,7 @@
 						<div class="tsd-signature tsd-kind-icon">debug<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L16">app/services/GitHubService.ts:16</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L16">app/services/GitHubService.ts:16</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -257,7 +276,7 @@
 						<div class="tsd-signature tsd-kind-icon">follow<wbr>Redirects<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L24">app/services/GitHubService.ts:24</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L24">app/services/GitHubService.ts:24</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -267,7 +286,7 @@
 						<div class="tsd-signature tsd-kind-icon">host<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;api.github.com&#x60;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L18">app/services/GitHubService.ts:18</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L18">app/services/GitHubService.ts:18</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -277,7 +296,7 @@
 						<div class="tsd-signature tsd-kind-icon">path<wbr>Prefix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&#x60;&#x60;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L19">app/services/GitHubService.ts:19</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L19">app/services/GitHubService.ts:19</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -287,7 +306,7 @@
 						<div class="tsd-signature tsd-kind-icon">protocol<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;https&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L17">app/services/GitHubService.ts:17</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L17">app/services/GitHubService.ts:17</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -297,7 +316,7 @@
 						<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;5000</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L25">app/services/GitHubService.ts:25</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L25">app/services/GitHubService.ts:25</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -307,7 +326,7 @@
 						<div class="tsd-signature tsd-kind-icon">headers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L20">app/services/GitHubService.ts:20</a></li>
+								<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L20">app/services/GitHubService.ts:20</a></li>
 							</ul>
 						</aside>
 						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -316,7 +335,7 @@
 							<div class="tsd-signature tsd-kind-icon">user-<wbr>agent<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;process.env.ANVIRECO_APPNAME</span></div>
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/services/GitHubService.ts#L21">app/services/GitHubService.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/GitHubService.ts#L21">app/services/GitHubService.ts:21</a></li>
 								</ul>
 							</aside>
 						</section>
@@ -368,9 +387,6 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>

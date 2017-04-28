@@ -76,7 +76,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x6d;&#x61;&#114;&#x69;&#111;&#64;&#109;&#x6a;&#x75;&#x65;&#x7a;&#x2e;&#99;&#x6f;&#x6d;">&#x6d;&#x61;&#114;&#x69;&#111;&#64;&#109;&#x6a;&#x75;&#x65;&#x7a;&#x2e;&#99;&#x6f;&#x6d;</a></p>
+						<dd><p>Mario Juez <a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#109;&#97;&#x72;&#x69;&#x6f;&#64;&#109;&#x6a;&#117;&#101;&#x7a;&#x2e;&#x63;&#111;&#x6d;">&#109;&#97;&#x72;&#x69;&#x6f;&#64;&#109;&#x6a;&#117;&#101;&#x7a;&#x2e;&#x63;&#111;&#x6d;</a></p>
 						</dd>
 					</dl>
 				</div>
@@ -127,7 +127,6 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_app_data_pullrequestrepository_.pullrequestrepository.html#create" class="tsd-kind-icon">create</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_app_data_pullrequestrepository_.pullrequestrepository.html#findby" class="tsd-kind-icon">find<wbr>By</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_app_data_pullrequestrepository_.pullrequestrepository.html#findonebypullid" class="tsd-kind-icon">find<wbr>One<wbr>ByPull<wbr>Id</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_app_data_pullrequestrepository_.pullrequestrepository.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_app_data_pullrequestrepository_.pullrequestrepository.html#update" class="tsd-kind-icon">update</a></li>
@@ -142,14 +141,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Pull<wbr>Request<wbr>Repository<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_data_pullrequestrepository_.pullrequestrepository.html" class="tsd-signature-type">PullRequestRepository</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Pull<wbr>Request<wbr>Repository<span class="tsd-signature-symbol">(</span>model<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_documents_pullrequestdocument_.pullrequestdocument.html" class="tsd-signature-type">PullRequestDocument</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_data_pullrequestrepository_.pullrequestrepository.html" class="tsd-signature-type">PullRequestRepository</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/PullRequestRepository.ts#L30">app/data/PullRequestRepository.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/PullRequestRepository.ts#L31">app/data/PullRequestRepository.ts:31</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -158,6 +157,17 @@
 									Creates the repository using the collection name and the Pull Request schema.</p>
 								</div>
 							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> model: <span class="tsd-signature-type">Model</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_documents_pullrequestdocument_.pullrequestdocument.html" class="tsd-signature-type">PullRequestDocument</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Optional mongoose model dependency injection.</p>
+										</div>
+									</div>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_app_data_pullrequestrepository_.pullrequestrepository.html" class="tsd-signature-type">PullRequestRepository</a></h4>
 						</li>
 					</ul>
@@ -171,7 +181,7 @@
 					<div class="tsd-signature tsd-kind-icon">_NAME<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"pullRequest"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;pullRequest&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/PullRequestRepository.ts#L30">app/data/PullRequestRepository.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/PullRequestRepository.ts#L31">app/data/PullRequestRepository.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -194,7 +204,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#model">model</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L32">app/data/AbstractRepository.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L28">app/data/AbstractRepository.ts:28</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -221,7 +231,7 @@
 								<p>Implementation of <a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html">IPullRequestRepository</a>.<a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html#create">create</a></p>
 								<p>Inherited from <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#create">create</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L41">app/data/AbstractRepository.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L37">app/data/AbstractRepository.ts:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -243,46 +253,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="findby" class="tsd-anchor"></a>
-					<h3>find<wbr>By</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">find<wbr>By<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html">IPullRequestRepository</a>.<a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html#findby">findBy</a></p>
-								<p>Inherited from <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#findby">findBy</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L76">app/data/AbstractRepository.ts:76</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Finds items that one of its keys match with a specific value.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>key: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>key to compare value.</p>
-									</div>
-								</li>
-								<li>
-									<h5>value: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>value to compare</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_app_entities_pullrequestentity_.ipullrequestentity.html" class="tsd-signature-type">IPullRequestEntity</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>a promise that returns an array of items if resolved.</p>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="findonebypullid" class="tsd-anchor"></a>
 					<h3>find<wbr>One<wbr>ByPull<wbr>Id</h3>
@@ -294,7 +264,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html">IPullRequestRepository</a>.<a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html#findonebypullid">findOneByPullId</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/PullRequestRepository.ts#L63">app/data/PullRequestRepository.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/PullRequestRepository.ts#L65">app/data/PullRequestRepository.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -328,7 +298,7 @@
 								<p>Implementation of <a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html">IPullRequestRepository</a>.<a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html#retrieve">retrieve</a></p>
 								<p>Inherited from <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#retrieve">retrieve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/AbstractRepository.ts#L56">app/data/AbstractRepository.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/AbstractRepository.ts#L52">app/data/AbstractRepository.ts:52</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -353,7 +323,7 @@
 								<p>Implementation of <a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html">IPullRequestRepository</a>.<a href="../interfaces/_app_data_pullrequestrepository_.ipullrequestrepository.html#update">update</a></p>
 								<p>Overrides <a href="_app_data_abstractrepository_.abstractrepository.html">AbstractRepository</a>.<a href="_app_data_abstractrepository_.abstractrepository.html#update">update</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/c9ad306/src/app/data/PullRequestRepository.ts#L45">app/data/PullRequestRepository.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/data/PullRequestRepository.ts#L47">app/data/PullRequestRepository.ts:47</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -423,9 +393,6 @@
 						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_util_genericfactory_.html">"app/util/<wbr>Generic<wbr>Factory"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -457,9 +424,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_app_data_pullrequestrepository_.pullrequestrepository.html#create" class="tsd-kind-icon">create</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="_app_data_pullrequestrepository_.pullrequestrepository.html#findby" class="tsd-kind-icon">find<wbr>By</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_app_data_pullrequestrepository_.pullrequestrepository.html#findonebypullid" class="tsd-kind-icon">find<wbr>One<wbr>ByPull<wbr>Id</a>
