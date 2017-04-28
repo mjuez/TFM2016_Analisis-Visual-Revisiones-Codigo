@@ -45,7 +45,9 @@ Anvireco es una herramienta para la extracción y visualización de datos sobre 
 | [gulp-typescript](https://github.com/ivogabe/gulp-typescript) | MIT | Sí |
 | [gulp-typedoc](https://github.com/rogierschouten/gulp-typedoc) | ISC | No |
 | [chai](https://github.com/chaijs/chai) | MIT | No |
+| [chai-as-promised](https://github.com/domenic/chai-as-promised) | WTFPL | No |
 | [chai-http](https://github.com/chaijs/chai-http) | MIT | No |
+| [sinon](https://github.com/sinonjs/sinon) | BSD | No |
 | [mocha](https://github.com/mochajs/mocha) | MIT | No |
 | [typedoc](https://github.com/TypeStrong/typedoc) | Apache-2.0 | No |
 
