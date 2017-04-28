@@ -74,6 +74,14 @@ TypeScript es un superconjunto tipado de JavaScript que es compilado a JavaScrip
 	\item \url{https://www.typescriptlang.org/}
 \end{itemize}
 
+\subsection{TypeDoc}
+
+TypeDoc es una herramienta para la generación de documentación para proyectos desarrollados en TypeScript. Su sintaxis es similar a la de JSDoc, pero simplificada ya que es capaz de leer e incluir los tipos de los parámetros definidos en el código.
+
+\begin{itemize}
+	\item \url{http://typedoc.org/}
+\end{itemize}
+
 \section{Visual Studio Code}
 
 Visual Studio Code es un entorno de desarrollo integrado (IDE) multiplataforma desarrollado por Microsoft, cuenta con una herramienta integrada para el uso de Git, así como un elevado número de extensiones que permiten personalizar el editor para las necesidades concretas de cada proyecto.
@@ -104,6 +112,30 @@ MongoDB es un sistema gestor de base de datos NoSQL. Ofrece escalabilidad, rendi
 
 \begin{itemize}
 	\item \url{https://www.mongodb.com}
+\end{itemize}
+
+\subsection{Mongoose}
+
+Mongoose es un ODM (Object Document Mapper) para MongoDB y JavaScript. Incluye características como conversión de tipos, validación, construcción de consultas, etc.
+
+\begin{itemize}
+	\item \url{http://mongoosejs.com/}
+\end{itemize}
+
+\subsection{mLab}
+
+La herramienta mLab es un alojamiento de bases de datos MongoDB en la nube, su plan gratuito permite la creación de varias bases de datos con hasta 500 MB de espacio de almacenamiento cada una.
+
+\begin{itemize}
+	\item \url{https://mlab.com/}
+\end{itemize}
+
+\subsubsection{Alternativas estudiadas}
+
+MongoDB Atlas ofrece bases de datos MongoDB como servicio pero su plan gratuito solo permite la creación de un clúster.
+
+\begin{itemize}
+	\item \url{https://www.mongodb.com/cloud/atlas}
 \end{itemize}
 
 \section{Herramientas de integración continua}
@@ -160,15 +192,18 @@ ZenHub añade funcionalidades que permiten la gestión de proyectos utilizando m
 	\item \url{https://www.zenhub.com}
 \end{itemize}
 
-\subsection{Mocha + Chai}
+\subsection{Mocha + Chai + Sinon}
 
 Mocha es un framework de pruebas unitarias para Node.js y para navegadores que simplifica el desarrollo de pruebas para aplicaciones asíncronas.
 
 Chai es una librería de aserciones con una sintaxis similar al lenguaje natural, facilitando la comprensión de las pruebas. También cuenta con un sistema de plugins que le permite aumentar su funcionalidad, un ejemplo es el plugin chai-http que permite probar aplicaciones que funcionen mediante peticiones http (por ejemplo aplicaciones REST).
 
+Sinon es una librería que funciona con cualquier framework de pruebas, y provee funcionalidades para el uso de spies, stubs y mocks. 
+
 \begin{itemize}
 	\item Mocha: \url{https://mochajs.org/}
 	\item Chai: \url{http://chaijs.com/}
+	\item Sinon: \url{http://sinonjs.org/}
 \end{itemize}
 
 \section{Heroku}
