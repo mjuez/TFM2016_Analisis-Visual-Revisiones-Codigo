@@ -39,7 +39,7 @@ export abstract class GitHubService implements IApiService<GitHubAPI>{
      */
     constructor(api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
         this._api = api || new GitHubAPI(this._API_OPTIONS);
-        //this._api.authenticate(apiAuth || this._API_AUTHENTICATION);
+        this._api.authenticate(apiAuth || this._API_AUTHENTICATION);
     }
 
     /** Gets the GitHub API wrapper. */
