@@ -2,6 +2,7 @@ import { IPersistenceService } from "../services/IPersistenceService";
 import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
+import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory } from "../data/filters/PullRequestFilter";
 import { IApiService } from "./IApiService";
 import { GitHubService } from "./GitHubService";
 import { GitHubUtil } from "../util/GitHubUtil";
@@ -14,6 +15,10 @@ import * as Promise from "bluebird";
  * @author Mario Juez <mario@mjuez.com> 
  */
 export interface IPullRequestService extends IPersistenceService<IPullRequestEntity>, IApiService<GitHubAPI> {
+
+    getLocalPullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
+
+    getLocalPullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]>;
 
     /**
      * Obtains a remote pull request (from GitHub).
@@ -122,6 +127,20 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
         });
 
         return promise;
+    }
+
+    /** @inheritdoc */
+    public getLocalPullRequest(owner: string, repo: string, id: number): Promise<IPullRequestEntity> {
+        let repository: IPullRequestRepository = this._repository;
+        let filter: SinglePullRequestFilter = PullRequestFilterFactory.createSingle({ owner, repository: repo, number: id });
+        return repository.findOne(filter);
+    }
+
+    /** @inheritdoc */
+    public getLocalPullRequests(owner: string, repo: string): Promise<IPullRequestEntity[]> {
+        let repository: IPullRequestRepository = this._repository;
+        let filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository: repo});
+        return repository.retrieve(filter);
     }
 
     /** @inheritdoc */
