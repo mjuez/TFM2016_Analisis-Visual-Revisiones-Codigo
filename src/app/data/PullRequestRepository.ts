@@ -3,6 +3,7 @@ import { AbstractRepository } from "./AbstractRepository";
 import { IPullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { PullRequestSchema } from "./schemas/PullRequestSchema";
+import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
 import * as Promise from "bluebird";
 import * as mongoose from "mongoose";
 
@@ -19,6 +20,11 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
      * @returns a promise that returns a pull request entity if resolved.
      */
     findOneByPullId(id: number): Promise<IPullRequestEntity>;
+
+    /**
+     * 
+     */
+    findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity>;
 }
 
 /**
@@ -72,6 +78,18 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
                 }
             });
         });
+        return promise;
+    }
+
+    public findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity> {
+        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
+            this.retrieve(filter).then((entities) => {
+                resolve(entities[0]);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+
         return promise;
     }
 
