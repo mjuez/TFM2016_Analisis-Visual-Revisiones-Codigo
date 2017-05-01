@@ -46,12 +46,14 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
     public abstract update(item: T): Promise<number>;
 
     /**
-     * Retrieves all items of a collection from database.
+     * Retrieves filtered items of a collection from database.
+     * @param filter      Document filter, by default an empty filter
+     *                    which retrieves all items of a collection.
      * @returns a promise that returns an array of items if resolved.
      */
-    public retrieve(): Promise<T[]> {
+    public retrieve(filter: Object = {}): Promise<T[]> {
         let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {
-            this.model.find({}, (err, res) => {
+            this.model.find(filter, (err, res) => {
                 if (!err) {
                     resolve(res);
                 } else {
