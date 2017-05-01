@@ -33,11 +33,23 @@ export class PullRequestRoutes {
         let controller: IPullRequestController = this._controller;
 
         router.get("/:owner/:repository/pulls/count", (req: express.Request, res: express.Response) => {
-            controller.count(req, res);
+            controller.getCount(req, res);
         });
         
         router.get("/:owner/:repository/pulls/:pull_id", (req: express.Request, res: express.Response) => {
-            controller.retrieve(req, res);
+            controller.get(req, res);
+        });
+
+        router.get("/:owner/:repository/pulls", (req: express.Request, res: express.Response) => {
+            controller.getAll(req, res);
+        });
+
+        router.get("/remote/:owner/:repository/pulls/:pull_id", (req: express.Request, res: express.Response) => {
+            controller.getRemote(req, res);
+        });
+
+        router.get("/remote/:owner/:repository/pulls", (req: express.Request, res: express.Response) => {
+            controller.getAllRemote(req, res);
         });
 
         return router;
