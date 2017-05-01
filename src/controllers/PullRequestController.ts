@@ -13,6 +13,45 @@ import * as Promise from "bluebird";
 export interface IPullRequestController {
 
     /**
+     * Gets a Pull Request stored locally given an owner, a repository
+     * and a pull request id.
+     * @param req   API request.
+     * @param res   API response.
+     */
+    get(req: Request, res: Response);
+
+    /**
+     * Gets all Pull Requests stored locally given an owner
+     * and a repository.
+     * @param req   API request.
+     * @param res   API response.
+     */
+    getAll(req: Request, res: Response);
+
+    /**
+     * Gets the number of Pull Requests stored locally given an owner
+     * and a repository.
+     * @param req   API request.
+     * @param res   API response.
+     */
+    getCount(req: Request, res: Response);
+
+    /**
+     * Gets a remote Pull Request given an owner, a repository
+     * and a pull request id.
+     * @param req   API request.
+     * @param res   API response.
+     */
+    getRemote(req: Request, res: Response);
+
+    /**
+     * Gets all remote Pull Requests given an owner and a repository.
+     * @param req   API request.
+     * @param res   API response.
+     */
+    getAllRemote(req: Request, res: Response);
+
+    /**
      * Retrieves a Pull Request from GitHub given an owner, a repository
      * and a pull request id.
      * It creates (if not exist) or updates the pull request in our database.
@@ -20,7 +59,7 @@ export interface IPullRequestController {
      * @param req   API request.
      * @param res   API response.
      */
-    retrieve(req: Request, res: Response): void;
+    //retrieve(req: Request, res: Response): void;
 
     /**
      * Counts Pull Request number from GitHub given an owner and a repository.
@@ -29,7 +68,7 @@ export interface IPullRequestController {
      * @param req   API request.
      * @param res   API response.
      */
-    count(req: Request, res: Response): void;
+    //count(req: Request, res: Response): void;
 }
 
 /**
@@ -49,6 +88,48 @@ export class PullRequestController implements IPullRequestController {
      */
     constructor(service: IPullRequestService) {
         this._service = service;
+    }
+
+    /** @inheritdoc */
+    get(req: Request, res: Response) {
+        let owner: string = req.params.owner;
+        let repository: string = req.params.repository;
+        let pullRequestId: number = req.params.pull_id;
+        let service: IPullRequestService = this._service;
+
+        service.getLocalPullRequest(owner, repository, pullRequestId).then((pull) => {
+            res.json(pull);
+        }).catch((error) => {
+            res.json({ "error": error });
+        });
+    }
+
+    /** @inheritdoc */
+    getAll(req: Request, res: Response) {
+        let owner: string = req.params.owner;
+        let repository: string = req.params.repository;
+        let service: IPullRequestService = this._service;
+
+        service.getLocalPullRequests(owner, repository).then((pulls) => {
+            res.json(pulls);
+        }).catch((error) => {
+            res.json({ "error": error });
+        });
+    }
+
+    /** @inheritdoc */
+    getCount(req: Request, res: Response) {
+        throw new Error('Method not implemented.');
+    }
+
+    /** @inheritdoc */
+    getRemote(req: Request, res: Response) {
+        throw new Error('Method not implemented.');
+    }
+
+    /** @inheritdoc */
+    getAllRemote(req: Request, res: Response) {
+        throw new Error('Method not implemented.');
     }
 
     /** @inheritdoc */
