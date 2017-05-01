@@ -70,7 +70,7 @@ class App {
       });
     });
     this._express.use('/', router);
-    this._express.use('/', this._pullRequestRoutes.routes);
+    this._express.use('/api/', this._pullRequestRoutes.routes);
   }
 
 }
