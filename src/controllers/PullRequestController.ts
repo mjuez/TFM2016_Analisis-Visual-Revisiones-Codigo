@@ -50,25 +50,6 @@ export interface IPullRequestController {
      * @param res   API response.
      */
     getAllRemote(req: Request, res: Response);
-
-    /**
-     * Retrieves a Pull Request from GitHub given an owner, a repository
-     * and a pull request id.
-     * It creates (if not exist) or updates the pull request in our database.
-     * Then, the pull request object is returned as response.
-     * @param req   API request.
-     * @param res   API response.
-     */
-    //retrieve(req: Request, res: Response): void;
-
-    /**
-     * Counts Pull Request number from GitHub given an owner and a repository.
-     * It creates (if not exist) or updates the pull request in our database.
-     * Then, the pull request object is returned as response.
-     * @param req   API request.
-     * @param res   API response.
-     */
-    //count(req: Request, res: Response): void;
 }
 
 /**
@@ -119,55 +100,50 @@ export class PullRequestController implements IPullRequestController {
 
     /** @inheritdoc */
     getCount(req: Request, res: Response) {
-        throw new Error('Method not implemented.');
-    }
-
-    /** @inheritdoc */
-    getRemote(req: Request, res: Response) {
-        throw new Error('Method not implemented.');
-    }
-
-    /** @inheritdoc */
-    getAllRemote(req: Request, res: Response) {
-        throw new Error('Method not implemented.');
-    }
-
-    /** @inheritdoc */
-    public retrieve(req: Request, res: Response): void {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let pullRequestId: number = req.params.pull_id;
         let service: IPullRequestService = this._service;
-        service.getRemotePullRequest(owner, repository, pullRequestId).then((pull) => {
-            service.createOrUpdate(pull).then((savedPull) => {
-                res.json(savedPull);
-            }).catch((error) => {
-                res.json({ "error": error });
-            });
+
+        service.getLocalPullRequests(owner, repository).then((pulls) => {
+            res.json({ "count": pulls.length });
         }).catch((error) => {
             res.json({ "error": error });
         });
     }
 
     /** @inheritdoc */
-    public count(req: Request, res: Response): void {
+    getRemote(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
+        let pullRequestId: number = req.params.pull_id;
         let service: IPullRequestService = this._service;
 
-        let savePullRequests = (pulls) => {
-            service.createOrUpdateMultiple(pulls).then((savedPulls) => {
-                res.json({ "count": savedPulls.length });
-            }).catch((error) => {
-                res.json({ "error": error });
+        res.json({ status: `started obtaining remote pull request at: ${new Date()}` });
+
+        service.getRemotePullRequest(owner, repository, pullRequestId).then((pull) => {
+            service.createOrUpdate(pull).then(() => {
+                console.log(`finished obtaining remote pull request at: ${new Date()}`);
             });
-        }
+        }).catch((error) => {
+            console.log(error); // logging ? 
+        });
+    }
+
+    /** @inheritdoc */
+    getAllRemote(req: Request, res: Response) {
+        let owner: string = req.params.owner;
+        let repository: string = req.params.repository;
+        let pullRequestId: number = req.params.pull_id;
+        let service: IPullRequestService = this._service;
+
+        res.json({ status: `started obtaining all remote pull requests at: ${new Date()}` });
 
         service.getRemotePullRequests(owner, repository).then((pulls) => {
-            savePullRequests(pulls);
-        }).catch((rejection) => {
-            let pulls = rejection["pull-requests"];
-            savePullRequests(pulls);
+            service.createOrUpdateMultiple(pulls).then(() => {
+                console.log(`finished obtaining all remote pull requests at: ${new Date()}`);
+            });
+        }).catch((error) => {
+            console.log(error); // logging ? 
         });
     }
 

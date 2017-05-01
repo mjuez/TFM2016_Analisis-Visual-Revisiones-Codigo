@@ -236,6 +236,7 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
                     let links: string = pageResult.meta.link;
                     let nextPage: number = GitHubUtil.getNextPageNumber(links);
                     let rejection: Object = {
+                        error: reason,
                         "pull-requests": pullRequests,
                         "next-page": nextPage
                     }
