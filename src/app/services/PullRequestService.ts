@@ -37,19 +37,6 @@ export interface IPullRequestService extends IPersistenceService<IPullRequestEnt
      */
     getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]>;
 
-    /**
-     * Transforms raw data to IPullRequestEntity.
-     * @param data  raw data.
-     * @returns a pull request entity.
-     */
-    toEntity(data: any): IPullRequestEntity;
-
-    /**
-     * Transforms raw data to IPullRequestEntity array.
-     * @param data  raw data.
-     * @returns an array of pull request entities.
-     */
-    toEntityArray(data: any): IPullRequestEntity[];
 }
 
 /**
@@ -153,7 +140,7 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
                 repo: repository,
                 number: id
             }).then((result) => {
-                let entity: IPullRequestEntity = this.toEntity(result.data);
+                let entity: IPullRequestEntity = PullRequestEntity.toEntity(result.data);
                 resolve(entity);
             }).catch((reason) => {
                 reject(reason);
@@ -188,24 +175,6 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
         return promise;
     }
 
-    /** @inheritdoc */
-    public toEntity(data: Object): IPullRequestEntity {
-        let entity: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>data);
-        return entity;
-    }
-
-    /** @inheritdoc */
-    public toEntityArray(data: Object[]): IPullRequestEntity[] {
-        let entityArray: IPullRequestEntity[] = [];
-        if (data.length > 0) {
-            data.map((jsonObject) => {
-                let entity: IPullRequestEntity = this.toEntity(jsonObject);
-                entityArray.push(entity);
-            });
-        }
-        return entityArray;
-    }
-
     /**
      * Obtains all pull requests from GitHub, even if they are paginated.
      * @param pageResult    a response that contains a page or results 
@@ -220,7 +189,7 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
         let api: GitHubAPI = this.API;
 
         let promise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
-            let pullRequests: IPullRequestEntity[] = this.toEntityArray(pageResult.data);
+            let pullRequests: IPullRequestEntity[] = PullRequestEntity.toEntityArray(pageResult.data);
             if (api.hasNextPage(pageResult)) {
                 api.getNextPage(pageResult).then((nextPageResult) => {
                     this.getAllPaginatedPullRequests(nextPageResult).then((followingPullRequests) => {

@@ -25,4 +25,30 @@ export class PullRequestEntity extends AbstractEntity<PullRequestDocument> imple
         return this.document.id;
     }
 
+    /**
+     * Transforms raw data to IPullRequestEntity.
+     * @param data  raw data.
+     * @returns a pull request entity.
+     */
+    public static toEntity(data: any): PullRequestEntity {
+        let entity: PullRequestEntity = new PullRequestEntity(<PullRequestDocument>data);
+        return entity;
+    }
+
+    /**
+     * Transforms raw data to IPullRequestEntity array.
+     * @param data  raw data.
+     * @returns an array of pull request entities.
+     */
+    public static toEntityArray(data: any[]): PullRequestEntity[] {
+        let entityArray: PullRequestEntity[] = [];
+        if (data.length > 0) {
+            data.map((jsonObject) => {
+                let entity: PullRequestEntity = this.toEntity(jsonObject);
+                entityArray.push(entity);
+            });
+        }
+        return entityArray;
+    }
+
 }
