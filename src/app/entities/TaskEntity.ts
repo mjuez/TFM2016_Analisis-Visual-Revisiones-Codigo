@@ -1,34 +1,37 @@
-import { TaskDocument, SubTaskDocument } from "./documents/TaskDocument";
+import { TaskDocument } from "./documents/TaskDocument";
 import { AbstractEntity } from "./AbstractEntity";
 import { IEntity } from "./IEntity";
+import { TaskType } from "./enum/TaskType";
 
 export interface ITaskEntity extends IEntity<TaskDocument> {
-
+    type: TaskType,
     isCompleted: boolean,
-
     creationDate: Date,
-
     startDate: Date,
-
     endDate: Date,
-
     owner: string,
-
     repository: string,
-
-    currentPage: number
-
+    currentPage: number,
+    parentTask?: ITaskEntity,
+    currentPullRequestNumber?: number
 }
 
-export interface ISubTaskEntity extends IEntity<SubTaskDocument> {
+class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEntity {
 
-    parentTask: ITaskEntity,
+    private _parentTask: ITaskEntity;
 
-    pullRequestNumber: number
+    constructor(document: TaskDocument, parentTask?: ITaskEntity) {
+        super(document);
+        this.parentTask = parentTask;
+    }
 
-}
+    get type(): TaskType {
+        return this.document.type;
+    }
 
-abstract class AbstractTaskEntity<T extends TaskDocument> extends AbstractEntity<T> implements ITaskEntity {
+    set type(type: TaskType) {
+        this.document.type = type;
+    }
 
     get isCompleted(): boolean {
         return this.document.is_completed;
@@ -86,34 +89,21 @@ abstract class AbstractTaskEntity<T extends TaskDocument> extends AbstractEntity
         this.document.current_page = currentPage;
     }
 
-}
-
-export class TaskEntity extends AbstractTaskEntity<TaskDocument>{}
-
-export class SubTaskEntity extends AbstractTaskEntity<SubTaskDocument> implements ISubTaskEntity {
-
-    private _parentTask: ITaskEntity;
-
-    constructor(document: SubTaskDocument, parentTask: ITaskEntity = null) {
-        super(document);
-        this.parentTask = parentTask;
-    }
-
     get parentTask(): ITaskEntity {
         return this._parentTask;
     }
 
-    set parentTask(parentTask: ITaskEntity){
+    set parentTask(parentTask: ITaskEntity) {
         this._parentTask = parentTask;
         this.document.parent_id = parentTask.document._id;
     }
 
-    get pullRequestNumber(): number {
-        return this.document.pull_request_number;
+    get currentPullRequestNumber(): number {
+        return this.document.current_pull_request_number;
     }
 
-    set pullRequestNumber(pullRequestNumber: number){
-        this.document.pull_request_number = pullRequestNumber;
+    set currentPullRequestNumber(pullRequestNumber: number) {
+        this.document.current_pull_request_number = pullRequestNumber;
     }
 
 }
