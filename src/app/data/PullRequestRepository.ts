@@ -1,6 +1,6 @@
 import { IRepository } from "../data/IRepository";
 import { AbstractRepository } from "./AbstractRepository";
-import { IPullRequestEntity } from "../entities/PullRequestEntity";
+import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { PullRequestSchema } from "./schemas/PullRequestSchema";
 import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
@@ -72,7 +72,8 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
         let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
             this.model.findOne({ id: id }, (error, result) => {
                 if (!error) {
-                    resolve(result);
+                    let entity: IPullRequestEntity = PullRequestEntity.toEntity(result);
+                    resolve(entity);
                 } else {
                     reject(error);
                 }
@@ -84,13 +85,18 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
     public findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity> {
         let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
             this.retrieve(filter).then((entities) => {
-                resolve(entities[0]);
+                let entity: IPullRequestEntity = PullRequestEntity.toEntity(entities[0]);
+                resolve(entity);
             }).catch((error) => {
                 reject(error);
             });
         });
 
         return promise;
+    }
+
+    protected convertToEntityArray(documentArray: PullRequestDocument[]): IPullRequestEntity[] {
+        return PullRequestEntity.toEntityArray(documentArray);
     }
 
 }

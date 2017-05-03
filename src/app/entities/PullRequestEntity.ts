@@ -30,8 +30,8 @@ export class PullRequestEntity extends AbstractEntity<PullRequestDocument> imple
      * @param data  raw data.
      * @returns a pull request entity.
      */
-    public static toEntity(data: any): PullRequestEntity {
-        let entity: PullRequestEntity = new PullRequestEntity(<PullRequestDocument>data);
+    public static toEntity(data: any): IPullRequestEntity {
+        let entity: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>data);
         return entity;
     }
 
@@ -40,11 +40,11 @@ export class PullRequestEntity extends AbstractEntity<PullRequestDocument> imple
      * @param data  raw data.
      * @returns an array of pull request entities.
      */
-    public static toEntityArray(data: any[]): PullRequestEntity[] {
-        let entityArray: PullRequestEntity[] = [];
+    public static toEntityArray(data: any[]): IPullRequestEntity[] {
+        let entityArray: IPullRequestEntity[] = [];
         if (data.length > 0) {
             data.map((jsonObject) => {
-                let entity: PullRequestEntity = this.toEntity(jsonObject);
+                let entity: IPullRequestEntity = this.toEntity(jsonObject);
                 entityArray.push(entity);
             });
         }

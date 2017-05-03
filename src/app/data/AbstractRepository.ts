@@ -55,7 +55,8 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
         let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {
             this.model.find(filter, (err, res) => {
                 if (!err) {
-                    resolve(res);
+                    let entityArray: T[] = this.convertToEntityArray(res);
+                    resolve(entityArray);
                 } else {
                     reject(err);
                 }
@@ -64,5 +65,8 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
 
         return promise;
     }
+
+    // template method
+    protected abstract convertToEntityArray(documentArray: E[]): T[];
 
 }
