@@ -85,8 +85,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
     public findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity> {
         let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
             this.retrieve(filter).then((entities) => {
-                let entity: IPullRequestEntity = PullRequestEntity.toEntity(entities[0]);
-                resolve(entity);
+                resolve(entities[0]);
             }).catch((error) => {
                 reject(error);
             });

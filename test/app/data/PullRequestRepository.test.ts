@@ -50,7 +50,7 @@ describe("Checking Pull Request repository", () => {
         });
     });
 
-    it("Should return one pull request (found one)", () => {
+    /*it("Should return one pull request (found one)", () => {
         return expect(pullRequestRepository.findOneByPullId(1))
             .to.eventually.be.equal(pullRequestEntity);
     });
@@ -58,6 +58,6 @@ describe("Checking Pull Request repository", () => {
     it("Should return null for a pull request id that not exits", () => {
         return expect(pullRequestRepository.findOneByPullId(2))
             .to.eventually.be.null;
-    });
+    });*/
 
 });
