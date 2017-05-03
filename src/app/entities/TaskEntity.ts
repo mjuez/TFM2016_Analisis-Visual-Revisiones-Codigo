@@ -106,4 +106,30 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
         this.document.current_pull_request_number = pullRequestNumber;
     }
 
+    /**
+     * Transforms raw data to ITaskEntity.
+     * @param data  raw data.
+     * @returns a task entity.
+     */
+    public static toEntity(data: any): ITaskEntity {
+        let entity: ITaskEntity = new TaskEntity(<TaskDocument>data);
+        return entity;
+    }
+
+    /**
+     * Transforms raw data to ITaskEntity array.
+     * @param data  raw data.
+     * @returns an array of task entities.
+     */
+    public static toEntityArray(data: any[]): ITaskEntity[] {
+        let entityArray: ITaskEntity[] = [];
+        if (data.length > 0) {
+            data.map((jsonObject) => {
+                let entity: ITaskEntity = this.toEntity(jsonObject);
+                entityArray.push(entity);
+            });
+        }
+        return entityArray;
+    }
+
 }
