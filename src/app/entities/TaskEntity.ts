@@ -16,7 +16,7 @@ export interface ITaskEntity extends IEntity<TaskDocument> {
     currentPullRequestNumber?: number
 }
 
-class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEntity {
+export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEntity {
 
     private _parentTask: ITaskEntity;
 
