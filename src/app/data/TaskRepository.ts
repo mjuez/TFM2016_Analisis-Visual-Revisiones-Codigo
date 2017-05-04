@@ -54,7 +54,8 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
     public findById(id: any): Promise<ITaskEntity>{
         let promise: Promise<ITaskEntity> = new Promise<ITaskEntity>((resolve, reject) => {
             this.model.findById(id).then((document) => {
-                TaskEntity
+                let entity: ITaskEntity = TaskEntity.toEntity(document);
+                resolve(entity);
             }).catch((error) => {
                 reject(error);
             });
