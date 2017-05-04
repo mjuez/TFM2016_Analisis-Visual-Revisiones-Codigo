@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import { TaskType } from "../../entities/enum/TaskType";
+import { TaskRepository } from "../TaskRepository";
 
 /**
  * Task Schema class. Defines the schema for
@@ -19,7 +20,10 @@ export class TaskSchema {
             owner: String,
             repository: String,
             current_page: Number,
-            parent_id: mongoose.Schema.Types.ObjectId,
+            parent: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: TaskRepository.COLLECTION_NAME
+            },
             current_pull_request_number: Number
         });
 

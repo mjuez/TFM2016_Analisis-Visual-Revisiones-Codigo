@@ -13,6 +13,7 @@ import * as mongoose from "mongoose";
  */
 export interface ITaskRepository extends IRepository<ITaskEntity, TaskDocument> {
     findById(id: any): Promise<ITaskEntity>;
+    findNext(): Promise<ITaskEntity>;
 }
 
 /**
@@ -22,7 +23,7 @@ export interface ITaskRepository extends IRepository<ITaskEntity, TaskDocument> 
 export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument> implements ITaskRepository {
 
     /** MongoDB collection name. */
-    private static readonly _NAME = "task";
+    public static readonly COLLECTION_NAME = "task";
 
     /**
      * Class constructor.
@@ -30,7 +31,7 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
      * @param model     Optional mongoose model dependency injection.
      */
     constructor(model?: mongoose.Model<TaskDocument>) {
-        super(TaskRepository._NAME, TaskSchema.schema, model);
+        super(TaskRepository.COLLECTION_NAME, TaskSchema.schema, model);
     }
 
     /**
@@ -51,15 +52,47 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
         return promise;
     }
 
-    public findById(id: any): Promise<ITaskEntity>{
+    public findById(id: any): Promise<ITaskEntity> {
         let promise: Promise<ITaskEntity> = new Promise<ITaskEntity>((resolve, reject) => {
-            this.model.findById(id).then((document) => {
-                let entity: ITaskEntity = TaskEntity.toEntity(document);
-                resolve(entity);
-            }).catch((error) => {
-                reject(error);
-            });
+            this.model.findById(id)
+                .populate('parent')
+                .then((document) => {
+                    let entity: ITaskEntity = TaskEntity.toEntity(document);
+                    resolve(entity);
+                }).catch((error) => {
+                    reject(error);
+                });
         });
+        return promise;
+    }
+
+    public findNext(): Promise<ITaskEntity> {
+        let promise: Promise<ITaskEntity> = new Promise<ITaskEntity>((resolve, reject) => {
+            this.model.findOne({ is_completed: false })
+                .sort({ creation_date: -1 })
+                .populate('parent')
+                .then((document) => {
+                    let entity: ITaskEntity = TaskEntity.toEntity(document);
+                    resolve(entity);
+                }).catch((error) => {
+                    reject(error);
+                });
+        });
+        return promise;
+    }
+
+    public retrieve(filter: Object = {}): Promise<ITaskEntity[]> {
+        let promise: Promise<ITaskEntity[]> = new Promise<ITaskEntity[]>((resolve, reject) => {
+            this.model.find(filter)
+                .populate('parent')
+                .then((documents) => {
+                    let entityArray: ITaskEntity[] = this.convertToEntityArray(documents);
+                    resolve(entityArray);
+                }).catch((error) => {
+                    reject(error);
+                });
+        });
+
         return promise;
     }
 

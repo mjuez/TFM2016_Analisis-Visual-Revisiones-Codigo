@@ -3,7 +3,7 @@ import { AbstractRepository } from "./AbstractRepository";
 import { ITaskManagerEntity, TaskManagerEntity } from "../entities/TaskManagerEntity";
 import { TaskManagerDocument } from "../entities/documents/TaskManagerDocument";
 import { TaskManagerSchema } from "./schemas/TaskManagerSchema";
-import * as Promise from "bluebird";
+import * as BluebirdPromise from "bluebird";
 import * as mongoose from "mongoose";
 
 /**
@@ -12,7 +12,7 @@ import * as mongoose from "mongoose";
  * @author Mario Juez <mario@mjuez.com>
  */
 export interface ITaskManagerRepository extends IRepository<ITaskManagerEntity, TaskManagerDocument> {
-    find(): Promise<ITaskEntity>;
+    find(): Promise<ITaskManagerEntity>;
 }
 
 /**
@@ -22,7 +22,7 @@ export interface ITaskManagerRepository extends IRepository<ITaskManagerEntity, 
 export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity, TaskManagerDocument> implements ITaskManagerRepository {
 
     /** MongoDB collection name. */
-    private static readonly _NAME = "taskManager";
+    public static readonly COLLECTION_NAME = "taskManager";
 
     /**
      * Class constructor.
@@ -30,7 +30,7 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
      * @param model     Optional mongoose model dependency injection.
      */
     constructor(model?: mongoose.Model<TaskManagerDocument>) {
-        super(TaskManagerRepository._NAME, TaskManagerSchema.schema, model);
+        super(TaskManagerRepository.COLLECTION_NAME, TaskManagerSchema.schema, model);
     }
 
     /**
@@ -38,8 +38,8 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
      * @param item      Task entity with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public update(item: ITaskManagerEntity): Promise<number> {
-        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
+    public update(item: ITaskManagerEntity): BluebirdPromise<number> {
+        let promise: BluebirdPromise<number> = new BluebirdPromise<number>((resolve, reject) => {
             this.model.update({ _id: item.document._id }, item.document, (error, rowsAffected) => {
                 if (!error) {
                     resolve(rowsAffected);
@@ -51,14 +51,16 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
         return promise;
     }
 
-    public find(): Promise<ITaskEntity> {
-        let promise: Promise<ITaskEntity> = new Promise<ITaskEntity>((resolve, reject) => {
-            this.retrieve().then((entities) => {
-                let entity: ITaskManagerEntity = entities[0];
-                resolve(entity);
-            }).catch((error) => {
-                reject(error);
-            })
+    public async find(): Promise<ITaskManagerEntity> {
+        let promise: BluebirdPromise<ITaskManagerEntity> = new BluebirdPromise<ITaskManagerEntity>((resolve, reject) => {
+            this.model.find()
+                .populate('current_task')
+                .then((documents) => {
+                    let entity: ITaskManagerEntity = TaskManagerEntity.toEntity(documents[0]);
+                    resolve(entity);
+                }).catch((error) => {
+                    reject(error);
+                })
         });
         return promise;
     }

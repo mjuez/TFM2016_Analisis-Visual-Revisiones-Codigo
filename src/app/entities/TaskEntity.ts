@@ -21,9 +21,11 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
 
     private _parentTask: ITaskEntity;
 
-    constructor(document: TaskDocument, parentTask?: ITaskEntity) {
+    constructor(document: TaskDocument) {
         super(document);
-        this.parentTask = parentTask;
+        if ('type' in this.document.parent) {
+            this.parentTask = new TaskEntity(this.document.parent);
+        }
     }
 
     get type(): TaskType {
@@ -97,7 +99,7 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
     set parentTask(parentTask: ITaskEntity) {
         if (!parentTask.isSubTask()) {
             this._parentTask = parentTask;
-            this.document.parent_id = parentTask.document._id;
+            this.document.parent = parentTask.document._id;
         }
     }
 

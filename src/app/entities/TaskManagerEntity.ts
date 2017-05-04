@@ -1,4 +1,5 @@
 import { TaskManagerDocument, TaskManagerStatus } from "./documents/TaskManagerDocument";
+import { TaskDocument } from "./documents/TaskDocument";
 import { AbstractEntity } from "./AbstractEntity";
 import { ITaskEntity, TaskEntity } from "./TaskEntity";
 import { IEntity } from "./IEntity";
@@ -9,21 +10,23 @@ export interface ITaskManagerEntity extends IEntity<TaskManagerDocument> {
 }
 
 export class TaskManagerEntity extends AbstractEntity<TaskManagerDocument> implements ITaskManagerEntity {
-    
+
     private _currentTask: ITaskEntity;
 
-    constructor(document: TaskManagerDocument, currentTask?: ITaskEntity){
+    constructor(document: TaskManagerDocument) {
         super(document);
-        this._currentTask = currentTask;
+        if ('type' in this.document.current_task) {
+            this._currentTask = new TaskEntity(this.document.current_task);
+        }
     }
 
     get currentTask(): ITaskEntity {
         return this._currentTask;
     }
 
-    set currentTask(currentTask: ITaskEntity){
+    set currentTask(currentTask: ITaskEntity) {
         this._currentTask = currentTask;
-        this.document.current_task_id = currentTask.document._id;
+        this.document.current_task = currentTask.document._id;
     }
 
     get status(): TaskManagerStatus {
@@ -59,5 +62,5 @@ export class TaskManagerEntity extends AbstractEntity<TaskManagerDocument> imple
         }
         return entityArray;
     }
-    
+
 }

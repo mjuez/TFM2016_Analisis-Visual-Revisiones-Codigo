@@ -10,6 +10,6 @@ export interface TaskManagerStatus {
 }
 
 export interface TaskManagerDocument extends mongoose.Document {
-    current_task_id: any,
+    current_task: any,
     status: TaskManagerStatus
 }
