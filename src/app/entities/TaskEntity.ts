@@ -13,7 +13,8 @@ export interface ITaskEntity extends IEntity<TaskDocument> {
     repository: string,
     currentPage: number,
     parentTask?: ITaskEntity,
-    currentPullRequestNumber?: number
+    currentPullRequestNumber?: number,
+    isSubTask(): boolean
 }
 
 export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEntity {
@@ -94,8 +95,10 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
     }
 
     set parentTask(parentTask: ITaskEntity) {
-        this._parentTask = parentTask;
-        this.document.parent_id = parentTask.document._id;
+        if (!parentTask.isSubTask()) {
+            this._parentTask = parentTask;
+            this.document.parent_id = parentTask.document._id;
+        }
     }
 
     get currentPullRequestNumber(): number {
@@ -104,6 +107,10 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
 
     set currentPullRequestNumber(pullRequestNumber: number) {
         this.document.current_pull_request_number = pullRequestNumber;
+    }
+
+    public isSubTask(): boolean {
+        return this._parentTask != null || undefined;
     }
 
     /**
