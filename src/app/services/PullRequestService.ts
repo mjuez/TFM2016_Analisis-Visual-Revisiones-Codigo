@@ -37,6 +37,13 @@ export interface IPullRequestService extends IPersistenceService<IPullRequestEnt
      */
     getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]>;
 
+    /**
+     * Saves or updates many entities into database.
+     * @param entities  an array of entities.
+     * @returns a promise that retrns an array of entities if resolved.
+     */
+    createOrUpdateMultiple(entities: IPullRequestEntity[]): Promise<IPullRequestEntity[]>;
+
 }
 
 /**
