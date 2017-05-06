@@ -94,6 +94,10 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
         return promise;
     }
 
+    protected convertToEntity(document: PullRequestDocument): IPullRequestEntity {
+        return PullRequestEntity.toEntity(document);
+    }
+
     protected convertToEntityArray(documentArray: PullRequestDocument[]): IPullRequestEntity[] {
         return PullRequestEntity.toEntityArray(documentArray);
     }

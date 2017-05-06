@@ -1,4 +1,4 @@
-import { TaskManagerDocument, TaskManagerStatus } from "./documents/TaskManagerDocument";
+import { TaskManagerDocument, TaskManagerError } from "./documents/TaskManagerDocument";
 import { TaskDocument } from "./documents/TaskDocument";
 import { AbstractEntity } from "./AbstractEntity";
 import { ITaskEntity, TaskEntity } from "./TaskEntity";
@@ -6,7 +6,7 @@ import { IEntity } from "./IEntity";
 
 export interface ITaskManagerEntity extends IEntity<TaskManagerDocument> {
     currentTask: ITaskEntity,
-    status: TaskManagerStatus
+    error: TaskManagerError
 }
 
 export class TaskManagerEntity extends AbstractEntity<TaskManagerDocument> implements ITaskManagerEntity {
@@ -15,7 +15,7 @@ export class TaskManagerEntity extends AbstractEntity<TaskManagerDocument> imple
 
     constructor(document: TaskManagerDocument) {
         super(document);
-        if ('type' in this.document.current_task) {
+        if (this.document.current_task && 'type' in this.document.current_task) {
             this._currentTask = new TaskEntity(this.document.current_task);
         }
     }
@@ -29,12 +29,12 @@ export class TaskManagerEntity extends AbstractEntity<TaskManagerDocument> imple
         this.document.current_task = currentTask.document._id;
     }
 
-    get status(): TaskManagerStatus {
-        return this.document.status;
+    get error(): TaskManagerError {
+        return this.document.error;
     }
 
-    set status(status: TaskManagerStatus) {
-        this.document.status = status;
+    set error(error: TaskManagerError) {
+        this.document.error = error;
     }
 
     /**
@@ -43,8 +43,11 @@ export class TaskManagerEntity extends AbstractEntity<TaskManagerDocument> imple
      * @returns a task manager entity.
      */
     public static toEntity(data: any): ITaskManagerEntity {
-        let entity: ITaskManagerEntity = new TaskManagerEntity(<TaskManagerDocument>data);
-        return entity;
+        if (data) {
+            let entity: ITaskManagerEntity = new TaskManagerEntity(<TaskManagerDocument>data);
+            return entity;
+        }
+        return null;
     }
 
     /**

@@ -1,10 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { IPullRequestService } from "../app/services/PullRequestService";
+import { ITaskManagerService, TaskManagerService } from "../app/services/TaskManagerService";
 import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
 import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
 import * as mongoose from "mongoose";
 import * as GitHubAPI from "github";
-import * as Promise from "bluebird";
+import * as BluebirdPromise from "bluebird";
 
 /**
  * Pull Request controller interface.
@@ -42,7 +43,7 @@ export interface IPullRequestController {
      * @param req   API request.
      * @param res   API response.
      */
-    getRemote(req: Request, res: Response);
+    //getRemote(req: Request, res: Response);
 
     /**
      * Gets all remote Pull Requests given an owner and a repository.
@@ -63,12 +64,16 @@ export class PullRequestController implements IPullRequestController {
     /** Pull Request service. */
     private readonly _service: IPullRequestService;
 
+    /** Pull Request service. */
+    private readonly _taskManagerService: ITaskManagerService;
+
     /**
      * Class constructor. Injects Pull Request service dependency.
      * @param service   Pull Request service.
      */
     constructor(service: IPullRequestService) {
         this._service = service;
+        this._taskManagerService = TaskManagerService.getInstance();
     }
 
     /** @inheritdoc */
@@ -111,7 +116,7 @@ export class PullRequestController implements IPullRequestController {
         });
     }
 
-    /** @inheritdoc */
+    /** @inheritdoc 
     getRemote(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
@@ -127,24 +132,35 @@ export class PullRequestController implements IPullRequestController {
         }).catch((error) => {
             console.log(error); // logging ? 
         });
-    }
+    }*/
 
     /** @inheritdoc */
-    getAllRemote(req: Request, res: Response) {
+    public async getAllRemote(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let pullRequestId: number = req.params.pull_id;
-        let service: IPullRequestService = this._service;
+        let service: ITaskManagerService = TaskManagerService.getInstance();
 
-        res.json({ status: `started obtaining all remote pull requests at: ${new Date()}` });
+        if (service.ready) {
+            let created: boolean = await service.createTask(owner, repository);
+            if (created) {
+                res.json({ message: "task created successfully." });
+            } else {
+                res.json({ error: "error creating task, try again later." });
+            }
+        } else {
+            service.on("taskManager:ready", async () => {
+                let created: boolean = await service.createTask(owner, repository);
+                if (created) {
+                    res.json({ message: "task created successfully." });
+                } else {
+                    res.json({ error: "error creating task, try again later." });
+                }
+            })
 
-        service.getRemotePullRequests(owner, repository).then((pulls) => {
-            service.createOrUpdateMultiple(pulls).then(() => {
-                console.log(`finished obtaining all remote pull requests at: ${new Date()}`);
-            });
-        }).catch((error) => {
-            console.log(error); // logging ? 
-        });
+            service.on("taskManager:initerror", (error) => {
+                res.json({ error: error });
+            })
+        }
     }
 
 }

@@ -1,15 +1,12 @@
 import * as mongoose from "mongoose";
 
-export interface TaskManagerStatus {
-    running: boolean,
-    error?: {
-        code: number,
-        message: string
-        continue_at: number
-    }
+export interface TaskManagerError {
+    code: number,
+    message: string
+    continue_at: number
 }
 
 export interface TaskManagerDocument extends mongoose.Document {
     current_task: any,
-    status: TaskManagerStatus
+    error?: TaskManagerError
 }

@@ -23,7 +23,7 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
 
     constructor(document: TaskDocument) {
         super(document);
-        if ('type' in this.document.parent) {
+        if (this.document.parent && 'type' in this.document.parent) {
             this.parentTask = new TaskEntity(this.document.parent);
         }
     }
@@ -121,8 +121,11 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
      * @returns a task entity.
      */
     public static toEntity(data: any): ITaskEntity {
-        let entity: ITaskEntity = new TaskEntity(<TaskDocument>data);
-        return entity;
+        if (data) {
+            let entity: ITaskEntity = new TaskEntity(<TaskDocument>data);
+            return entity;
+        }
+        return null;
     }
 
     /**

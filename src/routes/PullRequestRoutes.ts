@@ -44,9 +44,9 @@ export class PullRequestRoutes {
             controller.getAll(req, res);
         });
 
-        router.get("/remote/:owner/:repository/pulls/:pull_id", (req: express.Request, res: express.Response) => {
+        /*router.get("/remote/:owner/:repository/pulls/:pull_id", (req: express.Request, res: express.Response) => {
             controller.getRemote(req, res);
-        });
+        });*/
 
         router.get("/remote/:owner/:repository/pulls", (req: express.Request, res: express.Response) => {
             controller.getAllRemote(req, res);

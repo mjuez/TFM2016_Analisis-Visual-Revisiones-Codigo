@@ -12,7 +12,10 @@ export class TaskSchema {
     /** Gets the Task Schema. */
     public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
-            type: TaskType,
+            type: {
+                type: Number,
+                enum:  ['ALL', 'REVIEWS', 'REVIEW_COMMENTS']
+            },
             is_completed: Boolean,
             creation_date: Date,
             start_date: Date,

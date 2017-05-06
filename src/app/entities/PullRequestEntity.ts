@@ -31,8 +31,11 @@ export class PullRequestEntity extends AbstractEntity<PullRequestDocument> imple
      * @returns a pull request entity.
      */
     public static toEntity(data: any): IPullRequestEntity {
-        let entity: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>data);
-        return entity;
+        if (data) {
+            let entity: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>data);
+            return entity;
+        }
+        return null;
     }
 
     /**

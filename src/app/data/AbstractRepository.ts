@@ -1,7 +1,7 @@
 import * as mongoose from "mongoose";
 import { IRepository } from "./IRepository";
 import { IEntity } from "../entities/IEntity";
-import * as Promise from "bluebird";
+import * as BluebirdPromise from "bluebird";
 
 /**
  * Abstract Repository class. Includes all functionality that every
@@ -21,7 +21,15 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param model     Optional mongoose model dependency injection.
      */
     constructor(name: string, schema: mongoose.Schema, model?: mongoose.Model<E>) {
-        this._model = model || mongoose.model<E>(name, schema);
+        if (model) {
+            this._model = model;
+        } else {
+            try {
+                this._model = mongoose.model<E>(name);
+            } catch (error) {
+                this._model = mongoose.model<E>(name, schema);
+            }
+        }
     }
 
     /** Gets the Mongoose Model. */
@@ -34,8 +42,16 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param item      Item to create.
      * @returns a promise that returns the item created if resolved.
      */
-    public create(item: T): Promise<T> {
-        return this.model.create(item.document);
+    public create(item: T): BluebirdPromise<T> {
+        let promise: BluebirdPromise<T> = new BluebirdPromise<T>((resolve, reject) => {
+            this.model.create(item.document).then((document) => {
+                let entity: T = this.convertToEntity(document);
+                resolve(entity);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+        return promise;
     }
 
     /**
@@ -43,7 +59,7 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param item      Item with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public abstract update(item: T): Promise<number>;
+    public abstract update(item: T): BluebirdPromise<number>;
 
     /**
      * Retrieves filtered items of a collection from database.
@@ -51,8 +67,8 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      *                    which retrieves all items of a collection.
      * @returns a promise that returns an array of items if resolved.
      */
-    public retrieve(filter: Object = {}): Promise<T[]> {
-        let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {
+    public retrieve(filter: Object = {}): BluebirdPromise<T[]> {
+        let promise: BluebirdPromise<T[]> = new BluebirdPromise<T[]>((resolve, reject) => {
             this.model.find(filter, (err, res) => {
                 if (!err) {
                     let entityArray: T[] = this.convertToEntityArray(res);
@@ -65,6 +81,9 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
 
         return promise;
     }
+
+    // template method
+    protected abstract convertToEntity(documentArray: E): T;
 
     // template method
     protected abstract convertToEntityArray(documentArray: E[]): T[];

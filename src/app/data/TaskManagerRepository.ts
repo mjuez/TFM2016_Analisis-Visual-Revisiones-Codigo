@@ -65,6 +65,10 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
         return promise;
     }
 
+    protected convertToEntity(document: TaskManagerDocument): ITaskManagerEntity {
+        return TaskManagerEntity.toEntity(document);
+    }
+
     protected convertToEntityArray(documentArray: TaskManagerDocument[]): ITaskManagerEntity[] {
         return TaskManagerEntity.toEntityArray(documentArray);
     }

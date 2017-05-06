@@ -96,6 +96,10 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
         return promise;
     }
 
+    protected convertToEntity(document: TaskDocument): ITaskEntity {
+        return TaskEntity.toEntity(document);
+    }
+
     protected convertToEntityArray(documentArray: TaskDocument[]): ITaskEntity[] {
         return TaskEntity.toEntityArray(documentArray);
     }

@@ -15,7 +15,9 @@ export class TaskManagerSchema {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: TaskManagerRepository.COLLECTION_NAME
             },
-            status: Object
+            error: {
+                type: Object, required: false
+            }
         });
 
         return schema;
