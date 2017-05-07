@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import { TaskManagerRepository } from "../TaskManagerRepository"
+import { TaskRepository } from "../TaskRepository"
 
 /**
  * Task manager Schema class. Defines the schema for
@@ -13,7 +14,7 @@ export class TaskManagerSchema {
         let schema = new mongoose.Schema({
             current_task: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: TaskManagerRepository.COLLECTION_NAME
+                ref: TaskRepository.COLLECTION_NAME
             },
             error: {
                 type: Object, required: false

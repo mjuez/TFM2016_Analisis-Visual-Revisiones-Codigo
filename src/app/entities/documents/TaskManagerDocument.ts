@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 
 export interface TaskManagerError {
     code: number,
-    message: string
+    message: Object
     continue_at: number
 }
 

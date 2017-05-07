@@ -26,7 +26,11 @@ export class TaskManagerEntity extends AbstractEntity<TaskManagerDocument> imple
 
     set currentTask(currentTask: ITaskEntity) {
         this._currentTask = currentTask;
-        this.document.current_task = currentTask.document._id;
+        if (currentTask === null) {
+            this.document.current_task = null;
+        } else {
+            this.document.current_task = currentTask.document._id;
+        }
     }
 
     get error(): TaskManagerError {

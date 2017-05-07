@@ -64,16 +64,12 @@ export class PullRequestController implements IPullRequestController {
     /** Pull Request service. */
     private readonly _service: IPullRequestService;
 
-    /** Pull Request service. */
-    private readonly _taskManagerService: ITaskManagerService;
-
     /**
      * Class constructor. Injects Pull Request service dependency.
      * @param service   Pull Request service.
      */
     constructor(service: IPullRequestService) {
         this._service = service;
-        this._taskManagerService = TaskManagerService.getInstance();
     }
 
     /** @inheritdoc */
@@ -138,28 +134,13 @@ export class PullRequestController implements IPullRequestController {
     public async getAllRemote(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let service: ITaskManagerService = TaskManagerService.getInstance();
+        let service: ITaskManagerService = await TaskManagerService.getInstance();
 
-        if (service.ready) {
-            let created: boolean = await service.createTask(owner, repository);
-            if (created) {
-                res.json({ message: "task created successfully." });
-            } else {
-                res.json({ error: "error creating task, try again later." });
-            }
+        let created: boolean = await service.createTask(owner, repository);
+        if (created) {
+            res.json({ message: "task created successfully." });
         } else {
-            service.on("taskManager:ready", async () => {
-                let created: boolean = await service.createTask(owner, repository);
-                if (created) {
-                    res.json({ message: "task created successfully." });
-                } else {
-                    res.json({ error: "error creating task, try again later." });
-                }
-            })
-
-            service.on("taskManager:initerror", (error) => {
-                res.json({ error: error });
-            })
+            res.json({ error: "error creating task, try again later." });
         }
     }
 

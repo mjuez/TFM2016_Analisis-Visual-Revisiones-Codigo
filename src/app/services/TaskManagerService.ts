@@ -1,4 +1,4 @@
- import { IPersistenceService } from "../services/IPersistenceService";
+import { IPersistenceService } from "../services/IPersistenceService";
 import { ITaskEntity, TaskEntity } from "../entities/TaskEntity";
 import { TaskType } from "../entities/enum/TaskType";
 import { ITaskManagerEntity, TaskManagerEntity } from "../entities/TaskManagerEntity";
@@ -25,6 +25,7 @@ export interface ITaskManagerService extends IPersistenceService<ITaskManagerEnt
     ready: boolean;
     currentTask: ITaskEntity;
     error: TaskManagerError;
+    taskManager: ITaskManagerEntity;
     getPendingTasks(): BluebirdPromise<ITaskEntity[]>;
     getAllTasks(): BluebirdPromise<ITaskEntity[]>;
     createTask(owner: string, repository: string): Promise<boolean>;
@@ -64,12 +65,12 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
     }
 
     private initialize = () => {
-        this._repository.find().then((taskManagerEntity) => {
+        this._repository.find().then(async (taskManagerEntity) => {
             if (taskManagerEntity) {
                 this._taskManagerEntity = taskManagerEntity;
             } else {
                 this._taskManagerEntity = this.emptyTaskManagerEntity;
-                this.persist();
+                await this.persist();
             }
             this.start();
             this._ready = true;
@@ -80,6 +81,10 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
             // retry after 5 seconds.
             setTimeout(this.initialize, 5000);
         });
+    }
+
+    get taskManager(): ITaskManagerEntity{
+        return this._taskManagerEntity;
     }
 
     get emptyTaskManagerEntity(): ITaskManagerEntity {
@@ -99,14 +104,13 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     set currentTask(task: ITaskEntity) {
         this._taskManagerEntity.currentTask = task;
-        this.persist();
     }
 
     get error(): TaskManagerError {
         return this._taskManagerEntity.error;
     }
 
-    set error(error: TaskManagerError){
+    set error(error: TaskManagerError) {
         this._taskManagerEntity.error = error;
     }
 
@@ -191,7 +195,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         let taskEntity: ITaskEntity = new TaskEntity(document);
         let persisted: ITaskEntity = await this.persistTask(taskEntity);
         if (persisted) {
-            this.emit("task:created", persisted);
+            this.emit("task:created");
             return true;
         }
 
@@ -200,17 +204,20 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private handleError() {
         if (this.hasError()) {
+            console.log(`[${new Date()}] - error: ${this.error.code}`);
             let date: Date = new Date();
-            let continueDate: Date = new Date(this.error.continue_at);
+            let continueDate: Date = new Date(this.error.continue_at * 1000);
+            console.log(continueDate);
             let difference: number = continueDate.getTime() - date.getTime();
+            console.log(difference);
             if (difference > 0) {
+                console.log(`Going to retry on: ${continueDate}`);
                 setTimeout(this.continue, difference);
             }
         }
     }
 
     private start(): void {
-        console.log("starting");
         if (this.currentTask) {
             this.runCurrentTask();
         } else if (this.hasError()) {
@@ -221,6 +228,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
     }
 
     private continue = () => {
+        console.log(`[${new Date()}] - Continuing...`);
         this.removeError();
         this.persist();
         if (this.currentTask) {
@@ -236,9 +244,9 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         this.on("taskManager:dberror", this.onDbError);
     }
 
-    private onTaskFinished = () => {
+    private onTaskFinished = async () => {
         this.currentTask = null;
-        this.persist();
+        await this.persist();
         this.updateCurrentTask();
     }
 
@@ -246,16 +254,15 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         this.handleError();
     }
 
-    private onTaskCreated = (taskEntity: ITaskEntity) => {
+    private onTaskCreated = () => {
         if (this.isWaitingForTasks()) {
-            this.currentTask = taskEntity;
-            this.runCurrentTask();
-            this.persist();
+            this.updateCurrentTask();
         }
     }
 
-    private onTaskUpdated = () => {
-        this.persist();
+    private onTaskUpdated = async () => {
+        await this.persist();
+        this.runCurrentTask();
     }
 
     private onDbError = (dbError) => {
@@ -285,7 +292,6 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
             let persisted: ITaskEntity = await this.persistTask(currentTask);
             if (!persisted) return;
         }
-        console.log(currentTask);
         if (currentTask.type === TaskType.ALL) {
             this.makeAllApiCall();
         }
@@ -311,6 +317,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
     private async processPullRequestPage(page: any): Promise<void> {
         let api: GitHubAPI = this.API;
         let pullRequests: IPullRequestEntity[] = PullRequestEntity.toEntityArray(page.data);
+        console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
             await this._pullRequestService.createOrUpdateMultiple(pullRequests);
             if (api.hasNextPage(page)) {
@@ -354,6 +361,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
     }
 
     private async completeCurrentTask(): Promise<void> {
+        console.log("completing task...");
         this.currentTask.isCompleted = true;
         this.currentTask.endDate = new Date();
         await this.persistTask(this.currentTask);
@@ -361,11 +369,12 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
     }
 
     private async updateCurrentTask(): Promise<void> {
+        console.log("updating task...");
         try {
             let nextTask: ITaskEntity = await this._taskRepository.findNext();
             if (nextTask) {
+                console.log(nextTask);
                 this.currentTask = nextTask;
-                await this.persist();
                 this.emit("task:updated");
             }
         } catch (error) {
@@ -375,7 +384,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private async persist(): Promise<boolean> {
         try {
-            await this.createOrUpdate(this._taskManagerEntity);
+            this._taskManagerEntity = await this.createOrUpdate(this._taskManagerEntity);
             return true;
         } catch (error) {
             this.emit("taskManager:dberror", error);
@@ -392,11 +401,22 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         return null;
     }
 
-    public static getInstance(): ITaskManagerService {
+    public static getInstance(): BluebirdPromise<ITaskManagerService> {
         if (this._instance === null) {
             this._instance = new TaskManagerService();
         }
-        return this._instance;
+
+        let promise: BluebirdPromise<ITaskManagerService> = new BluebirdPromise<ITaskManagerService>((resolve, reject) => {
+            if (!this._instance.ready) {
+                this._instance.on("taskManager:ready", () => {
+                    resolve(this._instance);
+                });
+            } else {
+                resolve(this._instance);
+            }
+        });
+
+        return promise;
     }
 
 

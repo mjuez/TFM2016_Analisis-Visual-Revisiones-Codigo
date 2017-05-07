@@ -33,6 +33,11 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
         super(TaskManagerRepository.COLLECTION_NAME, TaskManagerSchema.schema, model);
     }
 
+    public create(item: ITaskManagerEntity): BluebirdPromise<ITaskManagerEntity> {
+        let entity: ITaskManagerEntity = this.prepareToBePersisted(item);
+        return super.create(entity);
+    }
+
     /**
      * Updates a Task from database. Uses its _id.
      * @param item      Task entity with updated data.
@@ -40,7 +45,10 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
      */
     public update(item: ITaskManagerEntity): BluebirdPromise<number> {
         let promise: BluebirdPromise<number> = new BluebirdPromise<number>((resolve, reject) => {
-            this.model.update({ _id: item.document._id }, item.document, (error, rowsAffected) => {
+            let entity: ITaskManagerEntity = this.prepareToBePersisted(item);
+
+            this.model.update({ _id: entity.document._id }, entity.document, (error, rowsAffected) => {
+                console.log(rowsAffected);
                 if (!error) {
                     resolve(rowsAffected);
                 } else {
@@ -55,8 +63,9 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
         let promise: BluebirdPromise<ITaskManagerEntity> = new BluebirdPromise<ITaskManagerEntity>((resolve, reject) => {
             this.model.find()
                 .populate('current_task')
-                .then((documents) => {
-                    let entity: ITaskManagerEntity = TaskManagerEntity.toEntity(documents[0]);
+                .then(async (documents) => {
+                    let document: TaskManagerDocument = documents[0];
+                    let entity: ITaskManagerEntity = TaskManagerEntity.toEntity(document);
                     resolve(entity);
                 }).catch((error) => {
                     reject(error);
@@ -71,5 +80,12 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
 
     protected convertToEntityArray(documentArray: TaskManagerDocument[]): ITaskManagerEntity[] {
         return TaskManagerEntity.toEntityArray(documentArray);
+    }
+
+    private prepareToBePersisted(entity: ITaskManagerEntity): ITaskManagerEntity {
+        if (entity.currentTask != null) {
+            entity.document.current_task = entity.currentTask.document._id;
+        }
+        return entity;
     }
 }

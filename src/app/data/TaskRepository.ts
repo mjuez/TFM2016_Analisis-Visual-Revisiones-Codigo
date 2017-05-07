@@ -69,7 +69,7 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
     public findNext(): Promise<ITaskEntity> {
         let promise: Promise<ITaskEntity> = new Promise<ITaskEntity>((resolve, reject) => {
             this.model.findOne({ is_completed: false })
-                .sort({ creation_date: -1 })
+                .sort({ creation_date: 1 })
                 .populate('parent')
                 .then((document) => {
                     let entity: ITaskEntity = TaskEntity.toEntity(document);
@@ -84,6 +84,7 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
     public retrieve(filter: Object = {}): Promise<ITaskEntity[]> {
         let promise: Promise<ITaskEntity[]> = new Promise<ITaskEntity[]>((resolve, reject) => {
             this.model.find(filter)
+                .sort({ creation_date: 1 })
                 .populate('parent')
                 .then((documents) => {
                     let entityArray: ITaskEntity[] = this.convertToEntityArray(documents);
