@@ -10,7 +10,8 @@ import { AbstractEntity } from "./AbstractEntity";
  * @author Mario Juez <mario@mjuez.com>
  */
 export interface IReviewEntity extends IEntity<ReviewDocument> {
-    
+    /** Gets Review GitHub id. */
+    id: number;
 }
 
 /**
@@ -18,6 +19,11 @@ export interface IReviewEntity extends IEntity<ReviewDocument> {
  * @author Mario Juez <mario@mjuez.com>
  */
 export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IReviewEntity {
+
+    /** @inheritdoc */
+    public get id(): number {
+        return this.document.id;
+    }
 
     /**
      * Transforms raw data to IReviewEntity.
