@@ -69,7 +69,7 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
             = new BluebirdPromise<IReviewCommentEntity[]>((resolve, reject) => {
                 this.model.find({ pull_request_review_id: id }, (error, result) => {
                     if (!error) {
-                        let entityArray: IReviewEntity[] = ReviewEntity.toEntityArray(result);
+                        let entityArray: IReviewCommentEntity[] = ReviewCommentEntity.toEntityArray(result);
                         resolve(entityArray);
                     } else {
                         reject(error);
