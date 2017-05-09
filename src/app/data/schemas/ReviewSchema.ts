@@ -11,6 +11,7 @@ export class ReviewSchema {
     public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
             id: Number,
+            pull_request_id: Number,
             user: Object,
             body: String,
             commit_id: String,

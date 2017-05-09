@@ -21,10 +21,17 @@ export interface IReviewRepository extends IRepository<IReviewEntity, ReviewDocu
      */
     findByPullId(id: number): BluebirdPromise<IReviewEntity[]>;
 
+    /**
+     * Retrieves a review given its GitHub id.
+     * @param id        Review GitHub id.
+     * @returns a promise that returns a review entity if resolved.
+     */
+    findById(id: number): BluebirdPromise<IReviewEntity>;
+
 }
 
 /**
- * Pull Request Repository class.
+ * Review Repository class.
  * @author Mario Juez <mario@mjuez.com>
  */
 export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDocument> implements IReviewRepository {
@@ -66,10 +73,29 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
      */
     public findByPullId(id: number): BluebirdPromise<IReviewEntity[]> {
         let promise: BluebirdPromise<IReviewEntity[]> = new BluebirdPromise<IReviewEntity[]>((resolve, reject) => {
-            this.model.find({ pull_request_review_id: id }, (error, result) => {
+            this.model.find({ pull_request_id: id }, (error, result) => {
                 if (!error) {
                     let entityArray: IReviewEntity[] = ReviewEntity.toEntityArray(result);
                     resolve(entityArray);
+                } else {
+                    reject(error);
+                }
+            });
+        });
+        return promise;
+    }
+
+    /**
+     * Retrieves a review given its GitHub id.
+     * @param id        Review GitHub id.
+     * @returns a promise that returns a review entity if resolved.
+     */
+    public findById(id: number): BluebirdPromise<IReviewEntity> {
+        let promise: BluebirdPromise<IReviewEntity> = new BluebirdPromise<IReviewEntity>((resolve, reject) => {
+            this.model.find({ id: id }, (error, result) => {
+                if (!error) {
+                    let entity: IReviewEntity = ReviewEntity.toEntity(result[0]);
+                    resolve(entity);
                 } else {
                     reject(error);
                 }

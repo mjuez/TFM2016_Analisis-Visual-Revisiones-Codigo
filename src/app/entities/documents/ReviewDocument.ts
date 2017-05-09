@@ -7,6 +7,7 @@ import * as mongoose from "mongoose";
  */
 export interface ReviewDocument extends mongoose.Document {
     id: number,
+    pull_request_id: number,
     user: Object,
     body: string,
     commit_id: string,
