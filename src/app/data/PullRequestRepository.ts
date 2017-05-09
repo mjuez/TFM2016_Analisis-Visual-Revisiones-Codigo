@@ -34,7 +34,7 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
 export class PullRequestRepository extends AbstractRepository<IPullRequestEntity, PullRequestDocument> implements IPullRequestRepository {
 
     /** MongoDB collection name. */
-    private static readonly _NAME = "pullRequest";
+    public static readonly COLLECTION_NAME = "pull_request";
 
     /**
      * Class constructor.
@@ -42,7 +42,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @param model     Optional mongoose model dependency injection.
      */
     constructor(model?: mongoose.Model<PullRequestDocument>) {
-        super(PullRequestRepository._NAME, PullRequestSchema.schema, model);
+        super(PullRequestRepository.COLLECTION_NAME, PullRequestSchema.schema, model);
     }
 
     /**

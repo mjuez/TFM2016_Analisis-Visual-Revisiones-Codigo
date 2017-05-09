@@ -22,7 +22,7 @@ export interface ITaskManagerRepository extends IRepository<ITaskManagerEntity, 
 export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity, TaskManagerDocument> implements ITaskManagerRepository {
 
     /** MongoDB collection name. */
-    public static readonly COLLECTION_NAME = "taskManager";
+    public static readonly COLLECTION_NAME = "task_manager";
 
     /**
      * Class constructor.
