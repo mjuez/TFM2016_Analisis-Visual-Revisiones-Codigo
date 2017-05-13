@@ -1,6 +1,5 @@
 import * as mongoose from "mongoose";
 import { IEntity } from "../entities/IEntity";
-import * as Promise from "bluebird";
 
 /**
  * IRepository interface.
@@ -27,9 +26,10 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
     update(item: T): Promise<number>;
 
     /**
-     * Retrieves all items of a collection from database.
+     * Retrieves filtered items of a collection from database.
+     * @param filter      Document filter.
      * @returns a promise that returns an array of items if resolved.
      */
-    retrieve(): Promise<T[]>;
+    retrieve(filter?: Object): Promise<T[]>;
 
 }

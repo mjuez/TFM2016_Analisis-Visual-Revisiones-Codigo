@@ -10,42 +10,91 @@ export class PullRequestSchema {
     /** Gets the Pull Request Schema. */
     public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
-            id: Number,
-            url: String,
+            id: {
+                type: Number,
+                index: true
+            },
             html_url: String,
-            diff_url: String,
-            patch_url: String,
-            issue_url: String,
-            commits_url: String,
-            review_comments_url: String,
-            review_comment_url: String,
-            comments_url: String,
-            statuses_url: String,
-            number: Number,
+            number: {
+                type: Number,
+                index: true
+            },
             state: String,
             title: String,
             body: String,
-            assignee: Object,
-            milestone: Object,
+            assignees: [{
+                id: Number,
+                login: String
+            }],
+            requested_reviewers: [{
+                id: Number,
+                login: String
+            }],
+            milestone: {
+                id: Number,
+                number: Number,
+                title: String,
+                description: String,
+                creator: {
+                    id: Number,
+                    login: String
+                },
+                open_issues: Number,
+                closed_issues: Number,
+                state: String,
+                created_at: Date,
+                updated_at: Date,
+                due_on: Date,
+                closed_at: Date
+            },
             locked: Boolean,
             created_at: Date,
             updated_at: Date,
             closed_at: Date,
             merged_at: Date,
-            head: Object,
-            base: Object,
-            _links: Object,
-            user: Object,
+            head: {
+                repo: {
+                    id: Number,
+                    name: String,
+                    owner: {
+                        id: Number,
+                        login: String
+                    }
+                },
+                user: {
+                    id: Number,
+                    login: String
+                }
+            },
+            base: {
+                repo: {
+                    id: Number,
+                    name: String,
+                    owner: {
+                        id: Number,
+                        login: String
+                    }
+                },
+                user: {
+                    id: Number,
+                    login: String
+                }
+            },
+            user: {
+                id: Number,
+                login: String
+            },
             merge_commit_sha: String,
             merged: Boolean,
             mergeable: Boolean,
             merged_by: Object,
             comments: Number,
+            reviews: Number,
+            review_comments: Number,
             commits: Number,
             additions: Number,
             deletions: Number,
-            changed_files: Number,
-            maintainer_can_modify: Boolean
+            changed_files: Number
         });
 
         return schema;

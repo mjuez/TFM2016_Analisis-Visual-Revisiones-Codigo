@@ -1,12 +1,13 @@
 import { IApiService } from "./IApiService";
 import * as GitHubAPI from "github";
 import * as Promise from "bluebird";
+import * as Events from "events";
 
 /**
  * GitHub API services.
  * @author Mario Juez <mario@mjuez.com>
  */
-export abstract class GitHubService implements IApiService<GitHubAPI>{
+export abstract class GitHubService extends Events.EventEmitter implements IApiService<GitHubAPI>{
 
     /** GitHub API wrapper. */
     private readonly _api: GitHubAPI;
@@ -38,8 +39,9 @@ export abstract class GitHubService implements IApiService<GitHubAPI>{
      * @param apiAuth   optional GitHub API authorization.
      */
     constructor(api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super();
         this._api = api || new GitHubAPI(this._API_OPTIONS);
-        //this._api.authenticate(apiAuth || this._API_AUTHENTICATION);
+        this._api.authenticate(apiAuth || this._API_AUTHENTICATION);
     }
 
     /** Gets the GitHub API wrapper. */

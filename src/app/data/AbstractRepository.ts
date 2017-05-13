@@ -1,7 +1,6 @@
 import * as mongoose from "mongoose";
 import { IRepository } from "./IRepository";
 import { IEntity } from "../entities/IEntity";
-import * as Promise from "bluebird";
 
 /**
  * Abstract Repository class. Includes all functionality that every
@@ -21,7 +20,15 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param model     Optional mongoose model dependency injection.
      */
     constructor(name: string, schema: mongoose.Schema, model?: mongoose.Model<E>) {
-        this._model = model || mongoose.model<E>(name, schema);
+        if (model) {
+            this._model = model;
+        } else {
+            try {
+                this._model = mongoose.model<E>(name);
+            } catch (error) {
+                this._model = mongoose.model<E>(name, schema);
+            }
+        }
     }
 
     /** Gets the Mongoose Model. */
@@ -34,8 +41,14 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param item      Item to create.
      * @returns a promise that returns the item created if resolved.
      */
-    public create(item: T): Promise<T> {
-        return this.model.create(item.document);
+    public async create(item: T): Promise<T> {
+        try {
+            let persistedDocument: E = await this.model.create(item.document);
+            let entity: T = this.convertToEntity(persistedDocument);
+            return entity;
+        } catch (error) {
+            throw error;
+        }
     }
 
     /**
@@ -46,21 +59,25 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
     public abstract update(item: T): Promise<number>;
 
     /**
-     * Retrieves all items of a collection from database.
+     * Retrieves filtered items of a collection from database.
+     * @param filter      Document filter, by default an empty filter
+     *                    which retrieves all items of a collection.
      * @returns a promise that returns an array of items if resolved.
      */
-    public retrieve(): Promise<T[]> {
-        let promise: Promise<T[]> = new Promise<T[]>((resolve, reject) => {
-            this.model.find({}, (err, res) => {
-                if (!err) {
-                    resolve(res);
-                } else {
-                    reject(err);
-                }
-            });
-        });
-
-        return promise;
+    public async retrieve(filter: Object = {}): Promise<T[]> {
+        try {
+            let documentArray: E[] = await this.model.find(filter);
+            let entityArray: T[] = this.convertToEntityArray(documentArray);
+            return entityArray;
+        }catch(error){
+            throw error;
+        }
     }
+
+    // template method
+    protected abstract convertToEntity(documentArray: E): T;
+
+    // template method
+    protected abstract convertToEntityArray(documentArray: E[]): T[];
 
 }

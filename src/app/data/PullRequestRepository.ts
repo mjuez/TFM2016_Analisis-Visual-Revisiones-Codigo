@@ -1,9 +1,9 @@
 import { IRepository } from "../data/IRepository";
 import { AbstractRepository } from "./AbstractRepository";
-import { IPullRequestEntity } from "../entities/PullRequestEntity";
+import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { PullRequestSchema } from "./schemas/PullRequestSchema";
-import * as Promise from "bluebird";
+import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
 import * as mongoose from "mongoose";
 
 /**
@@ -19,6 +19,16 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
      * @returns a promise that returns a pull request entity if resolved.
      */
     findOneByPullId(id: number): Promise<IPullRequestEntity>;
+
+    /**
+     * 
+     */
+    findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity>;
+
+    /**
+     * 
+     */
+    findSublist(filter: Object, startingFrom?: number): Promise<IPullRequestEntity[]>;
 }
 
 /**
@@ -28,7 +38,7 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
 export class PullRequestRepository extends AbstractRepository<IPullRequestEntity, PullRequestDocument> implements IPullRequestRepository {
 
     /** MongoDB collection name. */
-    private static readonly _NAME = "pullRequest";
+    public static readonly COLLECTION_NAME = "pull_request";
 
     /**
      * Class constructor.
@@ -36,7 +46,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @param model     Optional mongoose model dependency injection.
      */
     constructor(model?: mongoose.Model<PullRequestDocument>) {
-        super(PullRequestRepository._NAME, PullRequestSchema.schema, model);
+        super(PullRequestRepository.COLLECTION_NAME, PullRequestSchema.schema, model);
     }
 
     /**
@@ -66,13 +76,48 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
         let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
             this.model.findOne({ id: id }, (error, result) => {
                 if (!error) {
-                    resolve(result);
+                    let entity: IPullRequestEntity = PullRequestEntity.toEntity(result);
+                    resolve(entity);
                 } else {
                     reject(error);
                 }
             });
         });
         return promise;
+    }
+
+    public findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity> {
+        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
+            this.retrieve(filter).then((entities) => {
+                resolve(entities[0]);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public async findSublist(filter: Object = {}, startingFrom: number = 0): Promise<IPullRequestEntity[]> {
+        try {
+            let documentArray: PullRequestDocument[] =
+                await this.model.find(filter)
+                    .where('number')
+                    .gt(startingFrom)
+                    .sort({ number: 1 });
+            let pullRequestArray: IPullRequestEntity[] = this.convertToEntityArray(documentArray);
+            return pullRequestArray;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    protected convertToEntity(document: PullRequestDocument): IPullRequestEntity {
+        return PullRequestEntity.toEntity(document);
+    }
+
+    protected convertToEntityArray(documentArray: PullRequestDocument[]): IPullRequestEntity[] {
+        return PullRequestEntity.toEntityArray(documentArray);
     }
 
 }
