@@ -1,7 +1,6 @@
 import * as mongoose from "mongoose";
 import { IRepository } from "./IRepository";
 import { IEntity } from "../entities/IEntity";
-import * as BluebirdPromise from "bluebird";
 
 /**
  * Abstract Repository class. Includes all functionality that every
@@ -42,16 +41,14 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param item      Item to create.
      * @returns a promise that returns the item created if resolved.
      */
-    public create(item: T): BluebirdPromise<T> {
-        let promise: BluebirdPromise<T> = new BluebirdPromise<T>((resolve, reject) => {
-            this.model.create(item.document).then((document) => {
-                let entity: T = this.convertToEntity(document);
-                resolve(entity);
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-        return promise;
+    public async create(item: T): Promise<T> {
+        try {
+            let persistedDocument: E = await this.model.create(item.document);
+            let entity: T = this.convertToEntity(persistedDocument);
+            return entity;
+        } catch (error) {
+            throw error;
+        }
     }
 
     /**
@@ -59,7 +56,7 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param item      Item with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public abstract update(item: T): BluebirdPromise<number>;
+    public abstract update(item: T): Promise<number>;
 
     /**
      * Retrieves filtered items of a collection from database.
@@ -67,19 +64,14 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      *                    which retrieves all items of a collection.
      * @returns a promise that returns an array of items if resolved.
      */
-    public retrieve(filter: Object = {}): BluebirdPromise<T[]> {
-        let promise: BluebirdPromise<T[]> = new BluebirdPromise<T[]>((resolve, reject) => {
-            this.model.find(filter, (err, res) => {
-                if (!err) {
-                    let entityArray: T[] = this.convertToEntityArray(res);
-                    resolve(entityArray);
-                } else {
-                    reject(err);
-                }
-            });
-        });
-
-        return promise;
+    public async retrieve(filter: Object = {}): Promise<T[]> {
+        try {
+            let documentArray: E[] = await this.model.find(filter);
+            let entityArray: T[] = this.convertToEntityArray(documentArray);
+            return entityArray;
+        }catch(error){
+            throw error;
+        }
     }
 
     // template method

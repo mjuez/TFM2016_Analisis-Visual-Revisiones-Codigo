@@ -1,4 +1,4 @@
-import * as mocha from "mocha";
+/*import * as mocha from "mocha";
 import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
 import * as GitHubAPI from "github";
@@ -97,4 +97,4 @@ describe("Checking Pull Request services", () => {
         });
     });
 
-});
+});*/

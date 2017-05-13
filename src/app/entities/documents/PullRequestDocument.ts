@@ -7,22 +7,36 @@ import * as mongoose from "mongoose";
  */
 export interface PullRequestDocument extends mongoose.Document {
     id: number,
-    url: string,
     html_url: string,
-    diff_url: string,
-    patch_url: string,
-    issue_url: string,
-    commits_url: string,
-    review_comments_url: string,
-    review_comment_url: string,
-    comments_url: string,
-    statuses_url: string,
     number: number,
     state: string,
     title: string,
     body: string,
-    assignee: any,
-    milestone: any,
+    assignees: [{
+        id: number,
+        login: string
+    }],
+    requested_reviewers: [{
+        id: number,
+        login: string
+    }],
+    milestone: {
+        id: number,
+        number: number,
+        title: string,
+        description: string,
+        creator: {
+            id: number,
+            login: string
+        },
+        open_issues: number,
+        closed_issues: number,
+        state: string,
+        created_at: Date,
+        updated_at: Date,
+        due_on: Date,
+        closed_at: Date
+    },
     locked: boolean,
     created_at: Date,
     updated_at: Date,
@@ -30,16 +44,19 @@ export interface PullRequestDocument extends mongoose.Document {
     merged_at: Date,
     head: any,
     base: any,
-    _links: any,
-    user: any,
+    user: {
+        id: number,
+        login: string
+    },
     merge_commit_sha: string,
     merged: boolean,
     mergeable: boolean,
-    merged_by: any,
+    merged_by: Object,
     comments: number,
+    reviews: number,
+    review_comments: number,
     commits: number,
     additions: number,
     deletions: number,
-    changed_files: number,
-    maintainer_can_modify: boolean
+    changed_files: number
 }

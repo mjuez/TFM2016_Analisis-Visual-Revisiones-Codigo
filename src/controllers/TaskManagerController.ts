@@ -39,27 +39,30 @@ export interface ITaskManagerController {
  */
 export class TaskManagerController implements ITaskManagerController {
 
+    private _taskManagerService: ITaskManagerService;
+    
     /**
      * Class constructor.
      */
-    constructor() {
+    constructor(taskManagerService: ITaskManagerService) {
+        this._taskManagerService = taskManagerService;
     }
 
     /** @inheritdoc */
-    public async getStatus(req: Request, res: Response) {
-        let service: ITaskManagerService = await TaskManagerService.getInstance();
+    public getStatus(req: Request, res: Response) {
+        let service: ITaskManagerService =this._taskManagerService
         res.json(service.taskManager.document);
     }
 
     /** @inheritdoc */
     public async getPendingTasks(req: Request, res: Response) {
-        let service: ITaskManagerService = await TaskManagerService.getInstance();
+        let service: ITaskManagerService =this._taskManagerService
         res.json(await service.getPendingTasks());
     }
 
     /** @inheritdoc */
     public async getAllTasks(req: Request, res: Response) {
-        let service: ITaskManagerService = await TaskManagerService.getInstance();
+        let service: ITaskManagerService =this._taskManagerService
         res.json(await service.getAllTasks());
     }
 

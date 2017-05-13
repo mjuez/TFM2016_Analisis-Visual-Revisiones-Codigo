@@ -14,7 +14,7 @@ export class TaskSchema {
         let schema = new mongoose.Schema({
             type: {
                 type: Number,
-                enum:  ['ALL', 'REVIEWS', 'REVIEW_COMMENTS']
+                enum: ['ALL', 'REVIEWS', 'REVIEW_COMMENTS', 'USERS', 'REPOSITORY']
             },
             is_completed: Boolean,
             creation_date: Date,
@@ -27,7 +27,7 @@ export class TaskSchema {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: TaskRepository.COLLECTION_NAME
             },
-            current_pull_request_number: Number
+            last_processed: Number
         });
 
         return schema;

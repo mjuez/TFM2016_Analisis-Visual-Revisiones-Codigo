@@ -3,7 +3,6 @@ import { AbstractRepository } from "./AbstractRepository";
 import { ITaskManagerEntity, TaskManagerEntity } from "../entities/TaskManagerEntity";
 import { TaskManagerDocument } from "../entities/documents/TaskManagerDocument";
 import { TaskManagerSchema } from "./schemas/TaskManagerSchema";
-import * as BluebirdPromise from "bluebird";
 import * as mongoose from "mongoose";
 
 /**
@@ -33,7 +32,7 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
         super(TaskManagerRepository.COLLECTION_NAME, TaskManagerSchema.schema, model);
     }
 
-    public create(item: ITaskManagerEntity): BluebirdPromise<ITaskManagerEntity> {
+    public create(item: ITaskManagerEntity): Promise<ITaskManagerEntity> {
         let entity: ITaskManagerEntity = this.prepareToBePersisted(item);
         return super.create(entity);
     }
@@ -43,8 +42,8 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
      * @param item      Task entity with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public update(item: ITaskManagerEntity): BluebirdPromise<number> {
-        let promise: BluebirdPromise<number> = new BluebirdPromise<number>((resolve, reject) => {
+    public update(item: ITaskManagerEntity): Promise<number> {
+        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
             let entity: ITaskManagerEntity = this.prepareToBePersisted(item);
 
             this.model.update({ _id: entity.document._id }, entity.document, (error, rowsAffected) => {
@@ -60,7 +59,7 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
     }
 
     public async find(): Promise<ITaskManagerEntity> {
-        let promise: BluebirdPromise<ITaskManagerEntity> = new BluebirdPromise<ITaskManagerEntity>((resolve, reject) => {
+        let promise: Promise<ITaskManagerEntity> = new Promise<ITaskManagerEntity>((resolve, reject) => {
             this.model.find()
                 .populate('current_task')
                 .then(async (documents) => {

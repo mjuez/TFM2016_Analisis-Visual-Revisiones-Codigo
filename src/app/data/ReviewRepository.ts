@@ -4,7 +4,6 @@ import { IReviewEntity, ReviewEntity } from "../entities/ReviewEntity";
 import { ReviewDocument } from "../entities/documents/ReviewDocument";
 import { ReviewSchema } from "./schemas/ReviewSchema";
 import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
-import * as BluebirdPromise from "bluebird";
 import * as mongoose from "mongoose";
 
 /**
@@ -19,14 +18,14 @@ export interface IReviewRepository extends IRepository<IReviewEntity, ReviewDocu
      * @param id        Pull Request GitHub id.
      * @returns a promise that returns a list of review entities if resolved.
      */
-    findByPullId(id: number): BluebirdPromise<IReviewEntity[]>;
+    findByPullId(id: number): Promise<IReviewEntity[]>;
 
     /**
      * Retrieves a review given its GitHub id.
      * @param id        Review GitHub id.
      * @returns a promise that returns a review entity if resolved.
      */
-    findById(id: number): BluebirdPromise<IReviewEntity>;
+    findById(id: number): Promise<IReviewEntity>;
 
 }
 
@@ -53,55 +52,37 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
      * @param item      Review entity with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public update(item: IReviewEntity): BluebirdPromise<number> {
-        let promise: BluebirdPromise<number> = new BluebirdPromise<number>((resolve, reject) => {
-            this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
-                if (!error) {
-                    resolve(rowsAffected);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
+    public async update(item: IReviewEntity): Promise<number> {
+        try {
+            let result: any = await this.model.update({ id: item.id }, item.document);
+            return result.nModified;
+        } catch (error) {
+            return error;
+        }
     }
 
     /**
      * Retrieves a list of reviews of a pull request given its GitHub id.
-     * @param id        Pull Request GitHub id.
+     * @param id    Pull Request GitHub id.
      * @returns a promise that returns a list of review entities if resolved.
      */
-    public findByPullId(id: number): BluebirdPromise<IReviewEntity[]> {
-        let promise: BluebirdPromise<IReviewEntity[]> = new BluebirdPromise<IReviewEntity[]>((resolve, reject) => {
-            this.model.find({ pull_request_id: id }, (error, result) => {
-                if (!error) {
-                    let entityArray: IReviewEntity[] = ReviewEntity.toEntityArray(result);
-                    resolve(entityArray);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
+    public async findByPullId(id: number): Promise<IReviewEntity[]> {
+        return this.retrieve({ pull_request_id: id });
     }
 
     /**
      * Retrieves a review given its GitHub id.
-     * @param id        Review GitHub id.
+     * @param id    Review GitHub id.
      * @returns a promise that returns a review entity if resolved.
      */
-    public findById(id: number): BluebirdPromise<IReviewEntity> {
-        let promise: BluebirdPromise<IReviewEntity> = new BluebirdPromise<IReviewEntity>((resolve, reject) => {
-            this.model.find({ id: id }, (error, result) => {
-                if (!error) {
-                    let entity: IReviewEntity = ReviewEntity.toEntity(result[0]);
-                    resolve(entity);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
+    public async findById(id: number): Promise<IReviewEntity> {
+        try {
+            let document: ReviewDocument = await this.model.findOne({ id: id });
+            let entity: IReviewEntity = ReviewEntity.toEntity(document);
+            return entity;
+        } catch (error) {
+            return error;
+        }
     }
 
     protected convertToEntity(document: ReviewDocument): IReviewEntity {

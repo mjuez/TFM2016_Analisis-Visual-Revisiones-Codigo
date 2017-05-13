@@ -8,7 +8,10 @@ import * as mongoose from "mongoose";
 export interface ReviewDocument extends mongoose.Document {
     id: number,
     pull_request_id: number,
-    user: Object,
+    user: {
+        id: number,
+        login: string
+    },
     body: string,
     commit_id: string,
     state: string,

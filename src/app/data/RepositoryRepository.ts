@@ -4,7 +4,6 @@ import { IRepositoryEntity, RepositoryEntity } from "../entities/RepositoryEntit
 import { RepositoryDocument } from "../entities/documents/RepositoryDocument";
 import { RepositorySchema } from "./schemas/RepositorySchema";
 import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
-import * as BluebirdPromise from "bluebird";
 import * as mongoose from "mongoose";
 
 /**
@@ -19,7 +18,7 @@ export interface IRepositoryRepository extends IRepository<IRepositoryEntity, Re
      * @param id    Owner GitHub id.
      * @returns a promise that returns a list of repository entities if resolved.
      */
-    findByOwnerId(id: number): BluebirdPromise<IRepositoryEntity[]>;
+    findByOwnerId(id: number): Promise<IRepositoryEntity[]>;
 
     /**
      * Retrieves a repository given its GitHub owner id and its name.
@@ -27,7 +26,7 @@ export interface IRepositoryRepository extends IRepository<IRepositoryEntity, Re
      * @param name      Owner GitHub id.
      * @returns a promise that returns a repository entity if resolved.
      */
-    findOne(ownerId: number, name: string): BluebirdPromise<IRepositoryEntity>;
+    findOne(ownerId: number, name: string): Promise<IRepositoryEntity>;
 
 }
 
@@ -54,8 +53,8 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
      * @param item      Repository entity with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public update(item: IRepositoryEntity): BluebirdPromise<number> {
-        let promise: BluebirdPromise<number> = new BluebirdPromise<number>((resolve, reject) => {
+    public update(item: IRepositoryEntity): Promise<number> {
+        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
             this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
                 if (!error) {
                     resolve(rowsAffected);
@@ -72,8 +71,8 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
      * @param id    Owner GitHub id.
      * @returns a promise that returns a list of repository entities if resolved.
      */
-    findByOwnerId(id: number): BluebirdPromise<IRepositoryEntity[]>{
-        let promise: BluebirdPromise<IRepositoryEntity[]> = new BluebirdPromise<IRepositoryEntity[]>((resolve, reject) => {
+    findByOwnerId(id: number): Promise<IRepositoryEntity[]>{
+        let promise: Promise<IRepositoryEntity[]> = new Promise<IRepositoryEntity[]>((resolve, reject) => {
             this.model.find({ owner: {id: id} }, (error, result) => {
                 if (!error) {
                     let entityArray: IRepositoryEntity[] = RepositoryEntity.toEntityArray(result);
@@ -92,8 +91,8 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
      * @param name      Owner GitHub id.
      * @returns a promise that returns a repository entity if resolved.
      */
-    findOne(ownerId: number, name: string): BluebirdPromise<IRepositoryEntity>{
-        let promise: BluebirdPromise<IRepositoryEntity> = new BluebirdPromise<IRepositoryEntity>((resolve, reject) => {
+    findOne(ownerId: number, name: string): Promise<IRepositoryEntity>{
+        let promise: Promise<IRepositoryEntity> = new Promise<IRepositoryEntity>((resolve, reject) => {
             this.model.find({ name: name, owner: { id: ownerId } }, (error, result) => {
                 if (!error) {
                     let entity: IRepositoryEntity = RepositoryEntity.toEntity(result[0]);

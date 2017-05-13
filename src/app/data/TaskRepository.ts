@@ -3,7 +3,6 @@ import { AbstractRepository } from "./AbstractRepository";
 import { ITaskEntity, TaskEntity } from "../entities/TaskEntity";
 import { TaskDocument } from "../entities/documents/TaskDocument";
 import { TaskSchema } from "./schemas/TaskSchema";
-import * as Promise from "bluebird";
 import * as mongoose from "mongoose";
 
 /**

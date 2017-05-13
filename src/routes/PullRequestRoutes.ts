@@ -36,8 +36,12 @@ export class PullRequestRoutes {
             controller.getCount(req, res);
         });
         
-        router.get("/:owner/:repository/pulls/:pull_id", (req: express.Request, res: express.Response) => {
+        router.get("/:owner/:repository/pulls/:pull_number", (req: express.Request, res: express.Response) => {
             controller.get(req, res);
+        });
+
+        router.get("/:owner/:repository/pulls/:pull_number/reviews", async (req: express.Request, res: express.Response) => {
+            await controller.getReviews(req, res);
         });
 
         router.get("/:owner/:repository/pulls", (req: express.Request, res: express.Response) => {

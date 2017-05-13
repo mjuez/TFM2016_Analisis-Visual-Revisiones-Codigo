@@ -4,7 +4,6 @@ import { IUserEntity, UserEntity } from "../entities/UserEntity";
 import { UserDocument } from "../entities/documents/UserDocument";
 import { UserSchema } from "./schemas/UserSchema";
 import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
-import * as BluebirdPromise from "bluebird";
 import * as mongoose from "mongoose";
 
 /**
@@ -19,14 +18,14 @@ export interface IUserRepository extends IRepository<IUserEntity, UserDocument> 
      * @param id    User GitHub id.
      * @returns a promise that returns an user entity if resolved.
      */
-    findById(id: number): BluebirdPromise<IUserEntity>;
+    findById(id: number): Promise<IUserEntity>;
 
     /**
      * Retrieves an user given its login.
      * @param login User login.
      * @returns a promise that returns an user entity if resolved.
      */
-    findByLogin(login: string): BluebirdPromise<IUserEntity>;
+    findByLogin(login: string): Promise<IUserEntity>;
 
 }
 
@@ -53,8 +52,8 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
      * @param item      User entity with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public update(item: IUserEntity): BluebirdPromise<number> {
-        let promise: BluebirdPromise<number> = new BluebirdPromise<number>((resolve, reject) => {
+    public update(item: IUserEntity): Promise<number> {
+        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
             this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
                 if (!error) {
                     resolve(rowsAffected);
@@ -71,7 +70,7 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
      * @param id    User GitHub id.
      * @returns a promise that returns an user entity if resolved.
      */
-    public findById(id: number): BluebirdPromise<IUserEntity> {
+    public findById(id: number): Promise<IUserEntity> {
         return this.findOne({ id: id });
     }
 
@@ -80,7 +79,7 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
      * @param login User login.
      * @returns a promise that returns an user entity if resolved.
      */
-    public findByLogin(login: string): BluebirdPromise<IUserEntity> {
+    public findByLogin(login: string): Promise<IUserEntity> {
         return this.findOne({ login: login });
     }
 
@@ -89,8 +88,8 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
      * @param filter User filter.
      * @returns a promise that returns an user entity if resolved.
      */
-    private findOne(filter: Object): BluebirdPromise<IUserEntity> {
-        let promise: BluebirdPromise<IUserEntity> = new BluebirdPromise<IUserEntity>((resolve, reject) => {
+    private findOne(filter: Object): Promise<IUserEntity> {
+        let promise: Promise<IUserEntity> = new Promise<IUserEntity>((resolve, reject) => {
             this.model.find(filter, (error, result) => {
                 if (!error) {
                     let entity: IUserEntity = UserEntity.toEntity(result[0]);

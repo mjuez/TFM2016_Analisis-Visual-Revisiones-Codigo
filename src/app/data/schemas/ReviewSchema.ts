@@ -12,7 +12,10 @@ export class ReviewSchema {
         let schema = new mongoose.Schema({
             id: Number,
             pull_request_id: Number,
-            user: Object,
+            user: {
+                id: Number,
+                login: String
+            },
             body: String,
             commit_id: String,
             state: String,

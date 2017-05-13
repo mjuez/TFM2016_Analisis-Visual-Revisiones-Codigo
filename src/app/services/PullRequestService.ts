@@ -7,35 +7,13 @@ import { IApiService } from "./IApiService";
 import { GitHubService } from "./GitHubService";
 import { GitHubUtil } from "../util/GitHubUtil";
 import * as GitHubAPI from "github";
-import * as Promise from "bluebird";
 
 /**
  * IPullRequestService interface.
  * Describes specific functionality for Pull Request entities.
  * @author Mario Juez <mario@mjuez.com> 
  */
-export interface IPullRequestService extends IPersistenceService<IPullRequestEntity>, IApiService<GitHubAPI> {
-
-    getLocalPullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
-
-    getLocalPullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]>;
-
-    /**
-     * Obtains a remote pull request (from GitHub).
-     * @param owner         repository owner.
-     * @param repository    repository name.
-     * @param id            pull request id.
-     * @returns a promise that returns a pull request entity if resolved.
-     */
-    getRemotePullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
-
-    /**
-     * Obtains all remote pull requests (from GitHub).
-     * @param owner         repository owner.
-     * @param repository    repository name.
-     * @returns a promise that returns an array of pull request entities if resolved.
-     */
-    getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]>;
+export interface IPullRequestService extends IPersistenceService<IPullRequestEntity> {
 
     /**
      * Saves or updates many entities into database.
@@ -43,6 +21,8 @@ export interface IPullRequestService extends IPersistenceService<IPullRequestEnt
      * @returns a promise that retrns an array of entities if resolved.
      */
     createOrUpdateMultiple(entities: IPullRequestEntity[]): Promise<IPullRequestEntity[]>;
+    getLocalPullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
+    getLocalPullRequests(owner: string, repository: string, startingFrom?: number): Promise<IPullRequestEntity[]>;
 
 }
 
@@ -50,7 +30,7 @@ export interface IPullRequestService extends IPersistenceService<IPullRequestEnt
  * Pull Request services.
  * @author Mario Juez <mario@mjuez.com>
  */
-export class PullRequestService extends GitHubService implements IPullRequestService {
+export class PullRequestService implements IPullRequestService {
 
     /** Pull Request repository. */
     private readonly _repository: IPullRequestRepository;
@@ -59,11 +39,8 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
      * Class constructor with Pull Request repository dependency
      * injection.
      * @param repository    Injected Pull Request repository.
-     * @param api           optional GitHub API wrapper dependency injection.
-     * @param apiAuth       optional GitHub API authorization.
      */
-    constructor(repository: IPullRequestRepository, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(api, apiAuth);
+    constructor(repository: IPullRequestRepository) {
         this._repository = repository;
     }
 
@@ -72,30 +49,23 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
      * @param entity    a Pull Request.
      * @returns a promise that returns a pull request entity if resolved.
      */
-    public createOrUpdate(entity: IPullRequestEntity): Promise<IPullRequestEntity> {
+    public async createOrUpdate(entity: IPullRequestEntity): Promise<IPullRequestEntity> {
         let repository: IPullRequestRepository = this._repository;
-
-        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
-            repository.findOneByPullId(entity.id).then((foundEntity) => {
-                if (foundEntity) {
-                    repository.update(entity).then((rowsAffected) => {
-                        resolve(entity);
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    repository.create(entity).then((result) => {
-                        resolve(result);
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                }
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-
-        return promise;
+        let foundEntity: IPullRequestEntity = await repository.findOneByPullId(entity.id);
+        if (foundEntity != null) {
+            try {
+                await repository.update(entity);
+                return entity;
+            } catch (error) {
+                throw error;
+            }
+        } else {
+            try {
+                return await repository.create(entity);
+            } catch (error) {
+                throw error;
+            }
+        }
     }
 
     /**
@@ -103,24 +73,17 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
      * @param entity    a Pull Request array.
      * @returns a promise that returns an array of pull request entities if resolved.
      */
-    public createOrUpdateMultiple(entities: IPullRequestEntity[]): Promise<IPullRequestEntity[]> {
-        let promise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
-            let entitiesResult: IPullRequestEntity[] = [];
-            entities.map((entity) => {
-                this.createOrUpdate(entity).then((entity) => {
-                    let length: number = entitiesResult.push(entity);
-                    if (length === entities.length) {
-                        resolve(entitiesResult);
-                    }
-                }).catch((reason) => {
-                    reject(reason);
-                });
-            });
-
-            // TRY: resolve(entitiesResult) instead comparing lengths ?
+    public async createOrUpdateMultiple(entities: IPullRequestEntity[]): Promise<IPullRequestEntity[]> {
+        let entitiesResult: IPullRequestEntity[] = [];
+        entities.map(async (entity) => {
+            try {
+                let persisted: IPullRequestEntity = await this.createOrUpdate(entity);
+                entitiesResult.push(persisted);
+            } catch (error) {
+                throw error;
+            }
         });
-
-        return promise;
+        return entitiesResult;
     }
 
     /** @inheritdoc */
@@ -131,99 +94,10 @@ export class PullRequestService extends GitHubService implements IPullRequestSer
     }
 
     /** @inheritdoc */
-    public getLocalPullRequests(owner: string, repo: string): Promise<IPullRequestEntity[]> {
+    public getLocalPullRequests(owner: string, repo: string, startingFrom: number = 0): Promise<IPullRequestEntity[]> {
         let repository: IPullRequestRepository = this._repository;
-        let filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository: repo});
-        return repository.retrieve(filter);
-    }
-
-    /** @inheritdoc */
-    public getRemotePullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity> {
-        let api: GitHubAPI = this.API;
-
-        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
-            api.pullRequests.get(<GitHubAPI.PullRequestsGetParams>{
-                owner: owner,
-                repo: repository,
-                number: id
-            }).then((result) => {
-                let entity: IPullRequestEntity = PullRequestEntity.toEntity(result.data);
-                resolve(entity);
-            }).catch((reason) => {
-                reject(reason);
-            });
-        });
-
-        return promise;
-    }
-
-    /** @inheritdoc */
-    public getRemotePullRequests(owner: string, repository: string): Promise<IPullRequestEntity[]> {
-        let api: GitHubAPI = this.API;
-
-        let promise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
-            api.pullRequests.getAll(<GitHubAPI.PullRequestsGetAllParams>{
-                owner: owner,
-                repo: repository,
-                state: `all`,
-                per_page: 100,
-                direction: `asc`
-            }).then((result) => {
-                this.getAllPaginatedPullRequests(result).then((entities) => {
-                    resolve(entities);
-                }).catch((reason) => {
-                    reject(reason);
-                });
-            }).catch((reason) => {
-                reject(reason);
-            });
-        });
-
-        return promise;
-    }
-
-    /**
-     * Obtains all pull requests from GitHub, even if they are paginated.
-     * @param pageResult    a response that contains a page or results 
-     *                      from a GitHub API call.
-     * @returns a promise that returns an array of pull request entities if resolved,
-     *          or if rejected, returns an object with an array of a part of remote
-     *          pull requests and the last page that was processed to continue from
-     *          that point in the future. *Note: This can be useful when we run out of
-     *          api calls.
-     */
-    private getAllPaginatedPullRequests(pageResult): Promise<IPullRequestEntity[]> {
-        let api: GitHubAPI = this.API;
-
-        let promise: Promise<IPullRequestEntity[]> = new Promise<IPullRequestEntity[]>((resolve, reject) => {
-            let pullRequests: IPullRequestEntity[] = PullRequestEntity.toEntityArray(pageResult.data);
-            if (api.hasNextPage(pageResult)) {
-                api.getNextPage(pageResult).then((nextPageResult) => {
-                    this.getAllPaginatedPullRequests(nextPageResult).then((followingPullRequests) => {
-                        pullRequests = pullRequests.concat(followingPullRequests);
-                        resolve(pullRequests);
-                    }).catch((reason) => {
-                        let partialPullRequests: IPullRequestEntity[] = reason["pull-requests"];
-                        pullRequests = pullRequests.concat(partialPullRequests);
-                        reason["pull-requests"] = pullRequests;
-                        reject(reason);
-                    });
-                }).catch((reason) => {
-                    let links: string = pageResult.meta.link;
-                    let nextPage: number = GitHubUtil.getNextPageNumber(links);
-                    let rejection: Object = {
-                        error: reason,
-                        "pull-requests": pullRequests,
-                        "next-page": nextPage
-                    }
-                    reject(rejection);
-                });
-            } else {
-                resolve(pullRequests);
-            }
-        });
-
-        return promise;
+        let filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository: repo });
+        return repository.findSublist(filter, startingFrom);
     }
 
 }

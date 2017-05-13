@@ -30,9 +30,10 @@ export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IRev
      * @param data  raw data.
      * @returns a review entity.
      */
-    public static toEntity(data: any): IReviewEntity {
+    public static toEntity(data: any, pullId: number = null): IReviewEntity {
         if (data) {
             let entity: IReviewEntity = new ReviewEntity(<ReviewDocument>data);
+            entity.document.pull_request_id = pullId;
             return entity;
         }
         return null;
@@ -43,11 +44,11 @@ export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IRev
      * @param data  raw data.
      * @returns an array of review entities.
      */
-    public static toEntityArray(data: any[]): IReviewEntity[] {
+    public static toEntityArray(data: any[], pullId: number = null): IReviewEntity[] {
         let entityArray: IReviewEntity[] = [];
         if (data.length > 0) {
             data.map((jsonObject) => {
-                let entity: IReviewEntity = this.toEntity(jsonObject);
+                let entity: IReviewEntity = this.toEntity(jsonObject, pullId);
                 entityArray.push(entity);
             });
         }

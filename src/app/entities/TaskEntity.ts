@@ -13,7 +13,7 @@ export interface ITaskEntity extends IEntity<TaskDocument> {
     repository: string,
     currentPage: number,
     parentTask?: ITaskEntity,
-    currentPullRequestNumber?: number,
+    lastProcessed?: number,
     isSubTask(): boolean
 }
 
@@ -103,12 +103,12 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
         }
     }
 
-    get currentPullRequestNumber(): number {
-        return this.document.current_pull_request_number;
+    get lastProcessed(): number {
+        return this.document.last_processed;
     }
 
-    set currentPullRequestNumber(pullRequestNumber: number) {
-        this.document.current_pull_request_number = pullRequestNumber;
+    set lastProcessed(lastProcessed: number) {
+        this.document.last_processed = lastProcessed
     }
 
     public isSubTask(): boolean {

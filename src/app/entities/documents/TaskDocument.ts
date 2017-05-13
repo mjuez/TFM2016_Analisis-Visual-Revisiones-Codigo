@@ -16,5 +16,5 @@ export interface TaskDocument extends mongoose.Document {
     repository: string,
     current_page: number,
     parent?: any,
-    current_pull_request_number?: number
+    last_processed?: number
 }

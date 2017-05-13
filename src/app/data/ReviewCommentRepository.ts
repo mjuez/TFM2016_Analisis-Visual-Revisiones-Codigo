@@ -4,7 +4,6 @@ import { IReviewCommentEntity, ReviewCommentEntity } from "../entities/ReviewCom
 import { ReviewCommentDocument } from "../entities/documents/ReviewCommentDocument";
 import { ReviewCommentSchema } from "./schemas/ReviewCommentSchema";
 import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
-import * as BluebirdPromise from "bluebird";
 import * as mongoose from "mongoose";
 
 /**
@@ -19,7 +18,7 @@ export interface IReviewCommentRepository extends IRepository<IReviewCommentEnti
      * @param id        Review GitHub id.
      * @returns a promise that returns a list of review comment entities if resolved.
      */
-    findByReviewId(id: number): BluebirdPromise<IReviewCommentEntity[]>;
+    findByReviewId(id: number): Promise<IReviewCommentEntity[]>;
 
 }
 
@@ -46,8 +45,8 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
      * @param item      Review entity with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public update(item: IReviewCommentEntity): BluebirdPromise<number> {
-        let promise: BluebirdPromise<number> = new BluebirdPromise<number>((resolve, reject) => {
+    public update(item: IReviewCommentEntity): Promise<number> {
+        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
             this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
                 if (!error) {
                     resolve(rowsAffected);
@@ -64,9 +63,9 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
      * @param id        Review GitHub id.
      * @returns a promise that returns a list of review comment entities if resolved.
      */
-    public findByReviewId(id: number): BluebirdPromise<IReviewCommentEntity[]> {
-        let promise: BluebirdPromise<IReviewCommentEntity[]>
-            = new BluebirdPromise<IReviewCommentEntity[]>((resolve, reject) => {
+    public findByReviewId(id: number): Promise<IReviewCommentEntity[]> {
+        let promise: Promise<IReviewCommentEntity[]>
+            = new Promise<IReviewCommentEntity[]>((resolve, reject) => {
                 this.model.find({ pull_request_review_id: id }, (error, result) => {
                     if (!error) {
                         let entityArray: IReviewCommentEntity[] = ReviewCommentEntity.toEntityArray(result);

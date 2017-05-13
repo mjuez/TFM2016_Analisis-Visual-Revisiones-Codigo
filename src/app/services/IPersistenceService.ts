@@ -1,5 +1,4 @@
 import { IEntity } from "../entities/IEntity";
-import * as Promise from "bluebird";
 
 /**
  * IPersistenceService interface.

@@ -3,6 +3,7 @@ import { ITaskEntity, TaskEntity } from "../entities/TaskEntity";
 import { TaskType } from "../entities/enum/TaskType";
 import { ITaskManagerEntity, TaskManagerEntity } from "../entities/TaskManagerEntity";
 import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
+import { IReviewEntity, ReviewEntity } from "../entities/ReviewEntity";
 import { TaskManagerDocument, TaskManagerError } from "../entities/documents/TaskManagerDocument";
 import { TaskDocument } from "../entities/documents/TaskDocument";
 import { ITaskManagerRepository, TaskManagerRepository } from "../data/TaskManagerRepository";
@@ -11,9 +12,10 @@ import { PullRequestRepository } from "../data/PullRequestRepository";
 import { IApiService } from "./IApiService";
 import { GitHubService } from "./GitHubService";
 import { GitHubUtil } from "../util/GitHubUtil";
+import { TaskUtil } from "../util/TaskUtil";
 import { IPullRequestService, PullRequestService } from "./PullRequestService";
+import { IReviewService, ReviewService } from "./ReviewService";
 import * as GitHubAPI from "github";
-import * as BluebirdPromise from "bluebird";
 
 /**
  * ITaskManagerService interface.
@@ -26,21 +28,19 @@ export interface ITaskManagerService extends IPersistenceService<ITaskManagerEnt
     currentTask: ITaskEntity;
     error: TaskManagerError;
     taskManager: ITaskManagerEntity;
-    getPendingTasks(): BluebirdPromise<ITaskEntity[]>;
-    getAllTasks(): BluebirdPromise<ITaskEntity[]>;
+    getPendingTasks(): Promise<ITaskEntity[]>;
+    getAllTasks(): Promise<ITaskEntity[]>;
     createTask(owner: string, repository: string): Promise<boolean>;
 
 }
 
 /**
- * Task manager services. Is a singleton.
+ * Task manager services.
  * @author Mario Juez <mario@mjuez.com>
  */
 export class TaskManagerService extends GitHubService implements ITaskManagerService {
 
     private _ready: boolean;
-
-    private static _instance: ITaskManagerService = null;
 
     private _taskManagerEntity: ITaskManagerEntity;
 
@@ -51,23 +51,37 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private readonly _pullRequestService: IPullRequestService;
 
+    private readonly _reviewService: IReviewService;
+
     /**
      * Class constructor
      */
-    private constructor() {
+    constructor(
+        repositories: {
+            taskManager: ITaskManagerRepository;
+            task: ITaskRepository;
+        },
+        services: {
+            pullRequest: IPullRequestService;
+            review: IReviewService;
+            //userService: IUserService;
+            //repositoryService: IRepositoryService;
+        }) {
         super();
         this._ready = false;
-        this._repository = new TaskManagerRepository();
-        this._taskRepository = new TaskRepository();
-        this._pullRequestService = new PullRequestService(new PullRequestRepository());
+        this._repository = repositories.taskManager;
+        this._taskRepository = repositories.task;
+        this._pullRequestService = services.pullRequest;
+        this._reviewService = services.review;
         this.bindEventListeners();
         this.initialize();
     }
 
-    private initialize = () => {
-        this._repository.find().then(async (taskManagerEntity) => {
-            if (taskManagerEntity) {
-                this._taskManagerEntity = taskManagerEntity;
+    private initialize = async () => {
+        try {
+            let entity: ITaskManagerEntity = await this._repository.find();
+            if (entity) {
+                this._taskManagerEntity = entity;
             } else {
                 this._taskManagerEntity = this.emptyTaskManagerEntity;
                 await this.persist();
@@ -75,15 +89,15 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
             this.start();
             this._ready = true;
             this.emit("taskManager:ready");
-        }).catch((dbError) => {
+        } catch (dbError) {
             console.log(dbError);
             this.emit("taskManager:initerror", dbError);
             // retry after 5 seconds.
             setTimeout(this.initialize, 5000);
-        });
+        }
     }
 
-    get taskManager(): ITaskManagerEntity{
+    get taskManager(): ITaskManagerEntity {
         return this._taskManagerEntity;
     }
 
@@ -119,86 +133,74 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         delete this.error;
     }
 
-    public createOrUpdate(entity: ITaskManagerEntity): BluebirdPromise<ITaskManagerEntity> {
+    public async createOrUpdate(entity: ITaskManagerEntity): Promise<ITaskManagerEntity> {
         let repository: ITaskManagerRepository = this._repository;
-
-        let promise: BluebirdPromise<ITaskManagerEntity> = new BluebirdPromise<ITaskManagerEntity>((resolve, reject) => {
-            repository.find().then((foundEntity) => {
-                if (foundEntity) {
-                    repository.update(entity).then((rowsAffected) => {
-                        resolve(entity);
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    repository.create(entity).then((result) => {
-                        resolve(result);
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                }
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-
-        return promise;
+        let foundEntity: ITaskManagerEntity = await repository.find();
+        if (foundEntity != null) {
+            try {
+                await repository.update(entity);
+                return entity;
+            } catch (error) {
+                throw error;
+            }
+        } else {
+            try {
+                return await repository.create(entity);
+            } catch (error) {
+                throw error;
+            }
+        }
     }
 
-    private createOrUpdateTask(entity: ITaskEntity): BluebirdPromise<ITaskEntity> {
+    private async createOrUpdateTask(entity: ITaskEntity): Promise<ITaskEntity> {
         let repository: ITaskRepository = this._taskRepository;
-
-        let promise: BluebirdPromise<ITaskEntity> = new BluebirdPromise<ITaskEntity>((resolve, reject) => {
-            repository.findById(entity.document._id).then((foundEntity) => {
-                if (foundEntity) {
-                    repository.update(entity).then((rowsAffected) => {
-                        resolve(entity);
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                } else {
-                    repository.create(entity).then((result) => {
-                        resolve(result);
-                    }).catch((error) => {
-                        reject(error);
-                    });
-                }
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-
-        return promise;
+        let foundEntity: ITaskEntity = await repository.findById(entity.document._id);
+        if (foundEntity != null) {
+            try {
+                await repository.update(entity);
+                return entity;
+            } catch (error) {
+                throw error;
+            }
+        } else {
+            try {
+                return await repository.create(entity);
+            } catch (error) {
+                throw error;
+            }
+        }
     }
 
-    public getPendingTasks(): BluebirdPromise<ITaskEntity[]> {
+    public async getPendingTasks(): Promise<ITaskEntity[]> {
         let repository: ITaskRepository = this._taskRepository;
         return repository.retrieve({ is_completed: false });
     }
 
-    public getAllTasks(): BluebirdPromise<ITaskEntity[]> {
+    public async getAllTasks(): Promise<ITaskEntity[]> {
         let repository: ITaskRepository = this._taskRepository;
         return repository.retrieve();
     }
 
     public async createTask(owner: string, repository: string): Promise<boolean> {
-        let document: TaskDocument = <TaskDocument>{
-            type: TaskType.ALL,
-            is_completed: false,
-            creation_date: new Date(),
-            start_date: null,
-            end_date: null,
-            owner: owner,
-            repository: repository,
-            current_page: 1
-        };
-        let taskEntity: ITaskEntity = new TaskEntity(document);
+        let taskEntity: ITaskEntity = TaskUtil.buildMainTask(owner, repository);
         let persisted: ITaskEntity = await this.persistTask(taskEntity);
         if (persisted) {
+            // MUST TAKE CARE WITH SUBTASK CORRECT CREATION!
+            this.createSubTask(persisted, TaskType.REVIEWS);
+            //this.createSubTask(persisted, TaskType.REVIEW_COMMENTS);
+            //this.createSubTask(persisted, TaskType.USERS);
+            //this.createSubTask(persisted, TaskType.REPOSITORY);
             this.emit("task:created");
             return true;
         }
 
+        return false;
+    }
+
+    private async createSubTask(parent: ITaskEntity, type: TaskType): Promise<boolean> {
+        let subTask: ITaskEntity = TaskUtil.buildSubTask(parent, type);
+        let persisted: ITaskEntity = await this.persistTask(subTask);
+        if (persisted) return true;
         return false;
     }
 
@@ -294,6 +296,8 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         }
         if (currentTask.type === TaskType.ALL) {
             this.makeAllApiCall();
+        } else if (currentTask.type === TaskType.REVIEWS) {
+            this.runReviewsTask();
         }
     }
 
@@ -316,6 +320,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private async processPullRequestPage(page: any): Promise<void> {
         let api: GitHubAPI = this.API;
+        page.reviews = 0; //pff
         let pullRequests: IPullRequestEntity[] = PullRequestEntity.toEntityArray(page.data);
         console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
@@ -336,6 +341,73 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
                 }
             } else {
                 this.completeCurrentTask();
+            }
+        } catch (dbError) {
+            this.emit("taskManager:dberror", dbError);
+            this.emit("task:stopped");
+        }
+    }
+
+    private async runReviewsTask(): Promise<void> {
+        console.log("running review task");
+        let service: IPullRequestService = this._pullRequestService;
+        let pullRequests: IPullRequestEntity[] = await service.getLocalPullRequests(
+            this.currentTask.owner, this.currentTask.repository, this.currentTask.lastProcessed);
+        for (let i: number = 0; i < pullRequests.length; i++) {
+            try {
+                let pullRequest: IPullRequestEntity = pullRequests[i];
+                await this.makeReviewsApiCall(pullRequest);
+                this.currentTask.currentPage = 1;
+                this.currentTask.lastProcessed = pullRequest.document.number;
+                await this.persistTask(this.currentTask);
+            } catch (error) {
+                return;
+            }
+        }
+        this.completeCurrentTask();
+    }
+
+    private async makeReviewsApiCall(pullRequest: IPullRequestEntity): Promise<void> {
+        let api: GitHubAPI = this.API;
+        let currentTask: ITaskEntity = this.currentTask;
+        try {
+            let page: any = await api.pullRequests.getReviews(<GitHubAPI.PullRequestsGetReviewsParams>{
+                owner: currentTask.owner,
+                repo: currentTask.repository,
+                number: pullRequest.document.number,
+                per_page: 100,
+                direction: `asc`,
+                page: currentTask.currentPage
+            });
+            this.processReviewsPage(page, pullRequest);
+        } catch (error) {
+            this.handleApiError(error);
+        }
+    }
+
+    private async processReviewsPage(page: any, pullRequest: IPullRequestEntity): Promise<void> {
+        let api: GitHubAPI = this.API;
+        let reviews: IReviewEntity[] = ReviewEntity.toEntityArray(page.data, pullRequest.id);
+        console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
+        try {
+            await this._reviewService.createOrUpdateMultiple(reviews);
+            if (api.hasNextPage(page)) {
+                let links: string = page.meta.link;
+                let nextPage: number = GitHubUtil.getNextPageNumber(links);
+                this.currentTask.currentPage = nextPage;
+                let persisted: ITaskEntity = await this.persistTask(this.currentTask);
+                if (persisted) {
+                    try {
+                        let nextPage: any = await api.getNextPage(page);
+                        this.processReviewsPage(nextPage, pullRequest);
+                    } catch (error) {
+                        this.handleApiError(error);
+                        throw error;
+                    }
+                } else {
+                    this.emit("task:stopped");
+                    throw new Error();
+                }
             }
         } catch (dbError) {
             this.emit("taskManager:dberror", dbError);
@@ -373,9 +445,10 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         try {
             let nextTask: ITaskEntity = await this._taskRepository.findNext();
             if (nextTask) {
-                console.log(nextTask);
                 this.currentTask = nextTask;
                 this.emit("task:updated");
+            } else {
+                console.log("no task...");
             }
         } catch (error) {
             this.emit("taskManager:dberror", error);
@@ -400,24 +473,5 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         }
         return null;
     }
-
-    public static getInstance(): BluebirdPromise<ITaskManagerService> {
-        if (this._instance === null) {
-            this._instance = new TaskManagerService();
-        }
-
-        let promise: BluebirdPromise<ITaskManagerService> = new BluebirdPromise<ITaskManagerService>((resolve, reject) => {
-            if (!this._instance.ready) {
-                this._instance.on("taskManager:ready", () => {
-                    resolve(this._instance);
-                });
-            } else {
-                resolve(this._instance);
-            }
-        });
-
-        return promise;
-    }
-
 
 }

@@ -4,7 +4,6 @@ import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEn
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { PullRequestSchema } from "./schemas/PullRequestSchema";
 import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
-import * as Promise from "bluebird";
 import * as mongoose from "mongoose";
 
 /**
@@ -25,6 +24,11 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
      * 
      */
     findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity>;
+
+    /**
+     * 
+     */
+    findSublist(filter: Object, startingFrom?: number): Promise<IPullRequestEntity[]>;
 }
 
 /**
@@ -92,6 +96,20 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
         });
 
         return promise;
+    }
+
+    public async findSublist(filter: Object = {}, startingFrom: number = 0): Promise<IPullRequestEntity[]> {
+        try {
+            let documentArray: PullRequestDocument[] =
+                await this.model.find(filter)
+                    .where('number')
+                    .gt(startingFrom)
+                    .sort({ number: 1 });
+            let pullRequestArray: IPullRequestEntity[] = this.convertToEntityArray(documentArray);
+            return pullRequestArray;
+        } catch (error) {
+            throw error;
+        }
     }
 
     protected convertToEntity(document: PullRequestDocument): IPullRequestEntity {
