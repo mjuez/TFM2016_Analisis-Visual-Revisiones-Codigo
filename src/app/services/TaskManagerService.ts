@@ -15,6 +15,7 @@ import { GitHubUtil } from "../util/GitHubUtil";
 import { TaskUtil } from "../util/TaskUtil";
 import { IPullRequestService, PullRequestService } from "./PullRequestService";
 import { IReviewService, ReviewService } from "./ReviewService";
+import { IReviewCommentService, ReviewCommentService } from "./ReviewCommentService";
 import * as GitHubAPI from "github";
 
 /**
@@ -64,6 +65,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         services: {
             pullRequest: IPullRequestService;
             review: IReviewService;
+            reviewComment: IReviewCommentService;
             //userService: IUserService;
             //repositoryService: IRepositoryService;
         }) {
@@ -129,8 +131,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
     }
 
     private removeError(): void {
-        delete this._taskManagerEntity.error;
-        delete this.error;
+        this.error = undefined;
     }
 
     public async createOrUpdate(entity: ITaskManagerEntity): Promise<ITaskManagerEntity> {
@@ -206,24 +207,26 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private handleError() {
         if (this.hasError()) {
-            console.log(`[${new Date()}] - error: ${this.error.code}`);
             let date: Date = new Date();
+            console.log(`[${date}] - error: ${this.error.code}`);
             let continueDate: Date = new Date(this.error.continue_at * 1000);
             console.log(continueDate);
-            let difference: number = continueDate.getTime() - date.getTime();
+            let difference: number = continueDate.getTime() - date.getTime() + 10;
             console.log(difference);
             if (difference > 0) {
                 console.log(`Going to retry on: ${continueDate}`);
                 setTimeout(this.continue, difference);
+            }else{
+                this.continue();
             }
         }
     }
 
     private start(): void {
-        if (this.currentTask) {
-            this.runCurrentTask();
-        } else if (this.hasError()) {
+        if (this.hasError()) {
             this.handleError();
+        } else if (this.currentTask) {
+            this.runCurrentTask();
         } else {
             this.updateCurrentTask();
         }
@@ -354,13 +357,14 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         let pullRequests: IPullRequestEntity[] = await service.getLocalPullRequests(
             this.currentTask.owner, this.currentTask.repository, this.currentTask.lastProcessed);
         for (let i: number = 0; i < pullRequests.length; i++) {
-            try {
+            if (!this.hasError()) {
                 let pullRequest: IPullRequestEntity = pullRequests[i];
                 await this.makeReviewsApiCall(pullRequest);
                 this.currentTask.currentPage = 1;
                 this.currentTask.lastProcessed = pullRequest.document.number;
                 await this.persistTask(this.currentTask);
-            } catch (error) {
+            } else {
+                this.emit("task:stopped");
                 return;
             }
         }
@@ -387,6 +391,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private async processReviewsPage(page: any, pullRequest: IPullRequestEntity): Promise<void> {
         let api: GitHubAPI = this.API;
+        console.log(page);
         let reviews: IReviewEntity[] = ReviewEntity.toEntityArray(page.data, pullRequest.id);
         console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
@@ -402,11 +407,9 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
                         this.processReviewsPage(nextPage, pullRequest);
                     } catch (error) {
                         this.handleApiError(error);
-                        throw error;
                     }
                 } else {
                     this.emit("task:stopped");
-                    throw new Error();
                 }
             }
         } catch (dbError) {
