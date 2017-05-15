@@ -15,7 +15,5 @@ export interface ReviewDocument extends mongoose.Document {
     body: string,
     commit_id: string,
     state: string,
-    html_url: string,
-    pull_request_url: string,
-    _links: Object
+    html_url: string
 }

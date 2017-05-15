@@ -19,9 +19,7 @@ export class ReviewSchema {
             body: String,
             commit_id: String,
             state: String,
-            html_url: String,
-            pull_request_url: String,
-            _links: Object
+            html_url: String
         });
 
         return schema;
