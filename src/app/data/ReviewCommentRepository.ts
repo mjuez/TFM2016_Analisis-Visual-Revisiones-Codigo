@@ -20,6 +20,8 @@ export interface IReviewCommentRepository extends IRepository<IReviewCommentEnti
      */
     findByReviewId(id: number): Promise<IReviewCommentEntity[]>;
 
+    findById(id: number): Promise<IReviewCommentEntity>;
+
 }
 
 /**
@@ -41,41 +43,21 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
     }
 
     /**
-     * Updates a Review from database. Uses its GitHub id.
-     * @param item      Review entity with updated data.
-     * @returns a promise that returns the number of rows affected if resolved.
-     */
-    public update(item: IReviewCommentEntity): Promise<number> {
-        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
-            this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
-                if (!error) {
-                    resolve(rowsAffected);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
-    }
-
-    /**
      * Retrieves a list of review comments of a review given its GitHub id.
      * @param id        Review GitHub id.
      * @returns a promise that returns a list of review comment entities if resolved.
      */
-    public findByReviewId(id: number): Promise<IReviewCommentEntity[]> {
-        let promise: Promise<IReviewCommentEntity[]>
-            = new Promise<IReviewCommentEntity[]>((resolve, reject) => {
-                this.model.find({ pull_request_review_id: id }, (error, result) => {
-                    if (!error) {
-                        let entityArray: IReviewCommentEntity[] = ReviewCommentEntity.toEntityArray(result);
-                        resolve(entityArray);
-                    } else {
-                        reject(error);
-                    }
-                });
-            });
-        return promise;
+    public async findByReviewId(id: number): Promise<IReviewCommentEntity[]> {
+        return this.retrieve({ pull_request_review_id: id });
+    }
+
+    /**
+     * Retrieves a review given its GitHub id.
+     * @param id    Review GitHub id.
+     * @returns a promise that returns a review entity if resolved.
+     */
+    public async findById(id: number): Promise<IReviewCommentEntity> {
+        return this.findOne({id: id});
     }
 
     protected convertToEntity(document: ReviewCommentDocument): IReviewCommentEntity {
@@ -84,6 +66,10 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
 
     protected convertToEntityArray(documentArray: ReviewCommentDocument[]): IReviewCommentEntity[] {
         return ReviewCommentEntity.toEntityArray(documentArray);
+    }
+
+    protected updateFilter(item: IReviewCommentEntity): Object {
+        return { id: item.id };
     }
 
 }

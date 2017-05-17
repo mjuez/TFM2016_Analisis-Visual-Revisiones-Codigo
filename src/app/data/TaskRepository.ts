@@ -33,67 +33,39 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
         super(TaskRepository.COLLECTION_NAME, TaskSchema.schema, model);
     }
 
-    /**
-     * Updates a Task from database. Uses its _id.
-     * @param item      Task entity with updated data.
-     * @returns a promise that returns the number of rows affected if resolved.
-     */
-    public update(item: ITaskEntity): Promise<number> {
-        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
-            this.model.update({ _id: item.document._id }, item.document, (error, rowsAffected) => {
-                if (!error) {
-                    resolve(rowsAffected);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
+    public async findById(id: any): Promise<ITaskEntity> {
+        try {
+            let document: TaskDocument = await this.model.findById(id)
+                .populate('parent');
+            let entity: ITaskEntity = this.convertToEntity(document);
+            return entity;
+        } catch (error) {
+            throw error;
+        }
     }
 
-    public findById(id: any): Promise<ITaskEntity> {
-        let promise: Promise<ITaskEntity> = new Promise<ITaskEntity>((resolve, reject) => {
-            this.model.findById(id)
-                .populate('parent')
-                .then((document) => {
-                    let entity: ITaskEntity = TaskEntity.toEntity(document);
-                    resolve(entity);
-                }).catch((error) => {
-                    reject(error);
-                });
-        });
-        return promise;
-    }
-
-    public findNext(): Promise<ITaskEntity> {
-        let promise: Promise<ITaskEntity> = new Promise<ITaskEntity>((resolve, reject) => {
-            this.model.findOne({ is_completed: false })
+    public async findNext(): Promise<ITaskEntity> {
+        try {
+            let document: TaskDocument = await this.model.findOne({ is_completed: false })
                 .sort({ creation_date: 1 })
-                .populate('parent')
-                .then((document) => {
-                    let entity: ITaskEntity = TaskEntity.toEntity(document);
-                    resolve(entity);
-                }).catch((error) => {
-                    reject(error);
-                });
-        });
-        return promise;
+                .populate('parent');
+            let entity: ITaskEntity = this.convertToEntity(document);
+            return entity;
+        } catch (error) {
+            throw error;
+        }
     }
 
-    public retrieve(filter: Object = {}): Promise<ITaskEntity[]> {
-        let promise: Promise<ITaskEntity[]> = new Promise<ITaskEntity[]>((resolve, reject) => {
-            this.model.find(filter)
+    public async retrieve(filter: Object = {}): Promise<ITaskEntity[]> {
+        try {
+            let documents = await this.model.find(filter)
                 .sort({ creation_date: 1 })
-                .populate('parent')
-                .then((documents) => {
-                    let entityArray: ITaskEntity[] = this.convertToEntityArray(documents);
-                    resolve(entityArray);
-                }).catch((error) => {
-                    reject(error);
-                });
-        });
-
-        return promise;
+                .populate('parent');
+            let entityArray: ITaskEntity[] = this.convertToEntityArray(documents);
+            return entityArray;
+        } catch (error) {
+            throw error;
+        }
     }
 
     protected convertToEntity(document: TaskDocument): ITaskEntity {
@@ -102,5 +74,9 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
 
     protected convertToEntityArray(documentArray: TaskDocument[]): ITaskEntity[] {
         return TaskEntity.toEntityArray(documentArray);
+    }
+
+    protected updateFilter(item: ITaskEntity): Object {
+        return { _id: item.document._id };
     }
 }

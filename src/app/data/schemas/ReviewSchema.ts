@@ -11,7 +11,11 @@ export class ReviewSchema {
     public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
             id: Number,
-            pull_request_id: Number,
+            pull_request_number: Number,
+            repository: {
+                name: String,
+                owner: String
+            },
             user: {
                 id: Number,
                 login: String
@@ -19,7 +23,8 @@ export class ReviewSchema {
             body: String,
             commit_id: String,
             state: String,
-            html_url: String
+            html_url: String,
+            pull_request_url: String
         });
 
         return schema;

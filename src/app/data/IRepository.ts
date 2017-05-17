@@ -32,4 +32,6 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      */
     retrieve(filter?: Object): Promise<T[]>;
 
+    findOne(filter: Object): Promise<T>;
+
 }

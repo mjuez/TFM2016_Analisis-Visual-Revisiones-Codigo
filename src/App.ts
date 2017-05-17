@@ -8,6 +8,7 @@ import { ITaskManagerController, TaskManagerController } from "./controllers/Tas
 import { IPullRequestService, PullRequestService } from "./app/services/PullRequestService";
 import { ITaskManagerService, TaskManagerService } from "./app/services/TaskManagerService";
 import { IReviewService, ReviewService } from "./app/services/ReviewService";
+import { IReviewCommentService, ReviewCommentService } from "./app/services/ReviewCommentService";
 import { IPullRequestRepository, PullRequestRepository } from "./app/data/PullRequestRepository";
 import { IRepositoryRepository, RepositoryRepository } from "./app/data/RepositoryRepository";
 import { IReviewCommentRepository, ReviewCommentRepository } from "./app/data/ReviewCommentRepository";
@@ -51,12 +52,13 @@ class App {
   private _services: {
     pullRequest: IPullRequestService;
     //repository: IRepositoryService;
-    //reviewComment: IReviewCommentService;
+    reviewComment: IReviewCommentService;
     review: IReviewService;
     taskManager: ITaskManagerService;
     //user: IUserService;
   } = {
     pullRequest: null,
+    reviewComment: null,
     review: null,
     taskManager: null
   }
@@ -119,6 +121,7 @@ class App {
   private async createServices(): Promise<void> {
     this._services.pullRequest = new PullRequestService(this._repositories.pullRequest);
     this._services.review = new ReviewService(this._repositories.review, this._services.pullRequest);
+    this._services.reviewComment = new ReviewCommentService(this._repositories.reviewComment);
     await this.createTaskManager();
   }
 
@@ -129,7 +132,8 @@ class App {
     };
     let taskManagerServices: any = {
       pullRequest: this._services.pullRequest,
-      review: this._services.review
+      review: this._services.review,
+      reviewComment: this._services.reviewComment
     };
     this._services.taskManager = new TaskManagerService(taskManagerRepos, taskManagerServices);
     let promise: Promise<void> = new Promise<void>((resolve, reject) => {

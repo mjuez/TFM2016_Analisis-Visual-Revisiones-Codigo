@@ -4,6 +4,7 @@ import { TaskType } from "../entities/enum/TaskType";
 import { ITaskManagerEntity, TaskManagerEntity } from "../entities/TaskManagerEntity";
 import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { IReviewEntity, ReviewEntity } from "../entities/ReviewEntity";
+import { IReviewCommentEntity, ReviewCommentEntity } from "../entities/ReviewCommentEntity";
 import { TaskManagerDocument, TaskManagerError } from "../entities/documents/TaskManagerDocument";
 import { TaskDocument } from "../entities/documents/TaskDocument";
 import { ITaskManagerRepository, TaskManagerRepository } from "../data/TaskManagerRepository";
@@ -54,6 +55,8 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private readonly _reviewService: IReviewService;
 
+    private readonly _reviewCommentService: IReviewCommentService;
+
     /**
      * Class constructor
      */
@@ -75,6 +78,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         this._taskRepository = repositories.task;
         this._pullRequestService = services.pullRequest;
         this._reviewService = services.review;
+        this._reviewCommentService = services.reviewComment;
         this.bindEventListeners();
         this.initialize();
     }
@@ -187,8 +191,8 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
         let persisted: ITaskEntity = await this.persistTask(taskEntity);
         if (persisted) {
             // MUST TAKE CARE WITH SUBTASK CORRECT CREATION!
-            this.createSubTask(persisted, TaskType.REVIEWS);
-            //this.createSubTask(persisted, TaskType.REVIEW_COMMENTS);
+            await this.createSubTask(persisted, TaskType.REVIEWS);
+            await this.createSubTask(persisted, TaskType.REVIEW_COMMENTS);
             //this.createSubTask(persisted, TaskType.USERS);
             //this.createSubTask(persisted, TaskType.REPOSITORY);
             this.emit("task:created");
@@ -216,7 +220,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
             if (difference > 0) {
                 console.log(`Going to retry on: ${continueDate}`);
                 setTimeout(this.continue, difference);
-            }else{
+            } else {
                 this.continue();
             }
         }
@@ -301,6 +305,8 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
             this.makeAllApiCall();
         } else if (currentTask.type === TaskType.REVIEWS) {
             this.runReviewsTask();
+        } else if (currentTask.type === TaskType.REVIEW_COMMENTS) {
+            this.makeReviewCommentsApiCall();
         }
     }
 
@@ -323,7 +329,7 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private async processPullRequestPage(page: any): Promise<void> {
         let api: GitHubAPI = this.API;
-        page.reviews = 0; //pff
+        console.log(page.data);
         let pullRequests: IPullRequestEntity[] = PullRequestEntity.toEntityArray(page.data);
         console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
@@ -391,11 +397,12 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
 
     private async processReviewsPage(page: any, pullRequest: IPullRequestEntity): Promise<void> {
         let api: GitHubAPI = this.API;
-        console.log(page);
-        let reviews: IReviewEntity[] = ReviewEntity.toEntityArray(page.data, pullRequest.id);
+        let reviews: IReviewEntity[] = ReviewEntity.toEntityArray(page.data);
         console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
             await this._reviewService.createOrUpdateMultiple(reviews);
+            pullRequest.document.reviews += reviews.length;
+            await this._pullRequestService.createOrUpdate(pullRequest);
             if (api.hasNextPage(page)) {
                 let links: string = page.meta.link;
                 let nextPage: number = GitHubUtil.getNextPageNumber(links);
@@ -411,6 +418,53 @@ export class TaskManagerService extends GitHubService implements ITaskManagerSer
                 } else {
                     this.emit("task:stopped");
                 }
+            }
+        } catch (dbError) {
+            this.emit("taskManager:dberror", dbError);
+            this.emit("task:stopped");
+        }
+    }
+
+    private async makeReviewCommentsApiCall(): Promise<void> {
+        let api: GitHubAPI = this.API;
+        let currentTask: ITaskEntity = this.currentTask;
+        try {
+            let page: any = await api.pullRequests.getCommentsForRepo(<GitHubAPI.PullRequestsGetCommentsForRepoParams>{
+                owner: currentTask.owner,
+                repo: currentTask.repository,
+                per_page: 100,
+                direction: `asc`,
+                page: currentTask.currentPage
+            });
+            this.processReviewCommentsPage(page);
+        } catch (error) {
+            this.handleApiError(error);
+        }
+    }
+
+    private async processReviewCommentsPage(page: any): Promise<void> {
+        let api: GitHubAPI = this.API;
+        let reviewComments: IReviewCommentEntity[] = ReviewCommentEntity.toEntityArray(page.data);
+        console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
+        try {
+            await this._reviewCommentService.createOrUpdateMultiple(reviewComments);
+            if (api.hasNextPage(page)) {
+                let links: string = page.meta.link;
+                let nextPage: number = GitHubUtil.getNextPageNumber(links);
+                this.currentTask.currentPage = nextPage;
+                let persisted: ITaskEntity = await this.persistTask(this.currentTask);
+                if (persisted) {
+                    try {
+                        let nextPage: any = await api.getNextPage(page);
+                        this.processReviewCommentsPage(nextPage);
+                    } catch (error) {
+                        this.handleApiError(error);
+                    }
+                } else {
+                    this.emit("task:stopped");
+                }
+            } else {
+                this.completeCurrentTask();
             }
         } catch (dbError) {
             this.emit("taskManager:dberror", dbError);

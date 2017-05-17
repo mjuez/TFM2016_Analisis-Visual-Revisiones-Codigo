@@ -20,14 +20,6 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
      */
     findOneByPullId(id: number): Promise<IPullRequestEntity>;
 
-    /**
-     * 
-     */
-    findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity>;
-
-    /**
-     * 
-     */
     findSublist(filter: Object, startingFrom?: number): Promise<IPullRequestEntity[]>;
 }
 
@@ -50,52 +42,12 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
     }
 
     /**
-     * Updates a Pull Request from database. Uses its GitHub id.
-     * @param item      Pull Request entity with updated data.
-     * @returns a promise that returns the number of rows affected if resolved.
-     */
-    public update(item: IPullRequestEntity): Promise<number> {
-        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
-            this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
-                if (!error) {
-                    resolve(rowsAffected);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
-    }
-
-    /**
      * Retrieves a Pull Request given its GitHub id.
      * @param id        Pull Request GitHub id.
      * @returns a promise that returns a pull request entity if resolved.
      */
-    public findOneByPullId(id: number): Promise<IPullRequestEntity> {
-        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
-            this.model.findOne({ id: id }, (error, result) => {
-                if (!error) {
-                    let entity: IPullRequestEntity = PullRequestEntity.toEntity(result);
-                    resolve(entity);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
-    }
-
-    public findOne(filter: SinglePullRequestFilter): Promise<IPullRequestEntity> {
-        let promise: Promise<IPullRequestEntity> = new Promise<IPullRequestEntity>((resolve, reject) => {
-            this.retrieve(filter).then((entities) => {
-                resolve(entities[0]);
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-
-        return promise;
+    public async findOneByPullId(id: number): Promise<IPullRequestEntity> {
+        return this.findOne({id: id});
     }
 
     public async findSublist(filter: Object = {}, startingFrom: number = 0): Promise<IPullRequestEntity[]> {
@@ -118,6 +70,10 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
 
     protected convertToEntityArray(documentArray: PullRequestDocument[]): IPullRequestEntity[] {
         return PullRequestEntity.toEntityArray(documentArray);
+    }
+
+    protected updateFilter(item: IPullRequestEntity): Object {
+        return { id: item.id };
     }
 
 }

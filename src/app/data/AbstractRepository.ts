@@ -56,7 +56,14 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param item      Item with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public abstract update(item: T): Promise<number>;
+    public async update(item: T): Promise<number> {
+        try {
+            let result: any = await this.model.update(this.updateFilter(item), item.document);
+            return result.nModified;
+        } catch (error) {
+            return error;
+        }
+    }
 
     /**
      * Retrieves filtered items of a collection from database.
@@ -74,10 +81,22 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
         }
     }
 
+    public async findOne(filter: Object): Promise<T> {
+        try {
+            let document: E = await this.model.findOne(filter);
+            let entity: T = this.convertToEntity(document);
+            return entity;
+        } catch (error) {
+            return error;
+        }
+    }
+
     // template method
     protected abstract convertToEntity(documentArray: E): T;
 
     // template method
     protected abstract convertToEntityArray(documentArray: E[]): T[];
+
+    protected abstract updateFilter(item: T): Object;
 
 }

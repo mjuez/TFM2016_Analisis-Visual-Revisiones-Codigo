@@ -37,40 +37,15 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
         return super.create(entity);
     }
 
-    /**
-     * Updates a Task from database. Uses its _id.
-     * @param item      Task entity with updated data.
-     * @returns a promise that returns the number of rows affected if resolved.
-     */
-    public update(item: ITaskManagerEntity): Promise<number> {
-        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
-            let entity: ITaskManagerEntity = this.prepareToBePersisted(item);
-
-            this.model.update({ _id: entity.document._id }, entity.document, (error, rowsAffected) => {
-                console.log(rowsAffected);
-                if (!error) {
-                    resolve(rowsAffected);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
-    }
-
     public async find(): Promise<ITaskManagerEntity> {
-        let promise: Promise<ITaskManagerEntity> = new Promise<ITaskManagerEntity>((resolve, reject) => {
-            this.model.find()
-                .populate('current_task')
-                .then(async (documents) => {
-                    let document: TaskManagerDocument = documents[0];
-                    let entity: ITaskManagerEntity = TaskManagerEntity.toEntity(document);
-                    resolve(entity);
-                }).catch((error) => {
-                    reject(error);
-                })
-        });
-        return promise;
+        try {
+            let documents: TaskManagerDocument[] = await this.model.find()
+                .populate('current_task');
+            let entity: ITaskManagerEntity = TaskManagerEntity.toEntity(documents[0]);
+            return entity;
+        } catch (error) {
+            throw error;
+        }
     }
 
     protected convertToEntity(document: TaskManagerDocument): ITaskManagerEntity {
@@ -79,6 +54,10 @@ export class TaskManagerRepository extends AbstractRepository<ITaskManagerEntity
 
     protected convertToEntityArray(documentArray: TaskManagerDocument[]): ITaskManagerEntity[] {
         return TaskManagerEntity.toEntityArray(documentArray);
+    }
+
+    protected updateFilter(item: ITaskManagerEntity): Object {
+        return { _id: item.document._id };
     }
 
     private prepareToBePersisted(entity: ITaskManagerEntity): ITaskManagerEntity {

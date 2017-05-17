@@ -33,6 +33,9 @@ export class PullRequestEntity extends AbstractEntity<PullRequestDocument> imple
     public static toEntity(data: any): IPullRequestEntity {
         if (data) {
             let entity: IPullRequestEntity = new PullRequestEntity(<PullRequestDocument>data);
+            if(entity.document.reviews === undefined){
+                entity.document.reviews = 0;
+            }
             return entity;
         }
         return null;

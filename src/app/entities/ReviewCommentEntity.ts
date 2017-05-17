@@ -3,6 +3,7 @@ import { ReviewCommentDocument } from "./documents/ReviewCommentDocument";
 import { ReviewCommentSchema } from "../data/schemas/ReviewCommentSchema";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
+import { GitHubUtil } from "../util/GitHubUtil";
 
 /**
  * IReviewCommentEntity interface. Describes custom functionality for
@@ -33,6 +34,14 @@ export class ReviewCommentEntity extends AbstractEntity<ReviewCommentDocument> i
     public static toEntity(data: any): IReviewCommentEntity {
         if (data) {
             let entity: IReviewCommentEntity = new ReviewCommentEntity(<ReviewCommentDocument>data);
+            if (entity.document.pull_request_number === undefined) {
+                let pullData: any = GitHubUtil.getPullData(entity.document.pull_request_url);
+                entity.document.pull_request_number = pullData.number;
+                entity.document.repository = {
+                    name: pullData.repository,
+                    owner: pullData.owner
+                };
+            }
             return entity;
         }
         return null;

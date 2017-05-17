@@ -20,7 +20,14 @@ export class UserSchema {
             followers: Number,
             following: Number,
             created_at: Date,
-            updated_at: Date
+            updated_at: Date,
+            updated_on_task: mongoose.Schema.Types.ObjectId,
+            pull_request_count: Number,
+            reviews_count: Number,
+            reviews_accepted_count: Number,
+            reviews_commented_count: Number,
+            reviews_requested_changes_count: Number,
+            review_comments_count: Number
         });
 
         return schema;

@@ -16,5 +16,12 @@ export interface UserDocument extends mongoose.Document {
     followers: number,
     following: number,
     created_at: Date,
-    updated_at: Date
+    updated_at: Date,
+    updated_on_task: any,
+    pull_request_count: number,
+    reviews_count: number,
+    reviews_accepted_count: number,
+    reviews_commented_count: number,
+    reviews_requested_changes_count: number,
+    review_comments_count: number
 }
