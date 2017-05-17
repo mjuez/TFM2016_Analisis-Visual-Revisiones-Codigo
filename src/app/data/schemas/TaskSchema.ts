@@ -23,6 +23,7 @@ export class TaskSchema {
             owner: String,
             repository: String,
             current_page: Number,
+            current_local_page: Number,
             parent: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: TaskRepository.COLLECTION_NAME
