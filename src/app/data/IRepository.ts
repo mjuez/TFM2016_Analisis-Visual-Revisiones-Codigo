@@ -30,8 +30,12 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      * @param filter      Document filter.
      * @returns a promise that returns an array of items if resolved.
      */
-    retrieve(filter?: Object): Promise<T[]>;
+    retrieve(filter?: Object, page?: number): Promise<T[]>;
 
     findOne(filter: Object): Promise<T>;
+
+    count(filter?: Object): Promise<number>;
+
+    numPages(filter?: Object): Promise<number>;
 
 }

@@ -2,6 +2,8 @@ import * as mongoose from "mongoose";
 import { IRepository } from "./IRepository";
 import { IEntity } from "../entities/IEntity";
 
+const RESULTS_PER_PAGE: number = 100;
+
 /**
  * Abstract Repository class. Includes all functionality that every
  * repository should have (shared CRUD functionality).
@@ -61,7 +63,7 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
             let result: any = await this.model.update(this.updateFilter(item), item.document);
             return result.nModified;
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 
@@ -71,12 +73,13 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      *                    which retrieves all items of a collection.
      * @returns a promise that returns an array of items if resolved.
      */
-    public async retrieve(filter: Object = {}): Promise<T[]> {
+    public async retrieve(filter: Object = {}, page: number = 1): Promise<T[]> {
         try {
-            let documentArray: E[] = await this.model.find(filter);
+            let skip: number = (page - 1) * RESULTS_PER_PAGE;
+            let documentArray: E[] = await this.model.find(filter).skip(skip).limit(RESULTS_PER_PAGE);
             let entityArray: T[] = this.convertToEntityArray(documentArray);
             return entityArray;
-        }catch(error){
+        } catch (error) {
             throw error;
         }
     }
@@ -87,7 +90,24 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
             let entity: T = this.convertToEntity(document);
             return entity;
         } catch (error) {
-            return error;
+            throw error;
+        }
+    }
+
+    public async count(filter: Object = {}): Promise<number> {
+        try{
+            return await this.model.count(filter);
+        }catch(error){
+            throw error;
+        }
+    }
+
+    public async numPages(filter: Object = {}): Promise<number> {
+        try{
+            let numResults: number = await this.count(filter);
+            return Math.ceil(numResults / RESULTS_PER_PAGE);
+        }catch(error){
+            throw error;
         }
     }
 
