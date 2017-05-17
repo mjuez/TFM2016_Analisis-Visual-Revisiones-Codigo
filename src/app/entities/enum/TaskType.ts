@@ -2,6 +2,8 @@ export enum TaskType {
     ALL,
     REVIEWS,
     REVIEW_COMMENTS,
-    USERS,
+    USERS_PULLS,
+    USERS_REVIEWS,
+    USERS_REVIEW_COMMENTS,
     REPOSITORY
 }
