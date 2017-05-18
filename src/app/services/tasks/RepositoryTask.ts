@@ -37,7 +37,7 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
         let service: IRepositoryService = this._repoService;
         try {
             await this.startTask();
-            let repositoryEntity: IRepositoryEntity = await this.makeApiCall(this.entity.owner, this.entity.repository);
+            let repositoryEntity: IRepositoryEntity = await this.makeApiCall();
             let updatedEntity: IRepositoryEntity = await this.updateStats(repositoryEntity);
             await service.createOrUpdate(updatedEntity);
             await this.completeTask();
@@ -48,11 +48,11 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
         }
     }
 
-    private async makeApiCall(owner: string, repo: string): Promise<IRepositoryEntity> {
+    private async makeApiCall(): Promise<IRepositoryEntity> {
         try {
             let repoData: any = await this.API.repos.get(<GitHubAPI.ReposGetParams>{
-                owner,
-                repo
+                owner: this.entity.owner,
+                repo: this.entity.repository
             });
             return RepositoryEntity.toEntity(repoData.data);
         } catch (error) {
