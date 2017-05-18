@@ -36,7 +36,7 @@ interface Services {
 interface TaskManagerError {
     code: number,
     message: Object
-    continue_at: number
+    continue_at: Date
 }
 
 /**
@@ -168,7 +168,7 @@ export class TaskManagerService implements ITaskManagerService {
         this.error = {
             code: 503,
             message: error,
-            continue_at: date.getTime()
+            continue_at: date
         }
         this.handleError();
     }
@@ -179,13 +179,14 @@ export class TaskManagerService implements ITaskManagerService {
             this.removeWrongTask();
             this.updateCurrentTask();
         } else {
-            let continue_at: number;
+            let continue_at: Date;
             if (error.code === 403) {
-                continue_at = error.headers['x-ratelimit-reset'];
+                let milis: number = (<number>error.headers['x-ratelimit-reset'])*1000;
+                continue_at = new Date(milis);
             } else {
                 let date: Date = new Date();
                 date.setMinutes(date.getMinutes() + 1);
-                continue_at = date.getTime();
+                continue_at = date;
             }
             this.error = {
                 code: error.code,
@@ -209,7 +210,7 @@ export class TaskManagerService implements ITaskManagerService {
     private handleError(): void {
         this.currentTask = null;
         let currentDate: Date = new Date();
-        let continueDate: Date = new Date(this.error.continue_at * 1000);
+        let continueDate: Date = this.error.continue_at;
         let difference: number = continueDate.getTime() - currentDate.getTime() + 10;
         if (difference > 0) {
             console.log(`Going to retry on: ${continueDate}`);
