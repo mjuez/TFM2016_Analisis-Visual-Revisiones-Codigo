@@ -1,37 +1,55 @@
-import { IPersistenceService } from "../services/IPersistenceService";
 import { ITaskEntity, TaskEntity } from "../entities/TaskEntity";
 import { TaskType } from "../entities/enum/TaskType";
-import { ITaskManagerEntity, TaskManagerEntity } from "../entities/TaskManagerEntity";
-import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
-import { IReviewEntity, ReviewEntity } from "../entities/ReviewEntity";
-import { IReviewCommentEntity, ReviewCommentEntity } from "../entities/ReviewCommentEntity";
-import { TaskManagerDocument, TaskManagerError } from "../entities/documents/TaskManagerDocument";
 import { TaskDocument } from "../entities/documents/TaskDocument";
-import { ITaskManagerRepository, TaskManagerRepository } from "../data/TaskManagerRepository";
-import { ITaskRepository, TaskRepository } from "../data/TaskRepository";
-import { PullRequestRepository } from "../data/PullRequestRepository";
-import { IApiService } from "./IApiService";
-import { GitHubService } from "./GitHubService";
-import { GitHubUtil } from "../util/GitHubUtil";
+import { IPullRequestRepository } from "../data/PullRequestRepository";
+import { IReviewRepository } from "../data/ReviewRepository";
+import { IReviewCommentRepository } from "../data/ReviewCommentRepository";
+import { IUserRepository } from "../data/UserRepository";
+import { IRepositoryRepository } from "../data/RepositoryRepository";
+import { ITaskRepository } from "../data/TaskRepository";
+import { IPullRequestService } from "./PullRequestService";
+import { IReviewService } from "./ReviewService";
+import { IReviewCommentService } from "./ReviewCommentService";
+import { IUserService } from "./UserService";
+import { IRepositoryService } from "./RepositoryService";
+import { ITask } from "./tasks/ITask";
+import { TaskFactory } from "./tasks/TaskFactory";
 import { TaskUtil } from "../util/TaskUtil";
-import { IPullRequestService, PullRequestService } from "./PullRequestService";
-import { IReviewService, ReviewService } from "./ReviewService";
-import { IReviewCommentService, ReviewCommentService } from "./ReviewCommentService";
-import * as GitHubAPI from "github";
+
+interface Repositories {
+    pull: IPullRequestRepository,
+    review: IReviewRepository,
+    reviewComment: IReviewCommentRepository,
+    user: IUserRepository,
+    repo: IRepositoryRepository,
+    task: ITaskRepository
+}
+
+interface Services {
+    pull: IPullRequestService,
+    review: IReviewService,
+    reviewComment: IReviewCommentService,
+    user: IUserService,
+    repo: IRepositoryService
+}
+
+interface TaskManagerError {
+    code: number,
+    message: Object
+    continue_at: number
+}
 
 /**
  * ITaskManagerService interface.
  * Describes specific functionality for Task Manager entity.
  * @author Mario Juez <mario@mjuez.com> 
  */
-export interface ITaskManagerService extends IPersistenceService<ITaskManagerEntity>, IApiService<GitHubAPI> {
+export interface ITaskManagerService {
 
-    ready: boolean;
-    currentTask: ITaskEntity;
+    currentTask: ITask;
     error: TaskManagerError;
-    taskManager: ITaskManagerEntity;
-    getPendingTasks(): Promise<ITaskEntity[]>;
-    getAllTasks(): Promise<ITaskEntity[]>;
+    getPendingTasks(page?: number): Promise<ITaskEntity[]>;
+    getAllTasks(page?: number): Promise<ITaskEntity[]>;
     createTask(owner: string, repository: string): Promise<boolean>;
 
 }
@@ -40,495 +58,174 @@ export interface ITaskManagerService extends IPersistenceService<ITaskManagerEnt
  * Task manager services.
  * @author Mario Juez <mario@mjuez.com>
  */
-export class TaskManagerService extends GitHubService implements ITaskManagerService {
+export class TaskManagerService implements ITaskManagerService {
 
-    private _ready: boolean;
+    private readonly _repositories: Repositories;
 
-    private _taskManagerEntity: ITaskManagerEntity;
+    private readonly _services: Services;
 
-    /** Task manager repository. */
-    private readonly _repository: ITaskManagerRepository;
+    private readonly _taskFactory: TaskFactory;
 
-    private readonly _taskRepository: ITaskRepository;
+    private _currentTask: ITask;
 
-    private readonly _pullRequestService: IPullRequestService;
-
-    private readonly _reviewService: IReviewService;
-
-    private readonly _reviewCommentService: IReviewCommentService;
+    private _error: TaskManagerError;
 
     /**
      * Class constructor
      */
-    constructor(
-        repositories: {
-            taskManager: ITaskManagerRepository;
-            task: ITaskRepository;
-        },
-        services: {
-            pullRequest: IPullRequestService;
-            review: IReviewService;
-            reviewComment: IReviewCommentService;
-            //userService: IUserService;
-            //repositoryService: IRepositoryService;
-        }) {
-        super();
-        this._ready = false;
-        this._repository = repositories.taskManager;
-        this._taskRepository = repositories.task;
-        this._pullRequestService = services.pullRequest;
-        this._reviewService = services.review;
-        this._reviewCommentService = services.reviewComment;
-        this.bindEventListeners();
-        this.initialize();
+    constructor(repositories: Repositories, services: Services) {
+        this._repositories = repositories;
+        this._services = services;
+        this._taskFactory = new TaskFactory(repositories, services);
+        this._currentTask = null;
+        this.updateCurrentTask();
     }
 
-    private initialize = async () => {
-        try {
-            let entity: ITaskManagerEntity = await this._repository.find();
-            if (entity) {
-                this._taskManagerEntity = entity;
-            } else {
-                this._taskManagerEntity = this.emptyTaskManagerEntity;
-                await this.persist();
-            }
-            this.start();
-            this._ready = true;
-            this.emit("taskManager:ready");
-        } catch (dbError) {
-            console.log(dbError);
-            this.emit("taskManager:initerror", dbError);
-            // retry after 5 seconds.
-            setTimeout(this.initialize, 5000);
-        }
+    public get currentTask(): ITask {
+        return this._currentTask;
     }
 
-    get taskManager(): ITaskManagerEntity {
-        return this._taskManagerEntity;
+    public set currentTask(task: ITask) {
+        this._currentTask = task;
     }
 
-    get emptyTaskManagerEntity(): ITaskManagerEntity {
-        let document: TaskManagerDocument = <TaskManagerDocument>{
-            current_task: null
-        }
-        return new TaskManagerEntity(document);
+    public get error(): TaskManagerError {
+        return this._error;
     }
 
-    get ready(): boolean {
-        return this._ready;
+    public set error(error: TaskManagerError) {
+        this._error = error;
     }
 
-    get currentTask(): ITaskEntity {
-        return this._taskManagerEntity.currentTask;
+    public async getPendingTasks(page: number = 1): Promise<ITaskEntity[]> {
+        let repository: ITaskRepository = this._repositories.task;
+        return repository.retrievePartial({ is_completed: false }, page);
     }
 
-    set currentTask(task: ITaskEntity) {
-        this._taskManagerEntity.currentTask = task;
-    }
-
-    get error(): TaskManagerError {
-        return this._taskManagerEntity.error;
-    }
-
-    set error(error: TaskManagerError) {
-        this._taskManagerEntity.error = error;
-    }
-
-    private removeError(): void {
-        this.error = undefined;
-    }
-
-    public async createOrUpdate(entity: ITaskManagerEntity): Promise<ITaskManagerEntity> {
-        let repository: ITaskManagerRepository = this._repository;
-        let foundEntity: ITaskManagerEntity = await repository.find();
-        if (foundEntity != null) {
-            try {
-                await repository.update(entity);
-                return entity;
-            } catch (error) {
-                throw error;
-            }
-        } else {
-            try {
-                return await repository.create(entity);
-            } catch (error) {
-                throw error;
-            }
-        }
-    }
-
-    private async createOrUpdateTask(entity: ITaskEntity): Promise<ITaskEntity> {
-        let repository: ITaskRepository = this._taskRepository;
-        let foundEntity: ITaskEntity = await repository.findById(entity.document._id);
-        if (foundEntity != null) {
-            try {
-                await repository.update(entity);
-                return entity;
-            } catch (error) {
-                throw error;
-            }
-        } else {
-            try {
-                return await repository.create(entity);
-            } catch (error) {
-                throw error;
-            }
-        }
-    }
-
-    public async getPendingTasks(): Promise<ITaskEntity[]> {
-        let repository: ITaskRepository = this._taskRepository;
-        return repository.retrieve({ is_completed: false });
-    }
-
-    public async getAllTasks(): Promise<ITaskEntity[]> {
-        let repository: ITaskRepository = this._taskRepository;
-        return repository.retrieve();
+    public async getAllTasks(page: number = 1): Promise<ITaskEntity[]> {
+        let repository: ITaskRepository = this._repositories.task;
+        return repository.retrievePartial({}, page);
     }
 
     public async createTask(owner: string, repository: string): Promise<boolean> {
-        let taskEntity: ITaskEntity = TaskUtil.buildMainTask(owner, repository);
-        let persisted: ITaskEntity = await this.persistTask(taskEntity);
-        if (persisted) {
-            // MUST TAKE CARE WITH SUBTASK CORRECT CREATION!
-            await this.createSubTask(persisted, TaskType.REVIEWS);
-            await this.createSubTask(persisted, TaskType.REVIEW_COMMENTS);
-            //this.createSubTask(persisted, TaskType.USERS);
-            //this.createSubTask(persisted, TaskType.REPOSITORY);
-            this.emit("task:created");
-            return true;
-        }
-
-        return false;
-    }
-
-    private async createSubTask(parent: ITaskEntity, type: TaskType): Promise<boolean> {
-        let subTask: ITaskEntity = TaskUtil.buildSubTask(parent, type);
-        let persisted: ITaskEntity = await this.persistTask(subTask);
-        if (persisted) return true;
-        return false;
-    }
-
-    private handleError() {
-        if (this.hasError()) {
-            let date: Date = new Date();
-            console.log(`[${date}] - error: ${this.error.code}`);
-            let continueDate: Date = new Date(this.error.continue_at * 1000);
-            console.log(continueDate);
-            let difference: number = continueDate.getTime() - date.getTime() + 10;
-            console.log(difference);
-            if (difference > 0) {
-                console.log(`Going to retry on: ${continueDate}`);
-                setTimeout(this.continue, difference);
-            } else {
-                this.continue();
-            }
-        }
-    }
-
-    private start(): void {
-        if (this.hasError()) {
-            this.handleError();
-        } else if (this.currentTask) {
-            this.runCurrentTask();
-        } else {
+        let success: boolean = await this.saveTaskAndSubTasks(owner, repository);
+        if(success && this.currentTask === null){
             this.updateCurrentTask();
         }
+        return success;
     }
 
-    private continue = () => {
-        console.log(`[${new Date()}] - Continuing...`);
-        this.removeError();
-        this.persist();
-        if (this.currentTask) {
-            this.runCurrentTask();
+    private async saveTaskAndSubTasks(owner: string, repository: string): Promise<boolean> {
+        let taskEntity: ITaskEntity = TaskUtil.buildMainTaskEntity(owner, repository);
+        try {
+            let mainTask: ITask = await this._taskFactory.buildTask(taskEntity);
+            let reviewsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REVIEWS);
+            let reviewCommentsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REVIEW_COMMENTS);
+            let usersPullsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_PULLS);
+            let usersReviewsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_REVIEWS);
+            let usersReviewCommentsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_REVIEW_COMMENTS);
+            let repositoryTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REPOSITORY);
+            await this._taskFactory.buildTask(reviewsTaskEntity);
+            await this._taskFactory.buildTask(reviewCommentsTaskEntity);
+            await this._taskFactory.buildTask(usersPullsTaskEntity);
+            await this._taskFactory.buildTask(usersReviewsTaskEntity);
+            await this._taskFactory.buildTask(usersReviewCommentsTaskEntity);
+            await this._taskFactory.buildTask(repositoryTaskEntity);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    private updateCurrentTask = async (): Promise<void> => {
+        if (this.error === undefined) {
+            console.log("updating task...");
+            try {
+                let nextTask: ITaskEntity = await this._repositories.task.findNext();
+                if (nextTask) {
+                    this.currentTask = await this._taskFactory.buildTask(nextTask);
+                    this.bindEventListeners();
+                    this.currentTask.run();
+                } else {
+                    this.currentTask = null;
+                }
+            } catch (error) {
+                this.handleDBError(error);
+            }
         }
     }
 
     private bindEventListeners(): void {
-        this.on("task:finished", this.onTaskFinished);
-        this.on("task:stopped", this.onTaskStopped);
-        this.on("task:created", this.onTaskCreated);
-        this.on("task:updated", this.onTaskUpdated);
-        this.on("taskManager:dberror", this.onDbError);
+        this.currentTask.on("db:error", this.handleDBError);
+        this.currentTask.on("api:error", this.handleAPIError);
+        this.currentTask.on("task:completed", this.updateCurrentTask);
     }
 
-    private onTaskFinished = async () => {
-        this.currentTask = null;
-        await this.persist();
-        this.updateCurrentTask();
-    }
-
-    private onTaskStopped = () => {
-        this.handleError();
-    }
-
-    private onTaskCreated = () => {
-        if (this.isWaitingForTasks()) {
-            this.updateCurrentTask();
-        }
-    }
-
-    private onTaskUpdated = async () => {
-        await this.persist();
-        this.runCurrentTask();
-    }
-
-    private onDbError = (dbError) => {
-        console.log(dbError);
+    private handleDBError = (error): void => {
+        console.log(error);
         let date: Date = new Date();
         date.setMinutes(date.getMinutes() + 1);
         this.error = {
             code: 503,
-            message: dbError,
+            message: error,
             continue_at: date.getTime()
         }
         this.handleError();
     }
 
-    private isWaitingForTasks(): boolean {
-        return !this.currentTask && !this.hasError();
-    }
-
-    private hasError(): boolean {
-        return this._taskManagerEntity.error != undefined;
-    }
-
-    private async runCurrentTask(): Promise<void> {
-        let currentTask: ITaskEntity = this.currentTask;
-        if (!currentTask.startDate) {
-            currentTask.startDate = new Date();
-            let persisted: ITaskEntity = await this.persistTask(currentTask);
-            if (!persisted) return;
-        }
-        if (currentTask.type === TaskType.ALL) {
-            this.makeAllApiCall();
-        } else if (currentTask.type === TaskType.REVIEWS) {
-            this.runReviewsTask();
-        } else if (currentTask.type === TaskType.REVIEW_COMMENTS) {
-            this.makeReviewCommentsApiCall();
-        }
-    }
-
-    private makeAllApiCall(): void {
-        let api: GitHubAPI = this.API;
-        let currentTask: ITaskEntity = this.currentTask;
-        api.pullRequests.getAll(<GitHubAPI.PullRequestsGetAllParams>{
-            owner: currentTask.owner,
-            repo: currentTask.repository,
-            state: `all`,
-            per_page: 100,
-            direction: `asc`,
-            page: currentTask.currentPage
-        }).then((page) => {
-            this.processPullRequestPage(page);
-        }).catch((apiError) => {
-            this.handleApiError(apiError);
-        });
-    }
-
-    private async processPullRequestPage(page: any): Promise<void> {
-        let api: GitHubAPI = this.API;
-        console.log(page.data);
-        let pullRequests: IPullRequestEntity[] = PullRequestEntity.toEntityArray(page.data);
-        console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
-        try {
-            await this._pullRequestService.createOrUpdateMultiple(pullRequests);
-            if (api.hasNextPage(page)) {
-                let links: string = page.meta.link;
-                let nextPage: number = GitHubUtil.getNextPageNumber(links);
-                this.currentTask.currentPage = nextPage;
-                let persisted: ITaskEntity = await this.persistTask(this.currentTask);
-                if (persisted) {
-                    api.getNextPage(page).then((nextPage) => {
-                        this.processPullRequestPage(nextPage);
-                    }).catch((apiError) => {
-                        this.handleApiError(apiError);
-                    });
-                } else {
-                    this.emit("task:stopped");
-                }
-            } else {
-                this.completeCurrentTask();
-            }
-        } catch (dbError) {
-            this.emit("taskManager:dberror", dbError);
-            this.emit("task:stopped");
-        }
-    }
-
-    private async runReviewsTask(): Promise<void> {
-        console.log("running review task");
-        let service: IPullRequestService = this._pullRequestService;
-        let pullRequests: IPullRequestEntity[] = await service.getLocalPullRequests(
-            this.currentTask.owner, this.currentTask.repository, this.currentTask.lastProcessed);
-        for (let i: number = 0; i < pullRequests.length; i++) {
-            if (!this.hasError()) {
-                let pullRequest: IPullRequestEntity = pullRequests[i];
-                await this.makeReviewsApiCall(pullRequest);
-                this.currentTask.currentPage = 1;
-                this.currentTask.lastProcessed = pullRequest.document.number;
-                await this.persistTask(this.currentTask);
-            } else {
-                this.emit("task:stopped");
-                return;
-            }
-        }
-        this.completeCurrentTask();
-    }
-
-    private async makeReviewsApiCall(pullRequest: IPullRequestEntity): Promise<void> {
-        let api: GitHubAPI = this.API;
-        let currentTask: ITaskEntity = this.currentTask;
-        try {
-            let page: any = await api.pullRequests.getReviews(<GitHubAPI.PullRequestsGetReviewsParams>{
-                owner: currentTask.owner,
-                repo: currentTask.repository,
-                number: pullRequest.document.number,
-                per_page: 100,
-                direction: `asc`,
-                page: currentTask.currentPage
-            });
-            this.processReviewsPage(page, pullRequest);
-        } catch (error) {
-            this.handleApiError(error);
-        }
-    }
-
-    private async processReviewsPage(page: any, pullRequest: IPullRequestEntity): Promise<void> {
-        let api: GitHubAPI = this.API;
-        let reviews: IReviewEntity[] = ReviewEntity.toEntityArray(page.data);
-        console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
-        try {
-            await this._reviewService.createOrUpdateMultiple(reviews);
-            pullRequest.document.reviews += reviews.length;
-            await this._pullRequestService.createOrUpdate(pullRequest);
-            if (api.hasNextPage(page)) {
-                let links: string = page.meta.link;
-                let nextPage: number = GitHubUtil.getNextPageNumber(links);
-                this.currentTask.currentPage = nextPage;
-                let persisted: ITaskEntity = await this.persistTask(this.currentTask);
-                if (persisted) {
-                    try {
-                        let nextPage: any = await api.getNextPage(page);
-                        this.processReviewsPage(nextPage, pullRequest);
-                    } catch (error) {
-                        this.handleApiError(error);
-                    }
-                } else {
-                    this.emit("task:stopped");
-                }
-            }
-        } catch (dbError) {
-            this.emit("taskManager:dberror", dbError);
-            this.emit("task:stopped");
-        }
-    }
-
-    private async makeReviewCommentsApiCall(): Promise<void> {
-        let api: GitHubAPI = this.API;
-        let currentTask: ITaskEntity = this.currentTask;
-        try {
-            let page: any = await api.pullRequests.getCommentsForRepo(<GitHubAPI.PullRequestsGetCommentsForRepoParams>{
-                owner: currentTask.owner,
-                repo: currentTask.repository,
-                per_page: 100,
-                direction: `asc`,
-                page: currentTask.currentPage
-            });
-            this.processReviewCommentsPage(page);
-        } catch (error) {
-            this.handleApiError(error);
-        }
-    }
-
-    private async processReviewCommentsPage(page: any): Promise<void> {
-        let api: GitHubAPI = this.API;
-        let reviewComments: IReviewCommentEntity[] = ReviewCommentEntity.toEntityArray(page.data);
-        console.log(`[${new Date()}] - Getting page ${this.currentTask.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
-        try {
-            await this._reviewCommentService.createOrUpdateMultiple(reviewComments);
-            if (api.hasNextPage(page)) {
-                let links: string = page.meta.link;
-                let nextPage: number = GitHubUtil.getNextPageNumber(links);
-                this.currentTask.currentPage = nextPage;
-                let persisted: ITaskEntity = await this.persistTask(this.currentTask);
-                if (persisted) {
-                    try {
-                        let nextPage: any = await api.getNextPage(page);
-                        this.processReviewCommentsPage(nextPage);
-                    } catch (error) {
-                        this.handleApiError(error);
-                    }
-                } else {
-                    this.emit("task:stopped");
-                }
-            } else {
-                this.completeCurrentTask();
-            }
-        } catch (dbError) {
-            this.emit("taskManager:dberror", dbError);
-            this.emit("task:stopped");
-        }
-    }
-
-    private handleApiError(apiError: any): void {
-        this.error = {
-            code: apiError.code,
-            message: apiError.message,
-            continue_at: null
-        }
-        if (apiError.code === 403) {
-            this.error.continue_at = apiError.headers['x-ratelimit-reset'];
+    private handleAPIError = (error): void => {
+        console.log(error);
+        if (error.code === 404) {
+            this.removeWrongTask();
+            this.updateCurrentTask();
         } else {
-            let date: Date = new Date();
-            date.setMinutes(date.getMinutes() + 1);
-            this.error.continue_at = date.getTime();
-        }
-        this.persist();
-        this.emit("task:stopped");
-    }
-
-    private async completeCurrentTask(): Promise<void> {
-        console.log("completing task...");
-        this.currentTask.isCompleted = true;
-        this.currentTask.endDate = new Date();
-        await this.persistTask(this.currentTask);
-        this.emit("task:finished");
-    }
-
-    private async updateCurrentTask(): Promise<void> {
-        console.log("updating task...");
-        try {
-            let nextTask: ITaskEntity = await this._taskRepository.findNext();
-            if (nextTask) {
-                this.currentTask = nextTask;
-                this.emit("task:updated");
+            let continue_at: number;
+            if (error.code === 403) {
+                continue_at = error.headers['x-ratelimit-reset'];
             } else {
-                console.log("no task...");
+                let date: Date = new Date();
+                date.setMinutes(date.getMinutes() + 1);
+                continue_at = date.getTime();
             }
-        } catch (error) {
-            this.emit("taskManager:dberror", error);
+            this.error = {
+                code: error.code,
+                message: error.message,
+                continue_at: continue_at
+            }
+            this.handleError();
         }
     }
 
-    private async persist(): Promise<boolean> {
+    private async removeWrongTask(): Promise<void> {
+        let taskRepo: ITaskRepository = this._repositories.task;
         try {
-            this._taskManagerEntity = await this.createOrUpdate(this._taskManagerEntity);
-            return true;
+            await taskRepo.remove({ _id: this.currentTask.entity.document._id });
+            await taskRepo.remove({ parent: this.currentTask.entity.document._id });
         } catch (error) {
-            this.emit("taskManager:dberror", error);
+            this.handleDBError(error);
         }
-        return false;
     }
 
-    private async persistTask(taskEntity: ITaskEntity): Promise<ITaskEntity> {
-        try {
-            return await this.createOrUpdateTask(taskEntity);
-        } catch (error) {
-            this.emit("taskManager:dberror", error);
+    private handleError(): void {
+        this.currentTask = null;
+        let currentDate: Date = new Date();
+        let continueDate: Date = new Date(this.error.continue_at * 1000);
+        let difference: number = continueDate.getTime() - currentDate.getTime() + 10;
+        if (difference > 0) {
+            console.log(`Going to retry on: ${continueDate}`);
+            setTimeout(this.continue, difference);
+        } else {
+            this.continue();
         }
-        return null;
     }
 
+    private continue = (): void => {
+        console.log(`[${new Date()}] - Continuing...`);
+        this.removeError();
+        this.updateCurrentTask();
+    }
+
+    private removeError(): void {
+        this.error = undefined;
+    }
 }
