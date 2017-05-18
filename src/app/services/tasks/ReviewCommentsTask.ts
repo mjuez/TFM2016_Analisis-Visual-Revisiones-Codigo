@@ -13,9 +13,9 @@ interface Repositories {
     reviewComment: IReviewCommentRepository
 }
 
-export interface IReviewCommentTask extends ITask { }
+export interface IReviewCommentsTask extends ITask { }
 
-export class ReviewCommentTask extends GitHubTask implements IReviewCommentTask {
+export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTask {
 
     private readonly _repositories: Repositories;
 
