@@ -18,7 +18,7 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
      * @param id        Pull Request GitHub id.
      * @returns a promise that returns a pull request entity if resolved.
      */
-    findOneByPullId(id: number): Promise<IPullRequestEntity>;
+    findById(id: number): Promise<IPullRequestEntity>;
 }
 
 /**
@@ -44,7 +44,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @param id        Pull Request GitHub id.
      * @returns a promise that returns a pull request entity if resolved.
      */
-    public async findOneByPullId(id: number): Promise<IPullRequestEntity> {
+    public async findById(id: number): Promise<IPullRequestEntity> {
         return this.findOne({ id: id });
     }
 
