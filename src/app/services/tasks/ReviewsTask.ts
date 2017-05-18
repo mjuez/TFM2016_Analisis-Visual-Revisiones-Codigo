@@ -79,8 +79,9 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
                 direction: `asc`,
                 page: this.entity.currentPage
             });
-            this.processPage(page);
+            await this.processPage(page);
         } catch (error) {
+            this.emitError(error);
             throw error;
         }
     }
@@ -91,22 +92,16 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
         console.log(`[${new Date()}] - Getting page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
             await this._reviewService.createOrUpdateMultiple(reviews);
-            let links: string = page.meta.link;
-            let nextPage: number = GitHubUtil.getNextPageNumber(links);
-            this.entity.currentPage = nextPage;
-            await this.persist();
-        } catch (error) {
-            this.emit("db:error", error);
-            throw error;
-        }
-        if (api.hasNextPage(page)) {
-            try {
+            if (api.hasNextPage(page)) {
+                let links: string = page.meta.link;
+                let nextPageNumber: number = GitHubUtil.getNextPageNumber(links);
+                this.entity.currentPage = nextPageNumber;
+                await this.persist();
                 let nextPage: any = await api.getNextPage(page);
                 await this.processPage(nextPage);
-            }catch(error){
-                this.emit("api:error", error);
-                throw error;
             }
+        } catch (error) {
+            throw error;
         }
     }
 
@@ -128,5 +123,5 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
             this.emit("db:error", error);
             throw error;
         }
-    }  
+    }
 }

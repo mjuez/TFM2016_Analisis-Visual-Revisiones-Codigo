@@ -37,6 +37,7 @@ export abstract class AbstractUserTask extends GitHubTask {
             }
             await this.updateStats(username);
         } catch (error) {
+            this.emitError(error);
             throw error;
         }
     }
@@ -46,7 +47,6 @@ export abstract class AbstractUserTask extends GitHubTask {
             let userData: any = await this.API.users.getForUser(<GitHubAPI.Username>{ username });
             return UserEntity.toEntity(userData.data);
         } catch (error) {
-            this.emit("api:error", error);
             throw error;
         }
     }

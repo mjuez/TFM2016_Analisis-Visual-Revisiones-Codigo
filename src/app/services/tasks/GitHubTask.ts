@@ -60,9 +60,9 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     public async setEntity(entity: ITaskEntity): Promise<void> {
         this._entity = entity;
-        try{
+        try {
             await this.persist();
-        }catch(error){
+        } catch (error) {
             throw error;
         }
     }
@@ -99,6 +99,15 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
             this.emit("task:completed");
         } catch (error) {
             throw error;
+        }
+    }
+
+    protected emitError(error): void {
+        let isApiError: boolean = 'code' in error;
+        if (isApiError) {
+            this.emit("api:error", error);
+        } else {
+            this.emit("db:error", error);
         }
     }
 

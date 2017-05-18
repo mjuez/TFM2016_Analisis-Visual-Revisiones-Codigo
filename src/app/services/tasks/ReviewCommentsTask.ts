@@ -58,21 +58,16 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
         console.log(`[${new Date()}] - Getting page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
             await this._reviewCommentService.createOrUpdateMultiple(reviewComments);
-            let links: string = page.meta.link;
-            let nextPage: number = GitHubUtil.getNextPageNumber(links);
-            this.entity.currentPage = nextPage;
-            await this.persist();
-        } catch (error) {
-            this.emit("db:error", error);
-            return;
-        }
-        if (api.hasNextPage(page)) {
-            try {
+            if (api.hasNextPage(page)) {
+                let links: string = page.meta.link;
+                let nextPageNumber: number = GitHubUtil.getNextPageNumber(links);
+                this.entity.currentPage = nextPageNumber;
+                await this.persist();
                 let nextPage: any = await api.getNextPage(page);
                 await this.processPage(nextPage);
-            }catch(error){
-                throw error;
             }
+        } catch (error) {
+            this.emitError(error);
         }
     }
 }
