@@ -13,9 +13,9 @@ interface Repositories {
     pull: IPullRequestRepository
 }
 
-export interface IRepositoryTask extends ITask { }
+export interface IMainTask extends ITask { }
 
-export class RepositoryTask extends GitHubTask implements IRepositoryTask {
+export class MainTask extends GitHubTask implements IMainTask {
 
     private readonly _repositories: Repositories;
 
