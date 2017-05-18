@@ -60,6 +60,7 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
                 await this.makeApiCall(pull.document.number);
                 await this.updateStats(pull);
                 this.entity.lastProcessed = pull.document.number;
+                this.entity.currentPage = 1;
                 await this.persist();
             } catch (error) {
                 return false;

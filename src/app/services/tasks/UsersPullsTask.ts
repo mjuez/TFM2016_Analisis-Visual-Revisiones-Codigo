@@ -57,6 +57,7 @@ export class UsersPullsTask extends AbstractUserTask implements IUsersPullsTask 
                 await this.processUser(pull.document.base.user.login);
                 await this.processUser(pull.document.head.user.login);
                 this.entity.lastProcessed = pull.document.number;
+                this.entity.currentPage = 1;
                 await this.persist();
             } catch (error) {
                 return false;

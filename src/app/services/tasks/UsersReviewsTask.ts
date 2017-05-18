@@ -55,6 +55,7 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
             try {
                 await this.processUser(review.document.user.login);
                 this.entity.lastProcessed = review.document.id;
+                this.entity.currentPage = 1;
                 await this.persist();
             } catch (error) {
                 return false;
