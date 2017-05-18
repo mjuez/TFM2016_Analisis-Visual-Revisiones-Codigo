@@ -39,7 +39,7 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
             };
             let numPages: number = await reviewCommentRepo.numPages(filter, startingFrom);
             for (let page: number = 1; page <= numPages; page++) {
-                let reviewComments: IReviewCommentEntity[] = await reviewCommentRepo.retrievePartial(filter, startingFrom, page);
+                let reviewComments: IReviewCommentEntity[] = await reviewCommentRepo.retrievePartial(filter, page, startingFrom);
                 let success: boolean = await this.processReviewComments(reviewComments);
                 if (!success) return;
             }
@@ -67,11 +67,7 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
     protected async updateStats(username: string): Promise<void> {
         let userRepo: IUserRepository = this._repos.user;
         let reviewCommentRepo: IReviewCommentRepository = this._repos.reviewComment;
-        let filter: Object = {
-            user: {
-                login: username
-            }
-        }
+        let filter: Object = { "user.login": username };
         try {
             let user: IUserEntity = await userRepo.findByLogin(username);
             let reviewCommentsCount: number = await reviewCommentRepo.count(filter);

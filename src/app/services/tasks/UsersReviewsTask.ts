@@ -39,7 +39,7 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
             };
             let numPages: number = await reviewRepo.numPages(filter, startingFrom);
             for (let page: number = 1; page <= numPages; page++) {
-                let reviews: IReviewEntity[] = await reviewRepo.retrievePartial(filter, startingFrom, page);
+                let reviews: IReviewEntity[] = await reviewRepo.retrievePartial(filter, page, startingFrom);
                 let success: boolean = await this.processReviews(reviews);
                 if (!success) return;
             }
@@ -82,11 +82,7 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
 
     private async getStats(username: string, state: string = null): Promise<number> {
         let reviewRepo: IReviewRepository = this._repos.review;
-        let filter: Object = {
-            user: {
-                login: username
-            }
-        }
+        let filter: Object = { "user.login": username };
         if (state != null) filter["state"] = state;
         try {
             let reviewsCount: number = await reviewRepo.count(filter);

@@ -69,11 +69,7 @@ export class UsersPullsTask extends AbstractUserTask implements IUsersPullsTask 
     protected async updateStats(username: string): Promise<void> {
         let pullRepo: IPullRequestRepository = this._repos.pull;
         let userRepo: IUserRepository = this._repos.user;
-        let filter: Object = {
-            user: {
-                login: username
-            }
-        }
+        let filter: Object = { "user.login": username };
         try {
             let user: IUserEntity = await userRepo.findByLogin(username);
             let pullRequestCount: number = await pullRepo.count(filter);
