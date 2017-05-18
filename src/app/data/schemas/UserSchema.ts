@@ -22,13 +22,34 @@ export class UserSchema {
             created_at: Date,
             updated_at: Date,
             updated_on_task: mongoose.Schema.Types.ObjectId,
-            pull_request_count: Number,
-            reviews_count: Number,
-            reviews_approved_count: Number,
-            reviews_commented_count: Number,
-            reviews_changes_requested_count: Number,
-            reviews_dismissed_count: Number,
-            review_comments_count: Number
+            pull_request_count: {
+                type: Number,
+                default: 0
+            },
+            reviews_count: {
+                type: Number,
+                default: 0
+            },
+            reviews_approved_count: {
+                type: Number,
+                default: 0
+            },
+            reviews_commented_count: {
+                type: Number,
+                default: 0
+            },
+            reviews_changes_requested_count: {
+                type: Number,
+                default: 0
+            },
+            reviews_dismissed_count: {
+                type: Number,
+                default: 0
+            },
+            review_comments_count: {
+                type: Number,
+                default: 0
+            }
         });
 
         return schema;

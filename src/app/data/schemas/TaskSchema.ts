@@ -22,7 +22,10 @@ export class TaskSchema {
             end_date: Date,
             owner: String,
             repository: String,
-            current_page: Number,
+            current_page: {
+                type: Number,
+                default: 1
+            },
             parent: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: TaskRepository.COLLECTION_NAME
