@@ -43,8 +43,6 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
             await this.completeTask();
         } catch (error) {
             this.emit("db:error", error);
-            this.emit("task:stopped");
-            return;
         }
     }
 
@@ -57,7 +55,6 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
             return RepositoryEntity.toEntity(repoData.data);
         } catch (error) {
             this.emit("api:error", error);
-            this.emit("task:stopped");
         }
     }
 

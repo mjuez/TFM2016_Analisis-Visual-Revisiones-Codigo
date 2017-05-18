@@ -86,7 +86,6 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
         this.entity.startDate = new Date();
         try {
             this.persist();
-            this.emit("task:started");
         } catch (error) {
             throw error;
         }

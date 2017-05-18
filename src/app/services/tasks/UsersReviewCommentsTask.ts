@@ -41,16 +41,11 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
             for (let page: number = 1; page <= numPages; page++) {
                 let reviewComments: IReviewCommentEntity[] = await reviewCommentRepo.retrievePartial(filter, startingFrom, page);
                 let success: boolean = await this.processReviewComments(reviewComments);
-                if (!success) {
-                    this.emit("task:stopped");
-                    return;
-                }
+                if (!success) return;
             }
             await this.completeTask();
         } catch (error) {
             this.emit("db:error", error);
-            this.emit("task:stopped");
-            return;
         }
     }
 

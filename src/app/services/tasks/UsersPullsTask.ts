@@ -41,16 +41,11 @@ export class UsersPullsTask extends AbstractUserTask implements IUsersPullsTask 
             for (let page: number = 1; page <= numPages; page++) {
                 let pulls: IPullRequestEntity[] = await pullRepo.retrievePartial(filter, page, startingFrom);
                 let success: boolean = await this.processPullRequests(pulls);
-                if (!success) {
-                    this.emit("task:stopped");
-                    return;
-                }
+                if (!success) return;
             }
             await this.completeTask();
         } catch (error) {
             this.emit("db:error", error);
-            this.emit("task:stopped");
-            return;
         }
     }
 

@@ -34,8 +34,6 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
             await this.completeTask();
         } catch (error) {
             this.emit("db:error", error);
-            this.emit("task:stopped");
-            return;
         }
     }
 
@@ -51,7 +49,6 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
             await this.processPage(page);
         } catch (error) {
             this.emit("api:error", error);
-            this.emit("task:stopped");
         }
     }
 
@@ -67,7 +64,6 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
             await this.persist();
         } catch (error) {
             this.emit("db:error", error);
-            this.emit("task:stopped");
             return;
         }
         if (api.hasNextPage(page)) {
