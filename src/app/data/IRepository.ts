@@ -32,10 +32,12 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      */
     retrieve(filter?: Object, page?: number): Promise<T[]>;
 
+    retrievePartial(filter?: Object, page?: number, startingFrom?: number): Promise<T[]>;
+
     findOne(filter: Object): Promise<T>;
 
-    count(filter?: Object): Promise<number>;
+    count(filter?: Object): mongoose.Query<number>;
 
-    numPages(filter?: Object): Promise<number>;
+    numPages(filter?: Object, startingFrom?: number): Promise<number>;
 
 }
