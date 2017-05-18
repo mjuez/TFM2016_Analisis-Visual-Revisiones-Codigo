@@ -4,7 +4,7 @@ import { TaskType } from "../entities/enum/TaskType";
 
 export class TaskUtil {
 
-    public static buildMainTask(owner: string, repository: string): ITaskEntity {
+    public static buildMainTaskEntity(owner: string, repository: string): ITaskEntity {
         let document: TaskDocument = <TaskDocument>{
             type: TaskType.ALL,
             is_completed: false,
@@ -19,7 +19,7 @@ export class TaskUtil {
         return taskEntity;
     }
 
-    public static buildSubTask(parentTask: ITaskEntity, taskType: TaskType): ITaskEntity {
+    public static buildSubTaskEntity(parentTask: ITaskEntity, taskType: TaskType): ITaskEntity {
         let document: TaskDocument = <TaskDocument>{
             type: taskType,
             is_completed: false,
