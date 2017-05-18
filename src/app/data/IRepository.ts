@@ -40,4 +40,6 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
 
     numPages(filter?: Object, startingFrom?: number): Promise<number>;
 
+    remove(filter?: Object): Promise<void>;
+
 }

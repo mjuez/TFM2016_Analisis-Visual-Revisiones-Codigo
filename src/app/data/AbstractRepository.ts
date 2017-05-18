@@ -129,6 +129,14 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
         return this.model.count(filter);
     }
 
+    public async remove(filter: Object = {}): Promise<void> {
+        try{
+            await this.model.remove(filter);
+        }catch(error){
+            throw error;
+        }
+    }
+
     // template method
     protected abstract convertToEntity(documentArray: E): T;
 
