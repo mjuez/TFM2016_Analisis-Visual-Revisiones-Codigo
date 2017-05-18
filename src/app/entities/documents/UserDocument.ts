@@ -20,8 +20,9 @@ export interface UserDocument extends mongoose.Document {
     updated_on_task: any,
     pull_request_count: number,
     reviews_count: number,
-    reviews_accepted_count: number,
+    reviews_approved_count: number,
     reviews_commented_count: number,
-    reviews_requested_changes_count: number,
+    reviews_changes_requested_count: number,
+    reviews_dismissed_count: number,
     review_comments_count: number
 }

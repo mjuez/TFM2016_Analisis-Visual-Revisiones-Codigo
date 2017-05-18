@@ -24,9 +24,10 @@ export class UserSchema {
             updated_on_task: mongoose.Schema.Types.ObjectId,
             pull_request_count: Number,
             reviews_count: Number,
-            reviews_accepted_count: Number,
+            reviews_approved_count: Number,
             reviews_commented_count: Number,
-            reviews_requested_changes_count: Number,
+            reviews_changes_requested_count: Number,
+            reviews_dismissed_count: Number,
             review_comments_count: Number
         });
 
