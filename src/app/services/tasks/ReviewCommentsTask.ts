@@ -21,8 +21,8 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
 
     private readonly _reviewCommentService: IReviewCommentService;
 
-    constructor(entity: ITaskEntity, repositories: Repositories, reviewCommentService: IReviewCommentService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(entity, repositories.task, api, apiAuth);
+    constructor(repositories: Repositories, reviewCommentService: IReviewCommentService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repositories.task, api, apiAuth);
         this._reviewCommentService = reviewCommentService;
         this._repositories = repositories;
     }

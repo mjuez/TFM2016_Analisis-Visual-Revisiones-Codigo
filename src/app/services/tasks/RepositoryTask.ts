@@ -27,8 +27,8 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
 
     private readonly _repoService: IRepositoryService;
 
-    constructor(entity: ITaskEntity, repositories: Repositories, repoService: IRepositoryService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(entity, repositories.task, api, apiAuth);
+    constructor(repositories: Repositories, repoService: IRepositoryService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repositories.task, api, apiAuth);
         this._repoService = repoService;
         this._repositories = repositories;
     }

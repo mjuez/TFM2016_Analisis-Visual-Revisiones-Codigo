@@ -40,14 +40,13 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
      * @param api       optional GitHub API wrapper dependency injection.
      * @param apiAuth   optional GitHub API authorization.
      */
-    constructor(entity: ITaskEntity, repository: ITaskRepository,
+    constructor(repository: ITaskRepository,
         api: GitHubAPI = new GitHubAPI(GitHubTask._API_OPTIONS),
         apiAuth: GitHubAPI.Auth = GitHubTask._API_AUTHENTICATION) {
 
         super();
         this._api = api;
         this._api.authenticate(apiAuth);
-        this._entity = entity;
     }
 
     /** Gets the GitHub API wrapper. */
@@ -57,6 +56,15 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     public get entity(): ITaskEntity {
         return this._entity;
+    }
+
+    public async setEntity(entity: ITaskEntity): Promise<void> {
+        this._entity = entity;
+        try{
+            this.persist();
+        }catch(error){
+            throw error;
+        }
     }
 
     public abstract async run(): Promise<void>;

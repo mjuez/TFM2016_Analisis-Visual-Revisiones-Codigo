@@ -42,32 +42,37 @@ export class TaskFactory {
     private readonly _repositories: Repositories;
 
     private readonly _services: Services;
-    
-    constructor(repositories: Repositories, services: Services){
+
+    constructor(repositories: Repositories, services: Services) {
         this._repositories = repositories;
         this._services = services;
     }
 
-    public buildTask(entity: ITaskEntity): ITask {
+    public async buildTask(entity: ITaskEntity): Promise<ITask> {
         let task: ITask = null;
 
-        if(entity.type === TaskType.ALL){
-            task = new MainTask(entity, this._repositories, this._services.pull);
-        }else if(entity.type === TaskType.REPOSITORY){
-            task = new RepositoryTask(entity, this._repositories, this._services.repo);
-        }else if(entity.type === TaskType.REVIEW_COMMENTS){
-            task = new ReviewCommentsTask(entity, this._repositories, this._services.reviewComment);
-        }else if(entity.type === TaskType.REVIEWS){
-            task = new ReviewsTask(entity, this._repositories, this._services.review);
-        }else if(entity.type === TaskType.USERS_PULLS){
-            task = new UsersPullsTask(entity, this._repositories, this._services.user);
-        }else if(entity.type === TaskType.USERS_REVIEW_COMMENTS){
-            task = new UsersReviewCommentsTask(entity, this._repositories, this._services.user);
-        }else if(entity.type === TaskType.USERS_REVIEWS){
-            task = new UsersReviewsTask(entity, this._repositories, this._services.user);
+        if (entity.type === TaskType.ALL) {
+            task = new MainTask(this._repositories, this._services.pull);
+        } else if (entity.type === TaskType.REPOSITORY) {
+            task = new RepositoryTask(this._repositories, this._services.repo);
+        } else if (entity.type === TaskType.REVIEW_COMMENTS) {
+            task = new ReviewCommentsTask(this._repositories, this._services.reviewComment);
+        } else if (entity.type === TaskType.REVIEWS) {
+            task = new ReviewsTask(this._repositories, this._services.review);
+        } else if (entity.type === TaskType.USERS_PULLS) {
+            task = new UsersPullsTask(this._repositories, this._services.user);
+        } else if (entity.type === TaskType.USERS_REVIEW_COMMENTS) {
+            task = new UsersReviewCommentsTask(this._repositories, this._services.user);
+        } else if (entity.type === TaskType.USERS_REVIEWS) {
+            task = new UsersReviewsTask(this._repositories, this._services.user);
         }
 
-        return task;
+        try {
+            await task.setEntity(entity);
+            return task;
+        } catch (error) {
+            throw error;
+        }
     }
 
 }

@@ -17,8 +17,8 @@ export abstract class AbstractUserTask extends GitHubTask {
     
     protected readonly _userService: IUserService;
 
-    constructor(entity: ITaskEntity, repositories: Repositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(entity, repositories.task, api, apiAuth);
+    constructor(repositories: Repositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repositories.task, api, apiAuth);
         this._userService = userService;
         this._repositories = repositories;
     }

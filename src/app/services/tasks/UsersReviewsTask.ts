@@ -21,8 +21,8 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
 
     private readonly _repos: Repositories;
 
-    constructor(entity: ITaskEntity, repos: Repositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(entity, { task: repos.task, user: repos.user }, userService, api, apiAuth);
+    constructor(repos: Repositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super({ task: repos.task, user: repos.user }, userService, api, apiAuth);
         this._repos = repos;
     }
 

@@ -21,8 +21,8 @@ export class MainTask extends GitHubTask implements IMainTask {
 
     private readonly _pullService: IPullRequestService;
 
-    constructor(entity: ITaskEntity, repositories: Repositories, pullService: IPullRequestService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(entity, repositories.task, api, apiAuth);
+    constructor(repositories: Repositories, pullService: IPullRequestService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repositories.task, api, apiAuth);
         this._pullService = pullService;
         this._repositories = repositories;
     }

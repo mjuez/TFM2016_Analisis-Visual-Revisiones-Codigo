@@ -28,8 +28,8 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
 
     private readonly _reviewService: IReviewService;
 
-    constructor(entity: ITaskEntity, repos: Repositories, reviewService: IReviewService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(entity, repos.task, api, apiAuth);
+    constructor(repos: Repositories, reviewService: IReviewService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repos.task, api, apiAuth);
         this._repositories = repos;
         this._reviewService = reviewService;
     }
