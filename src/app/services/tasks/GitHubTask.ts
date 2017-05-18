@@ -43,8 +43,8 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
     constructor(repository: ITaskRepository,
         api: GitHubAPI = new GitHubAPI(GitHubTask._API_OPTIONS),
         apiAuth: GitHubAPI.Auth = GitHubTask._API_AUTHENTICATION) {
-
         super();
+        this._repository = repository;
         this._api = api;
         this._api.authenticate(apiAuth);
     }
@@ -61,7 +61,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
     public async setEntity(entity: ITaskEntity): Promise<void> {
         this._entity = entity;
         try{
-            this.persist();
+            await this.persist();
         }catch(error){
             throw error;
         }
@@ -85,7 +85,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
     protected async startTask(): Promise<void> {
         this.entity.startDate = new Date();
         try {
-            this.persist();
+            await this.persist();
         } catch (error) {
             throw error;
         }
@@ -93,8 +93,9 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     protected async completeTask(): Promise<void> {
         this.entity.endDate = new Date();
+        this.entity.isCompleted = true;
         try {
-            this.persist();
+            await this.persist();
             this.emit("task:completed");
         } catch (error) {
             throw error;
