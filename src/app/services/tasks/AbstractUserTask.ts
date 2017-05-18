@@ -33,7 +33,7 @@ export abstract class AbstractUserTask extends GitHubTask {
             if (foundUser === null) {
                 let user: IUserEntity = await this.makeApiCall(username);
                 user.document.updated_on_task = this.entity.parentTask.document._id;
-                this._userService.createOrUpdate(user);
+                await this._userService.createOrUpdate(user);
             }
             await this.updateStats(username);
         } catch (error) {
