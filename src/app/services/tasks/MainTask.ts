@@ -2,7 +2,6 @@ import { ITask } from "./ITask";
 import { GitHubTask } from "./GitHubTask";
 import { ITaskRepository } from "../../data/TaskRepository";
 import { IPullRequestRepository } from "../../data/PullRequestRepository";
-import { RepositoryPullRequestFilter, PullRequestFilterFactory } from "../../data/filters/PullRequestFilter";
 import { ITaskEntity } from "../../entities/TaskEntity";
 import { IPullRequestEntity, PullRequestEntity } from "../../entities/PullRequestEntity";
 import { IPullRequestService } from "../../services/PullRequestService";
