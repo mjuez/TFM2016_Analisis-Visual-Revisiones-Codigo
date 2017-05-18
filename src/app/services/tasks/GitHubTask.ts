@@ -75,7 +75,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
             if (foundEntity != null) {
                 await this._repository.update(this._entity);
             } else {
-                await this._repository.create(this._entity);
+                this._entity = await this._repository.create(this._entity);
             }
         } catch (error) {
             throw error;
