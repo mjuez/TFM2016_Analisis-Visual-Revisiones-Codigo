@@ -68,6 +68,14 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
         }
     }
 
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<ITaskEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, null, null); // will work? dont know
+    }
+
+    public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
+        return this._numPages(filter, startingFrom, null, null); // will work? dont know
+    }
+
     protected convertToEntity(document: TaskDocument): ITaskEntity {
         return TaskEntity.toEntity(document);
     }

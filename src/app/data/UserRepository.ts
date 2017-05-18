@@ -65,6 +65,14 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
         return this.findOne({ login: login });
     }
 
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IUserEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    }
+
+    public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
+        return this._numPages(filter, startingFrom, 'id', { id: 1 });
+    }
+
     protected convertToEntity(document: UserDocument): IUserEntity {
         return UserEntity.toEntity(document);
     }

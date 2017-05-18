@@ -27,6 +27,8 @@ export interface IReviewRepository extends IRepository<IReviewEntity, ReviewDocu
      */
     findById(id: number): Promise<IReviewEntity>;
 
+    findByRepository(name: string, owner: string, startingFrom?: number, page?: number): Promise<IReviewEntity[]>;
+
 }
 
 /**
@@ -63,6 +65,22 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
      */
     public async findById(id: number): Promise<IReviewEntity> {
         return this.findOne({ id: id });
+    }
+
+    public async findByRepository(name: string, owner: string, page: number = 1, startingFrom: number = 0): Promise<IReviewEntity[]> {
+        let repository: Object = {
+            name,
+            owner
+        }
+        return this.retrievePartial({ repository: repository }, page, startingFrom);
+    }
+
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IReviewEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    }
+
+    public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
+        return this._numPages(filter, startingFrom, 'id', { id: 1 });
     }
 
     protected convertToEntity(document: ReviewDocument): IReviewEntity {

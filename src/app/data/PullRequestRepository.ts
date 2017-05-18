@@ -19,8 +19,6 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
      * @returns a promise that returns a pull request entity if resolved.
      */
     findOneByPullId(id: number): Promise<IPullRequestEntity>;
-
-    findSublist(filter: Object, startingFrom?: number): Promise<IPullRequestEntity[]>;
 }
 
 /**
@@ -47,21 +45,15 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @returns a promise that returns a pull request entity if resolved.
      */
     public async findOneByPullId(id: number): Promise<IPullRequestEntity> {
-        return this.findOne({id: id});
+        return this.findOne({ id: id });
     }
 
-    public async findSublist(filter: Object = {}, startingFrom: number = 0): Promise<IPullRequestEntity[]> {
-        try {
-            let documentArray: PullRequestDocument[] =
-                await this.model.find(filter)
-                    .where('number')
-                    .gt(startingFrom)
-                    .sort({ number: 1 });
-            let pullRequestArray: IPullRequestEntity[] = this.convertToEntityArray(documentArray);
-            return pullRequestArray;
-        } catch (error) {
-            throw error;
-        }
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IPullRequestEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'number', { number: 1 });
+    }
+
+    public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
+        return this._numPages(filter, startingFrom, 'number', { number: 1 });
     }
 
     protected convertToEntity(document: PullRequestDocument): IPullRequestEntity {

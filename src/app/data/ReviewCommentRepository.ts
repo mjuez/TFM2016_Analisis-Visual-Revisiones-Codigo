@@ -48,7 +48,7 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
      * @returns a promise that returns a list of review comment entities if resolved.
      */
     public async findByReviewId(id: number): Promise<IReviewCommentEntity[]> {
-        return this.retrieve({ pull_request_review_id: id });
+        return this.retrieve({ pull_request_review_id: id }); // PAGINACION
     }
 
     /**
@@ -58,6 +58,14 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
      */
     public async findById(id: number): Promise<IReviewCommentEntity> {
         return this.findOne({id: id});
+    }
+
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IReviewCommentEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    }
+
+    public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
+        return this._numPages(filter, startingFrom, 'id', { id: 1 });
     }
 
     protected convertToEntity(document: ReviewCommentDocument): IReviewCommentEntity {
