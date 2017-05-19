@@ -11,7 +11,10 @@ export class UserSchema {
     public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
             login: String,
-            id: Number,
+            id: {
+                type: Number,
+                index: true
+            },
             html_url: String,
             type: String,
             name: String,

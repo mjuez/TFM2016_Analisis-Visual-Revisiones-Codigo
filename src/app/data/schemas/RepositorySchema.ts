@@ -10,7 +10,10 @@ export class RepositorySchema {
     /** Gets the Repository Schema. */
     public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
-            id: Number,
+            id: {
+                type: Number,
+                index: true
+            },
             owner: {
                 login: String,
                 id: Number

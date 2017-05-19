@@ -10,9 +10,18 @@ export class ReviewCommentSchema {
     /** Gets the Review Comment Schema. */
     public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
-            id: Number,
-            pull_request_review_id: Number,
-            pull_request_number: Number,
+            id: {
+                type: Number,
+                index: true
+            },
+            pull_request_review_id: {
+                type: Number,
+                index: true
+            },
+            pull_request_number: {
+                type: Number,
+                index: true
+            },
             repository: {
                 name: String,
                 owner: String
