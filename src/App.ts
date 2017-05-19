@@ -21,21 +21,21 @@ import * as mongoose from "mongoose";
 import * as BluebirdPromise from "bluebird";
 
 interface Repositories {
-    pull: IPullRequestRepository,
-    review: IReviewRepository,
-    reviewComment: IReviewCommentRepository,
-    user: IUserRepository,
-    repo: IRepositoryRepository,
-    task: ITaskRepository
+  pull: IPullRequestRepository,
+  review: IReviewRepository,
+  reviewComment: IReviewCommentRepository,
+  user: IUserRepository,
+  repo: IRepositoryRepository,
+  task: ITaskRepository
 }
 
 interface Services {
-    pull: IPullRequestService,
-    review: IReviewService,
-    reviewComment: IReviewCommentService,
-    user: IUserService,
-    repo: IRepositoryService,
-    taskManager: ITaskManagerService
+  pull: IPullRequestService,
+  review: IReviewService,
+  reviewComment: IReviewCommentService,
+  user: IUserService,
+  repo: IRepositoryService,
+  taskManager: ITaskManagerService
 }
 
 /**
@@ -147,6 +147,7 @@ class App {
   private configureMiddleware(): void {
     this._express.use(bodyParser.json());
     this._express.use(bodyParser.urlencoded({ extended: false }));
+    this._express.use(express.static(__dirname + '/client'));
   }
 
   /**
@@ -155,9 +156,7 @@ class App {
   private setRoutes(): void {
     let router = express.Router();
     router.get('/', (req, res, next) => {
-      res.json({
-        message: 'Welcome to ANVIRECO public API.'
-      });
+      res.sendFile('index.html');
     });
     this._express.use('/', router);
     this._express.use('/api/', this._routes.pullRequest.routes);
