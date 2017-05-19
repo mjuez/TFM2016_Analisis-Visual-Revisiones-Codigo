@@ -24,6 +24,7 @@ export abstract class AbstractUserTask extends GitHubTask {
     }
 
     protected async processUser(username: string): Promise<void> {
+        if(username === undefined) return;
         try {
             let userRepo: IUserRepository = this._repositories.user;
             let foundUser: IUserEntity = await userRepo.findOne({
