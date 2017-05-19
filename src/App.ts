@@ -1,22 +1,42 @@
-import * as path from "path";
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import * as mongoose from "mongoose";
-import * as BluebirdPromise from "bluebird";
 import { IPullRequestController, PullRequestController } from "./controllers/PullRequestController";
 import { ITaskManagerController, TaskManagerController } from "./controllers/TaskManagerController";
 import { IPullRequestService, PullRequestService } from "./app/services/PullRequestService";
 import { ITaskManagerService, TaskManagerService } from "./app/services/TaskManagerService";
 import { IReviewService, ReviewService } from "./app/services/ReviewService";
+import { IReviewCommentService, ReviewCommentService } from "./app/services/ReviewCommentService";
+import { IUserService, UserService } from "./app/services/UserService";
+import { IRepositoryService, RepositoryService } from "./app/services/RepositoryService";
 import { IPullRequestRepository, PullRequestRepository } from "./app/data/PullRequestRepository";
 import { IRepositoryRepository, RepositoryRepository } from "./app/data/RepositoryRepository";
 import { IReviewCommentRepository, ReviewCommentRepository } from "./app/data/ReviewCommentRepository";
 import { IReviewRepository, ReviewRepository } from "./app/data/ReviewRepository";
 import { ITaskRepository, TaskRepository } from "./app/data/TaskRepository";
-import { ITaskManagerRepository, TaskManagerRepository } from "./app/data/TaskManagerRepository";
 import { IUserRepository, UserRepository } from "./app/data/UserRepository";
 import { PullRequestRoutes } from "./routes/PullRequestRoutes";
 import { TasksRoutes } from "./routes/TasksRoutes";
+import * as path from "path";
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as mongoose from "mongoose";
+import * as BluebirdPromise from "bluebird";
+
+interface Repositories {
+  pull: IPullRequestRepository,
+  review: IReviewRepository,
+  reviewComment: IReviewCommentRepository,
+  user: IUserRepository,
+  repo: IRepositoryRepository,
+  task: ITaskRepository
+}
+
+interface Services {
+  pull: IPullRequestService,
+  review: IReviewService,
+  reviewComment: IReviewCommentService,
+  user: IUserService,
+  repo: IRepositoryService,
+  taskManager: ITaskManagerService
+}
 
 /**
  * Application main class.
@@ -30,34 +50,21 @@ class App {
 
   private _router: express.Router;
 
-  private _repositories: {
-    pullRequest: IPullRequestRepository;
-    repository: IRepositoryRepository;
-    reviewComment: IReviewCommentRepository;
-    review: IReviewRepository;
-    taskManager: ITaskManagerRepository;
-    task: ITaskRepository;
-    user: IUserRepository;
-  } = {
-    pullRequest: null,
-    repository: null,
-    reviewComment: null,
+  private _repositories: Repositories = {
+    pull: null,
     review: null,
-    taskManager: null,
-    task: null,
+    reviewComment: null,
     user: null,
+    repo: null,
+    task: null,
   }
 
-  private _services: {
-    pullRequest: IPullRequestService;
-    //repository: IRepositoryService;
-    //reviewComment: IReviewCommentService;
-    review: IReviewService;
-    taskManager: ITaskManagerService;
-    //user: IUserService;
-  } = {
-    pullRequest: null,
+  private _services: Services = {
+    pull: null,
     review: null,
+    reviewComment: null,
+    user: null,
+    repo: null,
     taskManager: null
   }
 
@@ -107,47 +114,25 @@ class App {
   }
 
   private createRepositories(): void {
-    this._repositories.pullRequest = new PullRequestRepository();
-    this._repositories.repository = new RepositoryRepository();
+    this._repositories.pull = new PullRequestRepository();
+    this._repositories.repo = new RepositoryRepository();
     this._repositories.reviewComment = new ReviewCommentRepository();
     this._repositories.review = new ReviewRepository();
-    this._repositories.taskManager = new TaskManagerRepository();
     this._repositories.task = new TaskRepository();
     this._repositories.user = new UserRepository();
   }
 
   private async createServices(): Promise<void> {
-    this._services.pullRequest = new PullRequestService(this._repositories.pullRequest);
-    this._services.review = new ReviewService(this._repositories.review, this._services.pullRequest);
-    await this.createTaskManager();
-  }
-
-  private async createTaskManager(): Promise<void> {
-    let taskManagerRepos: any = {
-      taskManager: this._repositories.taskManager,
-      task: this._repositories.task
-    };
-    let taskManagerServices: any = {
-      pullRequest: this._services.pullRequest,
-      review: this._services.review
-    };
-    this._services.taskManager = new TaskManagerService(taskManagerRepos, taskManagerServices);
-    let promise: Promise<void> = new Promise<void>((resolve, reject) => {
-      if (this._services.taskManager.ready) {
-        console.log("task manager ready: yuhu!");
-        resolve();
-      } else {
-        this._services.taskManager.on("taskManager:ready", () => {
-          console.log("task manager ready: yuhu!");
-          resolve();
-        });
-      }
-    });
-    return promise;
+    this._services.pull = new PullRequestService(this._repositories.pull);
+    this._services.review = new ReviewService(this._repositories.review, this._services.pull);
+    this._services.reviewComment = new ReviewCommentService(this._repositories.reviewComment);
+    this._services.user = new UserService(this._repositories.user);
+    this._services.repo = new RepositoryService(this._repositories.repo);
+    this._services.taskManager = new TaskManagerService(this._repositories, this._services);
   }
 
   private createControllers(): void {
-    this._controllers.pullRequest = new PullRequestController(this._services.pullRequest, this._services.taskManager, this._services.review);
+    this._controllers.pullRequest = new PullRequestController(this._services.pull, this._services.taskManager, this._services.review);
     this._controllers.taskManager = new TaskManagerController(this._services.taskManager);
   }
 
@@ -162,6 +147,7 @@ class App {
   private configureMiddleware(): void {
     this._express.use(bodyParser.json());
     this._express.use(bodyParser.urlencoded({ extended: false }));
+    this._express.use(express.static(__dirname + '/client'));
   }
 
   /**
@@ -170,9 +156,7 @@ class App {
   private setRoutes(): void {
     let router = express.Router();
     router.get('/', (req, res, next) => {
-      res.json({
-        message: 'Welcome to ANVIRECO public API.'
-      });
+      res.sendFile('index.html');
     });
     this._express.use('/', router);
     this._express.use('/api/', this._routes.pullRequest.routes);

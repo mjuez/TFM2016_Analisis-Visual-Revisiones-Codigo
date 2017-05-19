@@ -89,8 +89,14 @@ export class PullRequestSchema {
             mergeable: Boolean,
             merged_by: Object,
             comments: Number,
-            reviews: Number,
-            review_comments: Number,
+            reviews: {
+                type: Number,
+                default: 0
+            },
+            review_comments: {
+                type: Number,
+                default: 0
+            },
             commits: Number,
             additions: Number,
             deletions: Number,

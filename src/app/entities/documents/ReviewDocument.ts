@@ -7,7 +7,11 @@ import * as mongoose from "mongoose";
  */
 export interface ReviewDocument extends mongoose.Document {
     id: number,
-    pull_request_id: number,
+    pull_request_number: number,
+    repository: {
+        name: string,
+        owner: string
+    }
     user: {
         id: number,
         login: string
@@ -16,6 +20,5 @@ export interface ReviewDocument extends mongoose.Document {
     commit_id: string,
     state: string,
     html_url: string,
-    pull_request_url: string,
-    _links: Object
+    pull_request_url: string
 }

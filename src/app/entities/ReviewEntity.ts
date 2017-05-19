@@ -3,6 +3,7 @@ import { ReviewDocument } from "./documents/ReviewDocument";
 import { ReviewSchema } from "../data/schemas/ReviewSchema";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
+import { GitHubUtil } from "../util/GitHubUtil";
 
 /**
  * IReviewEntity interface. Describes custom functionality for
@@ -30,10 +31,17 @@ export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IRev
      * @param data  raw data.
      * @returns a review entity.
      */
-    public static toEntity(data: any, pullId: number = null): IReviewEntity {
+    public static toEntity(data: any): IReviewEntity {
         if (data) {
             let entity: IReviewEntity = new ReviewEntity(<ReviewDocument>data);
-            entity.document.pull_request_id = pullId;
+            if (entity.document.pull_request_number === undefined) {
+                let pullData: any = GitHubUtil.getPullData(entity.document.pull_request_url);
+                entity.document.pull_request_number = pullData.number;
+                entity.document.repository = {
+                    name: pullData.repository,
+                    owner: pullData.owner
+                };
+            }
             return entity;
         }
         return null;
@@ -44,11 +52,11 @@ export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IRev
      * @param data  raw data.
      * @returns an array of review entities.
      */
-    public static toEntityArray(data: any[], pullId: number = null): IReviewEntity[] {
+    public static toEntityArray(data: any[]): IReviewEntity[] {
         let entityArray: IReviewEntity[] = [];
         if (data.length > 0) {
             data.map((jsonObject) => {
-                let entity: IReviewEntity = this.toEntity(jsonObject, pullId);
+                let entity: IReviewEntity = this.toEntity(jsonObject);
                 entityArray.push(entity);
             });
         }

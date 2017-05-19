@@ -48,24 +48,6 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
     }
 
     /**
-     * Updates a User from database. Uses its GitHub id.
-     * @param item      User entity with updated data.
-     * @returns a promise that returns the number of rows affected if resolved.
-     */
-    public update(item: IUserEntity): Promise<number> {
-        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
-            this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
-                if (!error) {
-                    resolve(rowsAffected);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
-    }
-
-    /**
      * Retrieves an user given its GitHub id.
      * @param id    User GitHub id.
      * @returns a promise that returns an user entity if resolved.
@@ -83,23 +65,12 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
         return this.findOne({ login: login });
     }
 
-    /**
-     * Retrieves an user given a filter.
-     * @param filter User filter.
-     * @returns a promise that returns an user entity if resolved.
-     */
-    private findOne(filter: Object): Promise<IUserEntity> {
-        let promise: Promise<IUserEntity> = new Promise<IUserEntity>((resolve, reject) => {
-            this.model.find(filter, (error, result) => {
-                if (!error) {
-                    let entity: IUserEntity = UserEntity.toEntity(result[0]);
-                    resolve(entity);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IUserEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    }
+
+    public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
+        return this._numPages(filter, startingFrom, 'id', { id: 1 });
     }
 
     protected convertToEntity(document: UserDocument): IUserEntity {
@@ -108,6 +79,10 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
 
     protected convertToEntityArray(documentArray: UserDocument[]): IUserEntity[] {
         return UserEntity.toEntityArray(documentArray);
+    }
+
+    protected updateFilter(item: IUserEntity): Object {
+        return { id: item.id };
     }
 
 }

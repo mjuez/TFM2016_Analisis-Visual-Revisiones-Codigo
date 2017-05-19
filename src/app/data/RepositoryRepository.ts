@@ -20,13 +20,7 @@ export interface IRepositoryRepository extends IRepository<IRepositoryEntity, Re
      */
     findByOwnerId(id: number): Promise<IRepositoryEntity[]>;
 
-    /**
-     * Retrieves a repository given its GitHub owner id and its name.
-     * @param ownerId   Owner GitHub id.
-     * @param name      Owner GitHub id.
-     * @returns a promise that returns a repository entity if resolved.
-     */
-    findOne(ownerId: number, name: string): Promise<IRepositoryEntity>;
+    findById(id: number): Promise<IRepositoryEntity>;
 
 }
 
@@ -49,60 +43,24 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
     }
 
     /**
-     * Updates a Repository from database. Uses its GitHub id.
-     * @param item      Repository entity with updated data.
-     * @returns a promise that returns the number of rows affected if resolved.
-     */
-    public update(item: IRepositoryEntity): Promise<number> {
-        let promise: Promise<number> = new Promise<number>((resolve, reject) => {
-            this.model.update({ id: item.id }, item.document, (error, rowsAffected) => {
-                if (!error) {
-                    resolve(rowsAffected);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
-    }
-
-    /**
      * Retrieves a repository list given its GitHub owner id.
      * @param id    Owner GitHub id.
      * @returns a promise that returns a list of repository entities if resolved.
      */
-    findByOwnerId(id: number): Promise<IRepositoryEntity[]>{
-        let promise: Promise<IRepositoryEntity[]> = new Promise<IRepositoryEntity[]>((resolve, reject) => {
-            this.model.find({ owner: {id: id} }, (error, result) => {
-                if (!error) {
-                    let entityArray: IRepositoryEntity[] = RepositoryEntity.toEntityArray(result);
-                    resolve(entityArray);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
+    public async findByOwnerId(id: number): Promise<IRepositoryEntity[]>{
+        return this.retrieve({ owner: {id: id} }); // PAGINACION!
     }
 
-    /**
-     * Retrieves a repository given its GitHub owner id and its name.
-     * @param ownerId   Owner GitHub id.
-     * @param name      Owner GitHub id.
-     * @returns a promise that returns a repository entity if resolved.
-     */
-    findOne(ownerId: number, name: string): Promise<IRepositoryEntity>{
-        let promise: Promise<IRepositoryEntity> = new Promise<IRepositoryEntity>((resolve, reject) => {
-            this.model.find({ name: name, owner: { id: ownerId } }, (error, result) => {
-                if (!error) {
-                    let entity: IRepositoryEntity = RepositoryEntity.toEntity(result[0]);
-                    resolve(entity);
-                } else {
-                    reject(error);
-                }
-            });
-        });
-        return promise;
+    public findById(id: number): Promise<IRepositoryEntity> {
+        return this.findOne({ id: id });
+    }
+
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IRepositoryEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    }
+
+    public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
+        return this._numPages(filter, startingFrom, 'id', { id: 1 });
     }
 
     protected convertToEntity(document: RepositoryDocument): IRepositoryEntity {
@@ -111,6 +69,10 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
 
     protected convertToEntityArray(documentArray: RepositoryDocument[]): IRepositoryEntity[] {
         return RepositoryEntity.toEntityArray(documentArray);
+    }
+
+    protected updateFilter(item: IRepositoryEntity): Object {
+        return { id: item.id };
     }
 
 }

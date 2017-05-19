@@ -40,7 +40,7 @@ export interface ITaskManagerController {
 export class TaskManagerController implements ITaskManagerController {
 
     private _taskManagerService: ITaskManagerService;
-    
+
     /**
      * Class constructor.
      */
@@ -50,19 +50,30 @@ export class TaskManagerController implements ITaskManagerController {
 
     /** @inheritdoc */
     public getStatus(req: Request, res: Response) {
-        let service: ITaskManagerService =this._taskManagerService
-        res.json(service.taskManager.document);
+        let service: ITaskManagerService = this._taskManagerService;
+
+        if (service.currentTask != null) {
+            res.json({ status: "running" });
+        } else {
+            if (service.error === undefined) {
+                res.json({ status: "no tasks pending" });
+            } else {
+                res.json({ status: { error: service.error } });
+            }
+        }
+
+
     }
 
     /** @inheritdoc */
     public async getPendingTasks(req: Request, res: Response) {
-        let service: ITaskManagerService =this._taskManagerService
+        let service: ITaskManagerService = this._taskManagerService;
         res.json(await service.getPendingTasks());
     }
 
     /** @inheritdoc */
     public async getAllTasks(req: Request, res: Response) {
-        let service: ITaskManagerService =this._taskManagerService
+        let service: ITaskManagerService = this._taskManagerService;
         res.json(await service.getAllTasks());
     }
 

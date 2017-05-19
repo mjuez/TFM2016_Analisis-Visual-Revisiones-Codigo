@@ -12,6 +12,8 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
     /** Mongoose Model (repository). */
     private readonly _model: mongoose.Model<E>;
 
+    public static readonly RESULTS_PER_PAGE: number = 100;
+
     /**
      * Class constructor. Creates a Mongoose Model given
      * a name and a schema.
@@ -56,7 +58,14 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param item      Item with updated data.
      * @returns a promise that returns the number of rows affected if resolved.
      */
-    public abstract update(item: T): Promise<number>;
+    public async update(item: T): Promise<number> {
+        try {
+            let result: any = await this.model.update(this.updateFilter(item), item.document);
+            return result.nModified;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     /**
      * Retrieves filtered items of a collection from database.
@@ -64,11 +73,65 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      *                    which retrieves all items of a collection.
      * @returns a promise that returns an array of items if resolved.
      */
-    public async retrieve(filter: Object = {}): Promise<T[]> {
+    public async retrieve(filter: Object = {}, page: number = 1): Promise<T[]> {
         try {
-            let documentArray: E[] = await this.model.find(filter);
+            let skip: number = (page - 1) * AbstractRepository.RESULTS_PER_PAGE;
+            let documentArray: E[] = await this.model.find(filter).skip(skip).limit(AbstractRepository.RESULTS_PER_PAGE);
             let entityArray: T[] = this.convertToEntityArray(documentArray);
             return entityArray;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public abstract async retrievePartial(filter?: Object, page?: number, startingFrom?: number): Promise<T[]>;
+
+    protected async _retrievePartial(filter: Object, page: number, startingFrom: number, where: string, sort: Object): Promise<T[]> {
+        try {
+            let skip: number = (page - 1) * AbstractRepository.RESULTS_PER_PAGE;
+            let documentArray: E[] =
+                await this.model.find(filter)
+                    .where(where)
+                    .gt(startingFrom)
+                    .sort(sort)
+                    .skip(skip)
+                    .limit(AbstractRepository.RESULTS_PER_PAGE);
+            let pullRequestArray: T[] = this.convertToEntityArray(documentArray);
+            return pullRequestArray;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public abstract async numPages(filter: Object, startingFrom: number): Promise<number>;
+
+    protected async _numPages(filter: Object, startingFrom: number, where: string, sort: Object): Promise<number> {
+        try {
+            let numResults: number = await this.count(filter)
+                .where(where).gt(startingFrom).sort(sort);
+            return Math.ceil(numResults / AbstractRepository.RESULTS_PER_PAGE);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public async findOne(filter: Object): Promise<T> {
+        try {
+            let document: E = await this.model.findOne(filter);
+            let entity: T = this.convertToEntity(document);
+            return entity;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    public count(filter: Object = {}): mongoose.Query<number> {
+        return this.model.count(filter);
+    }
+
+    public async remove(filter: Object = {}): Promise<void> {
+        try{
+            await this.model.remove(filter);
         }catch(error){
             throw error;
         }
@@ -79,5 +142,8 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
 
     // template method
     protected abstract convertToEntityArray(documentArray: E[]): T[];
+
+    // template method
+    protected abstract updateFilter(item: T): Object;
 
 }

@@ -14,7 +14,7 @@ export class TaskSchema {
         let schema = new mongoose.Schema({
             type: {
                 type: Number,
-                enum: ['ALL', 'REVIEWS', 'REVIEW_COMMENTS', 'USERS', 'REPOSITORY']
+                enum: ['ALL', 'REVIEWS', 'REVIEW_COMMENTS', 'USERS', 'USERS_PULLS', 'USERS_REVIEWS', 'USERS_REVIEW_COMMENTS', 'REPOSITORY']
             },
             is_completed: Boolean,
             creation_date: Date,
@@ -22,7 +22,10 @@ export class TaskSchema {
             end_date: Date,
             owner: String,
             repository: String,
-            current_page: Number,
+            current_page: {
+                type: Number,
+                default: 1
+            },
             parent: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: TaskRepository.COLLECTION_NAME

@@ -10,7 +10,10 @@ export class RepositorySchema {
     /** Gets the Repository Schema. */
     public static get schema(): mongoose.Schema {
         let schema = new mongoose.Schema({
-            id: Number,
+            id: {
+                type: Number,
+                index: true
+            },
             owner: {
                 login: String,
                 id: Number
@@ -30,6 +33,18 @@ export class RepositorySchema {
             size: Number,
             default_branch: String,
             open_issues_count: Number,
+            pull_requests_count: {
+                type: Number,
+                default: 0
+            },
+            reviews_count: {
+                type: Number,
+                default: 0
+            },
+            review_comments_count: {
+                type: Number,
+                default: 0
+            },
             topics: [String],
             pushed_at: Date,
             created_at: Date,

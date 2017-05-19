@@ -15,10 +15,26 @@ export class GitHubUtil {
         let results: RegExpExecArray = regExp.exec(link);
         let pageNumber: number = null;
         if (results) {
-            let foundGroupNumber: number = 1;
+            const foundGroupNumber: number = 1;
             pageNumber = Number.parseInt(results[foundGroupNumber]);
         }
         return pageNumber;
+    }
+
+    static getPullData(pullRequestLink: string): { number: number, owner: string, repository: string } {
+        let regExp: RegExp = /(?:\/repos\/)([a-zA-Z0-9_.-]*)(?:\/)([a-zA-Z0-9_.-]*)(?:\/pulls\/)([0-9]+)/g;
+        let results: RegExpExecArray = regExp.exec(pullRequestLink);
+        if (results) {
+            const ownerGroup: number = 1;
+            const repoGroup: number = 2;
+            const numberGroup: number = 3;
+            return {
+                number: Number.parseInt(results[numberGroup]),
+                owner: results[ownerGroup],
+                repository: results[repoGroup]
+            };
+        }
+        return null;
     }
 
 }
