@@ -24,4 +24,8 @@ gulp.task('watch', ['compile'], () => {
     gulp.watch('src/**/*.ts', ['compile']);
 });
 
+gulp.task('watch-client', ['build-client'], () => {
+    gulp.watch('src/client/**/*', ['build-client']);
+});
+
 gulp.task('default', ['watch']);
