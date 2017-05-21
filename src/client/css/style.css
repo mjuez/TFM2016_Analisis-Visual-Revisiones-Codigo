@@ -1,5 +1,9 @@
 .anvireco-title {
     text-align:center;
     font-size: 3rem;
-    padding: 3rem 0;
+    padding: 6rem 0 3rem 0;
+}
+
+.ui.menu{
+    box-shadow: none;
 }
