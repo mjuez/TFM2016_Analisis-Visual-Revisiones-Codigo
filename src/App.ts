@@ -155,12 +155,12 @@ class App {
    */
   private setRoutes(): void {
     let router = express.Router();
-    router.get('/', (req, res, next) => {
-      res.sendFile('index.html');
-    });
     this._express.use('/', router);
     this._express.use('/api/', this._routes.pullRequest.routes);
     this._express.use('/api/', this._routes.tasks.routes);
+    this._express.get('*', (req, res) => {
+      res.sendFile(__dirname + '/client/index.html');
+    });
   }
 
 }
