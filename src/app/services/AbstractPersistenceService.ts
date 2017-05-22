@@ -39,6 +39,14 @@ export abstract class AbstractPersistenceService<T extends IRepository<E, S>, E 
         }
     }
 
+    protected toJSONArray(entityArray: IEntity<S>[]): Object[] {
+        let JSONArray: Object[] = [];
+        entityArray.map((entity) => {
+            JSONArray.push(entity.document);
+        });
+        return JSONArray;
+    }
+
     protected abstract async findEntity(entity: E): Promise<E>;
 
 }
