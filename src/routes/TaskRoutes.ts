@@ -6,7 +6,7 @@ import { ITaskManagerController } from "../controllers/TaskManagerController";
  * Defines our API routes.
  * @author Mario Juez <mario@mjuez.com>
  */
-export class TasksRoutes {
+export class TaskRoutes {
 
     /** Pull Request controller. */
     private readonly _controller: ITaskManagerController;

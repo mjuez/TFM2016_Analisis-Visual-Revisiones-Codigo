@@ -13,7 +13,7 @@ import { IReviewRepository, ReviewRepository } from "./app/data/ReviewRepository
 import { ITaskRepository, TaskRepository } from "./app/data/TaskRepository";
 import { IUserRepository, UserRepository } from "./app/data/UserRepository";
 import { PullRequestRoutes } from "./routes/PullRequestRoutes";
-import { TasksRoutes } from "./routes/TasksRoutes";
+import { TaskRoutes } from "./routes/TaskRoutes";
 import * as path from "path";
 import * as express from "express";
 import * as bodyParser from "body-parser";
@@ -78,7 +78,7 @@ class App {
 
   private _routes: {
     pullRequest: PullRequestRoutes;
-    tasks: TasksRoutes;
+    tasks: TaskRoutes;
   } = {
     pullRequest: null,
     tasks: null
@@ -138,7 +138,7 @@ class App {
 
   private createRoutes(): void {
     this._routes.pullRequest = new PullRequestRoutes(this._controllers.pullRequest, this._router);
-    this._routes.tasks = new TasksRoutes(this._controllers.taskManager, this._router);
+    this._routes.tasks = new TaskRoutes(this._controllers.taskManager, this._router);
   }
 
   /**
