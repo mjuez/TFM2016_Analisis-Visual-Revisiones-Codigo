@@ -1,5 +1,3 @@
-loadScripts();
-
 const SECTION_HOME = 'home';
 const SECTION_REPOSITORIES = 'repositories';
 const SECTION_PULLREQUESTS = 'pullrequests';
@@ -65,14 +63,6 @@ function setMenuClickEvents(menuItems) {
         loadSection(SECTION_USERS);
     });
 
-}
-
-function loadScripts() {
-    $.getScript(`/js/home.js`);
-    $.getScript(`/js/repositories.js`);
-    $.getScript(`/js/pullrequests.js`);
-    $.getScript(`/js/users.js`);
-    $.getScript(`/js/errors.js`);
 }
 
 function loadSection(section) {
