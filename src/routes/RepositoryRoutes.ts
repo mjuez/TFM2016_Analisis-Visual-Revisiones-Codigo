@@ -32,11 +32,11 @@ export class RepositoryRoutes {
         let router: express.Router = this._router;
         let controller: IRepositoryController = this._controller;
 
-        router.get("/repos/all", (req: express.Request, res: express.Response) => {
+        router.get("/repos", (req: express.Request, res: express.Response) => {
             controller.getFirstPage(req, res);
         });
 
-        router.get("/repos/all/page/:page", (req: express.Request, res: express.Response) => {
+        router.get("/repos/page/:page", (req: express.Request, res: express.Response) => {
             controller.getPage(req, res);
         });
 

@@ -11,6 +11,7 @@ export interface IRepositoryController {
     getFirstPage(req: Request, res: Response): Promise<void>;
     getPage(req: Request, res: Response): Promise<void>;
     getPageOrderedBy(req: Request, res: Response): Promise<void>;
+    getNumberOfPages(req: Request, res: Response): Promise<void>;
 }
 
 /**
@@ -34,20 +35,30 @@ export class RepositoryController implements IRepositoryController {
 
     public async getFirstPage(req: Request, res: Response): Promise<void> {
         let service: IRepositoryService = this._service;
+        await this._getPage(res, 1);
+    }
+
+    public async getPage(req: Request, res: Response): Promise<void> {
+        let page: number = req.params.page;
+        await this._getPage(res, page);
+    }
+
+    private async _getPage(res: Response, page: number): Promise<void> {
+        let service: IRepositoryService = this._service;
         try {
-            let repositories: Object[] = await service.getRepositories(1);
-            res.json(repositories);
+            let repositories: Object[] = await service.getRepositories(page);
+            let lastPage: number = await service.numPages();
+            res.json({ data: repositories, last_page: lastPage });
         } catch (error) {
             res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
 
-    public async getPage(req: Request, res: Response): Promise<void> {
-        let page: number = req.params.page;
+    public async getNumberOfPages(req: Request, res: Response): Promise<void> {
         let service: IRepositoryService = this._service;
         try {
-            let repositories: Object[] = await service.getRepositories(page);
-            res.json(repositories);
+            let pages = await service.numPages();
+            res.json({ num: pages });
         } catch (error) {
             res.status(500).json({ message: "Oops, something went wrong." });
         }
