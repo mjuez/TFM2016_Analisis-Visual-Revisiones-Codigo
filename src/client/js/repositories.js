@@ -3,11 +3,14 @@ function loadRepositories(callback) {
         const url = $(location).prop('pathname').split('/');
         if(url.length > 2){
             const isPage = url[2] === 'page';
+            const isSingle = url[2] === 'single';
             if(isPage){
                 const page = Number.parseInt(url[3]);
                 getRepositoryPage(page);
-            }else{
+            }else if(isSingle){
                 // GET SINGLE REPOSITORY
+            }else{
+                showError(hideLoader);
             }
         }else{
             getRepositoryPage(1);
