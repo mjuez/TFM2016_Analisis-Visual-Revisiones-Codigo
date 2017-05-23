@@ -1,9 +1,7 @@
 function loadRepositories(callback) {
     $('#content').load(`/_repositories.html`, () => {
         const url = $(location).prop('pathname').split('/');
-        console.log(url.length);
         if(url.length > 2){
-            console.log(url);
             const isPage = url[2] === 'page';
             if(isPage){
                 const page = Number.parseInt(url[3]);
