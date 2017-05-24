@@ -31,7 +31,7 @@ function setActiveMenuItem(menuItems, activeSection) {
     menuItems[SECTION_REPOSITORIES].removeClass('active');
     menuItems[SECTION_PULLREQUESTS].removeClass('active');
     menuItems[SECTION_USERS].removeClass('active');
-    if(menuItems[activeSection]){
+    if (menuItems[activeSection]) {
         menuItems[activeSection].addClass('active');
     }
 
