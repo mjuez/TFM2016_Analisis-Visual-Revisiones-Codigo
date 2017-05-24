@@ -1,18 +1,32 @@
 <h2 class="ui dividing header">Pedir un repositorio a GitHub</h2>
+<div class="ui success message hidden" id="home_success">
+    <i class="close icon"></i>
+    <div class="header">
+        Petición realizada
+    </div>
+    <p>Hemos encolado tu petición.</p>
+</div>
+<div class="ui error message hidden" id="home_fail">
+    <i class="close icon"></i>
+    <div class="header">
+        Error
+    </div>
+    <p>No se puede procesar tu petición en estos momentos.</p>
+</div>
 <div class="ui two column stackable grid">
     <div class="column">
         <div class="ui huge fluid input">
-            <input type="text" id="owner" placeholder="Propietario">
+            <input type="text" id="home_owner_input" placeholder="Propietario">
         </div>
     </div>
     <div class="column">
         <div class="ui huge fluid input">
-            <input type="text" id="repository" placeholder="Repositorio">
+            <input type="text" id="home_repository_input" placeholder="Repositorio">
         </div>
     </div>
 </div>
 <div class="ui one column stackable grid">
     <div class="column center aligned">
-        <div type="submit" class="ui huge violet button request-repository">¡Adelante!</div>
+        <div type="submit" class="ui huge violet button" id="home_go_button">¡Adelante!</div>
     </div>
 </div>
