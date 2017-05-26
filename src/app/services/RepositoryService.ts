@@ -10,6 +10,7 @@ import { IRepositoryRepository } from "../data/RepositoryRepository";
  * @author Mario Juez <mario@mjuez.com> 
  */
 export interface IRepositoryService extends IPersistenceService<IRepositoryEntity> {
+    getRepository(owner: string, repository: string): Promise<IRepositoryEntity>;
     getRepositories(page: number): Promise<Object[]>;
     numPages(): Promise<number>;
  }
@@ -29,6 +30,11 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
         super(repository);
     }
 
+    public async getRepository(owner: string, repository: string): Promise<IRepositoryEntity> {
+        let repo: IRepositoryRepository = this._repository;
+        return await repo.findOne({"owner.login": owner, "name": repository});
+    }
+    
     public async getRepositories(page: number): Promise<Object[]>{
         let repo: IRepositoryRepository = this._repository;
         let entities: IRepositoryEntity[] = await repo.retrievePartial({}, page);
