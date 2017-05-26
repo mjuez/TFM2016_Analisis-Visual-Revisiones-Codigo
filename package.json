@@ -36,6 +36,7 @@
     "@types/mocha": "^2.2.40",
     "@types/mongoose": "^4.7.11",
     "@types/node": "^7.0.12",
+    "@types/twix": "^0.6.32",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
