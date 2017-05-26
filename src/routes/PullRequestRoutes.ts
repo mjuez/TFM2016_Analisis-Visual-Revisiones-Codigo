@@ -48,6 +48,10 @@ export class PullRequestRoutes {
             controller.getAll(req, res);
         });
 
+        router.get("/:owner/:repository/pulls/stats/created/alltime", (req: express.Request, res: express.Response) => {
+            await controller.getCreatedAllTime(req, res);
+        });
+
         /*router.get("/remote/:owner/:repository/pulls/:pull_id", (req: express.Request, res: express.Response) => {
             controller.getRemote(req, res);
         });*/
