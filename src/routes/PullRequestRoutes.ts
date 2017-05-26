@@ -48,7 +48,7 @@ export class PullRequestRoutes {
             controller.getAll(req, res);
         });
 
-        router.get("/:owner/:repository/pulls/stats/created/alltime", (req: express.Request, res: express.Response) => {
+        router.get("/:owner/:repository/pulls/stats/created/alltime", async (req: express.Request, res: express.Response) => {
             await controller.getCreatedAllTime(req, res);
         });
 
