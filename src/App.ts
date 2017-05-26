@@ -138,7 +138,7 @@ class App {
   }
 
   private createControllers(): void {
-    this._controllers.pull = new PullRequestController(this._services.pull, this._services.taskManager, this._services.review);
+    this._controllers.pull = new PullRequestController(this._services);
     this._controllers.repo = new RepositoryController(this._services.repo);
     this._controllers.taskManager = new TaskManagerController(this._services.taskManager);
   }
