@@ -3,7 +3,10 @@ import { AbstractMultiplePersistenceService } from "../services/AbstractPersiste
 import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
-import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory } from "../data/filters/PullRequestFilter";
+import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory, BetweenDatesPullRequestFilter } from "../data/filters/PullRequestFilter";
+import * as moment from "moment";
+import * as twix from "twix";
+require("twix");
 
 /**
  * IPullRequestService interface.
@@ -20,6 +23,8 @@ export interface IPullRequestService extends IMultiplePersistenceService<IPullRe
     createOrUpdateMultiple(entities: IPullRequestEntity[]): Promise<IPullRequestEntity[]>;
     getLocalPullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
     getLocalPullRequests(owner: string, repository: string, startingFrom?: number): Promise<IPullRequestEntity[]>;
+    getCreatedAllTimeStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number[]>;
+    getCreatedBetweenDatesStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number>;
 
 }
 
@@ -50,6 +55,28 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         let repository: IPullRequestRepository = this._repository;
         let filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository: repo });
         return repository.retrievePartial(filter, page, startingFrom);
+    }
+
+    public async getCreatedAllTimeStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number[]> {
+        let dateRange: any = moment(dates.start).twix(dates.end);
+        let portions = dateRange.count("days");
+        if (portions > 20) portions = 20;
+        const twixDates: any[] = dateRange.divide(portions);
+        let counts: number[] = await Promise.all(twixDates.map(async (date) => {
+            const partialDates = {
+                start: date.start(),
+                end: date.end()
+            }
+            return await this.getCreatedBetweenDatesStats(owner, repository, partialDates);
+        }));
+        return counts;
+    }
+
+    public async getCreatedBetweenDatesStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number> {
+        let repo: IPullRequestRepository = this._repository;
+        let filter: BetweenDatesPullRequestFilter =
+            PullRequestFilterFactory.createBetweenDates({ owner, repository, startDate: dates.start, endDate: dates.end });
+        return await repo.count(filter);
     }
 
     protected async findEntity(entity: IPullRequestEntity): Promise<IPullRequestEntity> {

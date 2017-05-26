@@ -1,5 +1,15 @@
-.anvireco-title {
-    text-align:center;
-    font-size: 3rem;
-    padding: 3rem 0;
+html {
+    padding-top: 6rem;
+}
+
+.ui.menu{
+    box-shadow: none;
+}
+
+.ui.dividing.header {
+    margin-bottom: 2rem;
+}
+
+.ui.divided.items>.item {
+    padding: 2rem 0;
 }

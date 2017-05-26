@@ -1,4 +1,5 @@
 import { IPullRequestController, PullRequestController } from "./controllers/PullRequestController";
+import { IRepositoryController, RepositoryController } from "./controllers/RepositoryController";
 import { ITaskManagerController, TaskManagerController } from "./controllers/TaskManagerController";
 import { IPullRequestService, PullRequestService } from "./app/services/PullRequestService";
 import { ITaskManagerService, TaskManagerService } from "./app/services/TaskManagerService";
@@ -13,7 +14,8 @@ import { IReviewRepository, ReviewRepository } from "./app/data/ReviewRepository
 import { ITaskRepository, TaskRepository } from "./app/data/TaskRepository";
 import { IUserRepository, UserRepository } from "./app/data/UserRepository";
 import { PullRequestRoutes } from "./routes/PullRequestRoutes";
-import { TasksRoutes } from "./routes/TasksRoutes";
+import { RepositoryRoutes } from "./routes/RepositoryRoutes";
+import { TaskRoutes } from "./routes/TaskRoutes";
 import * as path from "path";
 import * as express from "express";
 import * as bodyParser from "body-parser";
@@ -69,18 +71,22 @@ class App {
   }
 
   private _controllers: {
-    pullRequest: IPullRequestController;
+    pull: IPullRequestController;
+    repo: IRepositoryController;
     taskManager: ITaskManagerController;
   } = {
-    pullRequest: null,
+    pull: null,
+    repo: null,
     taskManager: null
   }
 
   private _routes: {
-    pullRequest: PullRequestRoutes;
-    tasks: TasksRoutes;
+    pull: PullRequestRoutes;
+    repo: RepositoryRoutes;
+    tasks: TaskRoutes;
   } = {
-    pullRequest: null,
+    pull: null,
+    repo: null,
     tasks: null
   }
 
@@ -132,13 +138,15 @@ class App {
   }
 
   private createControllers(): void {
-    this._controllers.pullRequest = new PullRequestController(this._services.pull, this._services.taskManager, this._services.review);
+    this._controllers.pull = new PullRequestController(this._services);
+    this._controllers.repo = new RepositoryController(this._services.repo);
     this._controllers.taskManager = new TaskManagerController(this._services.taskManager);
   }
 
   private createRoutes(): void {
-    this._routes.pullRequest = new PullRequestRoutes(this._controllers.pullRequest, this._router);
-    this._routes.tasks = new TasksRoutes(this._controllers.taskManager, this._router);
+    this._routes.pull = new PullRequestRoutes(this._controllers.pull, this._router);
+    this._routes.repo = new RepositoryRoutes(this._controllers.repo, this._router);
+    this._routes.tasks = new TaskRoutes(this._controllers.taskManager, this._router);
   }
 
   /**
@@ -155,12 +163,13 @@ class App {
    */
   private setRoutes(): void {
     let router = express.Router();
-    router.get('/', (req, res, next) => {
-      res.sendFile('index.html');
-    });
     this._express.use('/', router);
-    this._express.use('/api/', this._routes.pullRequest.routes);
+    this._express.use('/api/', this._routes.pull.routes);
+    this._express.use('/api/', this._routes.repo.routes);
     this._express.use('/api/', this._routes.tasks.routes);
+    this._express.get('*', (req, res) => {
+      res.sendFile(__dirname + '/client/index.html');
+    });
   }
 
 }

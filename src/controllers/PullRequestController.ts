@@ -1,9 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
+import { AbstractController } from "./AbstractController";
 import { IPullRequestService } from "../app/services/PullRequestService";
+import { IRepositoryService } from "../app/services/RepositoryService";
 import { IReviewService } from "../app/services/ReviewService";
-import { ITaskManagerService, TaskManagerService } from "../app/services/TaskManagerService";
+import { ITaskManagerService } from "../app/services/TaskManagerService";
 import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
 import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
+import { IRepositoryEntity } from "../app/entities/RepositoryEntity";
 import * as mongoose from "mongoose";
 import * as GitHubAPI from "github";
 import * as BluebirdPromise from "bluebird";
@@ -40,6 +43,8 @@ export interface IPullRequestController {
 
     getReviews(req: Request, res: Response);
 
+    getCreatedAllTime(req: Request, res: Response);
+
     /**
      * Gets a remote Pull Request given an owner, a repository
      * and a pull request id.
@@ -62,33 +67,14 @@ export interface IPullRequestController {
  * @extends GitHubController.
  * @implements IPullRequestController.
  */
-export class PullRequestController implements IPullRequestController {
-
-    /** Pull Request service. */
-    private readonly _service: IPullRequestService;
-
-    /** Task Manager service. */
-    private readonly _taskManagerService: ITaskManagerService;
-
-    /** Task Manager service. */
-    private readonly _reviewService: IReviewService;
-
-    /**
-     * Class constructor. Injects Pull Request service dependency.
-     * @param service   Pull Request service.
-     */
-    constructor(service: IPullRequestService, taskManagerService: ITaskManagerService, reviewService: IReviewService) {
-        this._service = service;
-        this._taskManagerService = taskManagerService;
-        this._reviewService = reviewService;
-    }
+export class PullRequestController extends AbstractController implements IPullRequestController {
 
     /** @inheritdoc */
     get(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
         let pullRequestId: number = req.params.pull_number;
-        let service: IPullRequestService = this._service;
+        let service: IPullRequestService = this._services.pull;
 
         service.getLocalPullRequest(owner, repository, pullRequestId).then((pull) => {
             res.json(pull);
@@ -101,7 +87,7 @@ export class PullRequestController implements IPullRequestController {
     getAll(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let service: IPullRequestService = this._service;
+        let service: IPullRequestService = this._services.pull;
 
         service.getLocalPullRequests(owner, repository).then((pulls) => {
             res.json(pulls);
@@ -115,13 +101,34 @@ export class PullRequestController implements IPullRequestController {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
         let pullNumber: number = req.params.pull_number;
-        let service: IReviewService = this._reviewService;
+        let service: IReviewService = this._services.review;
 
         try {
             let reviews: any = await service.getPullRequestLocalReviews(owner, repository, pullNumber);
             res.json(reviews);
         } catch (error) {
-            res.json({ "error": error });
+            res.status(500).json({ message: "Oops, something went wrong." });
+        }
+    }
+
+    /** @inheritdoc */
+    public async getCreatedAllTime(req: Request, res: Response) {
+        let owner: string = req.params.owner;
+        let repository: string = req.params.repository;
+        let pullService: IPullRequestService = this._services.pull;
+        let repoService: IRepositoryService = this._services.repo;
+
+        try {
+            let repo: IRepositoryEntity = await repoService.getRepository(owner, repository);
+            let dates: any = {
+                start: repo.document.created_at,
+                end: repo.document.pushed_at
+            }
+            let counts: number[] = await pullService.getCreatedAllTimeStats(owner, repository, dates);
+            res.json(counts);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
 
@@ -129,7 +136,7 @@ export class PullRequestController implements IPullRequestController {
     getCount(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let service: IPullRequestService = this._service;
+        let service: IPullRequestService = this._services.pull;
 
         service.getLocalPullRequests(owner, repository).then((pulls) => {
             res.json({ "count": pulls.length });
@@ -138,35 +145,17 @@ export class PullRequestController implements IPullRequestController {
         });
     }
 
-    /** @inheritdoc 
-    getRemote(req: Request, res: Response) {
-        let owner: string = req.params.owner;
-        let repository: string = req.params.repository;
-        let pullRequestId: number = req.params.pull_id;
-        let service: IPullRequestService = this._service;
-
-        res.json({ status: `started obtaining remote pull request at: ${new Date()}` });
-
-        service.getRemotePullRequest(owner, repository, pullRequestId).then((pull) => {
-            service.createOrUpdate(pull).then(() => {
-                console.log(`finished obtaining remote pull request at: ${new Date()}`);
-            });
-        }).catch((error) => {
-            console.log(error); // logging ? 
-        });
-    }*/
-
     /** @inheritdoc */
     public async getAllRemote(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
-        let service: ITaskManagerService = this._taskManagerService;
+        let service: ITaskManagerService = this._services.taskManager;
 
         let created: boolean = await service.createTask(owner, repository);
         if (created) {
             res.json({ message: "task created successfully." });
         } else {
-            res.json({ error: "error creating task, try again later." });
+            res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
 

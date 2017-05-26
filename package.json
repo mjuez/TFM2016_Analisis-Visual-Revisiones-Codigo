@@ -36,6 +36,7 @@
     "@types/mocha": "^2.2.40",
     "@types/mongoose": "^4.7.11",
     "@types/node": "^7.0.12",
+    "@types/twix": "^0.6.32",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
@@ -43,9 +44,11 @@
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-typescript": "^3.1.6",
+    "moment": "^2.18.1",
     "mongoose": "^4.9.3",
     "ts-node": "^3.0.2",
     "tslint": "^5.0.0",
+    "twix": "^1.1.5",
     "typescript": "^2.2.2"
   },
   "devDependencies": {
