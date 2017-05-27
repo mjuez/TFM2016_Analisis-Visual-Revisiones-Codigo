@@ -28,6 +28,11 @@ function createTask() {
     function show(element) {
         if (element.hasClass('hidden')) {
             element.transition('fade');
+            setTimeout(() => {
+                if (element.hasClass('visible')) {
+                    element.transition('fade');
+                }
+            }, 3000);
         }
     }
 }
