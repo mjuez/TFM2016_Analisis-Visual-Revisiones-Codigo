@@ -15,6 +15,7 @@ import { IRepositoryService } from "./RepositoryService";
 import { ITask } from "./tasks/ITask";
 import { TaskFactory } from "./tasks/TaskFactory";
 import { TaskUtil } from "../util/TaskUtil";
+import { GitHubUtil } from "../util/GitHubUtil";
 
 interface Repositories {
     pull: IPullRequestRepository,
@@ -108,11 +109,15 @@ export class TaskManagerService implements ITaskManagerService {
     }
 
     public async createTask(owner: string, repository: string): Promise<boolean> {
-        let success: boolean = await this.saveTaskAndSubTasks(owner, repository);
-        if(success && this.currentTask === null){
-            this.updateCurrentTask();
+        const exists: boolean = await GitHubUtil.checkRepository(owner, repository);
+        if (exists) {
+            const success: boolean = await this.saveTaskAndSubTasks(owner, repository);
+            if (success && this.currentTask === null) {
+                this.updateCurrentTask();
+            }
+            return success;
         }
-        return success;
+        return false;
     }
 
     private async saveTaskAndSubTasks(owner: string, repository: string): Promise<boolean> {
