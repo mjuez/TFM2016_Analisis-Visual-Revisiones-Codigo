@@ -84,7 +84,7 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
         }
     }
 
-    public abstract async retrievePartial(filter?: Object, page?: number, startingFrom?: number): Promise<T[]>;
+    public abstract async retrievePartial(filter?: Object, page?: number, startingFrom?: number, sort?: Object): Promise<T[]>;
 
     protected async _retrievePartial(filter: Object, page: number, startingFrom: number, where: string, sort: Object): Promise<T[]> {
         try {

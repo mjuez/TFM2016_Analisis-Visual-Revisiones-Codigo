@@ -75,8 +75,8 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
         return this.retrievePartial({ repository: repository }, page, startingFrom);
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IReviewEntity[]> {
-        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0, sort: Object = { id: 1 }): Promise<IReviewEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'id', sort);
     }
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {

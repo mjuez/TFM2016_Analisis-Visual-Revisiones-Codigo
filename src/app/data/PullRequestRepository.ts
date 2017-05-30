@@ -48,8 +48,8 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
         return this.findOne({ id: id });
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IPullRequestEntity[]> {
-        return this._retrievePartial(filter, page, startingFrom, 'number', { number: 1 });
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0, sort: Object = { number: 1 }): Promise<IPullRequestEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'number', sort);
     }
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {

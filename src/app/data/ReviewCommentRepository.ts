@@ -60,8 +60,8 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
         return this.findOne({id: id});
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IReviewCommentEntity[]> {
-        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0, sort: Object = { id: 1 }): Promise<IReviewCommentEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'id', sort);
     }
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {

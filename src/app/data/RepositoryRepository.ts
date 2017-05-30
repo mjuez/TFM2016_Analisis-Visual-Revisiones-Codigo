@@ -47,16 +47,16 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
      * @param id    Owner GitHub id.
      * @returns a promise that returns a list of repository entities if resolved.
      */
-    public async findByOwnerId(id: number): Promise<IRepositoryEntity[]>{
-        return this.retrieve({ owner: {id: id} }); // PAGINACION!
+    public async findByOwnerId(id: number): Promise<IRepositoryEntity[]> {
+        return this.retrieve({ owner: { id: id } }); // PAGINACION!
     }
 
     public findById(id: number): Promise<IRepositoryEntity> {
         return this.findOne({ id: id });
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IRepositoryEntity[]> {
-        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0, sort: Object = { id: 1 }): Promise<IRepositoryEntity[]> {
+        return this._retrievePartial(filter, page, startingFrom, 'id', sort);
     }
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
