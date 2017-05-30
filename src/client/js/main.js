@@ -2,6 +2,9 @@ const SECTION_HOME = 'home';
 const SECTION_REPOSITORIES = 'repositories';
 const SECTION_PULLREQUESTS = 'pullrequests';
 const SECTION_USERS = 'users';
+const STATUS_RUNNING = 'status_running';
+const STATUS_WAITING = 'status_waiting';
+const STATUS_ERROR = 'status_error';
 
 $(document).ready(function () {
 
@@ -19,11 +22,18 @@ $(document).ready(function () {
         users: $('#m_users')
     }
 
+    setFooterHeight();
     setActiveMenuItem(menuItems, activeSection);
     setMenuClickEvents(menuItems);
     loadSection(activeSection);
+    setStatusInterval();
 
 });
+
+function setFooterHeight() {
+    var padding = $('.ui.inverted.very.padded.basic.footer.segment').outerHeight();
+    $('.full.height').css('padding-bottom', padding);
+}
 
 function setActiveMenuItem(menuItems, activeSection) {
 
@@ -91,4 +101,34 @@ function showLoader() {
 
 function hideLoader() {
     $('#loader').removeClass('active');
+}
+
+function setStatusInterval() {
+    setInterval(function () {
+        $.get(`/api/taskmanager/status`).done(function (result) {
+            console.log(result);
+            if (result.status.error === undefined) {
+                if (result.status === 'running') {
+                    updateStatus(STATUS_RUNNING);
+                } else {
+                    updateStatus(STATUS_WAITING);
+                }
+            } else {
+                updateStatus(STATUS_ERROR);
+            }
+        });
+    }, 2000);
+}
+
+function updateStatus(status) {
+    hideStatus(STATUS_RUNNING);
+    hideStatus(STATUS_WAITING);
+    hideStatus(STATUS_ERROR);
+    $(`#${status}`).removeClass('hidden');
+}
+
+function hideStatus(status) {
+    if (!$(`#${status}`).hasClass('hidden')) {
+        $(`#${status}`).addClass('hidden');
+    }
 }
