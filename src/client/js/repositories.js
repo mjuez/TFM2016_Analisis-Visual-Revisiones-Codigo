@@ -54,7 +54,6 @@ function getRepositoryPage(owner, repository) {
 }
 
 function printCreatedAllTimeStatsGraph(data) {
-    console.log(data);
     const divGraph = $('<div>',{
         id: "graph_createdalltime"
     });
@@ -85,30 +84,18 @@ function repositoryItem(repositoryData) {
                 $('<div>', {
                     class: 'header',
                     html: $('<a>', {
-                                text: repositoryData.name,
+                                text: repositoryData.full_name,
+                                class: 'ui violet large label',
                                 click: () => { getRepositoryPage(repositoryData.owner.login, repositoryData.name); }
                             })
                 }),
                 $('<div>', {
-                    class: 'meta',
-                    html: $('<span>', {
-                        class: 'full name',
-                        html: [
-                            $('<i>', {
-                                class: 'github icon'
-                            }),
-                            $('<a>', {
-                                href: repositoryData.html_url,
-                                target: '_BLANK',
-                                html: repositoryData.full_name
-                            })
-                        ]
-                    })
+                    class: 'ui hidden divider'
                 }),
                 $('<div>', {
                     class: 'description',
                     html: $('<p>', {
-                        html: repositoryData.description
+                        html: repositoryData.description || '<em>Sin descripción.</em>'
                     })
                 })
             ]

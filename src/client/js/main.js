@@ -106,7 +106,6 @@ function hideLoader() {
 function setStatusInterval() {
     setInterval(function () {
         $.get(`/api/taskmanager/status`).done(function (result) {
-            console.log(result);
             if (result.status.error === undefined) {
                 if (result.status === 'running') {
                     updateStatus(STATUS_RUNNING);
