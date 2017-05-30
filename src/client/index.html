@@ -3,24 +3,25 @@
 
 <head>
     <title>Anvireco</title>
-    <link rel="stylesheet" type="text/css" href="/js/semantic/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="/js/c3/c3.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/c3/0.4.11/c3.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
-    <script src="/js/semantic/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="https://cdn.jsdelivr.net/c3/0.4.11/c3.min.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/errors.js"></script>
     <script src="/js/home.js"></script>
     <script src="/js/repositories.js"></script>
     <script src="/js/pullrequests.js"></script>
     <script src="/js/users.js"></script>
-    <script src="http://d3js.org/d3.v3.js"></script>
-    <script src="/js/c3/c3.min.js"></script>
 </head>
 
 <body>
-    <div class="ui fixed violet menu">
+    <!-- SIDEBAR -->
+    <div class="ui visible left vertical inverted sidebar labeled icon menu">
         <div class="header item">
             Anvireco
         </div>
@@ -37,9 +38,24 @@
             <i class="users icon"></i> Usuarios
         </a>
     </div>
-    <div class="ui loader" id="loader"></div>
-    <div class="ui container" id="content">
+
+    <!-- CONTENT -->
+    <div class="full height">
+        <div class="ui very padded basic segment">
+            <div class="ui loader" id="loader"></div>
+            <div id="content"></div>
+        </div>
+        <div class="ui inverted very padded right aligned basic footer segment">
+            hola
+        </div>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var padding = $('.ui.inverted.very.padded.basic.footer.segment').outerHeight();
+            $('.full.height').css('padding-bottom', padding);
+        });
+    </script>
 </body>
 
 </html>
