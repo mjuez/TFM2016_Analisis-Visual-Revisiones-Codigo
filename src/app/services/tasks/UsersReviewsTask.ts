@@ -39,7 +39,7 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
             };
             let numPages: number = await reviewRepo.numPages(filter, startingFrom);
             for (let page: number = 1; page <= numPages; page++) {
-                let reviews: IReviewEntity[] = await reviewRepo.retrievePartial(filter, page, startingFrom);
+                let reviews: IReviewEntity[] = await reviewRepo.retrieve({ filter, page, startingFrom });
                 let success: boolean = await this.processReviews(reviews);
                 if (!success) return;
             }

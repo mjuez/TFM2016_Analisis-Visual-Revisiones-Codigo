@@ -1,32 +1,14 @@
 function loadRepositories(callback) {
-    $('#content').load(`/_repositories.html`, function () {
-        const url = $(location).prop('pathname').split('/');
-        if (url.length > 2) {
-            const isPage = url[2] === 'page';
-            const isSingle = url[2] === 'single';
-            if (isPage) {
-                const page = Number.parseInt(url[3]);
-                getRepositoriesPage(page);
-            } else if (isSingle) {
-                const owner = url[3];
-                const repository = url[4];
-                getRepositoryPage(owner, repository);
-            } else {
-                showError(hideLoader);
-            }
-        } else {
-            getRepositoriesPage(1);
-        }
-    });
+    loadPage(`/_repositories.html`, getPullrequestsPage, getPullRequestPage);
 }
 
-function getRepositoriesPage(page) {
+function getPullrequestsPage(page) {
     $('#loader').addClass('active');
     $.get(`/api/repos/page/${page}`)
         .done(function (result) {
             printRepositoryItems(result.data);
             let paginator = $('#repository_paginator');
-            printRepositoryPaginator(paginator, page, result.last_page);
+            printPaginator(paginator, page, result.last_page, getPullrequestsPage);
             history.pushState(null, `Repositorios - Página ${page}`, `/repositories/page/${page}`);
             $('#loader').removeClass('active');
         })
@@ -36,7 +18,7 @@ function getRepositoriesPage(page) {
         });
 }
 
-function getRepositoryPage(owner, repository) {
+function getPullRequestPage(owner, repository) {
     $('#loader').addClass('active');
     $('#content').load(`/_generic.html`, function () {
         history.pushState(null, `Repositorio - ${owner}/${repository}`, `/repositories/single/${owner}/${repository}`);
@@ -86,7 +68,7 @@ function repositoryItem(repositoryData) {
                     html: $('<a>', {
                         text: repositoryData.full_name,
                         class: 'ui violet large label',
-                        click: function () { getRepositoryPage(repositoryData.owner.login, repositoryData.name); }
+                        click: function () { getPullRequestPage(repositoryData.owner.login, repositoryData.name); }
                     })
                 }),
                 $('<div>', {
@@ -103,64 +85,4 @@ function repositoryItem(repositoryData) {
     });
 
     return item;
-}
-
-function printRepositoryPaginator(paginator, currentPage, numPages) {
-    paginator.html('');
-
-    if (numPages < 12) {
-        for (let page = 1; page <= numPages; page++) {
-            appendPageLink(page);
-        }
-    } else {
-        if (currentPage < 7) {
-            for (let page = 1; page < 10; page++) {
-                appendPageLink(page);
-            }
-            appendDisabledLink();
-            appendPageLink(numPages);
-        } else {
-            appendPageLink(1);
-            appendDisabledLink();
-            let numLastPages = numPages - currentPage;
-            if (numLastPages <= 5) {
-                let numPrevVisible = 8 - numLastPages;
-                for (let page = currentPage - numPrevVisible; page <= numPages; page++) {
-                    appendPageLink(page);
-                }
-            } else {
-                for (let page = currentPage - 3; page <= currentPage + 3; page++) {
-                    appendPageLink(page);
-                }
-                appendDisabledLink();
-                appendPageLink(numPages);
-            }
-
-        }
-    }
-
-    function appendPageLink(page) {
-        const isActive = page === currentPage;
-        const a = pageLink(page, isActive);
-        paginator.append(a);
-    }
-
-    function appendDisabledLink() {
-        const disabled = $('<div>', {
-            class: 'disabled item',
-            html: '...'
-        });
-        paginator.append(disabled);
-    }
-
-    function pageLink(page, isActive) {
-        let cssClass = "item";
-        if (isActive) cssClass += " active";
-        const a = $('<a>', {
-            class: cssClass,
-            text: page,
-            click: function () { getRepositoriesPage(page); }
-        });
-        return a;
-    }
 }

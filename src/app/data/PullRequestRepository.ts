@@ -1,4 +1,4 @@
-import { IRepository } from "../data/IRepository";
+import { IRepository, RetrieveOptions } from "../data/IRepository";
 import { AbstractRepository } from "./AbstractRepository";
 import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
@@ -48,12 +48,19 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
         return this.findOne({ id: id });
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0, sort: Object = { number: 1 }): Promise<IPullRequestEntity[]> {
-        return this._retrievePartial(filter, page, startingFrom, 'number', sort);
+    public async retrieve({
+        filter = {},
+        page,
+        startingFrom = 0,
+        where = 'number',
+        sort = { number: 1 },
+        select = '' }: RetrieveOptions = {}): Promise<IPullRequestEntity[]> {
+
+        return this._retrieve({ filter, page, startingFrom, where, sort, select });
     }
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
-        return this._numPages(filter, startingFrom, 'number', { number: 1 });
+        return this._numPages(filter, startingFrom, 'number');
     }
 
     protected convertToEntity(document: PullRequestDocument): IPullRequestEntity {

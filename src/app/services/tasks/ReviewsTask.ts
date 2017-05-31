@@ -35,16 +35,16 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
     }
 
     public async run(): Promise<void> {
-        let pullRepo: IPullRequestRepository = this._repositories.pull;
-        let filter: RepositoryPullRequestFilter =
+        const pullRepo: IPullRequestRepository = this._repositories.pull;
+        const filter: RepositoryPullRequestFilter =
             PullRequestFilterFactory.createRepository({ owner: this.entity.owner, repository: this.entity.repository });
-        let startingFrom: number = this.entity.lastProcessed;
+        const startingFrom: number = this.entity.lastProcessed;
         try {
             await this.startTask();
-            let numPages: number = await pullRepo.numPages(filter, startingFrom);
+            const numPages: number = await pullRepo.numPages(filter, startingFrom);
             for (let page: number = 1; page <= numPages; page++) {
-                let pulls: IPullRequestEntity[] = await pullRepo.retrievePartial(filter, page, startingFrom);
-                let success: boolean = await this.processPullRequests(pulls);
+                const pulls: IPullRequestEntity[] = await pullRepo.retrieve({ filter, page, startingFrom });
+                const success: boolean = await this.processPullRequests(pulls);
                 if (!success) return;
             }
             await this.completeTask();

@@ -32,32 +32,58 @@ export class PullRequestRoutes {
         let router: express.Router = this._router;
         let controller: IPullRequestController = this._controller;
 
-        router.get("/:owner/:repository/pulls/count", (req: express.Request, res: express.Response) => {
-            controller.getCount(req, res);
-        });
-        
-        router.get("/:owner/:repository/pulls/:pull_number", (req: express.Request, res: express.Response) => {
+        router.get("/pull/:owner/:repository/:number", (req: express.Request, res: express.Response) => {
             controller.get(req, res);
         });
 
-        router.get("/:owner/:repository/pulls/:pull_number/reviews", async (req: express.Request, res: express.Response) => {
-            await controller.getReviews(req, res);
+        router.get("/pulls", (req: express.Request, res: express.Response) => {
+            req.params.page = 1;
+            req.params.direction = 'ASC';
+            controller.getPage(req, res);
         });
 
-        router.get("/:owner/:repository/pulls", (req: express.Request, res: express.Response) => {
-            controller.getAll(req, res);
+        router.get("/pulls/page/:page", (req: express.Request, res: express.Response) => {
+            req.params.direction = 'ASC';
+            controller.getPage(req, res);
         });
 
-        router.get("/:owner/:repository/pulls/stats/created/alltime", async (req: express.Request, res: express.Response) => {
-            await controller.getCreatedAllTime(req, res);
+        router.get("/pulls/page/:page/order/date/:direction", (req: express.Request, res: express.Response) => {
+            controller.getPage(req, res);
         });
 
-        /*router.get("/remote/:owner/:repository/pulls/:pull_id", (req: express.Request, res: express.Response) => {
-            controller.getRemote(req, res);
-        });*/
+        router.get("/pulls/page/:page/order/name/:direction", (req: express.Request, res: express.Response) => {
+            controller.getByNamePage(req, res);
+        });
 
-        router.get("/remote/:owner/:repository/pulls", (req: express.Request, res: express.Response) => {
-            controller.getAllRemote(req, res);
+        router.get("/pulls/page/:page/order/reviews/:direction", (req: express.Request, res: express.Response) => {
+            controller.getByReviewsPage(req, res);
+        });
+
+        router.get("/pulls/single/:owner/:repository", (req: express.Request, res: express.Response) => {
+            req.params.page = 1;
+            req.params.direction = 'ASC';
+            controller.getPageFromRepository(req, res);
+        });
+
+        router.get("/pulls/single/:owner/:repository/page/:page", (req: express.Request, res: express.Response) => {
+            req.params.direction = 'ASC';
+            controller.getPageFromRepository(req, res);
+        });
+
+        router.get("/pulls/single/:owner/:repository/page/:page/order/date/:direction", (req: express.Request, res: express.Response) => {
+            controller.getPageFromRepository(req, res);
+        });
+
+        router.get("/pulls/single/:owner/:repository/page/:page/order/name/:direction", (req: express.Request, res: express.Response) => {
+            controller.getByNamePageFromRepository(req, res);
+        });
+
+        router.get("/pulls/single/:owner/:repository/page/:page/order/reviews/:direction", (req: express.Request, res: express.Response) => {
+            controller.getByReviewsPageFromRepository(req, res);
+        });
+
+        router.get("/:owner/:repository/pulls/stats/created/alltime", (req: express.Request, res: express.Response) => {
+            controller.getCreatedAllTime(req, res);
         });
 
         return router;

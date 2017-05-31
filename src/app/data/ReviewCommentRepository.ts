@@ -1,4 +1,4 @@
-import { IRepository } from "../data/IRepository";
+import { IRepository, RetrieveOptions } from "../data/IRepository";
 import { AbstractRepository } from "./AbstractRepository";
 import { IReviewCommentEntity, ReviewCommentEntity } from "../entities/ReviewCommentEntity";
 import { ReviewCommentDocument } from "../entities/documents/ReviewCommentDocument";
@@ -18,7 +18,7 @@ export interface IReviewCommentRepository extends IRepository<IReviewCommentEnti
      * @param id        Review GitHub id.
      * @returns a promise that returns a list of review comment entities if resolved.
      */
-    findByReviewId(id: number): Promise<IReviewCommentEntity[]>;
+    findByReviewId(id: number, page?: number, startingFrom?: number): Promise<IReviewCommentEntity[]>;
 
     findById(id: number): Promise<IReviewCommentEntity>;
 
@@ -47,8 +47,9 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
      * @param id        Review GitHub id.
      * @returns a promise that returns a list of review comment entities if resolved.
      */
-    public async findByReviewId(id: number): Promise<IReviewCommentEntity[]> {
-        return this.retrieve({ pull_request_review_id: id }); // PAGINACION
+    public async findByReviewId(id: number, page: number = 1, startingFrom: number = 0): Promise<IReviewCommentEntity[]> {
+        const filter: Object = { pull_request_review_id: id };
+        return this.retrieve({ filter, page, startingFrom });
     }
 
     /**
@@ -57,15 +58,22 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
      * @returns a promise that returns a review entity if resolved.
      */
     public async findById(id: number): Promise<IReviewCommentEntity> {
-        return this.findOne({id: id});
+        return this.findOne({ id: id });
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0, sort: Object = { id: 1 }): Promise<IReviewCommentEntity[]> {
-        return this._retrievePartial(filter, page, startingFrom, 'id', sort);
+    public async retrieve({
+        filter = {},
+        page,
+        startingFrom = 0,
+        where = 'id',
+        sort = { id: 1 },
+        select = '' }: RetrieveOptions = {}): Promise<IReviewCommentEntity[]> {
+
+        return this._retrieve({ filter, page, startingFrom, where, sort, select });
     }
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
-        return this._numPages(filter, startingFrom, 'id', { id: 1 });
+        return this._numPages(filter, startingFrom, 'id');
     }
 
     protected convertToEntity(document: ReviewCommentDocument): IReviewCommentEntity {

@@ -39,7 +39,7 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
             };
             let numPages: number = await reviewCommentRepo.numPages(filter, startingFrom);
             for (let page: number = 1; page <= numPages; page++) {
-                let reviewComments: IReviewCommentEntity[] = await reviewCommentRepo.retrievePartial(filter, page, startingFrom);
+                let reviewComments: IReviewCommentEntity[] = await reviewCommentRepo.retrieve({ filter, page, startingFrom });
                 let success: boolean = await this.processReviewComments(reviewComments);
                 if (!success) return;
             }

@@ -95,6 +95,28 @@ function loadSection(section) {
     }
 }
 
+function loadPage(template, pageList, page){
+    $('#content').load(template, function () {
+        const url = $(location).prop('pathname').split('/');
+        if (url.length > 2) {
+            const isPage = url[2] === 'page';
+            const isSingle = url[2] === 'single';
+            if (isPage) {
+                const page = Number.parseInt(url[3]);
+                pageList(page);
+            } else if (isSingle) {
+                const owner = url[3];
+                const repository = url[4];
+                page(owner, repository);
+            } else {
+                showError(hideLoader);
+            }
+        } else {
+            pageList(1);
+        }
+    });
+}
+
 function showLoader() {
     $('#loader').addClass('active');
 }
@@ -129,5 +151,65 @@ function updateStatus(status) {
 function hideStatus(status) {
     if (!$(`#${status}`).hasClass('hidden')) {
         $(`#${status}`).addClass('hidden');
+    }
+}
+
+function printPaginator(paginator, currentPage, numPages, pageList) {
+    paginator.html('');
+
+    if (numPages < 12) {
+        for (let page = 1; page <= numPages; page++) {
+            appendPageLink(page);
+        }
+    } else {
+        if (currentPage < 7) {
+            for (let page = 1; page < 10; page++) {
+                appendPageLink(page);
+            }
+            appendDisabledLink();
+            appendPageLink(numPages);
+        } else {
+            appendPageLink(1);
+            appendDisabledLink();
+            let numLastPages = numPages - currentPage;
+            if (numLastPages <= 5) {
+                let numPrevVisible = 8 - numLastPages;
+                for (let page = currentPage - numPrevVisible; page <= numPages; page++) {
+                    appendPageLink(page);
+                }
+            } else {
+                for (let page = currentPage - 3; page <= currentPage + 3; page++) {
+                    appendPageLink(page);
+                }
+                appendDisabledLink();
+                appendPageLink(numPages);
+            }
+
+        }
+    }
+
+    function appendPageLink(page) {
+        const isActive = page === currentPage;
+        const a = pageLink(page, isActive);
+        paginator.append(a);
+    }
+
+    function appendDisabledLink() {
+        const disabled = $('<div>', {
+            class: 'disabled item',
+            html: '...'
+        });
+        paginator.append(disabled);
+    }
+
+    function pageLink(page, isActive) {
+        let cssClass = "item";
+        if (isActive) cssClass += " active";
+        const a = $('<a>', {
+            class: cssClass,
+            text: page,
+            click: function () { pageList(page); }
+        });
+        return a;
     }
 }

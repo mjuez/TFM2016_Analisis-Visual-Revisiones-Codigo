@@ -10,10 +10,16 @@ import { IRepositoryRepository } from "../data/RepositoryRepository";
  * @author Mario Juez <mario@mjuez.com> 
  */
 export interface IRepositoryService extends IPersistenceService<IRepositoryEntity> {
+    
     getRepository(owner: string, repository: string): Promise<IRepositoryEntity>;
-    getRepositories(page: number): Promise<Object[]>;
+    getRepositoriesPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
+    getRepositoriesByNamePage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
+    getRepositoriesByReviewsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
+    getRepositoriesByPullRequestsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
+    getRepositoriesList(): Promise<IRepositoryEntity[]>;
     numPages(): Promise<number>;
- }
+
+}
 
 /**
  * Repository services.
@@ -31,19 +37,44 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
     }
 
     public async getRepository(owner: string, repository: string): Promise<IRepositoryEntity> {
-        let repo: IRepositoryRepository = this._repository;
-        return await repo.findOne({"owner.login": owner, "name": repository});
-    }
-    
-    public async getRepositories(page: number): Promise<Object[]>{
-        let repo: IRepositoryRepository = this._repository;
-        let entities: IRepositoryEntity[] = await repo.retrievePartial({}, page);
-        return this.toJSONArray(entities);
+        const repo: IRepositoryRepository = this._repository;
+        return await repo.findOne({ "owner.login": owner, "name": repository });
     }
 
-    public async numPages(): Promise<number> {
-        let repo: IRepositoryRepository = this._repository;
-        return await repo.numPages();
+    public async getRepositoriesPage(page: number, direction: number = 1): Promise<IRepositoryEntity[]> {
+        const repo: IRepositoryRepository = this._repository;
+        const sort: Object = { created_at: direction };
+        const entities: IRepositoryEntity[] = await repo.retrieve({ page, sort });
+        return entities;
+    }
+
+    public async getRepositoriesByNamePage(page: number, direction: number = 1): Promise<IRepositoryEntity[]> {
+        const repo: IRepositoryRepository = this._repository;
+        const sort: Object = { full_name: direction };
+        const entities: IRepositoryEntity[] = await repo.retrieve({ page, sort });
+        return entities;
+    }
+
+    public async getRepositoriesByReviewsPage(page: number, direction: number = 1): Promise<IRepositoryEntity[]> {
+        const repo: IRepositoryRepository = this._repository;
+        const sort: Object = { reviews_count: direction };
+        const entities: IRepositoryEntity[] = await repo.retrieve({ page, sort });
+        return entities;
+    }
+
+    public async getRepositoriesByPullRequestsPage(page: number, direction: number = 1): Promise<IRepositoryEntity[]> {
+        const repo: IRepositoryRepository = this._repository;
+        const sort: Object = { pull_requests_count: direction };
+        const entities: IRepositoryEntity[] = await repo.retrieve({ page, sort });
+        return entities;
+    }
+
+    public async getRepositoriesList(): Promise<IRepositoryEntity[]> {
+        const repo: IRepositoryRepository = this._repository;
+        const sort: Object = { full_name: 1 };
+        const select: string = 'id full_name';
+        const entities: IRepositoryEntity[] = await repo.retrieve({ sort, select });
+        return entities;
     }
 
     protected async findEntity(entity: IRepositoryEntity): Promise<IRepositoryEntity> {

@@ -99,13 +99,14 @@ export class TaskManagerService implements ITaskManagerService {
     }
 
     public async getPendingTasks(page: number = 1): Promise<ITaskEntity[]> {
-        let repository: ITaskRepository = this._repositories.task;
-        return repository.retrievePartial({ is_completed: false }, page);
+        const repository: ITaskRepository = this._repositories.task;
+        const filter: Object = { is_completed: false };
+        return repository.retrieve({ filter, page });
     }
 
     public async getAllTasks(page: number = 1): Promise<ITaskEntity[]> {
-        let repository: ITaskRepository = this._repositories.task;
-        return repository.retrievePartial({}, page);
+        const repository: ITaskRepository = this._repositories.task;
+        return repository.retrieve({ page });
     }
 
     public async createTask(owner: string, repository: string): Promise<boolean> {
@@ -186,7 +187,7 @@ export class TaskManagerService implements ITaskManagerService {
         } else {
             let continue_at: Date;
             if (error.code === 403) {
-                let milis: number = (<number>error.headers['x-ratelimit-reset'])*1000;
+                let milis: number = (<number>error.headers['x-ratelimit-reset']) * 1000;
                 continue_at = new Date(milis);
             } else {
                 let date: Date = new Date();

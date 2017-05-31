@@ -1,71 +1,76 @@
 import { Router, Request, Response, NextFunction } from "express";
+import { AbstractController } from "./AbstractController";
 import { IRepositoryService } from "../app/services/RepositoryService";
 import { RepositoryDocument } from "../app/entities/documents/RepositoryDocument";
 import { IRepositoryEntity, RepositoryEntity } from "../app/entities/RepositoryEntity";
+import { EntityUtil } from "../app/util/EntityUtil";
 
 /**
  * Repository controller interface.
  * @author Mario Juez <mario@mjuez.com>
  */
 export interface IRepositoryController {
-    getFirstPage(req: Request, res: Response): Promise<void>;
+    get(req: Request, res: Response): Promise<void>;
     getPage(req: Request, res: Response): Promise<void>;
-    getPageOrderedBy(req: Request, res: Response): Promise<void>;
-    getNumberOfPages(req: Request, res: Response): Promise<void>;
+    getByNamePage(req: Request, res: Response): Promise<void>;
+    getByReviewsPage(req: Request, res: Response): Promise<void>;
+    getByPullRequestsPage(req: Request, res: Response): Promise<void>;
 }
 
 /**
  * Repository controller.
  * Defines Repository requests handling.
- * @extends GitHubController.
- * @implements IPullRequestController.
+ * @implements IRepositoryController.
  */
-export class RepositoryController implements IRepositoryController {
+export class RepositoryController extends AbstractController implements IRepositoryController {
 
-    /** Repository service. */
-    private readonly _service: IRepositoryService;
-
-    /**
-     * Class constructor. Injects Repository service dependency.
-     * @param service   Repository service.
-     */
-    constructor(service: IRepositoryService) {
-        this._service = service;
-    }
-
-    public async getFirstPage(req: Request, res: Response): Promise<void> {
-        let service: IRepositoryService = this._service;
-        await this._getPage(res, 1);
+    public async get(req: Request, res: Response): Promise<void> {
+        const service: IRepositoryService = this._services.repo;
+        const owner: string = req.params.owner;
+        const repository: string = req.params.repository;
+        try {
+            const entity: IRepositoryEntity = await service.getRepository(owner, repository);
+            const json: Object[] = EntityUtil.toJSON(entity);
+            res.json(json);
+        } catch (error) {
+            res.status(500).json({ message: "Oops, something went wrong." });
+        }
     }
 
     public async getPage(req: Request, res: Response): Promise<void> {
-        let page: number = req.params.page;
-        await this._getPage(res, page);
-    }
+        const service: IRepositoryService = this._services.repo;
+        await this.getOrderedPage(req, res, service, handler);
 
-    private async _getPage(res: Response, page: number): Promise<void> {
-        let service: IRepositoryService = this._service;
-        try {
-            let repositories: Object[] = await service.getRepositories(page);
-            let lastPage: number = await service.numPages();
-            res.json({ data: repositories, last_page: lastPage });
-        } catch (error) {
-            res.status(500).json({ message: "Oops, something went wrong." });
+        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]>{
+            return service.getRepositoriesPage(page, direction);
         }
     }
 
-    public async getNumberOfPages(req: Request, res: Response): Promise<void> {
-        let service: IRepositoryService = this._service;
-        try {
-            let pages = await service.numPages();
-            res.json({ num: pages });
-        } catch (error) {
-            res.status(500).json({ message: "Oops, something went wrong." });
+    public async getByNamePage(req: Request, res: Response): Promise<void> {
+        const service: IRepositoryService = this._services.repo;
+        await this.getOrderedPage(req, res, service, handler);
+
+        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]>{
+            return service.getRepositoriesByNamePage(page, direction);
         }
     }
 
-    public async getPageOrderedBy(req: Request, res: Response): Promise<void> {
+    public async getByReviewsPage(req: Request, res: Response): Promise<void> {
+        const service: IRepositoryService = this._services.repo;
+        await this.getOrderedPage(req, res, service, handler);
 
+        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]>{
+            return service.getRepositoriesByReviewsPage(page, direction);
+        }
+    }
+
+    public async getByPullRequestsPage(req: Request, res: Response): Promise<void> {
+        const service: IRepositoryService = this._services.repo;
+        await this.getOrderedPage(req, res, service, handler);
+
+        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]>{
+            return service.getRepositoriesByPullRequestsPage(page, direction);
+        }
     }
 
 }

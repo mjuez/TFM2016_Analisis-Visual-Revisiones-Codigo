@@ -44,6 +44,10 @@ export class TaskRoutes {
             controller.getPendingTasks(req, res);
         });
 
+        router.post("/task/:owner/:repository", (req: express.Request, res: express.Response) => {
+            controller.createTask(req, res);
+        });
+
         return router;
     }
 

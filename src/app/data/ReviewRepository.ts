@@ -1,4 +1,4 @@
-import { IRepository } from "../data/IRepository";
+import { IRepository, RetrieveOptions } from "../data/IRepository";
 import { AbstractRepository } from "./AbstractRepository";
 import { IReviewEntity, ReviewEntity } from "../entities/ReviewEntity";
 import { ReviewDocument } from "../entities/documents/ReviewDocument";
@@ -18,7 +18,7 @@ export interface IReviewRepository extends IRepository<IReviewEntity, ReviewDocu
      * @param id        Pull Request GitHub id.
      * @returns a promise that returns a list of review entities if resolved.
      */
-    findByPullId(id: number): Promise<IReviewEntity[]>;
+    findByPullId(id: number, page?: number, startingFrom?: number): Promise<IReviewEntity[]>;
 
     /**
      * Retrieves a review given its GitHub id.
@@ -54,8 +54,9 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
      * @param id    Pull Request GitHub id.
      * @returns a promise that returns a list of review entities if resolved.
      */
-    public async findByPullId(id: number): Promise<IReviewEntity[]> {
-        return this.retrieve({ pull_request_id: id });
+    public async findByPullId(id: number, page: number = 1, startingFrom: number = 0): Promise<IReviewEntity[]> {
+        const filter = { pull_request_id: id };
+        return this.retrieve({ filter, page, startingFrom });
     }
 
     /**
@@ -68,19 +69,27 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
     }
 
     public async findByRepository(name: string, owner: string, page: number = 1, startingFrom: number = 0): Promise<IReviewEntity[]> {
-        let repository: Object = {
+        const repository: Object = {
             name,
             owner
         }
-        return this.retrievePartial({ repository: repository }, page, startingFrom);
+        const filter: Object = { repository: repository };
+        return this.retrieve({ filter, page, startingFrom });
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0, sort: Object = { id: 1 }): Promise<IReviewEntity[]> {
-        return this._retrievePartial(filter, page, startingFrom, 'id', sort);
+    public async retrieve({
+        filter = {},
+        page,
+        startingFrom = 0,
+        where = 'id',
+        sort = { id: 1 },
+        select = '' }: RetrieveOptions = {}): Promise<IReviewEntity[]> {
+
+        return this._retrieve({ filter, page, startingFrom, where, sort, select });
     }
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
-        return this._numPages(filter, startingFrom, 'id', { id: 1 });
+        return this._numPages(filter, startingFrom, 'id');
     }
 
     protected convertToEntity(document: ReviewDocument): IReviewEntity {

@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { ITaskManagerService, TaskManagerService } from "../app/services/TaskManagerService";
+import { AbstractController } from "./AbstractController";
 import * as mongoose from "mongoose";
 import * as GitHubAPI from "github";
 import * as BluebirdPromise from "bluebird";
@@ -15,21 +16,23 @@ export interface ITaskManagerController {
      * @param req   API request.
      * @param res   API response.
      */
-    getStatus(req: Request, res: Response);
+    getStatus(req: Request, res: Response): Promise<void>;
 
     /**
      * Gets the list of pending tasks.
      * @param req   API request.
      * @param res   API response.
      */
-    getPendingTasks(req: Request, res: Response);
+    getPendingTasks(req: Request, res: Response): Promise<void>;
 
     /**
      * Gets the list of all tasks.
      * @param req   API request.
      * @param res   API response.
      */
-    getAllTasks(req: Request, res: Response);
+    getAllTasks(req: Request, res: Response): Promise<void>;
+
+    createTask(req: Request, res: Response): Promise<void>;
 }
 
 /**
@@ -37,20 +40,11 @@ export interface ITaskManagerController {
  * Defines Task manager requests handling.
  * @implements ITaskManagerController.
  */
-export class TaskManagerController implements ITaskManagerController {
-
-    private _taskManagerService: ITaskManagerService;
-
-    /**
-     * Class constructor.
-     */
-    constructor(taskManagerService: ITaskManagerService) {
-        this._taskManagerService = taskManagerService;
-    }
+export class TaskManagerController extends AbstractController implements ITaskManagerController {
 
     /** @inheritdoc */
-    public getStatus(req: Request, res: Response) {
-        let service: ITaskManagerService = this._taskManagerService;
+    public async getStatus(req: Request, res: Response): Promise<void> {
+        let service: ITaskManagerService = this._services.taskManager;
 
         if (service.currentTask != null) {
             res.json({ status: "running" });
@@ -61,20 +55,31 @@ export class TaskManagerController implements ITaskManagerController {
                 res.json({ status: { error: service.error } });
             }
         }
-
-
     }
 
     /** @inheritdoc */
-    public async getPendingTasks(req: Request, res: Response) {
-        let service: ITaskManagerService = this._taskManagerService;
+    public async getPendingTasks(req: Request, res: Response): Promise<void> {
+        let service: ITaskManagerService = this._services.taskManager;
         res.json(await service.getPendingTasks());
     }
 
     /** @inheritdoc */
-    public async getAllTasks(req: Request, res: Response) {
-        let service: ITaskManagerService = this._taskManagerService;
+    public async getAllTasks(req: Request, res: Response): Promise<void> {
+        let service: ITaskManagerService = this._services.taskManager;
         res.json(await service.getAllTasks());
+    }
+
+    public async createTask(req: Request, res: Response): Promise<void> {
+        let owner: string = req.params.owner;
+        let repository: string = req.params.repository;
+        let service: ITaskManagerService = this._services.taskManager;
+
+        let created: boolean = await service.createTask(owner, repository);
+        if (created) {
+            res.json({ message: "task created successfully." });
+        } else {
+            res.status(500).json({ message: "Oops, something went wrong." });
+        }
     }
 
 }

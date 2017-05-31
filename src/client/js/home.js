@@ -15,7 +15,7 @@ function createTask() {
     const owner = $('#home_owner_input').val();
     const repository = $('#home_repository_input').val();
     $(this).addClass('loading');
-    $.get(`/api/remote/${owner}/${repository}/pulls`)
+    $.post(`/api/task/${owner}/${repository}`)
         .done((result) => {
             show($('#home_success'));
             $(this).removeClass('loading');
