@@ -17,7 +17,6 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
     getRepositoriesByReviewsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
     getRepositoriesByPullRequestsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
     getRepositoriesList(): Promise<IRepositoryEntity[]>;
-    numPages(): Promise<number>;
 
 }
 
@@ -72,7 +71,7 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
     public async getRepositoriesList(): Promise<IRepositoryEntity[]> {
         const repo: IRepositoryRepository = this._repository;
         const sort: Object = { full_name: 1 };
-        const select: string = 'id full_name';
+        const select: string = 'full_name -_id';
         const entities: IRepositoryEntity[] = await repo.retrieve({ sort, select });
         return entities;
     }

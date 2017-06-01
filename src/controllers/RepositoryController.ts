@@ -15,6 +15,7 @@ export interface IRepositoryController {
     getByNamePage(req: Request, res: Response): Promise<void>;
     getByReviewsPage(req: Request, res: Response): Promise<void>;
     getByPullRequestsPage(req: Request, res: Response): Promise<void>;
+    getList(req: Request, res: Response): Promise<void>;
 }
 
 /**
@@ -30,7 +31,7 @@ export class RepositoryController extends AbstractController implements IReposit
         const repository: string = req.params.repository;
         try {
             const entity: IRepositoryEntity = await service.getRepository(owner, repository);
-            const json: Object[] = EntityUtil.toJSON(entity);
+            const json: Object = EntityUtil.toJSON(entity);
             res.json(json);
         } catch (error) {
             res.status(500).json({ message: "Oops, something went wrong." });
@@ -41,7 +42,7 @@ export class RepositoryController extends AbstractController implements IReposit
         const service: IRepositoryService = this._services.repo;
         await this.getOrderedPage(req, res, service, handler);
 
-        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]>{
+        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]> {
             return service.getRepositoriesPage(page, direction);
         }
     }
@@ -50,7 +51,7 @@ export class RepositoryController extends AbstractController implements IReposit
         const service: IRepositoryService = this._services.repo;
         await this.getOrderedPage(req, res, service, handler);
 
-        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]>{
+        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]> {
             return service.getRepositoriesByNamePage(page, direction);
         }
     }
@@ -59,7 +60,7 @@ export class RepositoryController extends AbstractController implements IReposit
         const service: IRepositoryService = this._services.repo;
         await this.getOrderedPage(req, res, service, handler);
 
-        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]>{
+        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]> {
             return service.getRepositoriesByReviewsPage(page, direction);
         }
     }
@@ -68,8 +69,20 @@ export class RepositoryController extends AbstractController implements IReposit
         const service: IRepositoryService = this._services.repo;
         await this.getOrderedPage(req, res, service, handler);
 
-        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]>{
+        async function handler(page: number, direction: number): Promise<IRepositoryEntity[]> {
             return service.getRepositoriesByPullRequestsPage(page, direction);
+        }
+    }
+
+    public async getList(req: Request, res: Response): Promise<void> {
+        const service: IRepositoryService = this._services.repo;
+        try {
+            const entities: IRepositoryEntity[] = await service.getRepositoriesList();
+            const json: any[] = EntityUtil.toJSONArray(entities);
+            let list: string[] = json.map((jsonobj) => { return jsonobj.full_name });
+            res.json(list);
+        } catch (error) {
+            res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
 

@@ -63,6 +63,10 @@ export class RepositoryRoutes {
             controller.getByPullRequestsPage(req, res);
         });
 
+        router.get("/repos/all", (req: express.Request, res: express.Response) => {
+            controller.getList(req, res);
+        });
+
         return router;
     }
 
