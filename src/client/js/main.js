@@ -23,12 +23,12 @@ $(document).ready(function () {
     }
 
     setFooterHeight();
-    setActiveMenuItem(menuItems, activeSection);
-    setMenuClickEvents(menuItems);
-    loadSection(activeSection);
+    //setActiveMenuItem(menuItems, activeSection);
+    //setMenuClickEvents(menuItems);
+    //loadSection(activeSection);
     setStatusInterval();
 
-    app.run();
+    app.run('#/');
 
 });
 
@@ -37,14 +37,14 @@ function setFooterHeight() {
     $('.full.height').css('padding-bottom', padding);
 }
 
-function setActiveMenuItem(menuItems, activeSection) {
+function setActiveMenuItem(activeSection) {
 
-    menuItems[SECTION_HOME].removeClass('active');
-    menuItems[SECTION_REPOSITORIES].removeClass('active');
-    menuItems[SECTION_PULLREQUESTS].removeClass('active');
-    menuItems[SECTION_USERS].removeClass('active');
-    if (menuItems[activeSection]) {
-        menuItems[activeSection].addClass('active');
+    $('#m_home').removeClass('active');
+    $('#m_repositories').removeClass('active');
+    $('#m_pullrequests').removeClass('active');
+    $('#m_users').removeClass('active');
+    if ($(`#m_${activeSection}`)) {
+        $(`#m_${activeSection}`).addClass('active');
     }
 
 }
