@@ -1,34 +1,34 @@
-function loadHome(callback) {
-    $('#content').load(`/_home.html`, function () {
-        $('.message .close')
-            .on('click', function () {
-                $(this)
-                    .closest('.message')
-                    .transition('fade');
-            });
-        $('#home_go_button').on('click', createTask);
-        callback();
-    });
+function bindHomeListeners() {
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
+    $('#home_go_button').on('click', createTask);
 }
 
 function createTask() {
-    const owner = $('#home_owner_input').val();
-    const repository = $('#home_repository_input').val();
-    $(this).addClass('loading');
+    var owner = $('#home_owner_input').val();
+    var repository = $('#home_repository_input').val();
+    var btn = $(this);
+    btn.addClass('loading');
     $.post(`/api/task/${owner}/${repository}`)
-        .done((result) => {
+        .done(function (result) {
             show($('#home_success'));
-            $(this).removeClass('loading');
+            btn.removeClass('loading');
+            $('#home_owner_input').val('');
+            $('#home_repository_input').val('');
         })
-        .fail((error) => {
+        .fail(function (error) {
             show($('#home_fail'));
-            $(this).removeClass('loading');
+            btn.removeClass('loading');
         });
 
     function show(element) {
         if (element.hasClass('hidden')) {
             element.transition('fade');
-            setTimeout(() => {
+            setTimeout(function () {
                 if (element.hasClass('visible')) {
                     element.transition('fade');
                 }
