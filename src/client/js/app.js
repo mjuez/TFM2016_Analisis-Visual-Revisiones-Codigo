@@ -25,8 +25,14 @@ var app = Sammy('#content', function () {
     });
 
     this.get('#/repositories/order/date/asc/page/:page', function () {
+        setActiveMenuItem('repositories');
+        var container = this.$element();
         var page = this.params['page'];
-        this.redirect(`#/repositories/page/${page}`);
+        container.load('/_repositories.html', function () {
+            var apiUrl = `/api/repos/order/date/asc/page/${page}`;
+            $('#repositories_order_dropdown').dropdown('set selected', 'date_asc');
+            loadRepositoryList(apiUrl, page, '/#/repositories/order/date/asc/page');
+        });
     });
 
     this.get('#/repositories/order/date/desc/page/:page', function () {
@@ -35,6 +41,7 @@ var app = Sammy('#content', function () {
         var page = this.params['page'];
         container.load('/_repositories.html', function () {
             var apiUrl = `/api/repos/order/date/desc/page/${page}`;
+            $('#repositories_order_dropdown').dropdown('set selected', 'date_desc');
             loadRepositoryList(apiUrl, page, '/#/repositories/order/date/desc/page');
         });
     });
@@ -45,6 +52,7 @@ var app = Sammy('#content', function () {
         var page = this.params['page'];
         container.load('/_repositories.html', function () {
             var apiUrl = `/api/repos/order/name/asc/page/${page}`;
+            $('#repositories_order_dropdown').dropdown('set selected', 'name_asc');
             loadRepositoryList(apiUrl, page, '/#/repositories/order/name/asc/page');
         });
     });
@@ -55,6 +63,7 @@ var app = Sammy('#content', function () {
         var page = this.params['page'];
         container.load('/_repositories.html', function () {
             var apiUrl = `/api/repos/order/name/desc/page/${page}`;
+            $('#repositories_order_dropdown').dropdown('set selected', 'name_desc');
             loadRepositoryList(apiUrl, page, '/#/repositories/order/name/desc/page');
         });
     });
@@ -65,6 +74,7 @@ var app = Sammy('#content', function () {
         var page = this.params['page'];
         container.load('/_repositories.html', function () {
             var apiUrl = `/api/repos/order/reviews/asc/page/${page}`;
+            $('#repositories_order_dropdown').dropdown('set selected', 'reviews_asc');
             loadRepositoryList(apiUrl, page, '/#/repositories/order/reviews/asc/page');
         });
     });
@@ -75,6 +85,7 @@ var app = Sammy('#content', function () {
         var page = this.params['page'];
         container.load('/_repositories.html', function () {
             var apiUrl = `/api/repos/order/reviews/desc/page/${page}`;
+            $('#repositories_order_dropdown').dropdown('set selected', 'reviews_desc');
             loadRepositoryList(apiUrl, page, '/#/repositories/order/reviews/desc/page');
         });
     });
@@ -85,6 +96,7 @@ var app = Sammy('#content', function () {
         var page = this.params['page'];
         container.load('/_repositories.html', function () {
             var apiUrl = `/api/repos/order/pullrequests/asc/page/${page}`;
+            $('#repositories_order_dropdown').dropdown('set selected', 'pulls_asc');
             loadRepositoryList(apiUrl, page, '/#/repositories/order/pullrequests/asc/page');
         });
     });
@@ -95,6 +107,7 @@ var app = Sammy('#content', function () {
         var page = this.params['page'];
         container.load('/_repositories.html', function () {
             var apiUrl = `/api/repos/order/pullrequests/desc/page/${page}`;
+            $('#repositories_order_dropdown').dropdown('set selected', 'pulls_desc');
             loadRepositoryList(apiUrl, page, '/#/repositories/order/pullrequests/desc/page');
         });
     });

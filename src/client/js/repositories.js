@@ -1,16 +1,40 @@
 function loadRepositoryList(apiRoute, page, url) {
-    $('#loader').addClass('active');
+    showLoader();
+    $('#repositories_order_dropdown').dropdown({
+        onChange: function (value, text) { handleRepositoriesOrder(value, page); }
+    });
     $.get(apiRoute)
         .done(function (result) {
             printRepositoryItems(result.data);
             let paginator = $('#repository_paginator');
             printPaginator(paginator, page, result.last_page, url);
-            $('#loader').removeClass('active');
+            hideLoader();
         })
         .fail(function (error) {
             $('#repository_list').html('No se pueden obtener los repositorios en este momento.');
-            $('#loader').removeClass('active');
+            hideLoader();
         });
+}
+
+function handleRepositoriesOrder(value, page) {
+    switch (value) {
+        case 'date_asc': app.setLocation(`#/repositories/order/date/asc/page/${page}`);
+            break;
+        case 'date_desc': app.setLocation(`#/repositories/order/date/desc/page/${page}`);
+            break;
+        case 'name_asc': app.setLocation(`#/repositories/order/name/asc/page/${page}`);
+            break;
+        case 'name_desc': app.setLocation(`#/repositories/order/name/desc/page/${page}`);
+            break;
+        case 'reviews_asc': app.setLocation(`#/repositories/order/reviews/asc/page/${page}`);
+            break;
+        case 'reviews_desc': app.setLocation(`#/repositories/order/reviews/desc/page/${page}`);
+            break;
+        case 'pulls_asc': app.setLocation(`#/repositories/order/pullrequests/asc/page/${page}`);
+            break;
+        case 'pulls_desc': app.setLocation(`#/repositories/order/pullrequests/desc/page/${page}`);
+            break;
+    }
 }
 
 function loadRepository(owner, repository) {
@@ -67,6 +91,26 @@ function repositoryItem(repositoryData) {
                     html: $('<p>', {
                         html: repositoryData.description || '<em>Sin descripción.</em>'
                     })
+                }),
+                ,
+                $('<div>', {
+                    class: 'extra',
+                    html: [
+                        $('<i>', {
+                            class: 'unhide icon'
+                        }),
+                        repositoryData.reviews_count,
+                        ' | ',
+                        $('<i>', {
+                            class: 'comments icon'
+                        }),
+                        repositoryData.review_comments_count,
+                        ' | ',
+                        $('<i>', {
+                            class: 'fork icon'
+                        }),
+                        repositoryData.pull_requests_count
+                    ]
                 })
             ]
         })
