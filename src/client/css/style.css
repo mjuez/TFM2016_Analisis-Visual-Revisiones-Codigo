@@ -11,3 +11,7 @@
     width: 100%;
     bottom: 0;
 }
+
+#pulls_repository_filter{
+    margin-right: 1rem;
+}

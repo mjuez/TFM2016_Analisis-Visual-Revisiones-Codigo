@@ -1,14 +1,61 @@
-<h1 class="ui dividing header">Pull Requests</h1>
+<h1 class="ui header">Pull Requests</h1>
 <div class="ui hidden divider"></div>
+<div class="ui sticky top attached menu">
+    <div class="item">Filtros:</div>
+    <div class="right item">
+        <div class="ui dropdown labeled icon button" id="pulls_repository_filter">
+            <i class="filter icon"></i>
+            <span class="text">Filtrar por repositorio</span>
+            <div class="menu">
+                <div class="ui icon search input">
+                    <i class="search icon"></i>
+                    <input placeholder="Buscar repositorio..." type="text">
+                </div>
+                <div class="divider"></div>
+                <div class="scrolling menu">
+                    <div class="item">
+                        aligned
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui right aligned selection dropdown">
+            <input name="gender" type="hidden">
+            <i class="dropdown icon"></i>
+            <div class="default text">Gender</div>
+            <div class="menu">
+                <div class="item" data-value="1">Male</div>
+                <div class="item" data-value="0">Female</div>
+            </div>
+        </div>
+        <div class="ui hidden vertical divider"></div>
+        <div class="ui right aligned selection dropdown">
+            <input name="gender" type="hidden">
+            <i class="dropdown icon"></i>
+            <div class="default text">Genderr</div>
+            <div class="menu">
+                <div class="item" data-value="1">Male</div>
+                <div class="item" data-value="0">Female</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui bottom attached segment">
+    <p>
+        <div class="ui divided items" id="pullrequest_list">
+        </div>
+    </p>
+</div>
 <div class="ui grid">
     <div class="column">
-        <div class="ui divided items" id="repository_list">
-        </div>
+
     </div>
 </div>
 <div class="ui grid">
     <div class="column center aligned">
-        <div class="ui pagination menu" id="repository_paginator">
+        <div class="ui pagination menu" id="pullrequest_paginator">
         </div>
     </div>
 </div>

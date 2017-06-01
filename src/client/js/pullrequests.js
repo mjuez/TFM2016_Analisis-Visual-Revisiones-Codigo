@@ -4,16 +4,20 @@ function loadPullrequests(callback) {
 
 function getPullrequestsPage(page) {
     $('#loader').addClass('active');
-    $.get(`/api/repos/page/${page}`)
+    $.get(`/api/pulls/page/${page}`)
         .done(function (result) {
-            printRepositoryItems(result.data);
-            let paginator = $('#repository_paginator');
+            printPullRequestItems
+                (result.data);
+            let paginator = $('#pullrequest_paginator');
             printPaginator(paginator, page, result.last_page, getPullrequestsPage);
-            history.pushState(null, `Repositorios - Página ${page}`, `/repositories/page/${page}`);
+            history.pushState(null, `Pull Requests - Página ${page}`, `/pullrequests/page/${page}`);
             $('#loader').removeClass('active');
+
+            $('.ui.sticky').sticky();
+            $('.ui.dropdown').dropdown();
         })
         .fail(function (error) {
-            $('#repository_list').html('No se pueden obtener los repositorios en este momento.');
+            $('#pullrequest_list').html('No se pueden obtener los repositorios en este momento.');
             $('#loader').removeClass('active');
         });
 }
@@ -35,50 +39,48 @@ function getPullRequestPage(owner, repository) {
     });
 }
 
-function printCreatedAllTimeStatsGraph(data) {
-    const divGraph = $('<div>', {
-        id: "graph_createdalltime"
-    });
-    $('#generic_content').html(divGraph);
-    var chart = c3.generate({
-        bindto: '#graph_createdalltime',
-        data: {
-            columns: [
-                data
-            ]
-        }
-    });
-}
-
-function printRepositoryItems(items) {
-    $('#repository_list').html('');
+function printPullRequestItems(items) {
+    $('#pullrequest_list').html('');
     items.map(function (item) {
-        $('#repository_list').append(repositoryItem(item));
+        $('#pullrequest_list').append(pullrequestItem(item));
     });
 }
 
-function repositoryItem(repositoryData) {
+function pullrequestItem(pullrequestData) {
     const item = $('<div>', {
         class: 'item',
         html: $('<div>', {
             class: 'content',
             html: [
-                $('<div>', {
+                $('<a>', {
+                    text: pullrequestData.title,
                     class: 'header',
-                    html: $('<a>', {
-                        text: repositoryData.full_name,
-                        class: 'ui violet large label',
-                        click: function () { getPullRequestPage(repositoryData.owner.login, repositoryData.name); }
-                    })
-                }),
-                $('<div>', {
-                    class: 'ui hidden divider'
+                    click: function () { getPullRequestPage(repositoryData.owner.login, repositoryData.name); }
                 }),
                 $('<div>', {
                     class: 'description',
                     html: $('<p>', {
-                        html: repositoryData.description || '<em>Sin descripción.</em>'
+                        html: `${pullrequestData.base.repo.owner.login}/${pullrequestData.base.repo.name}`
                     })
+                }),
+                $('<div>', {
+                    class: 'extra',
+                    html: [
+                        $('<i>', {
+                            class: 'user icon'
+                        }),
+                        pullrequestData.user.login,
+                        ' | ',
+                        $('<i>', {
+                            class: 'unhide icon'
+                        }),
+                        pullrequestData.reviews,
+                        ' | ',
+                        $('<i>', {
+                            class: 'comments icon'
+                        }),
+                        pullrequestData.review_comments
+                    ]
                 })
             ]
         })
