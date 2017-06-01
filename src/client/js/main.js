@@ -120,11 +120,13 @@ function loadPage(template, pageList, page){
 }
 
 function showLoader() {
+    $('#content').hide();
     $('#loader').addClass('active');
 }
 
 function hideLoader() {
     $('#loader').removeClass('active');
+    $('#content').show();
 }
 
 function setStatusInterval() {
