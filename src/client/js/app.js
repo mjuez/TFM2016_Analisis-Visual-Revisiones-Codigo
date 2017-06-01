@@ -1,5 +1,9 @@
 var app = Sammy('#content', function () {
 
+    //////////
+    // HOME //
+    //////////
+    
     this.get('#/', function () {
         setActiveMenuItem('home');
         var container = this.$element();
@@ -9,6 +13,10 @@ var app = Sammy('#content', function () {
     this.get('#/home', function () {
         this.redirect('#/');
     });
+
+    //////////////////
+    // REPOSITORIES //
+    //////////////////
 
     this.get('#/repositories', function () {
         this.redirect('#/repositories/page/1');
@@ -111,6 +119,184 @@ var app = Sammy('#content', function () {
             loadRepositoryList(apiUrl, page, '/#/repositories/order/pullrequests/desc/page');
         });
     });
+
+    ///////////////////
+    // PULL REQUESTS //
+    ///////////////////
+
+    this.get('#/pullrequests', function () {
+        this.redirect('#/pullrequests/page/1');
+    });
+
+    this.get('#/pullrequests/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/page/${page}`;
+            loadPullrequestsList(apiUrl, page, '/#/pullrequests/page');
+        });
+    });
+
+    this.get('#/pullrequests/order/date/asc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/order/date/asc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'date_asc');
+            loadPullrequestsList(apiUrl, page, '/#/pullrequests/order/date/asc/page');
+        });
+    });
+
+    this.get('#/pullrequests/order/date/desc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/order/date/desc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'date_desc');
+            loadPullrequestsList(apiUrl, page, '/#/pullrequests/order/date/desc/page');
+        });
+    });
+
+    this.get('#/pullrequests/order/name/asc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/order/name/asc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'name_asc');
+            loadPullrequestsList(apiUrl, page, '/#/pullrequests/order/name/asc/page');
+        });
+    });
+
+    this.get('#/pullrequests/order/name/desc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/order/name/desc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'name_desc');
+            loadPullrequestsList(apiUrl, page, '/#/pullrequests/order/name/desc/page');
+        });
+    });
+
+    this.get('#/pullrequests/order/reviews/asc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/order/reviews/asc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'reviews_asc');
+            loadPullrequestsList(apiUrl, page, '/#/pullrequests/order/reviews/asc/page');
+        });
+    });
+
+    this.get('#/pullrequests/order/reviews/desc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/order/reviews/desc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'reviews_desc');
+            loadPullrequestsList(apiUrl, page, '/#/pullrequests/order/reviews/desc/page');
+        });
+    });
+
+    this.get('#/pullrequests/filter/:owner/:repository/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/asc/page/${page}`;
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/page`, {owner, name: repository});
+        });
+    });
+
+    this.get('#/pullrequests/filter/:owner/:repository/order/date/asc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/asc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'date_asc');
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/date/asc/page`, {owner, name: repository});
+        });
+    });
+
+    this.get('#/pullrequests/filter/:owner/:repository/order/date/desc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/desc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'date_desc');
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/date/desc/page`, {owner, name: repository});
+        });
+    });
+
+    this.get('#/pullrequests/filter/:owner/:repository/order/name/asc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/name/asc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'name_asc');
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/name/asc/page`, {owner, name: repository});
+        });
+    });
+
+    this.get('#/pullrequests/filter/:owner/:repository/order/name/desc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/name/desc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'name_desc');
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/name/desc/page`, {owner, name: repository});
+        });
+    });
+
+    this.get('#/pullrequests/filter/:owner/:repository/order/reviews/asc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/reviews/asc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'reviews_asc');
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/reviews/asc/page`, {owner, name: repository});
+        });
+    });
+
+    this.get('#/pullrequests/filter/:owner/:repository/order/reviews/desc/page/:page', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        var page = this.params['page'];
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/reviews/desc/page/${page}`;
+            $('#pullrequests_order_dropdown').dropdown('set selected', 'reviews_desc');
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/reviews/desc/page`, {owner, name: repository});
+        });
+    });
+
+    ///////////////
+    // NOT FOUND //
+    ///////////////
 
     this.notFound = function () {
         var container = this.$element();

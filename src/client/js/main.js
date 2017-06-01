@@ -102,7 +102,7 @@ function printPaginator(paginator, currentPage, numPages, url) {
     }
 
     function appendPageLink(page) {
-        var isActive = (page === currentPage);
+        var isActive = (page === parseInt(currentPage));
         var a = pageLink(page, isActive);
         paginator.append(a);
     }
@@ -121,8 +121,16 @@ function printPaginator(paginator, currentPage, numPages, url) {
         var a = $('<a>', {
             class: cssClass,
             text: page,
-            herf: `${url}/${page}`
+            href: `${url}/${page}`
         });
         return a;
     }
+}
+
+function repositoryStringToObject(repository){
+    var repoArray = repository.split('/');
+    return {
+        owner: repoArray[0],
+        name: repoArray[1]
+    };
 }
