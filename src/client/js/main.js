@@ -156,7 +156,7 @@ function hideStatus(status) {
     }
 }
 
-function printPaginator(paginator, currentPage, numPages, pageList) {
+function printPaginator(paginator, currentPage, numPages, url) {
     paginator.html('');
 
     if (numPages < 12) {
@@ -210,7 +210,7 @@ function printPaginator(paginator, currentPage, numPages, pageList) {
         const a = $('<a>', {
             class: cssClass,
             text: page,
-            click: function () { pageList(page); }
+            herf: `${url}/${page}`
         });
         return a;
     }
