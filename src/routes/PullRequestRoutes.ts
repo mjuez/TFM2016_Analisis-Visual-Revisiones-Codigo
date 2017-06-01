@@ -47,38 +47,38 @@ export class PullRequestRoutes {
             controller.getPage(req, res);
         });
 
-        router.get("/pulls/page/:page/order/date/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getPage(req, res);
         });
 
-        router.get("/pulls/page/:page/order/name/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByNamePage(req, res);
         });
 
-        router.get("/pulls/page/:page/order/reviews/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByReviewsPage(req, res);
         });
 
-        router.get("/pulls/single/:owner/:repository", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/:owner/:repository", (req: express.Request, res: express.Response) => {
             req.params.page = 1;
             req.params.direction = 'ASC';
             controller.getPageFromRepository(req, res);
         });
 
-        router.get("/pulls/single/:owner/:repository/page/:page", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/:owner/:repository/page/:page", (req: express.Request, res: express.Response) => {
             req.params.direction = 'ASC';
             controller.getPageFromRepository(req, res);
         });
 
-        router.get("/pulls/single/:owner/:repository/page/:page/order/date/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/:owner/:repository/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getPageFromRepository(req, res);
         });
 
-        router.get("/pulls/single/:owner/:repository/page/:page/order/name/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/:owner/:repository/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByNamePageFromRepository(req, res);
         });
 
-        router.get("/pulls/single/:owner/:repository/page/:page/order/reviews/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/:owner/:repository/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByReviewsPageFromRepository(req, res);
         });
 
