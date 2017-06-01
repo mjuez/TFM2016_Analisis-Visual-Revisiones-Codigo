@@ -57,7 +57,7 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
 
     public async getPullRequestsByNamePage(page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
         const repo: IPullRequestRepository = this._repository;
-        const sort: Object = { full_name: direction };
+        const sort: Object = { title: direction };
         return repo.retrieve({ page, sort });
     }
 
@@ -79,7 +79,7 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
 
         const repo: IPullRequestRepository = this._repository;
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
-        const sort: Object = { full_name: direction };
+        const sort: Object = { title: direction };
         return repo.retrieve({ filter, page, sort });
     }
     public async getRepositoryPullRequestsByReviewsPage(
