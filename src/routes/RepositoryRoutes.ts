@@ -38,7 +38,7 @@ export class RepositoryRoutes {
             controller.getPage(req, res);
         });
 
-        router.get("/repos/single/:owner/:repository", (req: express.Request, res: express.Response) => {
+        router.get("/repo/:owner/:repository", (req: express.Request, res: express.Response) => {
             controller.get(req, res);
         });
 
@@ -47,19 +47,19 @@ export class RepositoryRoutes {
             controller.getPage(req, res);
         });
 
-        router.get("/repos/page/:page/order/date/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/repos/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getPage(req, res);
         });
 
-        router.get("/repos/page/:page/order/name/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/repos/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByNamePage(req, res);
         });
 
-        router.get("/repos/page/:page/order/reviews/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/repos/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByReviewsPage(req, res);
         });
 
-        router.get("/repos/page/:page/order/pullrequests/:direction", (req: express.Request, res: express.Response) => {
+        router.get("/repos/order/pullrequests/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByPullRequestsPage(req, res);
         });
 
