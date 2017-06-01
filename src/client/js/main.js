@@ -28,6 +28,8 @@ $(document).ready(function () {
     loadSection(activeSection);
     setStatusInterval();
 
+    app.run();
+
 });
 
 function setFooterHeight() {
