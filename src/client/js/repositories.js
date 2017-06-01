@@ -1,15 +1,10 @@
-function loadRepositories(callback) {
-    loadPage(`/_repositories.html`, getPullrequestsPage, getPullRequestPage);
-}
-
-function getPullrequestsPage(page) {
+function loadRepositoryList(apiRoute, page, url) {
     $('#loader').addClass('active');
-    $.get(`/api/repos/page/${page}`)
+    $.get(apiRoute)
         .done(function (result) {
             printRepositoryItems(result.data);
             let paginator = $('#repository_paginator');
-            printPaginator(paginator, page, result.last_page, getPullrequestsPage);
-            history.pushState(null, `Repositorios - Página ${page}`, `/repositories/page/${page}`);
+            printPaginator(paginator, page, result.last_page, url);
             $('#loader').removeClass('active');
         })
         .fail(function (error) {
@@ -18,10 +13,9 @@ function getPullrequestsPage(page) {
         });
 }
 
-function getPullRequestPage(owner, repository) {
+function loadRepository(owner, repository) {
     $('#loader').addClass('active');
     $('#content').load(`/_generic.html`, function () {
-        history.pushState(null, `Repositorio - ${owner}/${repository}`, `/repositories/single/${owner}/${repository}`);
         $('#generic_title').html(`Repositorio: ${owner}/${repository}`);
         $.get(`/api/${owner}/${repository}/pulls/stats/created/alltime`)
             .done(function (result) {
@@ -63,16 +57,10 @@ function repositoryItem(repositoryData) {
         html: $('<div>', {
             class: 'content',
             html: [
-                $('<div>', {
+                $('<a>', {
+                    text: repositoryData.full_name,
                     class: 'header',
-                    html: $('<a>', {
-                        text: repositoryData.full_name,
-                        class: 'ui violet large label',
-                        click: function () { getPullRequestPage(repositoryData.owner.login, repositoryData.name); }
-                    })
-                }),
-                $('<div>', {
-                    class: 'ui hidden divider'
+                    href: `/#/repository/${repositoryData.owner.login}/${repositoryData.name}`
                 }),
                 $('<div>', {
                     class: 'description',
