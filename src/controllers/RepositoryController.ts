@@ -16,6 +16,7 @@ export interface IRepositoryController {
     getByReviewsPage(req: Request, res: Response): Promise<void>;
     getByPullRequestsPage(req: Request, res: Response): Promise<void>;
     getList(req: Request, res: Response): Promise<void>;
+    getStatsAverages(req: Request, res: Response): Promise<void>;
 }
 
 /**
@@ -81,6 +82,16 @@ export class RepositoryController extends AbstractController implements IReposit
             const json: any[] = EntityUtil.toJSONArray(entities);
             let list: string[] = json.map((jsonobj) => { return jsonobj.full_name });
             res.json(list);
+        } catch (error) {
+            res.status(500).json({ message: "Oops, something went wrong." });
+        }
+    }
+
+    public async getStatsAverages(req: Request, res: Response): Promise<void> {
+        const service: IRepositoryService = this._services.repo;
+        try {
+            const averages: any = await service.getRepositoriesStatsAverages();
+            res.json(averages);
         } catch (error) {
             res.status(500).json({ message: "Oops, something went wrong." });
         }

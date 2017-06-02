@@ -67,6 +67,10 @@ export class RepositoryRoutes {
             controller.getList(req, res);
         });
 
+        router.get("/repos/stats/averages", (req: express.Request, res: express.Response) => {
+            controller.getStatsAverages(req, res);
+        });
+
         return router;
     }
 
