@@ -38,32 +38,99 @@ function handleRepositoriesOrder(value, page) {
 }
 
 function loadRepository(owner, repository) {
-    $('#loader').addClass('active');
-    $('#content').load(`/_generic.html`, function () {
-        $('#generic_title').html(`Repositorio: ${owner}/${repository}`);
-        $.get(`/api/${owner}/${repository}/pulls/stats/created/alltime`)
-            .done(function (result) {
-                printCreatedAllTimeStatsGraph(result);
-                $('#loader').removeClass('active');
-            })
-            .fail(function (error) {
-                $('#generic_content').html('No se pueden obtener los repositorios en este momento.');
-                $('#loader').removeClass('active');
-            });
+    showLoader();
+    $.get(`/api/repo/${owner}/${repository}`)
+        .done(function (result) {
+            $('#repository_title').html(`Repositorio: ${result.full_name}`);
+            configureRepositoryButtons(result);
+            loadRepositoryCharts(result);
+            hideLoader();
+        })
+        .fail(function (error) {
+            app.setLocation(`#/notfound`);
+            hideLoader();
+        });
+}
+
+function configureRepositoryButtons(repository) {
+    $('#repository_pullrequests_button').on('click', function(){
+        app.setLocation(`#/pullrequests/filter/${repository.full_name}/page/1`);
+    });
+
+    $('#repository_viewgithub_button').on('click', function(){
+        $(location).attr('href', repository.html_url);
     });
 }
 
-function printCreatedAllTimeStatsGraph(data) {
-    const divGraph = $('<div>', {
-        id: "graph_createdalltime"
-    });
-    $('#generic_content').html(divGraph);
-    var chart = c3.generate({
-        bindto: '#graph_createdalltime',
+function loadRepositoryCharts(repository) {
+    $.get(`/api/repos/stats/averages`)
+        .done(function (result) {
+            printRepositoryAverageCharts(repository, result);
+        })
+        .fail(function (error) {
+
+        });
+
+    $.get(`/api/pulls/filter/${repository.full_name}/stats/created/alltime`)
+        .done(function (result) {
+            printRepositoryCreatedAllTimeStatsChart(result);
+        })
+        .fail(function (error) {
+
+        });
+}
+
+function printRepositoryAverageCharts(repository, avgData) {
+    printAverageChart('stargazers', repository.stargazers_count, avgData.stargazers, 'repository_stargazers_chart');
+    printAverageChart('watchers', repository.watchers_count, avgData.watchers, 'repository_watchers_chart');
+    printAverageChart('forks', repository.forks_count, avgData.forks, 'repository_forks_chart');
+    printAverageChart('pull_requests', repository.pull_requests_count, avgData.pull_requests, 'repository_pullrequests_chart');
+    printAverageChart('reviews', repository.reviews_count, avgData.reviews, 'repository_reviews_chart');
+    printAverageChart('review_comments', repository.review_comments_count, avgData.review_comments, 'repository_reviewcomments_chart');
+}
+
+function printAverageChart(name, value, avg, container) {
+    $(`#${container}_segment`).removeClass('loading');
+    var data = ['data1', value];
+    var avgData = ['data2', avg];
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#${container}`,
         data: {
             columns: [
+                data,
+                avgData
+            ],
+            type: 'bar',
+            names: {
+                data1: name,
+                data2: `Media de ${name}`
+            }
+        }
+    });
+}
+
+function printRepositoryCreatedAllTimeStatsChart(data) {
+    $(`#repository_createdalltime_chart_segment`).removeClass('loading');
+    data.unshift('data1');
+    console.log(data);
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: '#repository_createdalltime_chart',
+        data: {
+            x: 'x',
+            columns: [
+                ['x', 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
                 data
-            ]
+            ],
+            type: 'area',
+            names: {
+                data1: 'Nro de pull requests creadas',
+            }
         }
     });
 }
