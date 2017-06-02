@@ -82,7 +82,7 @@ export class PullRequestRoutes {
             controller.getByReviewsPageFromRepository(req, res);
         });
 
-        router.get("/:owner/:repository/pulls/stats/created/alltime", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/:owner/:repository/stats/created/alltime", (req: express.Request, res: express.Response) => {
             controller.getCreatedAllTime(req, res);
         });
 
