@@ -43,7 +43,7 @@ export class PullRequestController extends AbstractController implements IPullRe
         const service: IPullRequestService = this._services.pull;
         const owner: string = req.params.owner;
         const repository: string = req.params.repository;
-        const number: number = req.params.pull_number;
+        const number: number = req.params.number;
 
         try {
             const pull: IPullRequestEntity = await service.getPullRequest(owner, repository, number);
