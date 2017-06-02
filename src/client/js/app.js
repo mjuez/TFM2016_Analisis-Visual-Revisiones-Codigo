@@ -3,7 +3,7 @@ var app = Sammy('#content', function () {
     //////////
     // HOME //
     //////////
-    
+
     this.get('#/', function () {
         setActiveMenuItem('home');
         var container = this.$element();
@@ -17,6 +17,16 @@ var app = Sammy('#content', function () {
     //////////////////
     // REPOSITORIES //
     //////////////////
+
+    this.get('#/repository/:owner/:repository', function () {
+        setActiveMenuItem('repositories');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        container.load('/_repository.html', function () {
+            loadRepository(owner, repository);
+        });
+    });
 
     this.get('#/repositories', function () {
         this.redirect('#/repositories/page/1');
@@ -212,7 +222,7 @@ var app = Sammy('#content', function () {
         var page = this.params['page'];
         container.load('/_pullrequests.html', function () {
             var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/asc/page/${page}`;
-            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/page`, {owner, name: repository});
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/page`, { owner, name: repository });
         });
     });
 
@@ -225,7 +235,7 @@ var app = Sammy('#content', function () {
         container.load('/_pullrequests.html', function () {
             var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/asc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'date_asc');
-            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/date/asc/page`, {owner, name: repository});
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/date/asc/page`, { owner, name: repository });
         });
     });
 
@@ -238,7 +248,7 @@ var app = Sammy('#content', function () {
         container.load('/_pullrequests.html', function () {
             var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/desc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'date_desc');
-            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/date/desc/page`, {owner, name: repository});
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/date/desc/page`, { owner, name: repository });
         });
     });
 
@@ -251,7 +261,7 @@ var app = Sammy('#content', function () {
         container.load('/_pullrequests.html', function () {
             var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/name/asc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'name_asc');
-            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/name/asc/page`, {owner, name: repository});
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/name/asc/page`, { owner, name: repository });
         });
     });
 
@@ -264,7 +274,7 @@ var app = Sammy('#content', function () {
         container.load('/_pullrequests.html', function () {
             var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/name/desc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'name_desc');
-            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/name/desc/page`, {owner, name: repository});
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/name/desc/page`, { owner, name: repository });
         });
     });
 
@@ -277,7 +287,7 @@ var app = Sammy('#content', function () {
         container.load('/_pullrequests.html', function () {
             var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/reviews/asc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'reviews_asc');
-            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/reviews/asc/page`, {owner, name: repository});
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/reviews/asc/page`, { owner, name: repository });
         });
     });
 
@@ -290,7 +300,7 @@ var app = Sammy('#content', function () {
         container.load('/_pullrequests.html', function () {
             var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/reviews/desc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'reviews_desc');
-            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/reviews/desc/page`, {owner, name: repository});
+            loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/reviews/desc/page`, { owner, name: repository });
         });
     });
 
