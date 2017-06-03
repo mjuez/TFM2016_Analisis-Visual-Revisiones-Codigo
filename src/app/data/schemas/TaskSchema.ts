@@ -14,7 +14,7 @@ export class TaskSchema {
         let schema = new mongoose.Schema({
             type: {
                 type: Number,
-                enum: ['ALL', 'REVIEWS', 'REVIEW_COMMENTS', 'USERS', 'USERS_PULLS', 'USERS_REVIEWS', 'USERS_REVIEW_COMMENTS', 'REPOSITORY']
+                enum: ['ALL', 'PULL_REQUESTS', 'REVIEWS', 'REVIEW_COMMENTS', 'USERS', 'USERS_PULLS', 'USERS_REVIEWS', 'USERS_REVIEW_COMMENTS', 'REPOSITORY']
             },
             is_completed: Boolean,
             creation_date: Date,
