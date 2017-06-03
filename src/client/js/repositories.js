@@ -1,77 +1,143 @@
-function loadRepositories(callback) {
-    $('#content').load(`/_repositories.html`, () => {
-        const url = $(location).prop('pathname').split('/');
-        if (url.length > 2) {
-            const isPage = url[2] === 'page';
-            const isSingle = url[2] === 'single';
-            if (isPage) {
-                const page = Number.parseInt(url[3]);
-                getRepositoriesPage(page);
-            } else if (isSingle) {
-                const owner = url[3];
-                const repository = url[4];
-                getRepositoryPage(owner, repository);
-            } else {
-                showError(hideLoader);
+function loadRepositoryList(apiRoute, page, url) {
+    showLoader();
+    $('#repositories_order_dropdown').dropdown({
+        onChange: function (value, text) { handleRepositoriesOrder(value, page); }
+    });
+    $.get(apiRoute)
+        .done(function (result) {
+            printRepositoryItems(result.data);
+            let paginator = $('#repository_paginator');
+            printPaginator(paginator, page, result.last_page, url);
+            hideLoader();
+        })
+        .fail(function (error) {
+            $('#repository_list').html('No se pueden obtener los repositorios en este momento.');
+            hideLoader();
+        });
+}
+
+function handleRepositoriesOrder(value, page) {
+    switch (value) {
+        case 'date_asc': app.setLocation(`#/repositories/order/date/asc/page/${page}`);
+            break;
+        case 'date_desc': app.setLocation(`#/repositories/order/date/desc/page/${page}`);
+            break;
+        case 'name_asc': app.setLocation(`#/repositories/order/name/asc/page/${page}`);
+            break;
+        case 'name_desc': app.setLocation(`#/repositories/order/name/desc/page/${page}`);
+            break;
+        case 'reviews_asc': app.setLocation(`#/repositories/order/reviews/asc/page/${page}`);
+            break;
+        case 'reviews_desc': app.setLocation(`#/repositories/order/reviews/desc/page/${page}`);
+            break;
+        case 'pulls_asc': app.setLocation(`#/repositories/order/pullrequests/asc/page/${page}`);
+            break;
+        case 'pulls_desc': app.setLocation(`#/repositories/order/pullrequests/desc/page/${page}`);
+            break;
+    }
+}
+
+function loadRepository(owner, repository) {
+    showLoader();
+    $.get(`/api/repo/${owner}/${repository}`)
+        .done(function (result) {
+            $('#repository_title').html(`Repositorio: ${result.full_name}`);
+            configureRepositoryButtons(result);
+            loadRepositoryCharts(result);
+            hideLoader();
+        })
+        .fail(function (error) {
+            app.setLocation(`#/notfound`);
+            hideLoader();
+        });
+}
+
+function configureRepositoryButtons(repository) {
+    $('#repository_pullrequests_button').on('click', function(){
+        app.setLocation(`#/pullrequests/filter/${repository.full_name}/page/1`);
+    });
+
+    $('#repository_viewgithub_button').on('click', function(){
+        $(location).attr('href', repository.html_url);
+    });
+}
+
+function loadRepositoryCharts(repository) {
+    $.get(`/api/repos/stats/averages`)
+        .done(function (result) {
+            printRepositoryAverageCharts(repository, result);
+        })
+        .fail(function (error) {
+
+        });
+
+    $.get(`/api/pulls/filter/${repository.full_name}/stats/created/alltime`)
+        .done(function (result) {
+            printRepositoryCreatedAllTimeStatsChart(result);
+        })
+        .fail(function (error) {
+
+        });
+}
+
+function printRepositoryAverageCharts(repository, avgData) {
+    printAverageChart('stargazers', repository.stargazers_count, avgData.stargazers, 'repository_stargazers_chart');
+    printAverageChart('watchers', repository.watchers_count, avgData.watchers, 'repository_watchers_chart');
+    printAverageChart('forks', repository.forks_count, avgData.forks, 'repository_forks_chart');
+    printAverageChart('pull_requests', repository.pull_requests_count, avgData.pull_requests, 'repository_pullrequests_chart');
+    printAverageChart('reviews', repository.reviews_count, avgData.reviews, 'repository_reviews_chart');
+    printAverageChart('review_comments', repository.review_comments_count, avgData.review_comments, 'repository_reviewcomments_chart');
+}
+
+function printAverageChart(name, value, avg, container) {
+    $(`#${container}_segment`).removeClass('loading');
+    var data = ['data1', value];
+    var avgData = ['data2', avg];
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#${container}`,
+        data: {
+            columns: [
+                data,
+                avgData
+            ],
+            type: 'bar',
+            names: {
+                data1: name,
+                data2: `Media de ${name}`
             }
-        } else {
-            getRepositoriesPage(1);
         }
     });
 }
 
-function getRepositoriesPage(page) {
-    $('#loader').addClass('active');
-    $.get(`/api/repos/page/${page}`)
-        .done((result) => {
-            printRepositoryItems(result.data);
-            let paginator = $('#repository_paginator');
-            printRepositoryPaginator(paginator, page, result.last_page);
-            history.pushState(null, `Repositorios - Página ${page}`, `/repositories/page/${page}`);
-            $('#loader').removeClass('active');
-        })
-        .fail((error) => {
-            $('#repository_list').html('No se pueden obtener los repositorios en este momento.');
-            $('#loader').removeClass('active');
-        });
-}
-
-function getRepositoryPage(owner, repository) {
-    $('#loader').addClass('active');
-    $('#content').load(`/_generic.html`, () => {
-        history.pushState(null, `Repositorio - ${owner}/${repository}`, `/repositories/single/${owner}/${repository}`);
-        $('#generic_title').html(`Repositorio: ${owner}/${repository}`);
-        $.get(`/api/${owner}/${repository}/pulls/stats/created/alltime`)
-            .done((result) => {
-                printCreatedAllTimeStatsGraph(result);
-                $('#loader').removeClass('active');
-            })
-            .fail((error) => {
-                $('#generic_content').html('No se pueden obtener los repositorios en este momento.');
-                $('#loader').removeClass('active');
-            });
-    });
-}
-
-function printCreatedAllTimeStatsGraph(data) {
+function printRepositoryCreatedAllTimeStatsChart(data) {
+    $(`#repository_createdalltime_chart_segment`).removeClass('loading');
+    data.unshift('data1');
     console.log(data);
-    const divGraph = $('<div>',{
-        id: "graph_createdalltime"
-    });
-    $('#generic_content').html(divGraph);
-    var chart = c3.generate({
-        bindto: '#graph_createdalltime',
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: '#repository_createdalltime_chart',
         data: {
+            x: 'x',
             columns: [
+                ['x', 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
                 data
-            ]
+            ],
+            type: 'area',
+            names: {
+                data1: 'Nro de pull requests creadas',
+            }
         }
     });
 }
 
 function printRepositoryItems(items) {
     $('#repository_list').html('');
-    items.map((item) => {
+    items.map(function (item) {
         $('#repository_list').append(repositoryItem(item));
     });
 }
@@ -82,98 +148,40 @@ function repositoryItem(repositoryData) {
         html: $('<div>', {
             class: 'content',
             html: [
-                $('<div>', {
+                $('<a>', {
+                    text: repositoryData.full_name,
                     class: 'header',
-                    html: $('<a>', {
-                                text: repositoryData.name,
-                                click: () => { getRepositoryPage(repositoryData.owner.login, repositoryData.name); }
-                            })
-                }),
-                $('<div>', {
-                    class: 'meta',
-                    html: $('<span>', {
-                        class: 'full name',
-                        html: [
-                            $('<i>', {
-                                class: 'github icon'
-                            }),
-                            $('<a>', {
-                                href: repositoryData.html_url,
-                                target: '_BLANK',
-                                html: repositoryData.full_name
-                            })
-                        ]
-                    })
+                    href: `/#/repository/${repositoryData.owner.login}/${repositoryData.name}`
                 }),
                 $('<div>', {
                     class: 'description',
                     html: $('<p>', {
-                        html: repositoryData.description
+                        html: repositoryData.description || '<em>Sin descripción.</em>'
                     })
+                }),
+                ,
+                $('<div>', {
+                    class: 'extra',
+                    html: [
+                        $('<i>', {
+                            class: 'unhide icon'
+                        }),
+                        repositoryData.reviews_count,
+                        ' | ',
+                        $('<i>', {
+                            class: 'comments icon'
+                        }),
+                        repositoryData.review_comments_count,
+                        ' | ',
+                        $('<i>', {
+                            class: 'fork icon'
+                        }),
+                        repositoryData.pull_requests_count
+                    ]
                 })
             ]
         })
     });
 
     return item;
-}
-
-function printRepositoryPaginator(paginator, currentPage, numPages) {
-    paginator.html('');
-
-    if (numPages < 12) {
-        for (let page = 1; page <= numPages; page++) {
-            appendPageLink(page);
-        }
-    } else {
-        if (currentPage < 7) {
-            for (let page = 1; page < 10; page++) {
-                appendPageLink(page);
-            }
-            appendDisabledLink();
-            appendPageLink(numPages);
-        } else {
-            appendPageLink(1);
-            appendDisabledLink();
-            let numLastPages = numPages - currentPage;
-            if (numLastPages <= 5) {
-                let numPrevVisible = 8 - numLastPages;
-                for (let page = currentPage - numPrevVisible; page <= numPages; page++) {
-                    appendPageLink(page);
-                }
-            } else {
-                for (let page = currentPage - 3; page <= currentPage + 3; page++) {
-                    appendPageLink(page);
-                }
-                appendDisabledLink();
-                appendPageLink(numPages);
-            }
-
-        }
-    }
-
-    function appendPageLink(page) {
-        const isActive = page === currentPage;
-        const a = pageLink(page, isActive);
-        paginator.append(a);
-    }
-
-    function appendDisabledLink() {
-        const disabled = $('<div>', {
-            class: 'disabled item',
-            html: '...'
-        });
-        paginator.append(disabled);
-    }
-
-    function pageLink(page, isActive) {
-        let cssClass = "item";
-        if (isActive) cssClass += " active";
-        const a = $('<a>', {
-            class: cssClass,
-            text: page,
-            click: () => { getRepositoriesPage(page); }
-        });
-        return a;
-    }
 }

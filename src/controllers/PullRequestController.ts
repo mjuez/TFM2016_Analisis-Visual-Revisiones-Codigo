@@ -7,6 +7,8 @@ import { ITaskManagerService } from "../app/services/TaskManagerService";
 import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
 import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
 import { IRepositoryEntity } from "../app/entities/RepositoryEntity";
+import { EntityUtil } from "../app/util/EntityUtil";
+import { RoutesUtil } from "../app/util/RoutesUtil";
 import * as mongoose from "mongoose";
 import * as GitHubAPI from "github";
 import * as BluebirdPromise from "bluebird";
@@ -17,48 +19,16 @@ import * as BluebirdPromise from "bluebird";
  */
 export interface IPullRequestController {
 
-    /**
-     * Gets a Pull Request stored locally given an owner, a repository
-     * and a pull request id.
-     * @param req   API request.
-     * @param res   API response.
-     */
-    get(req: Request, res: Response);
+    get(req: Request, res: Response): Promise<void>;
+    getPage(req: Request, res: Response): Promise<void>;
+    getByNamePage(req: Request, res: Response): Promise<void>;
+    getByReviewsPage(req: Request, res: Response): Promise<void>;
+    getPageFromRepository(req: Request, res: Response): Promise<void>;
+    getByNamePageFromRepository(req: Request, res: Response): Promise<void>;
+    getByReviewsPageFromRepository(req: Request, res: Response): Promise<void>;
+    getCreatedAllTime(req: Request, res: Response): Promise<void>;
+    getAllRemote(req: Request, res: Response): Promise<void>;
 
-    /**
-     * Gets all Pull Requests stored locally given an owner
-     * and a repository.
-     * @param req   API request.
-     * @param res   API response.
-     */
-    getAll(req: Request, res: Response);
-
-    /**
-     * Gets the number of Pull Requests stored locally given an owner
-     * and a repository.
-     * @param req   API request.
-     * @param res   API response.
-     */
-    getCount(req: Request, res: Response);
-
-    getReviews(req: Request, res: Response);
-
-    getCreatedAllTime(req: Request, res: Response);
-
-    /**
-     * Gets a remote Pull Request given an owner, a repository
-     * and a pull request id.
-     * @param req   API request.
-     * @param res   API response.
-     */
-    //getRemote(req: Request, res: Response);
-
-    /**
-     * Gets all remote Pull Requests given an owner and a repository.
-     * @param req   API request.
-     * @param res   API response.
-     */
-    getAllRemote(req: Request, res: Response);
 }
 
 /**
@@ -69,49 +39,95 @@ export interface IPullRequestController {
  */
 export class PullRequestController extends AbstractController implements IPullRequestController {
 
-    /** @inheritdoc */
-    get(req: Request, res: Response) {
-        let owner: string = req.params.owner;
-        let repository: string = req.params.repository;
-        let pullRequestId: number = req.params.pull_number;
-        let service: IPullRequestService = this._services.pull;
-
-        service.getLocalPullRequest(owner, repository, pullRequestId).then((pull) => {
-            res.json(pull);
-        }).catch((error) => {
-            res.json({ "error": error });
-        });
-    }
-
-    /** @inheritdoc */
-    getAll(req: Request, res: Response) {
-        let owner: string = req.params.owner;
-        let repository: string = req.params.repository;
-        let service: IPullRequestService = this._services.pull;
-
-        service.getLocalPullRequests(owner, repository).then((pulls) => {
-            res.json(pulls);
-        }).catch((error) => {
-            res.json({ "error": error });
-        });
-    }
-
-    /** @inheritdoc */
-    public async getReviews(req: Request, res: Response) {
-        let owner: string = req.params.owner;
-        let repository: string = req.params.repository;
-        let pullNumber: number = req.params.pull_number;
-        let service: IReviewService = this._services.review;
+    public async get(req: Request, res: Response): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        const owner: string = req.params.owner;
+        const repository: string = req.params.repository;
+        const number: number = req.params.number;
 
         try {
-            let reviews: any = await service.getPullRequestLocalReviews(owner, repository, pullNumber);
-            res.json(reviews);
+            const pull: IPullRequestEntity = await service.getPullRequest(owner, repository, number);
+            const json: Object = EntityUtil.toJSON(pull);
+            res.json(json);
         } catch (error) {
             res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
 
-    /** @inheritdoc */
+    public async getPage(req: Request, res: Response): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        await this.getOrderedPage(req, res, service, handler);
+
+        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]>{
+            return service.getPullRequestsPage(page, direction);
+        }
+    }
+
+    public async getByNamePage(req: Request, res: Response): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        await this.getOrderedPage(req, res, service, handler);
+
+        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]>{
+            return service.getPullRequestsByNamePage(page, direction);
+        }
+    }
+
+    public async getByReviewsPage(req: Request, res: Response): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        await this.getOrderedPage(req, res, service, handler);
+
+        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]>{
+            return service.getPullRequestsByReviewsPage(page, direction);
+        }
+    }
+
+    public async getPageFromRepository(req: Request, res: Response): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        await this.getOrderedPageFromRepository(req, res, handler);
+
+        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]>{
+            return service.getRepositoryPullRequestsPage(owner, repository, page, direction);
+        }
+    }
+
+    public async getByNamePageFromRepository(req: Request, res: Response): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        await this.getOrderedPageFromRepository(req, res, handler);
+
+        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]>{
+            return service.getRepositoryPullRequestsByNamePage(owner, repository, page, direction);
+        }
+    }
+
+    public async getByReviewsPageFromRepository(req: Request, res: Response): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        await this.getOrderedPageFromRepository(req, res, handler);
+
+        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]>{
+            return service.getRepositoryPullRequestsByReviewsPage(owner, repository, page, direction);
+        }
+    }
+
+    private async getOrderedPageFromRepository(req: Request, res: Response, handler: any): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        const page: number = req.params.page;
+        const owner: string = req.params.owner;
+        const repository: string = req.params.repository;
+        const direction: number = RoutesUtil.directionNameToNumber(req.params.direction);
+        if (direction === 0) {
+            res.status(404).json({ message: "Page not found." });
+        } else {
+            try {
+                const pulls: IPullRequestEntity[] = await handler(owner, repository, page, direction);
+                const jsonRepos: Object[] = EntityUtil.toJSONArray(pulls);
+                const lastPage: number = await service.numPagesForRepository(owner, repository);
+                res.json({ data: jsonRepos, last_page: lastPage });
+            } catch (error) {
+                res.status(500).json({ message: "Oops, something went wrong." });
+            }
+        }
+    }
+
     public async getCreatedAllTime(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
@@ -124,28 +140,14 @@ export class PullRequestController extends AbstractController implements IPullRe
                 start: repo.document.created_at,
                 end: repo.document.pushed_at
             }
-            let counts: number[] = await pullService.getCreatedAllTimeStats(owner, repository, dates);
-            res.json(counts);
+            let stats: number[] = await pullService.getRepositoryCreatedAllTimeStats(owner, repository, dates);
+            res.json(stats);
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
 
-    /** @inheritdoc */
-    getCount(req: Request, res: Response) {
-        let owner: string = req.params.owner;
-        let repository: string = req.params.repository;
-        let service: IPullRequestService = this._services.pull;
-
-        service.getLocalPullRequests(owner, repository).then((pulls) => {
-            res.json({ "count": pulls.length });
-        }).catch((error) => {
-            res.json({ "error": error });
-        });
-    }
-
-    /** @inheritdoc */
     public async getAllRemote(req: Request, res: Response) {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;

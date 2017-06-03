@@ -71,3 +71,9 @@ release/
 
 .gitignore
 .gitignore~
+/.vs/git/v15
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/.vs/slnx.sqlite-journal
+/.vs

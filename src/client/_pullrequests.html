@@ -1,1 +1,62 @@
-<h2 class="ui dividing header">Pull Requests</h2>
+<h1 class="ui header">Pull Requests</h1>
+<div class="ui hidden divider"></div>
+<div class="ui sticky top attached menu">
+    <div class="right item">
+        <div class="ui labeled icon button dropdown" id="pullrequests_filter_dropdown">
+            <i class="filter icon"></i>
+            <div class="default text">Filtrar por repositorio</div>
+            <div class="menu">
+                <div class="ui icon search input">
+                    <i class="search icon"></i>
+                    <input placeholder="Buscar repositorio..." type="text">
+                </div>
+                <div class="scrolling menu" id="pullrequests_filter_repositories">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui right aligned selection dropdown" id="pullrequests_order_dropdown">
+            <i class="dropdown icon"></i>
+            <div class="default text">Orden...</div>
+            <div class="menu">
+                <div class="item" data-value="date_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Fecha de creación
+                </div>
+                <div class="item" data-value="date_desc">
+                    Fecha de creación
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="name_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nombre
+                </div>
+                <div class="item" data-value="name_desc">
+                    Nombre
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="reviews_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nº Revisiones
+                </div>
+                <div class="item" data-value="reviews_desc">
+                    Nº Revisiones
+                    <i class="right floated arrow down icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui bottom attached segment">
+    <p>
+        <div class="ui divided items" id="pullrequest_list">
+        </div>
+    </p>
+</div>
+<div class="ui grid">
+    <div class="column center aligned">
+        <div class="ui pagination menu" id="pullrequest_paginator">
+        </div>
+    </div>
+</div>

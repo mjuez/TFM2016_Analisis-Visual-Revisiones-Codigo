@@ -1,15 +1,17 @@
-html {
-    padding-top: 6rem;
+.full.height {
+    position: absolute;
+    min-height: 100%;
+    left: 8.2rem;
+    right: 0;
 }
 
-.ui.menu{
-    box-shadow: none;
+.ui.inverted.very.padded.basic.footer.segment {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
 }
 
-.ui.dividing.header {
-    margin-bottom: 2rem;
-}
-
-.ui.divided.items>.item {
-    padding: 2rem 0;
+#pullrequests_filter_dropdown{
+    margin-right: 1rem;
 }

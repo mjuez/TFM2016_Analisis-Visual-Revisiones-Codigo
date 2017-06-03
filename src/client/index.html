@@ -3,42 +3,79 @@
 
 <head>
     <title>Anvireco</title>
-    <link rel="stylesheet" type="text/css" href="/js/semantic/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="/js/c3/c3.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/c3/0.4.11/c3.min.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
         crossorigin="anonymous"></script>
-    <script src="/js/semantic/semantic.min.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/sammy/0.7.4/sammy.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="https://cdn.jsdelivr.net/c3/0.4.11/c3.min.js"></script>
+    <script src="/js/app.js"></script>
     <script src="/js/errors.js"></script>
     <script src="/js/home.js"></script>
     <script src="/js/repositories.js"></script>
     <script src="/js/pullrequests.js"></script>
     <script src="/js/users.js"></script>
-    <script src="http://d3js.org/d3.v3.js"></script>
-    <script src="/js/c3/c3.min.js"></script>
+    <script src="/js/main.js"></script>
 </head>
 
 <body>
-    <div class="ui fixed violet menu">
+    <!-- SIDEBAR -->
+    <div class="ui visible left vertical inverted sidebar labeled icon menu">
         <div class="header item">
             Anvireco
         </div>
-        <a class="item" id="m_home">
+        <a class="item" id="m_home" href="/#/">
             <i class="home icon"></i> Inicio
         </a>
-        <a class="item" id="m_repositories">
+        <a class="item" id="m_repositories" href="/#/repositories">
             <i class="github icon"></i> Repositorios
         </a>
-        <a class="item" id="m_pullrequests">
+        <a class="item" id="m_pullrequests" href="/#/pullrequests">
             <i class="fork icon"></i> Pull Requests
         </a>
-        <a class="item" id="m_users">
+        <a class="item" id="m_users" href="/#/users">
             <i class="users icon"></i> Usuarios
         </a>
     </div>
-    <div class="ui loader" id="loader"></div>
-    <div class="ui container" id="content">
+
+    <!-- CONTENT -->
+    <div class="full height">
+        <div class="ui very padded basic segment">
+            <div class="ui loader" id="loader"></div>
+            <div id="content"></div>
+        </div>
+        <div class="ui inverted very padded basic footer segment">
+            <div class="ui stackable grid">
+                <div class="ten wide column">
+                    <p><i class="bookmark icon"></i>
+                        <strong>TFM del Máster Universitario en Ingeniería Informática:</strong>
+                        <br /> Análisis Visual de Revisiones de Código.</p>
+                    <p><i class="student icon"></i>
+                        <strong>Autor:</strong>
+                        <br />Mario Juez Gil.</p>
+                    <p><i class="users icon"></i>
+                        <strong>Tutores:</strong>
+                        <br />Carlos López Nozal, Raúl Marticorena Sánchez.</p>
+                    <p><i class="calendar icon"></i>
+                        <strong>Curso:</strong>
+                        <br />2016-2017.</p>
+                </div>
+                <div class="right aligned six wide column">
+                    <i class="treatment icon"></i>
+                    <strong>Estado:</strong>
+                    <p>
+                        <div>
+                            <a class="ui hidden blue label" id="status_waiting">Esperando tareas</a>
+                            <a class="ui hidden green label" id="status_running">Obteniendo datos</a>
+                            <a class="ui hidden red label" id="status_error">Error API GitHub</a>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

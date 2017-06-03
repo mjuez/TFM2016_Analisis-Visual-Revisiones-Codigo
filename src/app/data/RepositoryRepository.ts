@@ -1,4 +1,4 @@
-import { IRepository } from "../data/IRepository";
+import { IRepository, RetrieveOptions } from "../data/IRepository";
 import { AbstractRepository } from "./AbstractRepository";
 import { IRepositoryEntity, RepositoryEntity } from "../entities/RepositoryEntity";
 import { RepositoryDocument } from "../entities/documents/RepositoryDocument";
@@ -18,7 +18,7 @@ export interface IRepositoryRepository extends IRepository<IRepositoryEntity, Re
      * @param id    Owner GitHub id.
      * @returns a promise that returns a list of repository entities if resolved.
      */
-    findByOwnerId(id: number): Promise<IRepositoryEntity[]>;
+    findByOwnerId(id: number, page?: number, startingFrom?: number): Promise<IRepositoryEntity[]>;
 
     findById(id: number): Promise<IRepositoryEntity>;
 
@@ -47,20 +47,28 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
      * @param id    Owner GitHub id.
      * @returns a promise that returns a list of repository entities if resolved.
      */
-    public async findByOwnerId(id: number): Promise<IRepositoryEntity[]>{
-        return this.retrieve({ owner: {id: id} }); // PAGINACION!
+    public async findByOwnerId(id: number, page: number = 1, startingFrom: number = 0): Promise<IRepositoryEntity[]> {
+        const filter: Object = { owner: { id: id } };
+        return this.retrieve({ filter, page, startingFrom });
     }
 
     public findById(id: number): Promise<IRepositoryEntity> {
         return this.findOne({ id: id });
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<IRepositoryEntity[]> {
-        return this._retrievePartial(filter, page, startingFrom, 'id', { id: 1 });
+    public async retrieve({
+        filter = {},
+        page,
+        startingFrom = 0,
+        where = 'id',
+        sort = { id: 1 },
+        select = '' }: RetrieveOptions = {}): Promise<IRepositoryEntity[]> {
+
+        return this._retrieve({ filter, page, startingFrom, where, sort, select });
     }
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
-        return this._numPages(filter, startingFrom, 'id', { id: 1 });
+        return this._numPages(filter, startingFrom, 'id');
     }
 
     protected convertToEntity(document: RepositoryDocument): IRepositoryEntity {

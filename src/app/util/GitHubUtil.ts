@@ -1,3 +1,6 @@
+import * as cheerio from "cheerio";
+import * as rp from "request-promise";
+
 /**
  * GitHub Utilities.
  * @author Mario Juez <mario@mjuez.com>
@@ -35,6 +38,22 @@ export class GitHubUtil {
             };
         }
         return null;
+    }
+
+    static async checkRepository(owner: string, repository: string): Promise<boolean> {
+        try {
+            const options = {
+                uri: `https://github.com/${owner}/${repository}`,
+                transform: (body: string) => {
+                    return cheerio.load(body);
+                }
+            };
+            const $ = await rp(options);
+            const description = $('meta[name="description"]').attr('content');
+            return description != undefined;
+        } catch (error) {
+            return false;
+        }
     }
 
 }

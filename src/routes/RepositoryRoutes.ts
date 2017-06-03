@@ -29,15 +29,46 @@ export class RepositoryRoutes {
      * @returns  the router.
      */
     public get routes(): express.Router {
-        let router: express.Router = this._router;
-        let controller: IRepositoryController = this._controller;
-
+        const router: express.Router = this._router;
+        const controller: IRepositoryController = this._controller;
+        
         router.get("/repos", (req: express.Request, res: express.Response) => {
-            controller.getFirstPage(req, res);
+            req.params.page = 1;
+            req.params.direction = 'ASC';
+            controller.getPage(req, res);
+        });
+
+        router.get("/repo/:owner/:repository", (req: express.Request, res: express.Response) => {
+            controller.get(req, res);
         });
 
         router.get("/repos/page/:page", (req: express.Request, res: express.Response) => {
+            req.params.direction = 'ASC';
             controller.getPage(req, res);
+        });
+
+        router.get("/repos/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
+            controller.getPage(req, res);
+        });
+
+        router.get("/repos/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
+            controller.getByNamePage(req, res);
+        });
+
+        router.get("/repos/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
+            controller.getByReviewsPage(req, res);
+        });
+
+        router.get("/repos/order/pullrequests/:direction/page/:page", (req: express.Request, res: express.Response) => {
+            controller.getByPullRequestsPage(req, res);
+        });
+
+        router.get("/repos/all", (req: express.Request, res: express.Response) => {
+            controller.getList(req, res);
+        });
+
+        router.get("/repos/stats/averages", (req: express.Request, res: express.Response) => {
+            controller.getStatsAverages(req, res);
         });
 
         return router;

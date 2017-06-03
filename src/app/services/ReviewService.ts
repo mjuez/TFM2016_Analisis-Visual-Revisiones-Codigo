@@ -13,17 +13,6 @@ import { AbstractMultiplePersistenceService } from "./AbstractPersistenceService
  */
 export interface IReviewService extends IMultiplePersistenceService<IReviewEntity> {
 
-    getPullRequestLocalReviews(owner: string, repository: string, pullNumber: number): Promise<IReviewEntity[]>;
-
-    getUserLocalReviews(userLogin: string): Promise<IReviewEntity[]>;
-
-    /**
-     * Saves or updates many entities into database.
-     * @param entities  an array of entities.
-     * @returns a promise that retrns an array of entities if resolved.
-     */
-    createOrUpdateMultiple(entities: IReviewEntity[]): Promise<IReviewEntity[]>;
-
 }
 
 /**
@@ -44,20 +33,6 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
     constructor(repository: IReviewRepository, pullRequestService: IPullRequestService) {
         super(repository);
         this._pullRequestService = pullRequestService;
-    }
-
-    // will be paginated?
-    public async getPullRequestLocalReviews(owner: string, repo: string, pullNumber: number): Promise<IReviewEntity[]>{
-        let repository: IReviewRepository = this._repository;
-        let service: IPullRequestService = this._pullRequestService;
-        let pullRequest: IPullRequestEntity = await service.getLocalPullRequest(owner, repo, pullNumber);
-        return await repository.findByPullId(pullRequest.id); // promise or promise inside promise?
-    }
-
-    // will be paginated?
-    public async getUserLocalReviews(userLogin: string): Promise<IReviewEntity[]>{
-        let repository: IReviewRepository = this._repository;
-        return await repository.retrieve({"user.login": userLogin});
     }
 
     protected async findEntity(entity: IReviewEntity): Promise<IReviewEntity> {

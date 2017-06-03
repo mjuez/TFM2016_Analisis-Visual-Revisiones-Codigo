@@ -1,5 +1,5 @@
 import * as mongoose from "mongoose";
-import { IRepository } from "./IRepository";
+import { IRepository, RetrieveOptions } from "./IRepository";
 import { IEntity } from "../entities/IEntity";
 
 /**
@@ -67,16 +67,28 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
         }
     }
 
-    /**
-     * Retrieves filtered items of a collection from database.
-     * @param filter      Document filter, by default an empty filter
-     *                    which retrieves all items of a collection.
-     * @returns a promise that returns an array of items if resolved.
-     */
-    public async retrieve(filter: Object = {}, page: number = 1): Promise<T[]> {
+    public abstract async retrieve(options: RetrieveOptions): Promise<T[]>;
+    
+    protected async _retrieve(options: RetrieveOptions): Promise<T[]> {
         try {
-            let skip: number = (page - 1) * AbstractRepository.RESULTS_PER_PAGE;
-            let documentArray: E[] = await this.model.find(filter).skip(skip).limit(AbstractRepository.RESULTS_PER_PAGE);
+            if(options.page === undefined){
+                return await this._retrieveAll(options);
+            }else{
+                return await this._retrievePage(options);
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    private async _retrieveAll(options: RetrieveOptions): Promise<T[]> {
+        try {
+            let documentArray: E[] =
+                await this.model.find(options.filter)
+                    .where(options.where)
+                    .gt(options.startingFrom)
+                    .sort(options.sort)
+                    .select(options.select);
             let entityArray: T[] = this.convertToEntityArray(documentArray);
             return entityArray;
         } catch (error) {
@@ -84,20 +96,19 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
         }
     }
 
-    public abstract async retrievePartial(filter?: Object, page?: number, startingFrom?: number): Promise<T[]>;
-
-    protected async _retrievePartial(filter: Object, page: number, startingFrom: number, where: string, sort: Object): Promise<T[]> {
+    private async _retrievePage(options: RetrieveOptions): Promise<T[]> {
         try {
-            let skip: number = (page - 1) * AbstractRepository.RESULTS_PER_PAGE;
+            let skip: number = (options.page - 1) * AbstractRepository.RESULTS_PER_PAGE;
             let documentArray: E[] =
-                await this.model.find(filter)
-                    .where(where)
-                    .gt(startingFrom)
-                    .sort(sort)
+                await this.model.find(options.filter)
+                    .where(options.where)
+                    .gt(options.startingFrom)
+                    .sort(options.sort)
+                    .select(options.select)
                     .skip(skip)
                     .limit(AbstractRepository.RESULTS_PER_PAGE);
-            let pullRequestArray: T[] = this.convertToEntityArray(documentArray);
-            return pullRequestArray;
+            let entityArray: T[] = this.convertToEntityArray(documentArray);
+            return entityArray;
         } catch (error) {
             throw error;
         }
@@ -105,10 +116,10 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
 
     public abstract async numPages(filter: Object, startingFrom: number): Promise<number>;
 
-    protected async _numPages(filter: Object, startingFrom: number, where: string, sort: Object): Promise<number> {
+    protected async _numPages(filter: Object, startingFrom: number, where: string): Promise<number> {
         try {
             let numResults: number = await this.count(filter)
-                .where(where).gt(startingFrom).sort(sort);
+                .where(where).gt(startingFrom);
             return Math.ceil(numResults / AbstractRepository.RESULTS_PER_PAGE);
         } catch (error) {
             throw error;
@@ -130,9 +141,9 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
     }
 
     public async remove(filter: Object = {}): Promise<void> {
-        try{
+        try {
             await this.model.remove(filter);
-        }catch(error){
+        } catch (error) {
             throw error;
         }
     }

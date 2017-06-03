@@ -18,4 +18,18 @@ describe("Checking GitHub utilities", () => {
         expect(nextPage).to.be.null;
     });
 
-})
+    it("Repository should exist", async () => {
+        const owner: string = "octocat";
+        const repository: string = "Hello-World";
+        const exists: boolean = await GitHubUtil.checkRepository(owner, repository);
+        expect(exists).to.be.true;
+    });
+
+    it("Repository should not exist", async () => {
+        const owner: string = "octocat";
+        const repository: string = "este-repositorio-no-existe";
+        const exists: boolean = await GitHubUtil.checkRepository(owner, repository);
+        expect(exists).to.be.false;
+    });
+
+});

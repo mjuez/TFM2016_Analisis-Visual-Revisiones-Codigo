@@ -15,16 +15,16 @@ require("twix");
  */
 export interface IPullRequestService extends IMultiplePersistenceService<IPullRequestEntity> {
 
-    /**
-     * Saves or updates many entities into database.
-     * @param entities  an array of entities.
-     * @returns a promise that retrns an array of entities if resolved.
-     */
-    createOrUpdateMultiple(entities: IPullRequestEntity[]): Promise<IPullRequestEntity[]>;
-    getLocalPullRequest(owner: string, repository: string, id: number): Promise<IPullRequestEntity>;
-    getLocalPullRequests(owner: string, repository: string, startingFrom?: number): Promise<IPullRequestEntity[]>;
-    getCreatedAllTimeStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number[]>;
-    getCreatedBetweenDatesStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number>;
+    getPullRequest(owner: string, repository: string, number: number): Promise<IPullRequestEntity>;
+    getPullRequestsPage(page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    getPullRequestsByNamePage(page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    getPullRequestsByReviewsPage(page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    getRepositoryPullRequestsPage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    getRepositoryPullRequestsByNamePage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    getRepositoryPullRequestsByReviewsPage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    getRepositoryCreatedAllTimeStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number[]>;
+    getRepositoryCreatedBetweenDatesStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number>;
+    numPagesForRepository(owner: string, repository: string): Promise<number>;
 
 }
 
@@ -43,21 +43,57 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         super(repository);
     }
 
-    /** @inheritdoc */
-    public getLocalPullRequest(owner: string, repo: string, id: number): Promise<IPullRequestEntity> {
-        let repository: IPullRequestRepository = this._repository;
-        let filter: SinglePullRequestFilter = PullRequestFilterFactory.createSingle({ owner, repository: repo, number: id });
-        return repository.findOne(filter);
+    public async getPullRequest(owner: string, repository: string, number: number): Promise<IPullRequestEntity> {
+        const repo: IPullRequestRepository = this._repository;
+        const filter: SinglePullRequestFilter = PullRequestFilterFactory.createSingle({ owner, repository, number });
+        return repo.findOne(filter);
     }
 
-    /** @inheritdoc */
-    public getLocalPullRequests(owner: string, repo: string, page: number = 1, startingFrom: number = 0): Promise<IPullRequestEntity[]> {
-        let repository: IPullRequestRepository = this._repository;
-        let filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository: repo });
-        return repository.retrievePartial(filter, page, startingFrom);
+    public async getPullRequestsPage(page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
+        const repo: IPullRequestRepository = this._repository;
+        const sort: Object = { created_at: direction };
+        return repo.retrieve({ page, sort });
     }
 
-    public async getCreatedAllTimeStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number[]> {
+    public async getPullRequestsByNamePage(page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
+        const repo: IPullRequestRepository = this._repository;
+        const sort: Object = { title: direction };
+        return repo.retrieve({ page, sort });
+    }
+
+    public async getPullRequestsByReviewsPage(page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
+        const repo: IPullRequestRepository = this._repository;
+        const sort: Object = { reviews: direction };
+        return repo.retrieve({ page, sort });
+    }
+    public async getRepositoryPullRequestsPage(
+        owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
+
+        const repo: IPullRequestRepository = this._repository;
+        const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
+        const sort: Object = { created_at: direction };
+        return repo.retrieve({ filter, page, sort });
+    }
+    public async getRepositoryPullRequestsByNamePage(
+        owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
+
+        const repo: IPullRequestRepository = this._repository;
+        const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
+        const sort: Object = { title: direction };
+        return repo.retrieve({ filter, page, sort });
+    }
+    public async getRepositoryPullRequestsByReviewsPage(
+        owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
+
+        const repo: IPullRequestRepository = this._repository;
+        const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
+        const sort: Object = { reviews: direction };
+        return repo.retrieve({ filter, page, sort });
+    }
+
+    public async getRepositoryCreatedAllTimeStats(
+        owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number[]> {
+
         let dateRange: any = moment(dates.start).twix(dates.end);
         let portions = dateRange.count("days");
         if (portions > 20) portions = 20;
@@ -67,16 +103,24 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
                 start: date.start(),
                 end: date.end()
             }
-            return await this.getCreatedBetweenDatesStats(owner, repository, partialDates);
+            return await this.getRepositoryCreatedBetweenDatesStats(owner, repository, partialDates);
         }));
         return counts;
     }
 
-    public async getCreatedBetweenDatesStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number> {
+    public async getRepositoryCreatedBetweenDatesStats(
+        owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number> {
+
         let repo: IPullRequestRepository = this._repository;
         let filter: BetweenDatesPullRequestFilter =
             PullRequestFilterFactory.createBetweenDates({ owner, repository, startDate: dates.start, endDate: dates.end });
         return await repo.count(filter);
+    }
+
+    public async numPagesForRepository(owner: string, repository: string): Promise<number> {
+        const repo: IPullRequestRepository = this._repository;
+        const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
+        return await repo.numPages(filter);
     }
 
     protected async findEntity(entity: IPullRequestEntity): Promise<IPullRequestEntity> {

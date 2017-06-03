@@ -1,6 +1,15 @@
 import * as mongoose from "mongoose";
 import { IEntity } from "../entities/IEntity";
 
+export interface RetrieveOptions {
+    filter?: Object, 
+    page?: number, 
+    startingFrom?: number, 
+    where?: string, 
+    sort?: Object,
+    select?: string
+}
+
 /**
  * IRepository interface.
  * Defines all functions that every repository should implement (CRUD).
@@ -25,14 +34,7 @@ export interface IRepository<T extends IEntity<E>, E extends mongoose.Document> 
      */
     update(item: T): Promise<number>;
 
-    /**
-     * Retrieves filtered items of a collection from database.
-     * @param filter      Document filter.
-     * @returns a promise that returns an array of items if resolved.
-     */
-    retrieve(filter?: Object, page?: number): Promise<T[]>;
-
-    retrievePartial(filter?: Object, page?: number, startingFrom?: number): Promise<T[]>;
+    retrieve(options: RetrieveOptions): Promise<T[]>;
 
     findOne(filter: Object): Promise<T>;
 

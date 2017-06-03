@@ -1,4 +1,4 @@
-import { IRepository } from "../data/IRepository";
+import { IRepository, RetrieveOptions } from "../data/IRepository";
 import { AbstractRepository } from "./AbstractRepository";
 import { ITaskEntity, TaskEntity } from "../entities/TaskEntity";
 import { TaskDocument } from "../entities/documents/TaskDocument";
@@ -56,11 +56,28 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
         }
     }
 
-    public async retrieve(filter: Object = {}): Promise<ITaskEntity[]> {
+    public async retrieve({
+        filter = {},
+        page,
+        sort = { creation_date: 1 },
+        select = '' }: RetrieveOptions = {}): Promise<ITaskEntity[]> {
+        try {
+            if (page === undefined) {
+                return await this._retrieveAllTasks(filter, sort, select);
+            } else {
+                return await this._retrieveTasksPage(filter, page, sort, select);
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    private async _retrieveAllTasks(filter: Object, sort: Object, select: string): Promise<ITaskEntity[]> {
         try {
             let documents = await this.model.find(filter)
-                .sort({ creation_date: 1 })
-                .populate('parent');
+                .sort(sort)
+                .populate('parent')
+                .select(select);
             let entityArray: ITaskEntity[] = this.convertToEntityArray(documents);
             return entityArray;
         } catch (error) {
@@ -68,13 +85,14 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
         }
     }
 
-    public async retrievePartial(filter: Object = {}, page: number = 1, startingFrom: number = 0): Promise<ITaskEntity[]> {
+    private async _retrieveTasksPage(filter: Object, page: number, sort: Object, select: string): Promise<ITaskEntity[]> {
         try {
             let skip: number = (page - 1) * AbstractRepository.RESULTS_PER_PAGE;
             let documentArray: TaskDocument[] =
                 await this.model.find(filter)
-                    .sort({ creation_date: 1 })
+                    .sort(sort)
                     .populate('parent')
+                    .select(select)
                     .skip(skip)
                     .limit(AbstractRepository.RESULTS_PER_PAGE);
             let entityArray: ITaskEntity[] = this.convertToEntityArray(documentArray);

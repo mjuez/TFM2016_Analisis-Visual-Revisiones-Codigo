@@ -13,6 +13,8 @@ export interface IPersistenceService<IEntity> {
      */
     createOrUpdate(entity: IEntity): Promise<IEntity>;
 
+    numPages(): Promise<number>;
+
 }
 
 /**
