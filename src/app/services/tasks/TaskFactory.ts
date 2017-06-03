@@ -1,5 +1,6 @@
 import { ITask } from "./ITask";
 import { IMainTask, MainTask } from "./MainTask";
+import { IPullRequestsTask, PullRequestsTask } from "./PullRequestsTask";
 import { IReviewsTask, ReviewsTask } from "./ReviewsTask";
 import { IReviewCommentsTask, ReviewCommentsTask } from "./ReviewCommentsTask";
 import { IUsersPullsTask, UsersPullsTask } from "./UsersPullsTask";
@@ -53,6 +54,8 @@ export class TaskFactory {
 
         if (entity.type === TaskType.ALL) {
             task = new MainTask(this._repositories, this._services.pull);
+        } else if (entity.type === TaskType.PULL_REQUESTS) {
+            task = new PullRequestsTask(this._repositories, this._services.pull);
         } else if (entity.type === TaskType.REPOSITORY) {
             task = new RepositoryTask(this._repositories, this._services.repo);
         } else if (entity.type === TaskType.REVIEW_COMMENTS) {
