@@ -29,6 +29,7 @@ export class MainTask extends GitHubTask implements IMainTask {
 
     public async run(): Promise<void> {
         try {
+            console.log('Starting main task...');
             await this.startTask();
             await this.makeApiCall();
             await this.completeTask();

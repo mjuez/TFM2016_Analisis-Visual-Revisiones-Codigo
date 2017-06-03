@@ -29,6 +29,7 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
 
     public async run(): Promise<void> {
         try {
+            console.log("Starting review comments task...");
             await this.startTask();
             await this.makeApiCall();
             await this.completeTask();
@@ -55,7 +56,7 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
     private async processPage(page: any): Promise<void> {
         let api: GitHubAPI = this.API;
         let reviewComments: IReviewCommentEntity[] = ReviewCommentEntity.toEntityArray(page.data);
-        console.log(`[${new Date()}] - Getting page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
+        console.log(`[${new Date()}] - Getting reviewcomment page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
             await this._reviewCommentService.createOrUpdateMultiple(reviewComments);
             if (api.hasNextPage(page)) {

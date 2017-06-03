@@ -36,6 +36,7 @@ export class UsersPullsTask extends AbstractUserTask implements IUsersPullsTask 
             PullRequestFilterFactory.createRepository({ owner: this.entity.owner, repository: this.entity.repository });
         const startingFrom: number = this.entity.lastProcessed;
         try {
+            console.log("Starting user pulls task...");
             await this.startTask();
             const numPages: number = await pullRepo.numPages(filter, startingFrom);
             for (let page: number = 1; page <= numPages; page++) {

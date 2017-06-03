@@ -30,6 +30,7 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
         let reviewCommentRepo: IReviewCommentRepository = this._repos.reviewComment;
         let startingFrom: number = this.entity.lastProcessed;
         try {
+            console.log("Starting user review comments task...");
             await this.startTask();
             let filter: Object = {
                 repository: {

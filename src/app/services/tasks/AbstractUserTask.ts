@@ -46,6 +46,7 @@ export abstract class AbstractUserTask extends GitHubTask {
     protected async makeApiCall(username: string): Promise<IUserEntity> {
         try {
             let userData: any = await this.API.users.getForUser(<GitHubAPI.Username>{ username });
+            console.log(`[${new Date()}] - Getting user #${username}, remaining reqs: ${userData.meta['x-ratelimit-remaining']}`);
             return UserEntity.toEntity(userData.data);
         } catch (error) {
             throw error;

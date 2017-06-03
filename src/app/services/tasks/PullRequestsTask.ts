@@ -37,6 +37,7 @@ export class PullRequestsTask extends GitHubTask implements IPullRequestsTask {
             PullRequestFilterFactory.createRepository({ owner: this.entity.owner, repository: this.entity.repository });
         const startingFrom: number = this.entity.lastProcessed;
         try {
+            console.log('Starting pull requests task...');
             await this.startTask();
             const numPages: number = await pullRepo.numPages(filter, startingFrom);
             for (let page: number = 1; page <= numPages; page++) {
@@ -74,6 +75,7 @@ export class PullRequestsTask extends GitHubTask implements IPullRequestsTask {
                 repo: this.entity.repository,
                 number: pullNumber
             });
+            console.log(`[${new Date()}] - Getting pull #${pullNumber}, remaining reqs: ${pullData.meta['x-ratelimit-remaining']}`);
             return PullRequestEntity.toEntity(pullData.data);
         } catch (error) {
             throw error;
