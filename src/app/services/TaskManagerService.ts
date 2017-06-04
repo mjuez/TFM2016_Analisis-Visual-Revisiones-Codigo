@@ -110,6 +110,9 @@ export class TaskManagerService implements ITaskManagerService {
     }
 
     public async createTask(owner: string, repository: string): Promise<boolean> {
+        const isPending: boolean = await this.isPending(owner, repository);
+        if (isPending) return true;
+        
         const exists: boolean = await GitHubUtil.checkRepository(owner, repository);
         if (exists) {
             const success: boolean = await this.saveTaskAndSubTasks(owner, repository);
