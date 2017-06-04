@@ -121,6 +121,13 @@ export class TaskManagerService implements ITaskManagerService {
         return false;
     }
 
+    private async isPending(owner: string, repository: string): Promise<boolean> {
+        const repo: ITaskRepository = this._repositories.task;
+        const filter: Object = { owner, repository, is_completed: false };
+        const pendingTasks: ITaskEntity[] = await repo.retrieve({ filter });
+        return pendingTasks.length > 0;
+    }
+
     private async saveTaskAndSubTasks(owner: string, repository: string): Promise<boolean> {
         let taskEntity: ITaskEntity = TaskUtil.buildMainTaskEntity(owner, repository);
         try {
