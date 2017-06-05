@@ -1,5 +1,6 @@
 import { IPullRequestController, PullRequestController } from "./controllers/PullRequestController";
 import { IRepositoryController, RepositoryController } from "./controllers/RepositoryController";
+import { IUserController, UserController } from "./controllers/UserController";
 import { ITaskManagerController, TaskManagerController } from "./controllers/TaskManagerController";
 import { IPullRequestService, PullRequestService } from "./app/services/PullRequestService";
 import { ITaskManagerService, TaskManagerService } from "./app/services/TaskManagerService";
@@ -15,6 +16,7 @@ import { ITaskRepository, TaskRepository } from "./app/data/TaskRepository";
 import { IUserRepository, UserRepository } from "./app/data/UserRepository";
 import { PullRequestRoutes } from "./routes/PullRequestRoutes";
 import { RepositoryRoutes } from "./routes/RepositoryRoutes";
+import { UserRoutes } from "./routes/UserRoutes";
 import { TaskRoutes } from "./routes/TaskRoutes";
 import * as path from "path";
 import * as express from "express";
@@ -73,20 +75,24 @@ class App {
   private _controllers: {
     pull: IPullRequestController;
     repo: IRepositoryController;
+    user: IUserController;
     taskManager: ITaskManagerController;
   } = {
     pull: null,
     repo: null,
+    user: null,
     taskManager: null
   }
 
   private _routes: {
     pull: PullRequestRoutes;
     repo: RepositoryRoutes;
+    user: UserRoutes;
     tasks: TaskRoutes;
   } = {
     pull: null,
     repo: null,
+    user: null,
     tasks: null
   }
 
@@ -140,12 +146,14 @@ class App {
   private createControllers(): void {
     this._controllers.pull = new PullRequestController(this._services);
     this._controllers.repo = new RepositoryController(this._services);
+    this._controllers.user = new UserController(this._services);
     this._controllers.taskManager = new TaskManagerController(this._services);
   }
 
   private createRoutes(): void {
     this._routes.pull = new PullRequestRoutes(this._controllers.pull, this._router);
     this._routes.repo = new RepositoryRoutes(this._controllers.repo, this._router);
+    this._routes.user = new UserRoutes(this._controllers.user, this._router);
     this._routes.tasks = new TaskRoutes(this._controllers.taskManager, this._router);
   }
 
