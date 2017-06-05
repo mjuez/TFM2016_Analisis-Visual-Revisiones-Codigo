@@ -71,41 +71,6 @@ export class UserRoutes {
             controller.getByReviewCommentsPage(req, res);
         });
 
-        router.get("/users/filter/:owner/:repository", (req: express.Request, res: express.Response) => {
-            req.params.page = 1;
-            req.params.direction = 'ASC';
-            controller.getPageFromRepository(req, res);
-        });
-
-        router.get("/users/filter/:owner/:repository/page/:page", (req: express.Request, res: express.Response) => {
-            req.params.direction = 'ASC';
-            controller.getPageFromRepository(req, res);
-        });
-
-        router.get("/users/filter/:owner/:repository/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getPageFromRepository(req, res);
-        });
-
-        router.get("/users/filter/:owner/:repository/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByNamePageFromRepository(req, res);
-        });
-
-        router.get("/users/filter/:owner/:repository/order/pullrequests/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByPullRequestsPageFromRepository(req, res);
-        });
-
-        router.get("/users/filter/:owner/:repository/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByReviewsPageFromRepository(req, res);
-        });
-
-        router.get("/users/filter/:owner/:repository/order/reviews/:state/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByReviewsByStatePageFromRepository(req, res);
-        });
-
-        router.get("/users/filter/:owner/:repository/order/reviewcomments/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByReviewCommentsPageFromRepository(req, res);
-        });
-
         return router;
     }
 
