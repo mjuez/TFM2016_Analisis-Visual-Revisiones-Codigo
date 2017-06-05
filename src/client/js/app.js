@@ -304,6 +304,24 @@ var app = Sammy('#content', function () {
         });
     });
 
+    ///////////
+    // USERS //
+    ///////////
+
+    this.get('#/users', function () {
+        this.redirect('#/users/page/1');
+    });
+
+    this.get('#/users/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/pulls/page/${page}`;
+            loadUsersList(apiUrl, page, '/#/users/page');
+        });
+    });
+
     ///////////////
     // NOT FOUND //
     ///////////////
