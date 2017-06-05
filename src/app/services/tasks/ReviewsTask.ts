@@ -112,12 +112,13 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
         let filter: Object = {
             pull_request_number: pull.document.number,
             repository: {
-                name: this.entity.repository,
-                owner: this.entity.owner
+                name: pull.document.base.repo.name,
+                owner: pull.document.base.repo.owner.login
             }
         }
         try {
             let reviewsCount: number = await reviewRepo.count(filter);
+            console.log(`Updating pull reviews count, pull: #${pull.document.number} (${pull.document.base.repo.owner.login}/${pull.document.base.repo.name}, count: ${reviewsCount})`);
             pull.document["reviews"] = reviewsCount;
             await pullRepo.update(pull);
         } catch (error) {
