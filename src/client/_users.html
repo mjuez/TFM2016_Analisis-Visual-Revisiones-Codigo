@@ -1,1 +1,96 @@
-<h2 class="ui dividing header">Usuarios</h2>
+<h1 class="ui header">Usuarios</h1>
+<div class="ui hidden divider"></div>
+<div class="ui top attached menu">
+    <div class="right item">
+        <div class="ui right aligned selection dropdown" id="users_order_dropdown">
+            <i class="dropdown icon"></i>
+            <div class="default text">Orden...</div>
+            <div class="menu">
+                <div class="item" data-value="date_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Fecha de creación
+                </div>
+                <div class="item" data-value="date_desc">
+                    Fecha de creación
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="name_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Login
+                </div>
+                <div class="item" data-value="name_desc">
+                    Login
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="pulls_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nº Pull Requests
+                </div>
+                <div class="item" data-value="pulls_desc">
+                    Nº Pull Requests
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="reviews_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nº Revisiones
+                </div>
+                <div class="item" data-value="reviews_desc">
+                    Nº Revisiones
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="accepted_reviews_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nº Rev. Aceptadas
+                </div>
+                <div class="item" data-value="accepted_reviews_desc">
+                    Nº Rev. Aceptadas
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="commented_reviews_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nº Rev. Comentadas
+                </div>
+                <div class="item" data-value="commented_reviews_desc">
+                    Nº Rev. Comentadas
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="changes_requested_reviews_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nº Rev. P.Cambios
+                </div>
+                <div class="item" data-value="changes_requested_reviews_desc">
+                    Nº Rev. P.Cambios
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="dismissed_reviews_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nº Rev. Descartadas
+                </div>
+                <div class="item" data-value="dismissed_reviews_desc">
+                    Nº Rev. Descartadas
+                    <i class="right floated arrow down icon"></i>
+                </div>
+                <div class="item" data-value="review_comments_asc">
+                    <i class="right floated arrow up icon"></i>
+                    Nº Comentarios Rev.
+                </div>
+                <div class="item" data-value="review_comments_desc">
+                    Nº Comentarios Rev.
+                    <i class="right floated arrow down icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="ui bottom attached segment">
+    <p>
+        <div class="ui divided items" id="user_list">
+        </div>
+    </p>
+</div>
+<div class="ui grid">
+    <div class="column center aligned">
+        <div class="ui pagination menu" id="user_paginator">
+        </div>
+    </div>
+</div>
