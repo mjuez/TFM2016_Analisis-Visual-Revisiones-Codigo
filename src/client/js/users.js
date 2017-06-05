@@ -68,3 +68,75 @@ function handleUsersOrder(value, page) {
             break;
     }
 }
+
+function printUserItems(items) {
+    $('#user_list').html('');
+    items.map(function (item) {
+        $('#user_list').append(userItem(item));
+    });
+}
+
+function userItem(userData) {
+    const item = $('<div>', {
+        class: 'item',
+        html: $('<div>', {
+            class: 'content',
+            html: [
+                $('<a>', {
+                    text: userData.login,
+                    class: 'header',
+                    href: `/#/user/${userData.login}`
+                }),
+                $('<div>', {
+                    class: 'description',
+                    html: $('<p>', {
+                        html: userData.name
+                    })
+                }),
+                ,
+                $('<div>', {
+                    class: 'extra',
+                    html: [
+                        $('<i>', {
+                            class: 'unhide icon'
+                        }),
+                        userData.reviews_count,
+                        ' (',
+                        $('<i>', {
+                            class: 'checkmark icon'
+                        }),
+                        userData.reviews_approved_count,
+                        ', ',
+                        $('<i>', {
+                            class: 'talk icon'
+                        }),
+                        userData.reviews_commented_count,
+                        ', ',
+                        $('<i>', {
+                            class: 'remove icon'
+                        }),
+                        userData.reviews_changes_requested_count,
+                        ', ',
+                        $('<i>', {
+                            class: 'trash icon'
+                        }),
+                        userData.reviews_dismissed_count,
+                        ') ',
+                        ' | ',
+                        $('<i>', {
+                            class: 'comments icon'
+                        }),
+                        userData.review_comments_count,
+                        ' | ',
+                        $('<i>', {
+                            class: 'fork icon'
+                        }),
+                        userData.pull_requests_count
+                    ]
+                })
+            ]
+        })
+    });
+
+    return item;
+}
