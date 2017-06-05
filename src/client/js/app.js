@@ -322,6 +322,204 @@ var app = Sammy('#content', function () {
         });
     });
 
+    this.get('#/users/order/date/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/date/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'date_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/date/asc/page');
+        });
+    });
+
+    this.get('#/users/order/date/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/date/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'date_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/date/desc/page');
+        });
+    });
+
+    this.get('#/users/order/name/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/name/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'name_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/name/asc/page');
+        });
+    });
+
+    this.get('#/users/order/name/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/name/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'name_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/name/desc/page');
+        });
+    });
+
+    this.get('#/users/order/pullrequests/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/pullrequests/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'pulls_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/pullrequests/asc/page');
+        });
+    });
+
+    this.get('#/users/order/pullrequests/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/pullrequests/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'pulls_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/pullrequests/desc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'reviews_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/asc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'reviews_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/desc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/accepted/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/accepted/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'accepted_reviews_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/accepted/asc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/accepted/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/accepted/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'accepted_reviews_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/accepted/desc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/changes_requested/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/changes_requested/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'changes_requested_reviews_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/changes_requested/asc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/changes_requested/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/changes_requested/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'changes_requested_reviews_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/changes_requested/desc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/commented/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/commented/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'commented_reviews_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/commented/asc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/commented/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/commented/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'commented_reviews_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/commented/desc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/dismissed/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/dismissed/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'dismissed_reviews_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/dismissed/asc/page');
+        });
+    });
+
+    this.get('#/users/order/reviews/dismissed/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviews/dismissed/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'dismissed_reviews_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/dismissed/desc/page');
+        });
+    });
+
+    this.get('#/users/order/reviewcomments/asc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviewcomments/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'review_comments_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviewcomments/asc/page');
+        });
+    });
+
+    this.get('#/users/order/reviewcomments/desc/page/:page', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var page = this.params['page'];
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/order/reviewcomments/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'review_comments_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviewcomments/desc/page');
+        });
+    });
+
     ///////////////
     // NOT FOUND //
     ///////////////
