@@ -1,4 +1,4 @@
-function loadUserList(apiRoute, page, url) {
+function loadUsersList(apiRoute, page, url) {
     showLoader();
     $('#users_order_dropdown').dropdown({
         onChange: function (value, text) { handleUsersOrder(value, page); }
