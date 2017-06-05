@@ -11,7 +11,7 @@ function loadUsersList(apiRoute, page, url) {
             hideLoader();
         })
         .fail(function (error) {
-            $('#user_list').html('No se pueden obtener los repositorios en este momento.');
+            $('#user_list').html('No se pueden obtener los usuarios en este momento.');
             hideLoader();
         });
 }
