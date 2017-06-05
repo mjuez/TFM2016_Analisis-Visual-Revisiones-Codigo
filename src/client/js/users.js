@@ -42,11 +42,11 @@ function handleUsersOrder(value, page) {
         case 'reviews_desc':
             app.setLocation(`#/users/order/reviews/desc/page/${page}`);
             break;
-        case 'accepted_reviews_asc':
-            app.setLocation(`#/users/order/reviews/accepted/asc/page/${page}`);
+        case 'approved_reviews_asc':
+            app.setLocation(`#/users/order/reviews/approved/asc/page/${page}`);
             break;
-        case 'accepted_reviews_desc':
-            app.setLocation(`#/users/order/reviews/accepted/desc/page/${page}`);
+        case 'approved_reviews_desc':
+            app.setLocation(`#/users/order/reviews/approved/desc/page/${page}`);
             break;
         case 'commented_reviews_asc':
             app.setLocation(`#/users/order/reviews/commented/asc/page/${page}`);

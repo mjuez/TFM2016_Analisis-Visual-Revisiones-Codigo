@@ -410,25 +410,25 @@ var app = Sammy('#content', function () {
         });
     });
 
-    this.get('#/users/order/reviews/accepted/asc/page/:page', function () {
+    this.get('#/users/order/reviews/approved/asc/page/:page', function () {
         setActiveMenuItem('users');
         var container = this.$element();
         var page = this.params['page'];
         container.load('/_users.html', function () {
-            var apiUrl = `/api/users/order/reviews/accepted/asc/page/${page}`;
-            $('#users_order_dropdown').dropdown('set selected', 'accepted_reviews_asc');
-            loadUsersList(apiUrl, page, '/#/users/order/reviews/accepted/asc/page');
+            var apiUrl = `/api/users/order/reviews/approved/asc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'approved_reviews_asc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/approved/asc/page');
         });
     });
 
-    this.get('#/users/order/reviews/accepted/desc/page/:page', function () {
+    this.get('#/users/order/reviews/approved/desc/page/:page', function () {
         setActiveMenuItem('users');
         var container = this.$element();
         var page = this.params['page'];
         container.load('/_users.html', function () {
-            var apiUrl = `/api/users/order/reviews/accepted/desc/page/${page}`;
-            $('#users_order_dropdown').dropdown('set selected', 'accepted_reviews_desc');
-            loadUsersList(apiUrl, page, '/#/users/order/reviews/accepted/desc/page');
+            var apiUrl = `/api/users/order/reviews/approved/desc/page/${page}`;
+            $('#users_order_dropdown').dropdown('set selected', 'approved_reviews_desc');
+            loadUsersList(apiUrl, page, '/#/users/order/reviews/approved/desc/page');
         });
     });
 
