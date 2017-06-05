@@ -119,7 +119,7 @@ class App {
 
   private async init(): Promise<void> {
     this.createRepositories();
-    await this.createServices();
+    this.createServices();
     this.createControllers();
     this.createRoutes();
     this.setRoutes();
@@ -134,7 +134,7 @@ class App {
     this._repositories.user = new UserRepository();
   }
 
-  private async createServices(): Promise<void> {
+  private createServices(): void {
     this._services.pull = new PullRequestService(this._repositories.pull);
     this._services.review = new ReviewService(this._repositories.review, this._services.pull);
     this._services.reviewComment = new ReviewCommentService(this._repositories.reviewComment);
