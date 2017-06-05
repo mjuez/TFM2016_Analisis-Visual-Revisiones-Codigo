@@ -9,7 +9,17 @@ import { IUserRepository } from "../data/UserRepository";
  * Describes specific functionality for User entities.
  * @author Mario Juez <mario@mjuez.com> 
  */
-export interface IUserService extends IPersistenceService<IUserEntity> {}
+export interface IUserService extends IPersistenceService<IUserEntity> {
+
+    getUser(username: string): Promise<IUserEntity>;
+    getUsersPage(page: number, direction: number): Promise<IUserEntity[]>;
+    getUsersByNamePage(page: number, direction: number): Promise<IUserEntity[]>;
+    getUsersByPullRequestsPage(page: number, direction: number): Promise<IUserEntity[]>;
+    getUsersByReviewsPage(page: number, direction: number): Promise<IUserEntity[]>;
+    getUsersByReviewsByStatePage(page: number, state: string, direction: number): Promise<IUserEntity[]>;
+    getUsersByReviewCommentsPage(page: number, direction: number): Promise<IUserEntity[]>;
+
+}
 
 /**
  * User services.
