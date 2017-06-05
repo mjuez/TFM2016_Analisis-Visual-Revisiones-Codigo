@@ -66,6 +66,12 @@ function handleUsersOrder(value, page) {
         case 'dismissed_reviews_desc':
             app.setLocation(`#/users/order/reviews/dismissed/desc/page/${page}`);
             break;
+        case 'review_comments_asc':
+            app.setLocation(`#/users/order/reviewcomments/asc/page/${page}`);
+            break;
+        case 'review_comments_desc':
+            app.setLocation(`#/users/order/reviewcomments/desc/page/${page}`);
+            break;
     }
 }
 
