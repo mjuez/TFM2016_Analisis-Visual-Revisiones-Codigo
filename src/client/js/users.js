@@ -137,7 +137,7 @@ function userItem(userData) {
                         $('<i>', {
                             class: 'fork icon'
                         }),
-                        userData.pull_requests_count
+                        userData.pull_request_count
                     ]
                 })
             ]
