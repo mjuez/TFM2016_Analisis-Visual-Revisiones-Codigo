@@ -55,7 +55,9 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
     }
 
     public async getUsersByPullRequestsPage(page: number, direction: number): Promise<IUserEntity[]> {
-        throw new Error("Method not implemented.");
+        const repo: IUserRepository = this._repository;
+        const sort: Object = { pull_request_count: direction };
+        return repo.retrieve({ page, sort });
     }
 
     public async getUsersByReviewsPage(page: number, direction: number): Promise<IUserEntity[]> {
