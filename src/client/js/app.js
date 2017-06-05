@@ -317,7 +317,7 @@ var app = Sammy('#content', function () {
         var container = this.$element();
         var page = this.params['page'];
         container.load('/_users.html', function () {
-            var apiUrl = `/api/pulls/page/${page}`;
+            var apiUrl = `/api/users/page/${page}`;
             loadUsersList(apiUrl, page, '/#/users/page');
         });
     });
