@@ -174,6 +174,7 @@ class App {
     this._express.use('/', router);
     this._express.use('/api/', this._routes.pull.routes);
     this._express.use('/api/', this._routes.repo.routes);
+    this._express.use('/api/', this._routes.user.routes);
     this._express.use('/api/', this._routes.tasks.routes);
     this._express.get('*', (req, res) => {
       res.sendFile(__dirname + '/client/index.html');
