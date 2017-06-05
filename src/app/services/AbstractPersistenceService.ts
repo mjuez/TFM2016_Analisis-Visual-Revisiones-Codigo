@@ -70,7 +70,7 @@ export abstract class AbstractMultiplePersistenceService<T extends IRepository<E
      */
     public async createOrUpdateMultiple(entities: E[]): Promise<E[]> {
         let entitiesResult: E[] = [];
-        entities.map(async (entity) => {
+        await entities.map(async (entity) => {
             try {
                 let persisted: E = await this.createOrUpdate(entity);
                 entitiesResult.push(persisted);
