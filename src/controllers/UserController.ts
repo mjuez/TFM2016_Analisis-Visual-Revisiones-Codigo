@@ -88,4 +88,13 @@ export class UserController extends AbstractController implements IUserControlle
         }
     }
 
+    public async getByReviewCommentsPage(req: Request, res: Response): Promise<void> {
+        const service: IUserService = this._services.user;
+        await this.getOrderedPage(req, res, service, handler);
+
+        async function handler(page: number, direction: number): Promise<IUserEntity[]>{
+            return service.getUsersByReviewCommentsPage(page, direction);
+        }
+    }
+
 }
