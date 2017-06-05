@@ -43,21 +43,18 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
     }
 
     public async getUsersPage(page: number, direction: number): Promise<IUserEntity[]> {
-        const repo: IUserRepository = this._repository;
         const sort: Object = { created_at: direction };
-        return repo.retrieve({ page, sort });
+        return this.getSortedPage(page, sort);
     }
 
     public async getUsersByNamePage(page: number, direction: number): Promise<IUserEntity[]> {
-        const repo: IUserRepository = this._repository;
         const sort: Object = { login: direction };
-        return repo.retrieve({ page, sort });
+        return this.getSortedPage(page, sort);
     }
 
     public async getUsersByPullRequestsPage(page: number, direction: number): Promise<IUserEntity[]> {
-        const repo: IUserRepository = this._repository;
         const sort: Object = { pull_request_count: direction };
-        return repo.retrieve({ page, sort });
+        return this.getSortedPage(page, sort);
     }
 
     public async getUsersByReviewsPage(page: number, direction: number): Promise<IUserEntity[]> {
