@@ -3,6 +3,7 @@ import { AbstractPersistenceService } from "../services/AbstractPersistenceServi
 import { IUserEntity, UserEntity } from "../entities/UserEntity";
 import { UserDocument } from "../entities/documents/UserDocument";
 import { IUserRepository } from "../data/UserRepository";
+import * as math from "mathjs";
 
 /**
  * IUserService interface.
@@ -81,6 +82,31 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
     public async getUsersByReviewCommentsPage(page: number, direction: number): Promise<IUserEntity[]> {
         const sort: Object = { review_comments_count: direction };
         return this.getSortedPage(page, sort);
+    }
+
+    public async getUsersStatsMedians(): Promise<Object> {
+        const repo: IUserRepository = this._repository;
+        const select: string = 'pull_request_count reviews_count review_comments_count -_id';
+        const entities: IUserEntity[] = await repo.retrieve({ select });
+        const pullRequestCounts: number[] = this.getUsersStatsArray(entities, "pull_request_count");
+        const reviewCounts: number[] = this.getUsersStatsArray(entities, "reviews_count");
+        const reviewCommentCounts: number[] = this.getUsersStatsArray(entities, "review_comments_count");
+
+        const medians: Object = {
+            pull_request_count: math.median(pullRequestCounts),
+            reviews_count: math.median(reviewCounts),
+            review_comments_count: math.median(reviewCommentCounts)
+        };
+
+        return medians;
+    }
+
+    private getUsersStatsArray(users: IUserEntity[], statsField: string): number[] {
+        let array: number[] = users.map((user): number => {
+            return user[statsField];
+        });
+
+        return array;
     }
 
     protected async findEntity(entity: IUserEntity): Promise<IUserEntity> {
