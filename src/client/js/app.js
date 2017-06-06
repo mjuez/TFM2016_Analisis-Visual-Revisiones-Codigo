@@ -308,6 +308,15 @@ var app = Sammy('#content', function () {
     // USERS //
     ///////////
 
+    this.get('#/user/:login', function () {
+        setActiveMenuItem('users');
+        var container = this.$element();
+        var login = this.params['login'];
+        container.load('/_user.html', function () {
+            loadUser(login);
+        });
+    });
+
     this.get('#/users', function () {
         this.redirect('#/users/page/1');
     });
