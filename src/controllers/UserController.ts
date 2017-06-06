@@ -18,6 +18,7 @@ export interface IUserController {
     getByReviewsPage(req: Request, res: Response): Promise<void>;
     getByReviewsByStatePage(req: Request, res: Response): Promise<void>;
     getByReviewCommentsPage(req: Request, res: Response): Promise<void>;
+    getStatsMedians(req: Request, res: Response): Promise<void>;
 
 }
 
@@ -94,6 +95,16 @@ export class UserController extends AbstractController implements IUserControlle
 
         async function handler(page: number, direction: number): Promise<IUserEntity[]>{
             return service.getUsersByReviewCommentsPage(page, direction);
+        }
+    }
+
+    public async getStatsMedians(req: Request, res: Response): Promise<void> {
+        const service: IUserService = this._services.user;
+        try {
+            const medians: Object = await service.getUsersStatsMedians();
+            res.json(medians);
+        } catch (error) {
+            res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
 
