@@ -19,7 +19,7 @@ export interface IUserService extends IPersistenceService<IUserEntity> {
     getUsersByReviewsPage(page: number, direction: number): Promise<IUserEntity[]>;
     getUsersByReviewsByStatePage(page: number, state: string, direction: number): Promise<IUserEntity[]>;
     getUsersByReviewCommentsPage(page: number, direction: number): Promise<IUserEntity[]>;
-    getUsersStatsMedians(): Promise<Object>;
+    getUsersStatsMeans(): Promise<Object>;
 
 }
 
@@ -85,7 +85,7 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
         return this.getSortedPage(page, sort);
     }
 
-    public async getUsersStatsMedians(): Promise<Object> {
+    public async getUsersStatsMeans(): Promise<Object> {
         const repo: IUserRepository = this._repository;
         const select: string = 'pull_request_count reviews_count review_comments_count -_id';
         const entities: IUserEntity[] = await repo.retrieve({ select });
@@ -93,18 +93,18 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
         const reviewCounts: number[] = this.getUsersStatsArray(entities, "reviews_count");
         const reviewCommentCounts: number[] = this.getUsersStatsArray(entities, "review_comments_count");
 
-        const medians: Object = {
-            pull_request_count: math.median(pullRequestCounts),
-            reviews_count: math.median(reviewCounts),
-            review_comments_count: math.median(reviewCommentCounts)
+        const means: Object = {
+            pull_request_count: math.ceil(math.mean(pullRequestCounts)),
+            reviews_count: math.ceil(math.mean(reviewCounts)),
+            review_comments_count: math.ceil(math.mean(reviewCommentCounts))
         };
 
-        return medians;
+        return means;
     }
 
     private getUsersStatsArray(users: IUserEntity[], statsField: string): number[] {
         let array: number[] = users.map((user): number => {
-            return user[statsField];
+            return user.document[statsField];
         });
 
         return array;

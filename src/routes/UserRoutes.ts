@@ -71,8 +71,8 @@ export class UserRoutes {
             controller.getByReviewCommentsPage(req, res);
         });
 
-        router.get("/users/stats/medians", (req: express.Request, res: express.Response) => {
-            controller.getStatsMedians(req, res);
+        router.get("/users/stats/means", (req: express.Request, res: express.Response) => {
+            controller.getStatsMeans(req, res);
         });
 
         return router;
