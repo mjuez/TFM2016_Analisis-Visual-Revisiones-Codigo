@@ -75,6 +75,21 @@ function handleUsersOrder(value, page) {
     }
 }
 
+function loadUser(login) {
+    showLoader();
+    $.get(`/api/user/${login}`)
+        .done(function (result) {
+            $('#user_title').html(`Usuario: ${result.login}`);
+            configureUserButtons(result);
+            loadUserCharts(result);
+            hideLoader();
+        })
+        .fail(function (error) {
+            app.setLocation(`#/notfound`);
+            hideLoader();
+        });
+}
+
 function printUserItems(items) {
     $('#user_list').html('');
     items.map(function (item) {
