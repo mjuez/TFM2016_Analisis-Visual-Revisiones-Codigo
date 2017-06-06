@@ -100,6 +100,7 @@ function loadUserCharts(user) {
     $.get(`/api/users/stats/means`)
         .done(function (result) {
             printUserMeanCharts(user, result);
+            printUserReviewTypesChart(user);
         })
         .fail(function (error) {
             // todo
@@ -131,6 +132,28 @@ function printUserMeanCharts(user, meanData) {
         y_label: 'Número de comentarios de revisión realizados'
     };
     printUserMeanChart(reviewCommentsCountConfig);
+}
+
+function printUserReviewTypesChart(user){
+    $(`#user_reviewtypes_chart_segment`).removeClass('loading');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#user_reviewtypes_chart`,
+        data: {
+            columns: [
+                ['Aprobadas', user.reviews_approved_count],
+                ['Comentadas', user.reviews_commented_count]
+                ['Con petición de cambios', user.reviews_changes_requested_count]
+                ['Descartadas', user.reviews_dismissed_count]
+            ],
+            type: 'donut'
+        },
+        donut: {
+            title: 'Revisiones'
+        }
+    });
 }
 
 function printUserMeanChart(config) {
