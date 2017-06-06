@@ -19,6 +19,7 @@ export interface IUserService extends IPersistenceService<IUserEntity> {
     getUsersByReviewsPage(page: number, direction: number): Promise<IUserEntity[]>;
     getUsersByReviewsByStatePage(page: number, state: string, direction: number): Promise<IUserEntity[]>;
     getUsersByReviewCommentsPage(page: number, direction: number): Promise<IUserEntity[]>;
+    getUsersStatsMedians(): Promise<Object>;
 
 }
 
