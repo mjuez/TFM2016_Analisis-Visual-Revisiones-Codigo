@@ -90,6 +90,81 @@ function loadUser(login) {
         });
 }
 
+function configureUserButtons(user) {
+    $('#user_viewgithub_button').on('click', function(){
+        $(location).attr('href', user.html_url);
+    });
+}
+
+function loadUserCharts(user) {
+    $.get(`/api/users/stats/means`)
+        .done(function (result) {
+            printUserMeanCharts(user, result);
+        })
+        .fail(function (error) {
+            // todo
+        });
+}
+
+function printUserMeanCharts(user, meanData) {
+    var pullsCountConfig = {
+        value: user.pull_request_count,
+        mean: meanData.pull_request_count,
+        container: 'user_pullrequests_chart',
+        column_legend: `Usuario: ${user.login}`,
+        y_label: 'Número de pull request creadas'
+    };
+    printUserMeanChart(pullsCountConfig);
+    var reviewsCountConfig = {
+        value: user.reviews_count,
+        mean: meanData.reviews_count,
+        container: 'user_reviews_chart',
+        column_legend: `Usuario: ${user.login}`,
+        y_label: 'Número de revisiones realizadas'
+    };
+    printUserMeanChart(reviewsCountConfig);
+    var reviewCommentsCountConfig = {
+        value: user.review_comments_count,
+        mean: meanData.review_comments_count,
+        container: 'user_reviewcomments_chart',
+        column_legend: `Usuario: ${user.login}`,
+        y_label: 'Número de comentarios de revisión realizados'
+    };
+    printUserMeanChart(reviewCommentsCountConfig);
+}
+
+function printUserMeanChart(config) {
+    $(`#${config.container}_segment`).removeClass('loading');
+    var data = ['data1', config.value];
+    var meanData = ['data2', config.mean];
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#${config.container}`,
+        data: {
+            columns: [
+                data,
+                meanData
+            ],
+            type: 'bar',
+            names: {
+                data1: `${config.column_legend}`,
+                data2: `Media`
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: ['muestras']
+            },
+            y: {
+                label: config.y_label
+            }
+        }
+    });
+}
+
 function printUserItems(items) {
     $('#user_list').html('');
     items.map(function (item) {
