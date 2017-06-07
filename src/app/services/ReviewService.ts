@@ -18,7 +18,7 @@ require("twix");
 export interface IReviewService extends IMultiplePersistenceService<IReviewEntity> {
 
     getFirstAndLast(): Promise<any>;
-    getAllTimeStatsByUser(userLogin: string, dates: { start: Date, end: Date }): Promise<number[]>;
+    getAllTimeStatsByUser(userLogin: string, dates: { start: Date, end: Date }): Promise<Object>;
 
 }
 
