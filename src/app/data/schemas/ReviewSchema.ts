@@ -30,7 +30,8 @@ export class ReviewSchema {
             commit_id: String,
             state: String,
             html_url: String,
-            pull_request_url: String
+            pull_request_url: String,
+            submitted_at: Date,
         });
 
         return schema;
