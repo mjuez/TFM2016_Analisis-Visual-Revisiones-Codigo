@@ -27,10 +27,9 @@ export class ReviewController extends AbstractController implements IReviewContr
         try {
             const firstAndLastReviews: any = await service.getFirstAndLast();
             let dates: any = {
-                start: firstAndLastReviews.first.submitted_at,
-                end: firstAndLastReviews.last.submitted_at
+                start: firstAndLastReviews.first.document.submitted_at,
+                end: firstAndLastReviews.last.document.submitted_at
             }
-            console.log(dates);
             const stats: any = await service.getAllTimeStatsByUser(userLogin, dates);
             res.json(stats);
         } catch (error) {
