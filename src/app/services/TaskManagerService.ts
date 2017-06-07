@@ -132,23 +132,23 @@ export class TaskManagerService implements ITaskManagerService {
     }
 
     private async saveTaskAndSubTasks(owner: string, repository: string): Promise<boolean> {
-        let taskEntity: ITaskEntity = TaskUtil.buildMainTaskEntity(owner, repository);
+        const taskEntity: ITaskEntity = TaskUtil.buildMainTaskEntity(owner, repository);
         try {
-            let mainTask: ITask = await this._taskFactory.buildTask(taskEntity);
-            //let pullsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.PULL_REQUESTS);
-            let reviewsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REVIEWS);
-            //let reviewCommentsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REVIEW_COMMENTS);
-            //let usersPullsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_PULLS);
-            //let usersReviewsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_REVIEWS);
-            //let usersReviewCommentsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_REVIEW_COMMENTS);
-            //let repositoryTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REPOSITORY);
-            //await this._taskFactory.buildTask(pullsTaskEntity);
+            const mainTask: ITask = await this._taskFactory.buildTask(taskEntity);
+            const pullsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.PULL_REQUESTS);
+            const reviewsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REVIEWS);
+            const reviewCommentsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REVIEW_COMMENTS);
+            const usersPullsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_PULLS);
+            const usersReviewsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_REVIEWS);
+            const usersReviewCommentsTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.USERS_REVIEW_COMMENTS);
+            const repositoryTaskEntity: ITaskEntity = TaskUtil.buildSubTaskEntity(mainTask.entity, TaskType.REPOSITORY);
+            await this._taskFactory.buildTask(pullsTaskEntity);
             await this._taskFactory.buildTask(reviewsTaskEntity);
-            //await this._taskFactory.buildTask(reviewCommentsTaskEntity);
-            //await this._taskFactory.buildTask(usersPullsTaskEntity);
-            //await this._taskFactory.buildTask(usersReviewsTaskEntity);
-            //await this._taskFactory.buildTask(usersReviewCommentsTaskEntity);
-            //await this._taskFactory.buildTask(repositoryTaskEntity);
+            await this._taskFactory.buildTask(reviewCommentsTaskEntity);
+            await this._taskFactory.buildTask(usersPullsTaskEntity);
+            await this._taskFactory.buildTask(usersReviewsTaskEntity);
+            await this._taskFactory.buildTask(usersReviewCommentsTaskEntity);
+            await this._taskFactory.buildTask(repositoryTaskEntity);
             return true;
         } catch (error) {
             return false;
