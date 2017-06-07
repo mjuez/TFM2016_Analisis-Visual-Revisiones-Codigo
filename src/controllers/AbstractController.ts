@@ -6,6 +6,7 @@ import { IReviewService } from "../app/services/ReviewService";
 import { IReviewCommentService } from "../app/services/ReviewCommentService";
 import { IUserService } from "../app/services/UserService";
 import { IRepositoryService } from "../app/services/RepositoryService";
+import { IStatsService } from "../app/services/StatsService";
 import { EntityUtil } from "../app/util/EntityUtil";
 import { RoutesUtil } from "../app/util/RoutesUtil";
 
@@ -15,7 +16,8 @@ interface Services {
   reviewComment: IReviewCommentService,
   user: IUserService,
   repo: IRepositoryService,
-  taskManager: ITaskManagerService
+  taskManager: ITaskManagerService,
+  stats: IStatsService
 }
 
 export abstract class AbstractController {
