@@ -71,23 +71,6 @@ function handlePullrequestsFilter(value) {
     }
 }
 
-function getPullRequestPage(owner, repository) {
-    $('#loader').addClass('active');
-    $('#content').load(`/_generic.html`, function () {
-        history.pushState(null, `Repositorio - ${owner}/${repository}`, `/repositories/single/${owner}/${repository}`);
-        $('#generic_title').html(`Repositorio: ${owner}/${repository}`);
-        $.get(`/api/${owner}/${repository}/pulls/stats/created/alltime`)
-            .done(function (result) {
-                printCreatedAllTimeStatsGraph(result);
-                $('#loader').removeClass('active');
-            })
-            .fail(function (error) {
-                $('#generic_content').html('No se pueden obtener los repositorios en este momento.');
-                $('#loader').removeClass('active');
-            });
-    });
-}
-
 function printPullRequestItems(items) {
     $('#pullrequest_list').html('');
     items.map(function (item) {
