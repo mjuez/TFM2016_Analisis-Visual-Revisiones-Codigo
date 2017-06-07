@@ -221,7 +221,7 @@ var app = Sammy('#content', function () {
         var repository = this.params['repository'];
         var page = this.params['page'];
         container.load('/_pullrequests.html', function () {
-            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/asc/page/${page}`;
+            var apiUrl = `/api/pulls/filter/repo/${owner}/${repository}/order/date/asc/page/${page}`;
             loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/page`, { owner, name: repository });
         });
     });
@@ -233,7 +233,7 @@ var app = Sammy('#content', function () {
         var repository = this.params['repository'];
         var page = this.params['page'];
         container.load('/_pullrequests.html', function () {
-            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/asc/page/${page}`;
+            var apiUrl = `/api/pulls/filter/repo/${owner}/${repository}/order/date/asc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'date_asc');
             loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/date/asc/page`, { owner, name: repository });
         });
@@ -246,7 +246,7 @@ var app = Sammy('#content', function () {
         var repository = this.params['repository'];
         var page = this.params['page'];
         container.load('/_pullrequests.html', function () {
-            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/date/desc/page/${page}`;
+            var apiUrl = `/api/pulls/filter/repo/${owner}/${repository}/order/date/desc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'date_desc');
             loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/date/desc/page`, { owner, name: repository });
         });
@@ -259,7 +259,7 @@ var app = Sammy('#content', function () {
         var repository = this.params['repository'];
         var page = this.params['page'];
         container.load('/_pullrequests.html', function () {
-            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/name/asc/page/${page}`;
+            var apiUrl = `/api/pulls/filter/repo/${owner}/${repository}/order/name/asc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'name_asc');
             loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/name/asc/page`, { owner, name: repository });
         });
@@ -272,7 +272,7 @@ var app = Sammy('#content', function () {
         var repository = this.params['repository'];
         var page = this.params['page'];
         container.load('/_pullrequests.html', function () {
-            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/name/desc/page/${page}`;
+            var apiUrl = `/api/pulls/filter/repo/${owner}/${repository}/order/name/desc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'name_desc');
             loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/name/desc/page`, { owner, name: repository });
         });
@@ -285,7 +285,7 @@ var app = Sammy('#content', function () {
         var repository = this.params['repository'];
         var page = this.params['page'];
         container.load('/_pullrequests.html', function () {
-            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/reviews/asc/page/${page}`;
+            var apiUrl = `/api/pulls/filter/repo/${owner}/${repository}/order/reviews/asc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'reviews_asc');
             loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/reviews/asc/page`, { owner, name: repository });
         });
@@ -298,7 +298,7 @@ var app = Sammy('#content', function () {
         var repository = this.params['repository'];
         var page = this.params['page'];
         container.load('/_pullrequests.html', function () {
-            var apiUrl = `/api/pulls/filter/${owner}/${repository}/order/reviews/desc/page/${page}`;
+            var apiUrl = `/api/pulls/filter/repo/${owner}/${repository}/order/reviews/desc/page/${page}`;
             $('#pullrequests_order_dropdown').dropdown('set selected', 'reviews_desc');
             loadPullrequestsList(apiUrl, page, `/#/pullrequests/filter/${owner}/${repository}/order/reviews/desc/page`, { owner, name: repository });
         });
