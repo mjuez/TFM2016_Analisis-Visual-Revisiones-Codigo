@@ -1,7 +1,7 @@
 function loadUsersList(apiRoute, page, url) {
     showLoader();
     $('#users_order_dropdown').dropdown({
-        onChange: function (value, text) { handleUsersOrder(value, page); }
+        onChange: function (value, text) { handleUsersOrder(value); }
     });
     $.get(apiRoute)
         .done(function (result) {
@@ -16,61 +16,61 @@ function loadUsersList(apiRoute, page, url) {
         });
 }
 
-function handleUsersOrder(value, page) {
+function handleUsersOrder(value) {
     switch (value) {
         case 'date_asc':
-            app.setLocation(`#/users/order/date/asc/page/${page}`);
+            app.setLocation(`#/users/order/date/asc/page/1`);
             break;
         case 'date_desc':
-            app.setLocation(`#/users/order/date/desc/page/${page}`);
+            app.setLocation(`#/users/order/date/desc/page/1`);
             break;
         case 'name_asc':
-            app.setLocation(`#/users/order/name/asc/page/${page}`);
+            app.setLocation(`#/users/order/name/asc/page/1`);
             break;
         case 'name_desc':
-            app.setLocation(`#/users/order/name/desc/page/${page}`);
+            app.setLocation(`#/users/order/name/desc/page/1`);
             break;
         case 'pulls_asc':
-            app.setLocation(`#/users/order/pullrequests/asc/page/${page}`);
+            app.setLocation(`#/users/order/pullrequests/asc/page/1`);
             break;
         case 'pulls_desc':
-            app.setLocation(`#/users/order/pullrequests/desc/page/${page}`);
+            app.setLocation(`#/users/order/pullrequests/desc/page/1`);
             break;
         case 'reviews_asc':
-            app.setLocation(`#/users/order/reviews/asc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/asc/page/1`);
             break;
         case 'reviews_desc':
-            app.setLocation(`#/users/order/reviews/desc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/desc/page/1`);
             break;
         case 'approved_reviews_asc':
-            app.setLocation(`#/users/order/reviews/approved/asc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/approved/asc/page/1`);
             break;
         case 'approved_reviews_desc':
-            app.setLocation(`#/users/order/reviews/approved/desc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/approved/desc/page/1`);
             break;
         case 'commented_reviews_asc':
-            app.setLocation(`#/users/order/reviews/commented/asc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/commented/asc/page/1`);
             break;
         case 'commented_reviews_desc':
-            app.setLocation(`#/users/order/reviews/commented/desc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/commented/desc/page/1`);
             break;
         case 'changes_requested_reviews_asc':
-            app.setLocation(`#/users/order/reviews/changes_requested/asc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/changes_requested/asc/page/1`);
             break;
         case 'changes_requested_reviews_desc':
-            app.setLocation(`#/users/order/reviews/changes_requested/desc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/changes_requested/desc/page/1`);
             break;
         case 'dismissed_reviews_asc':
-            app.setLocation(`#/users/order/reviews/dismissed/asc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/dismissed/asc/page/1`);
             break;
         case 'dismissed_reviews_desc':
-            app.setLocation(`#/users/order/reviews/dismissed/desc/page/${page}`);
+            app.setLocation(`#/users/order/reviews/dismissed/desc/page/1`);
             break;
         case 'review_comments_asc':
-            app.setLocation(`#/users/order/reviewcomments/asc/page/${page}`);
+            app.setLocation(`#/users/order/reviewcomments/asc/page/1`);
             break;
         case 'review_comments_desc':
-            app.setLocation(`#/users/order/reviewcomments/desc/page/${page}`);
+            app.setLocation(`#/users/order/reviewcomments/desc/page/1`);
             break;
     }
 }

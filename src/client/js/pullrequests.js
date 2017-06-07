@@ -1,7 +1,7 @@
 function loadPullrequestsList(apiRoute, page, url, repository = undefined) {
     showLoader();
     $('#pullrequests_order_dropdown').dropdown({
-        onChange: function (value, text) { handlePullrequestsOrder(value, page, repository); }
+        onChange: function (value, text) { handlePullrequestsOrder(value, repository); }
     });
     configurePullrequestsFilter(page);
     $.get(apiRoute)
@@ -17,23 +17,23 @@ function loadPullrequestsList(apiRoute, page, url, repository = undefined) {
         });
 }
 
-function handlePullrequestsOrder(value, page, repository) {
+function handlePullrequestsOrder(value, repository) {
     var repositoryFilter = '';
     if (repository != undefined) {
         repositoryFilter = `filter/${repository.owner}/${repository.name}/`;
     }
     switch (value) {
-        case 'date_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/date/asc/page/${page}`);
+        case 'date_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/date/asc/page/1`);
             break;
-        case 'date_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/date/desc/page/${page}`);
+        case 'date_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/date/desc/page/1`);
             break;
-        case 'name_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/name/asc/page/${page}`);
+        case 'name_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/name/asc/page/1`);
             break;
-        case 'name_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/name/desc/page/${page}`);
+        case 'name_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/name/desc/page/1`);
             break;
-        case 'reviews_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/reviews/asc/page/${page}`);
+        case 'reviews_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/reviews/asc/page/1`);
             break;
-        case 'reviews_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/reviews/desc/page/${page}`);
+        case 'reviews_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/reviews/desc/page/1`);
             break;
     }
 }
@@ -56,18 +56,18 @@ function configurePullrequestsFilter(page, repository) {
             }
 
             $('#pullrequests_filter_dropdown').dropdown({
-                onChange: function (value, text) { handlePullrequestsFilter(value, page); }
+                onChange: function (value, text) { handlePullrequestsFilter(value); }
             });
         });
 }
 
-function handlePullrequestsFilter(value, page) {
+function handlePullrequestsFilter(value) {
     var order = $('#pullrequests_order_dropdown').dropdown('get value');
     if (order === '') {
-        app.setLocation(`#/pullrequests/filter/${value}/page/${page}`);
+        app.setLocation(`#/pullrequests/filter/${value}/page/1`);
     } else {
         var repository = repositoryStringToObject(value);
-        handlePullrequestsOrder(order, page, repository);
+        handlePullrequestsOrder(order, repository);
     }
 }
 

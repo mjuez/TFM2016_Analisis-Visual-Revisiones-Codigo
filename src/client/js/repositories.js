@@ -1,7 +1,7 @@
 function loadRepositoryList(apiRoute, page, url) {
     showLoader();
     $('#repositories_order_dropdown').dropdown({
-        onChange: function (value, text) { handleRepositoriesOrder(value, page); }
+        onChange: function (value, text) { handleRepositoriesOrder(value); }
     });
     $.get(apiRoute)
         .done(function (result) {
@@ -16,23 +16,23 @@ function loadRepositoryList(apiRoute, page, url) {
         });
 }
 
-function handleRepositoriesOrder(value, page) {
+function handleRepositoriesOrder(value) {
     switch (value) {
-        case 'date_asc': app.setLocation(`#/repositories/order/date/asc/page/${page}`);
+        case 'date_asc': app.setLocation(`#/repositories/order/date/asc/page/1`);
             break;
-        case 'date_desc': app.setLocation(`#/repositories/order/date/desc/page/${page}`);
+        case 'date_desc': app.setLocation(`#/repositories/order/date/desc/page/1`);
             break;
-        case 'name_asc': app.setLocation(`#/repositories/order/name/asc/page/${page}`);
+        case 'name_asc': app.setLocation(`#/repositories/order/name/asc/page/1`);
             break;
-        case 'name_desc': app.setLocation(`#/repositories/order/name/desc/page/${page}`);
+        case 'name_desc': app.setLocation(`#/repositories/order/name/desc/page/1`);
             break;
-        case 'reviews_asc': app.setLocation(`#/repositories/order/reviews/asc/page/${page}`);
+        case 'reviews_asc': app.setLocation(`#/repositories/order/reviews/asc/page/1`);
             break;
-        case 'reviews_desc': app.setLocation(`#/repositories/order/reviews/desc/page/${page}`);
+        case 'reviews_desc': app.setLocation(`#/repositories/order/reviews/desc/page/1`);
             break;
-        case 'pulls_asc': app.setLocation(`#/repositories/order/pullrequests/asc/page/${page}`);
+        case 'pulls_asc': app.setLocation(`#/repositories/order/pullrequests/asc/page/1`);
             break;
-        case 'pulls_desc': app.setLocation(`#/repositories/order/pullrequests/desc/page/${page}`);
+        case 'pulls_desc': app.setLocation(`#/repositories/order/pullrequests/desc/page/1`);
             break;
     }
 }
