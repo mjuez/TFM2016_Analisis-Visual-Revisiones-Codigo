@@ -143,9 +143,9 @@ function printUserReviewTypesChart(user){
         bindto: `#user_reviewtypes_chart`,
         data: {
             columns: [
-                ['Aprobadas', user.reviews_approved_count],
                 ['Comentadas', user.reviews_commented_count],
                 ['Con petición de cambios', user.reviews_changes_requested_count],
+                ['Aprobadas', user.reviews_approved_count],
                 ['Descartadas', user.reviews_dismissed_count]
             ],
             type: 'donut'
