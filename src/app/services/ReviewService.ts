@@ -16,7 +16,10 @@ require("twix");
  * @author Mario Juez <mario@mjuez.com> 
  */
 export interface IReviewService extends IMultiplePersistenceService<IReviewEntity> {
+
+    getFirstAndLast(): Promise<any>;
     getAllTimeStatsByUser(userLogin: string, dates: { start: Date, end: Date }): Promise<number[]>;
+
 }
 
 /**
@@ -37,6 +40,16 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
     constructor(repository: IReviewRepository, pullRequestService: IPullRequestService) {
         super(repository);
         this._pullRequestService = pullRequestService;
+    }
+
+    public async getFirstAndLast(): Promise<any> {
+        const repo: IReviewRepository = this._repository;
+        const firstPage: IReviewEntity[] = await repo.retrieve({ page: 1, sort: { submitted_at: 1 } });
+        const lastPage: IReviewEntity[] = await repo.retrieve({ page: 1, sort: { submitted_at: -1 } });
+        return {
+            first: firstPage[0],
+            last: lastPage[0]
+        };
     }
 
     public async getAllTimeStatsByUser(userLogin: string, dates: { start: Date, end: Date }): Promise<Object> {
