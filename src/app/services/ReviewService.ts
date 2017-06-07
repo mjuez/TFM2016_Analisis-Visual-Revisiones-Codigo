@@ -5,6 +5,10 @@ import { IPullRequestEntity } from "../entities/PullRequestEntity";
 import { ReviewDocument } from "../entities/documents/ReviewDocument";
 import { IReviewRepository } from "../data/ReviewRepository";
 import { AbstractMultiplePersistenceService } from "./AbstractPersistenceService";
+import { FormatUtil } from "../util/FormatUtil";
+import * as moment from "moment";
+import * as twix from "twix";
+require("twix");
 
 /**
  * IReviewService interface.
@@ -12,7 +16,7 @@ import { AbstractMultiplePersistenceService } from "./AbstractPersistenceService
  * @author Mario Juez <mario@mjuez.com> 
  */
 export interface IReviewService extends IMultiplePersistenceService<IReviewEntity> {
-
+    getAllTimeStatsByUser(userLogin: string, dates: { start: Date, end: Date }): Promise<number[]>;
 }
 
 /**
@@ -33,6 +37,52 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
     constructor(repository: IReviewRepository, pullRequestService: IPullRequestService) {
         super(repository);
         this._pullRequestService = pullRequestService;
+    }
+
+    public async getAllTimeStatsByUser(userLogin: string, dates: { start: Date, end: Date }): Promise<Object> {
+        const dateRange: any = moment(dates.start).twix(dates.end);
+        let portions = dateRange.count("days");
+        if (portions > 20) portions = 20;
+        const twixDates: any[] = dateRange.divide(portions);
+        let stats: any = {
+            labels: FormatUtil.toDateLabels(twixDates),
+            all: [],
+            approved: [],
+            changes_requested: [],
+            commented: [],
+            dismissed: []
+        }
+        for (let i = 0; i < twixDates.length; i++) {
+            const dateRange: any = twixDates[i];
+            const partialDates: any = {
+                start: dateRange.start(),
+                end: dateRange.end()
+            }
+            const all = await this.getCreatedBetweenDatesStatsByUser(userLogin, partialDates);
+            const approved = await this.getCreatedBetweenDatesStatsByUser(userLogin, partialDates, "APPROVED");
+            const changes_requested = await this.getCreatedBetweenDatesStatsByUser(userLogin, partialDates, "CHANGES_REQUESTED");
+            const commented = await this.getCreatedBetweenDatesStatsByUser(userLogin, partialDates, "COMMENTED");
+            const dismissed = await this.getCreatedBetweenDatesStatsByUser(userLogin, partialDates, "DISMISSED");
+            stats.all.push(all);
+            stats.approved.push(approved);
+            stats.changes_requested.push(changes_requested);
+            stats.commented.push(commented);
+            stats.dismissed.push(dismissed);
+        }
+        return stats;
+    }
+
+    private async getCreatedBetweenDatesStatsByUser(userLogin: string, dates: { start: Date, end: Date }, state: string = "ALL"): Promise<number> {
+        const repo: IReviewRepository = this._repository;
+        let filter: Object = {
+            "user.login": userLogin,
+            $and: [
+                { submitted_at: { $gte: dates.start } },
+                { submitted_at: { $lte: dates.end } }
+            ]
+        };
+        if (state != "ALL") filter["state"] = state;
+        return await repo.count(filter);
     }
 
     protected async findEntity(entity: IReviewEntity): Promise<IReviewEntity> {
