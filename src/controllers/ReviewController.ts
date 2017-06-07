@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { AbstractController } from "./AbstractController";
-import { IReviewService } from "../app/services/ReviewService";
+import { IStatsService } from "../app/services/StatsService";
 
 /**
  * Review controller interface.
@@ -22,15 +22,10 @@ export class ReviewController extends AbstractController implements IReviewContr
 
     public async getAllTimeStatsByUser(req: Request, res: Response): Promise<void> {
         const userLogin: string = req.params.userlogin;
-        const service: IReviewService = this._services.review;
+        const service: IStatsService = this._services.stats;
 
         try {
-            const firstAndLastReviews: any = await service.getFirstAndLast();
-            let dates: any = {
-                start: firstAndLastReviews.first.document.submitted_at,
-                end: firstAndLastReviews.last.document.submitted_at
-            }
-            const stats: any = await service.getAllTimeStatsByUser(userLogin, dates);
+            const stats: any = await service.getReviewsAllTimeStatsByUser(userLogin);
             res.json(stats);
         } catch (error) {
             console.log(error);
