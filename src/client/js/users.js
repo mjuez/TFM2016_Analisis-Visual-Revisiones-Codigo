@@ -234,7 +234,7 @@ function printUserMeanChart(config) {
         axis: {
             x: {
                 type: 'category',
-                categories: ['muestras']
+                categories: ['Suma']
             },
             y: {
                 label: config.y_label
