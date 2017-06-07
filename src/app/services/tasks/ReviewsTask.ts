@@ -96,7 +96,6 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
             if (api.hasNextPage(page)) {
                 let links: string = page.meta.link;
                 let nextPageNumber: number = GitHubUtil.getNextPageNumber(links);
-                console.log(`links: ${links}, pagenumber: ${nextPageNumber}`);
                 this.entity.currentPage = nextPageNumber;
                 await this.persist();
                 let nextPage: any = await api.getNextPage(page);
