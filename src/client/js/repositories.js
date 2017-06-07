@@ -115,7 +115,6 @@ function printAverageChart(name, value, avg, container) {
 function printRepositoryCreatedAllTimeStatsChart(data) {
     $(`#repository_createdalltime_chart_segment`).removeClass('loading');
     data.unshift('data1');
-    console.log(data);
     c3.generate({
         padding: {
             right: 10
