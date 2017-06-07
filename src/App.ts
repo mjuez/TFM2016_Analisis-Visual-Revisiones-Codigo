@@ -9,6 +9,7 @@ import { IReviewService, ReviewService } from "./app/services/ReviewService";
 import { IReviewCommentService, ReviewCommentService } from "./app/services/ReviewCommentService";
 import { IUserService, UserService } from "./app/services/UserService";
 import { IRepositoryService, RepositoryService } from "./app/services/RepositoryService";
+import { IStatsService, StatsService } from "./app/services/StatsService";
 import { IPullRequestRepository, PullRequestRepository } from "./app/data/PullRequestRepository";
 import { IRepositoryRepository, RepositoryRepository } from "./app/data/RepositoryRepository";
 import { IReviewCommentRepository, ReviewCommentRepository } from "./app/data/ReviewCommentRepository";
@@ -41,7 +42,8 @@ interface Services {
   reviewComment: IReviewCommentService,
   user: IUserService,
   repo: IRepositoryService,
-  taskManager: ITaskManagerService
+  taskManager: ITaskManagerService,
+  stats: IStatsService
 }
 
 /**
@@ -71,7 +73,8 @@ class App {
     reviewComment: null,
     user: null,
     repo: null,
-    taskManager: null
+    taskManager: null,
+    stats: null
   }
 
   private _controllers: {
@@ -147,6 +150,7 @@ class App {
     this._services.user = new UserService(this._repositories.user);
     this._services.repo = new RepositoryService(this._repositories.repo);
     this._services.taskManager = new TaskManagerService(this._repositories, this._services);
+    this._services.stats = new StatsService(this._repositories);
   }
 
   private createControllers(): void {
