@@ -53,7 +53,8 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
     }
 
     public async getAllTimeStatsByUser(userLogin: string, dates: { start: Date, end: Date }): Promise<Object> {
-        const dateRange: any = moment(dates.start).twix(dates.end);
+        const startDate: moment.Moment = moment(dates.start).add(-1, 'days');
+        const dateRange: any = moment(startDate).twix(dates.end);
         let portions = dateRange.count("days");
         if (portions > 20) portions = 20;
         const twixDates: any[] = dateRange.divide(portions);
@@ -90,7 +91,7 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
         let filter: Object = {
             "user.login": userLogin,
             $and: [
-                { submitted_at: { $gte: dates.start } },
+                { submitted_at: { $gt: dates.start } },
                 { submitted_at: { $lte: dates.end } }
             ]
         };
