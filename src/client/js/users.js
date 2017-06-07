@@ -91,7 +91,7 @@ function loadUser(login) {
 }
 
 function configureUserButtons(user) {
-    $('#user_viewgithub_button').on('click', function(){
+    $('#user_viewgithub_button').on('click', function () {
         $(location).attr('href', user.html_url);
     });
 }
@@ -105,6 +105,13 @@ function loadUserCharts(user) {
         .fail(function (error) {
             // todo
         });
+    $.get(`/api/reviews/filter/user/${user.login}/stats/alltime`)
+        .done(function (result) {
+            printUserReviewsAllTimeChart(result);
+        })
+        .fail(function (error) {
+            // todo
+        })
 }
 
 function printUserMeanCharts(user, meanData) {
@@ -134,7 +141,7 @@ function printUserMeanCharts(user, meanData) {
     printUserMeanChart(reviewCommentsCountConfig);
 }
 
-function printUserReviewTypesChart(user){
+function printUserReviewTypesChart(user) {
     $(`#user_reviewtypes_chart_segment`).removeClass('loading');
     c3.generate({
         padding: {
@@ -152,6 +159,54 @@ function printUserReviewTypesChart(user){
         },
         donut: {
             title: 'Revisiones'
+        }
+    });
+}
+
+function printUserReviewsAllTimeChart(stats) {
+    $(`#user_reviews_alltime_chart_segment`).removeClass('loading');
+    stats.all.unshift('all');
+    stats.approved.unshift('approved');
+    stats.changes_requested.unshift('changes_requested');
+    stats.commented.unshift('commented');
+    stats.dismissed.unshift('dismissed');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#user_reviews_alltime_chart`,
+        data: {
+            columns: [
+                stats.commented,
+                stats.changes_requested,
+                stats.approved,
+                stats.dismissed,
+                stats.all
+            ],
+            type: 'area',
+            names: {
+                all: 'Todas',
+                approved: 'Aprobadas',
+                changes_requested: 'Con petición de cambios',
+                commented: 'Comentadas',
+                dismissed: 'Descartadas',
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: stats.labels,
+                tick: {
+                    rotate: 75,
+                    multiline: false
+                }
+            },
+            y: {
+                label: {
+                    text: 'Nº de revisiones',
+                    position: 'outer-middle'
+                }
+            }
         }
     });
 }
