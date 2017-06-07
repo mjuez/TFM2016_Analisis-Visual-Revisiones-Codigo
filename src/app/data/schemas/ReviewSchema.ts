@@ -24,14 +24,17 @@ export class ReviewSchema {
             },
             user: {
                 id: Number,
-                login: String
+                login: {
+                    type: String,
+                    index: true
+                }
             },
             body: String,
             commit_id: String,
             state: String,
             html_url: String,
             pull_request_url: String,
-            submitted_at: Date,
+            submitted_at: Date
         });
 
         return schema;
