@@ -27,7 +27,7 @@ export class StatsService implements IStatsService {
     }
 
     public async getReviewsAllTimeStatsByUser(userLogin: string): Promise<any> {
-        const dateRange: any = this.getReviewsAllTimeDateRange();
+        const dateRange: any = await this.getReviewsAllTimeDateRange();
 
         let stats: any = {
             labels: [],
@@ -71,8 +71,8 @@ export class StatsService implements IStatsService {
         const filter: any = {
             "user.login": userLogin,
             $and: [
-                { created_at: { $gt: dates.start } },
-                { created_at: { $lte: dates.end } }
+                { submitted_at: { $gt: dates.start } },
+                { submitted_at: { $lte: dates.end } }
             ]
         };
         if (state != "ALL") filter["state"] = state;
