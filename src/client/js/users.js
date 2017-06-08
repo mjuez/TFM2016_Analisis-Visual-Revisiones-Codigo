@@ -79,7 +79,7 @@ function loadUser(login) {
     showLoader();
     $.get(`/api/user/${login}`)
         .done(function (result) {
-            $('#user_title').html(`Usuario: ${result.login}`);
+            $('#user_title').html(`Usuario: ${result.name} (@${result.login})`);
             configureUserButtons(result);
             loadUserCharts(result);
             hideLoader();
