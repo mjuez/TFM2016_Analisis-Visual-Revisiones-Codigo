@@ -111,6 +111,14 @@ function loadUserCharts(user) {
         })
         .fail(function (error) {
             // todo
+        });
+    $.get(`/api/pulls/filter/user/${user.login}/stats/alltime`)
+        .done(function (result) {
+            printUserPullsStatesChart(result);
+            printUserPullsAllTimeChart(result);
+        })
+        .fail(function (error) {
+            // todo
         })
 }
 
@@ -204,6 +212,66 @@ function printUserReviewsAllTimeChart(stats) {
             y: {
                 label: {
                     text: 'Nº de revisiones',
+                    position: 'outer-middle'
+                }
+            }
+        }
+    });
+}
+
+function printUserPullsStatesChart(stats) {
+    $(`#user_pullsstates_chart_segment`).removeClass('loading');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#user_pullsstates_chart`,
+        data: {
+            columns: [
+                ['Abiertas', stats.open],
+                ['Cerradas', stats.closed]
+            ],
+            type: 'donut',
+            colors: {
+                Abiertas: '#2ca02c',
+                Cerradas: '#d62728'
+            }
+        },
+        donut: {
+            title: 'Pull Requests'
+        }
+    });
+}
+
+function printUserPullsAllTimeChart(stats) {
+    $(`#user_pulls_alltime_chart_segment`).removeClass('loading');
+    stats.created.unshift('created');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#user_pulls_alltime_chart`,
+        data: {
+            columns: [
+                stats.created
+            ],
+            type: 'area',
+            names: {
+                created: 'Creadas'
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: stats.labels,
+                tick: {
+                    rotate: 75,
+                    multiline: false
+                }
+            },
+            y: {
+                label: {
+                    text: 'Nº de pull requests',
                     position: 'outer-middle'
                 }
             }
