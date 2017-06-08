@@ -4,6 +4,7 @@ import { IPullRequestService } from "../app/services/PullRequestService";
 import { IRepositoryService } from "../app/services/RepositoryService";
 import { IReviewService } from "../app/services/ReviewService";
 import { ITaskManagerService } from "../app/services/TaskManagerService";
+import { IStatsService } from "../app/services/StatsService";
 import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
 import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
 import { IRepositoryEntity } from "../app/entities/RepositoryEntity";
@@ -26,8 +27,8 @@ export interface IPullRequestController {
     getPageFromRepository(req: Request, res: Response): Promise<void>;
     getByNamePageFromRepository(req: Request, res: Response): Promise<void>;
     getByReviewsPageFromRepository(req: Request, res: Response): Promise<void>;
-    getCreatedAllTime(req: Request, res: Response): Promise<void>;
-    getAllRemote(req: Request, res: Response): Promise<void>;
+    getAllTimeStatsByUser(req: Request, res: Response): Promise<void>;
+    getAllTimeStatsByRepository(req: Request, res: Response): Promise<void>;
 
 }
 
@@ -128,19 +129,12 @@ export class PullRequestController extends AbstractController implements IPullRe
         }
     }
 
-    public async getCreatedAllTime(req: Request, res: Response) {
-        let owner: string = req.params.owner;
-        let repository: string = req.params.repository;
-        let pullService: IPullRequestService = this._services.pull;
-        let repoService: IRepositoryService = this._services.repo;
+    public async getAllTimeStatsByUser(req: Request, res: Response): Promise<void> {
+        const userLogin: string = req.params.userlogin;
+        const service: IStatsService = this._services.stats;
 
         try {
-            let repo: IRepositoryEntity = await repoService.getRepository(owner, repository);
-            let dates: any = {
-                start: repo.document.created_at,
-                end: repo.document.pushed_at
-            }
-            let stats: number[] = await pullService.getRepositoryCreatedAllTimeStats(owner, repository, dates);
+            const stats: any = await service.getPullRequestsStatsByUser(userLogin);
             res.json(stats);
         } catch (error) {
             console.log(error);
@@ -148,15 +142,16 @@ export class PullRequestController extends AbstractController implements IPullRe
         }
     }
 
-    public async getAllRemote(req: Request, res: Response) {
-        let owner: string = req.params.owner;
-        let repository: string = req.params.repository;
-        let service: ITaskManagerService = this._services.taskManager;
+    public async getAllTimeStatsByRepository(req: Request, res: Response): Promise<void> {
+        const owner: string = req.params.owner;
+        const repository: string = req.params.repository;
+        const service: IStatsService = this._services.stats;
 
-        let created: boolean = await service.createTask(owner, repository);
-        if (created) {
-            res.json({ message: "task created successfully." });
-        } else {
+        try {
+            const stats: any = await service.getPullRequestsStatsByRepository(owner, repository);
+            res.json(stats);
+        } catch (error) {
+            console.log(error);
             res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
