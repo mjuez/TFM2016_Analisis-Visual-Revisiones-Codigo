@@ -53,82 +53,293 @@ function loadRepository(owner, repository) {
 }
 
 function configureRepositoryButtons(repository) {
-    $('#repository_pullrequests_button').on('click', function(){
+    $('#repository_pullrequests_button').on('click', function () {
         app.setLocation(`#/pullrequests/filter/${repository.full_name}/page/1`);
     });
 
-    $('#repository_viewgithub_button').on('click', function(){
+    $('#repository_viewgithub_button').on('click', function () {
         $(location).attr('href', repository.html_url);
     });
 }
 
 function loadRepositoryCharts(repository) {
-    $.get(`/api/repos/stats/averages`)
+    $.get(`/api/repos/stats/means`)
         .done(function (result) {
-            printRepositoryAverageCharts(repository, result);
+            printRepositoryMeanCharts(repository, result);
         })
         .fail(function (error) {
-
+            // todo
         });
 
-    $.get(`/api/pulls/filter/${repository.full_name}/stats/created/alltime`)
-        .done(function (result) {
-            printRepositoryCreatedAllTimeStatsChart(result);
-        })
-        .fail(function (error) {
+    if (repository.reviews_count > 0) {
+        $.get(`/api/reviews/filter/repo/${repository.full_name}/stats/alltime`)
+            .done(function (result) {
+                printRepositoryReviewsAllTimeChart(result);
+                printRepositoryReviewTypesChart(result);
+            })
+            .fail(function (error) {
+                // todo
+            });
+    } else {
+        $('#repository_reviews_none_msg').removeClass("invisible");
+        $('#repository_reviewtypes_chart_segment').addClass("invisible");
+        $('#repository_reviews_alltime_chart_segment').addClass("invisible");
+    }
 
-        });
+    if (repository.pull_requests_count > 0) {
+        $.get(`/api/pulls/filter/repo/${repository.full_name}/stats/alltime`)
+            .done(function (result) {
+                printRepositoryPullsStatesChart(result);
+                printRepositoryPullsAllTimeChart(result);
+            })
+            .fail(function (error) {
+                // todo
+            });
+    } else {
+        $('#repository_pulls_none_msg').removeClass("invisible");
+        $('#repository_pullsstates_chart_segment').addClass("invisible");
+        $('#repository_pulls_alltime_chart_segment').addClass("invisible");
+    }
+
+    if (repository.review_comments_count > 0) {
+        $.get(`/api/reviewcomments/filter/repo/${repository.full_name}/stats/alltime`)
+            .done(function (result) {
+                printRepositoryReviewCommentsAllTimeChart(result);
+            })
+            .fail(function (error) {
+                // todo
+            });
+    } else {
+        $('#repository_reviewcomments_none_msg').removeClass("invisible");
+        $('#repository_reviewcomments_alltime_chart_segment').addClass("invisible");
+    }
+
 }
 
-function printRepositoryAverageCharts(repository, avgData) {
-    printAverageChart('stargazers', repository.stargazers_count, avgData.stargazers, 'repository_stargazers_chart');
-    printAverageChart('watchers', repository.watchers_count, avgData.watchers, 'repository_watchers_chart');
-    printAverageChart('forks', repository.forks_count, avgData.forks, 'repository_forks_chart');
-    printAverageChart('pull_requests', repository.pull_requests_count, avgData.pull_requests, 'repository_pullrequests_chart');
-    printAverageChart('reviews', repository.reviews_count, avgData.reviews, 'repository_reviews_chart');
-    printAverageChart('review_comments', repository.review_comments_count, avgData.review_comments, 'repository_reviewcomments_chart');
+function printRepositoryMeanCharts(repository, meanData) {
+    var stargazersCountConfig = {
+        value: repository.stargazers_count,
+        mean: meanData.stargazers_count,
+        container: 'repository_stargazers_chart',
+        column_legend: `Repositorio: ${repository.name}`,
+        y_label: 'Número de stargazers'
+    };
+    printMeanChart(stargazersCountConfig);
+    var watchersCountConfig = {
+        value: repository.watchers_count,
+        mean: meanData.watchers_count,
+        container: 'repository_watchers_chart',
+        column_legend: `Repositorio: ${repository.name}`,
+        y_label: 'Número de watchers'
+    };
+    printMeanChart(watchersCountConfig);
+    var forksCountConfig = {
+        value: repository.forks_count,
+        mean: meanData.forks_count,
+        container: 'repository_forks_chart',
+        column_legend: `Repositorio: ${repository.name}`,
+        y_label: 'Número de forks'
+    };
+    printMeanChart(forksCountConfig);
+    var pullrequestsCountConfig = {
+        value: repository.pull_requests_count,
+        mean: meanData.pull_requests_count,
+        container: 'repository_pullrequests_chart',
+        column_legend: `Repositorio: ${repository.name}`,
+        y_label: 'Número de pull requests'
+    };
+    printMeanChart(pullrequestsCountConfig);
+    var reviewsCountConfig = {
+        value: repository.reviews_count,
+        mean: meanData.reviews_count,
+        container: 'repository_reviews_chart',
+        column_legend: `Repositorio: ${repository.name}`,
+        y_label: 'Número de revisiones'
+    };
+    printMeanChart(reviewsCountConfig);
+    var reviewcommentsCountConfig = {
+        value: repository.review_comments_count,
+        mean: meanData.review_comments_count,
+        container: 'repository_reviewcomments_chart',
+        column_legend: `Repositorio: ${repository.name}`,
+        y_label: 'Número de comentarios de revisión'
+    };
+    printMeanChart(reviewcommentsCountConfig);
 }
 
-function printAverageChart(name, value, avg, container) {
-    $(`#${container}_segment`).removeClass('loading');
-    var data = ['data1', value];
-    var avgData = ['data2', avg];
+function printRepositoryReviewTypesChart(stats) {
+    $(`#repository_reviewtypes_chart_segment`).removeClass('loading');
+    var reviewsCommented = stats.commented.reduce(function (x, y) { return x + y; });
+    var reviewsChangesRequested = stats.changes_requested.reduce(function (x, y) { return x + y; });
+    var reviewsApproved = stats.approved.reduce(function (x, y) { return x + y; });
+    var reviewsDismissed = stats.dismissed.reduce(function (x, y) { return x + y; });
     c3.generate({
         padding: {
             right: 10
         },
-        bindto: `#${container}`,
+        bindto: `#repository_reviewtypes_chart`,
         data: {
             columns: [
-                data,
-                avgData
+                ['Comentadas', reviewsCommented],
+                ['Con petición de cambios', reviewsChangesRequested],
+                ['Aprobadas', reviewsApproved],
+                ['Descartadas', reviewsDismissed]
             ],
-            type: 'bar',
+            type: 'donut'
+        },
+        donut: {
+            title: 'Revisiones'
+        }
+    });
+}
+
+function printRepositoryReviewsAllTimeChart(stats) {
+    $(`#repository_reviews_alltime_chart_segment`).removeClass('loading');
+    var data = $.extend(true, {}, stats);
+    data.all.unshift('all');
+    data.approved.unshift('approved');
+    data.changes_requested.unshift('changes_requested');
+    data.commented.unshift('commented');
+    data.dismissed.unshift('dismissed');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#repository_reviews_alltime_chart`,
+        data: {
+            columns: [
+                data.commented,
+                data.changes_requested,
+                data.approved,
+                data.dismissed,
+                data.all
+            ],
+            type: 'area',
             names: {
-                data1: name,
-                data2: `Media de ${name}`
+                all: 'Todas',
+                approved: 'Aprobadas',
+                changes_requested: 'Con petición de cambios',
+                commented: 'Comentadas',
+                dismissed: 'Descartadas',
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: data.labels,
+                tick: {
+                    rotate: 75,
+                    multiline: false
+                }
+            },
+            y: {
+                label: {
+                    text: 'Nº de revisiones',
+                    position: 'outer-middle'
+                }
             }
         }
     });
 }
 
-function printRepositoryCreatedAllTimeStatsChart(data) {
-    $(`#repository_createdalltime_chart_segment`).removeClass('loading');
-    data.unshift('data1');
+function printRepositoryPullsStatesChart(stats) {
+    $(`#repository_pullsstates_chart_segment`).removeClass('loading');
     c3.generate({
         padding: {
             right: 10
         },
-        bindto: '#repository_createdalltime_chart',
+        bindto: `#repository_pullsstates_chart`,
         data: {
-            x: 'x',
             columns: [
-                ['x', 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
-                data
+                ['Abiertas', stats.open],
+                ['Cerradas', stats.closed]
+            ],
+            type: 'donut',
+            colors: {
+                Abiertas: '#2ca02c',
+                Cerradas: '#d62728'
+            }
+        },
+        donut: {
+            title: 'Pull Requests'
+        }
+    });
+}
+
+function printRepositoryPullsAllTimeChart(stats) {
+    $(`#repository_pulls_alltime_chart_segment`).removeClass('loading');
+    var data = $.extend(true, {}, stats);
+    data.created.unshift('created');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#repository_pulls_alltime_chart`,
+        data: {
+            columns: [
+                data.created
             ],
             type: 'area',
             names: {
-                data1: 'Nro de pull requests creadas',
+                created: 'Creadas'
+            },
+            colors: {
+                created: '#9467bd'
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: data.labels,
+                tick: {
+                    rotate: 75,
+                    multiline: false
+                }
+            },
+            y: {
+                label: {
+                    text: 'Nº de pull requests',
+                    position: 'outer-middle'
+                }
+            }
+        }
+    });
+}
+
+function printRepositoryReviewCommentsAllTimeChart(stats) {
+    $(`#repository_reviewcomments_alltime_chart_segment`).removeClass('loading');
+    stats.created.unshift('created');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#repository_reviewcomments_alltime_chart`,
+        data: {
+            columns: [
+                stats.created
+            ],
+            type: 'area',
+            names: {
+                created: 'Creados'
+            },
+            colors: {
+                created: '#9467bd'
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: stats.labels,
+                tick: {
+                    rotate: 75,
+                    multiline: false
+                }
+            },
+            y: {
+                label: {
+                    text: 'Nº de comentarios de revisión',
+                    position: 'outer-middle'
+                }
             }
         }
     });
