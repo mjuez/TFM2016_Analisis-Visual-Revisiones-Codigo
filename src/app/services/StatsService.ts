@@ -49,7 +49,7 @@ export class StatsService implements IStatsService {
     }
 
     public async getPullRequestsStatsByRepository(owner: string, name: string): Promise<any> {
-        const filter: any = { "repository.owner": owner, "repository.name": name };
+        const filter: any = { "base.repo.owner.login": owner, "base.repo.name": name };
         const dateRange: any = await this.getPullRequestsDateRange(filter);
         return await this.getPullRequestsStatsBetween(dateRange, filter);
     }
@@ -102,6 +102,7 @@ export class StatsService implements IStatsService {
         }
 
         const handler = async (dates, datesLabel) => {
+            stats.labels.push(datesLabel);
             const created: number = await this.getPullRequestsSingleStatsBetweenDates(filter, dates);
             stats.created.push(created);
         };
@@ -153,8 +154,8 @@ export class StatsService implements IStatsService {
 
     private async getPullRequestsDateRange(filter: any): Promise<any> {
         const repo: IPullRequestRepository = this._repos.pull;
-        const firstPage: IPullRequestEntity[] = await repo.retrieve({ filter, page: 1, sort: { submitted_at: 1 } });
-        const lastPage: IPullRequestEntity[] = await repo.retrieve({ filter, page: 1, sort: { submitted_at: -1 } });
+        const firstPage: IPullRequestEntity[] = await repo.retrieve({ filter, page: 1, sort: { created_at: 1 } });
+        const lastPage: IPullRequestEntity[] = await repo.retrieve({ filter, page: 1, sort: { created_at: -1 } });
         return { start: firstPage[0].document.created_at, end: lastPage[0].document.created_at };
     }
 
