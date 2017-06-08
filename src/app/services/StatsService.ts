@@ -15,7 +15,7 @@ interface Repositories {
 }
 
 export interface IStatsService {
-    getReviewsAllTimeStatsByUser(userLogin: string): Promise<any>;
+    getReviewsAllTimeStats(filter: any): Promise<any>;
 }
 
 export class StatsService implements IStatsService {
@@ -26,7 +26,7 @@ export class StatsService implements IStatsService {
         this._repos = repos;
     }
 
-    public async getReviewsAllTimeStatsByUser(userLogin: string): Promise<any> {
+    public async getReviewsAllTimeStats(filter: any): Promise<any> {
         const dateRange: any = await this.getReviewsAllTimeDateRange();
 
         let stats: any = {
@@ -39,11 +39,11 @@ export class StatsService implements IStatsService {
         }
 
         const handler = async (dates, datesLabel) => {
-            const all: number = await this.getReviewsSingleStatsBetweenDates(userLogin, dates);
-            const approved: number = await this.getReviewsSingleStatsBetweenDates(userLogin, dates, "APPROVED");
-            const commented: number = await this.getReviewsSingleStatsBetweenDates(userLogin, dates, "COMMENTED");
-            const changes_requested: number = await this.getReviewsSingleStatsBetweenDates(userLogin, dates, "CHANGES_REQUESTED");
-            const dismissed: number = await this.getReviewsSingleStatsBetweenDates(userLogin, dates, "DISMISSED");
+            const all: number = await this.getReviewsSingleStatsBetweenDates(filter, dates);
+            const approved: number = await this.getReviewsSingleStatsBetweenDates(filter, dates, "APPROVED");
+            const commented: number = await this.getReviewsSingleStatsBetweenDates(filter, dates, "COMMENTED");
+            const changes_requested: number = await this.getReviewsSingleStatsBetweenDates(filter, dates, "CHANGES_REQUESTED");
+            const dismissed: number = await this.getReviewsSingleStatsBetweenDates(filter, dates, "DISMISSED");
             stats.labels.push(datesLabel);
             stats.all.push(all);
             stats.approved.push(approved);
@@ -66,15 +66,12 @@ export class StatsService implements IStatsService {
         };
     }
 
-    private async getReviewsSingleStatsBetweenDates(userLogin: string, dates: { start: Date, end: Date }, state: string = "ALL"): Promise<number> {
+    private async getReviewsSingleStatsBetweenDates(filter: any, dates: { start: Date, end: Date }, state: string = "ALL"): Promise<number> {
         const repo: IReviewRepository = this._repos.review;
-        const filter: any = {
-            "user.login": userLogin,
-            $and: [
-                { submitted_at: { $gt: dates.start } },
-                { submitted_at: { $lte: dates.end } }
-            ]
-        };
+        filter["$and"] = [
+            { submitted_at: { $gt: dates.start } },
+            { submitted_at: { $lte: dates.end } }
+        ];
         if (state != "ALL") filter["state"] = state;
         return await repo.count(filter);
     }

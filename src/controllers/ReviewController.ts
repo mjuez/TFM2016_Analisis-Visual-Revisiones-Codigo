@@ -25,7 +25,8 @@ export class ReviewController extends AbstractController implements IReviewContr
         const service: IStatsService = this._services.stats;
 
         try {
-            const stats: any = await service.getReviewsAllTimeStatsByUser(userLogin);
+            const filter: any = { "user.login": userLogin };
+            const stats: any = await service.getReviewsAllTimeStats(filter);
             res.json(stats);
         } catch (error) {
             console.log(error);
