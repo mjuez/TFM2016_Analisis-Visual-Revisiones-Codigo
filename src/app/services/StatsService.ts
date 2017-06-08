@@ -68,12 +68,15 @@ export class StatsService implements IStatsService {
 
     private async getReviewsSingleStatsBetweenDates(filter: any, dates: { start: Date, end: Date }, state: string = "ALL"): Promise<number> {
         const repo: IReviewRepository = this._repos.review;
-        filter["$and"] = [
-            { submitted_at: { $gt: dates.start } },
-            { submitted_at: { $lte: dates.end } }
-        ];
-        if (state != "ALL") filter["state"] = state;
-        return await repo.count(filter);
+        let sharedFilter: any = {
+            $and: [
+                { submitted_at: { $gt: dates.start } },
+                { submitted_at: { $lte: dates.end } }
+            ]
+        };
+        if (state != "ALL") sharedFilter.state = state;
+        const mixedFilter = Object.assign(sharedFilter, filter);
+        return await repo.count(mixedFilter);
     }
 
     private async getAllStatsBetweenDates(dates: { start: Date, end: Date }, handler: any): Promise<void> {
