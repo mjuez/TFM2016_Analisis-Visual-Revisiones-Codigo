@@ -100,33 +100,54 @@ function loadUserCharts(user) {
     $.get(`/api/users/stats/means`)
         .done(function (result) {
             printUserMeanCharts(user, result);
-            printUserReviewTypesChart(user);
         })
         .fail(function (error) {
             // todo
         });
-    $.get(`/api/reviews/filter/user/${user.login}/stats/alltime`)
-        .done(function (result) {
-            printUserReviewsAllTimeChart(result);
-        })
-        .fail(function (error) {
-            // todo
-        });
-    $.get(`/api/pulls/filter/user/${user.login}/stats/alltime`)
-        .done(function (result) {
-            printUserPullsStatesChart(result);
-            printUserPullsAllTimeChart(result);
-        })
-        .fail(function (error) {
-            // todo
-        });
-    $.get(`/api/reviewcomments/filter/user/${user.login}/stats/alltime`)
-        .done(function (result) {
-            printUserReviewCommentsAllTimeChart(result);
-        })
-        .fail(function (error) {
-            // todo
-        });
+
+    if (user.reviews_count > 0) {
+        $.get(`/api/reviews/filter/user/${user.login}/stats/alltime`)
+            .done(function (result) {
+                printUserReviewsAllTimeChart(result);
+                printUserReviewTypesChart(user);
+            })
+            .fail(function (error) {
+                // todo
+            });
+    } else {
+        $('#user_reviews_none_msg').removeClass("invisible");
+        $('#user_reviewtypes_chart_segment').addClass("invisible");
+        $('#user_reviews_alltime_chart_segment').addClass("invisible");
+    }
+
+    if (user.pull_request_count > 0) {
+        $.get(`/api/pulls/filter/user/${user.login}/stats/alltime`)
+            .done(function (result) {
+                printUserPullsStatesChart(result);
+                printUserPullsAllTimeChart(result);
+            })
+            .fail(function (error) {
+                // todo
+            });
+    } else {
+        $('#user_pulls_none_msg').removeClass("invisible");
+        $('#user_pullsstates_chart_segment').addClass("invisible");
+        $('#user_pulls_alltime_chart_segment').addClass("invisible");
+    }
+
+    if (user.review_comments_count > 0) {
+        $.get(`/api/reviewcomments/filter/user/${user.login}/stats/alltime`)
+            .done(function (result) {
+                printUserReviewCommentsAllTimeChart(result);
+            })
+            .fail(function (error) {
+                // todo
+            });
+    } else {
+        $('#user_reviewcomments_none_msg').removeClass("invisible");
+        $('#user_reviewcomments_alltime_chart_segment').addClass("invisible");
+    }
+
 }
 
 function printUserMeanCharts(user, meanData) {
