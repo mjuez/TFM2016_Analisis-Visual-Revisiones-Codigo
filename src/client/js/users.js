@@ -119,7 +119,14 @@ function loadUserCharts(user) {
         })
         .fail(function (error) {
             // todo
+        });
+    $.get(`/api/reviewcomments/filter/user/${user.login}/stats/alltime`)
+        .done(function (result) {
+            printUserReviewCommentsAllTimeChart(result);
         })
+        .fail(function (error) {
+            // todo
+        });
 }
 
 function printUserMeanCharts(user, meanData) {
@@ -258,6 +265,9 @@ function printUserPullsAllTimeChart(stats) {
             type: 'area',
             names: {
                 created: 'Creadas'
+            },
+            colors: {
+                created: '#9467bd'
             }
         },
         axis: {
@@ -272,6 +282,45 @@ function printUserPullsAllTimeChart(stats) {
             y: {
                 label: {
                     text: 'Nº de pull requests',
+                    position: 'outer-middle'
+                }
+            }
+        }
+    });
+}
+
+function printUserReviewCommentsAllTimeChart(stats) {
+    $(`#user_reviewcomments_alltime_chart_segment`).removeClass('loading');
+    stats.created.unshift('created');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#user_reviewcomments_alltime_chart`,
+        data: {
+            columns: [
+                stats.created
+            ],
+            type: 'area',
+            names: {
+                created: 'Creados'
+            },
+            colors: {
+                created: '#9467bd'
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: stats.labels,
+                tick: {
+                    rotate: 75,
+                    multiline: false
+                }
+            },
+            y: {
+                label: {
+                    text: 'Nº de comentarios de revisión',
                     position: 'outer-middle'
                 }
             }
