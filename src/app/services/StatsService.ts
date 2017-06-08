@@ -21,6 +21,8 @@ export interface IStatsService {
     getReviewsStatsByRepository(owner: string, name: string): Promise<any>;
     getPullRequestsStatsByUser(userLogin: string): Promise<any>;
     getPullRequestsStatsByRepository(owner: string, name: string): Promise<any>;
+    getReviewCommentsStatsByUser(userLogin: string): Promise<any>;
+    getReviewCommentsStatsByRepository(owner: string, name: string): Promise<any>;
 }
 
 export class StatsService implements IStatsService {
