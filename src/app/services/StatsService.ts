@@ -2,10 +2,7 @@ import { IPullRequestRepository } from "../data/PullRequestRepository";
 import { IReviewRepository } from "../data/ReviewRepository";
 import { IReviewCommentRepository } from "../data/ReviewCommentRepository";
 import { IRepositoryRepository } from "../data/RepositoryRepository";
-import { IUserRepository } from "../data/UserRepository";
 import { IReviewEntity } from "../entities/ReviewEntity";
-import { IUserEntity } from "../entities/UserEntity";
-import { IRepositoryEntity } from "../entities/RepositoryEntity";
 import * as moment from "moment";
 import * as twix from "twix";
 require("twix");
@@ -14,7 +11,6 @@ interface Repositories {
     pull: IPullRequestRepository,
     review: IReviewRepository,
     reviewComment: IReviewCommentRepository,
-    user: IUserRepository,
     repo: IRepositoryRepository
 }
 
@@ -32,27 +28,18 @@ export class StatsService implements IStatsService {
     }
 
     public async getReviewsStatsByUser(userLogin: string): Promise<any> {
-        const repo: IUserRepository = this._repos.user;
-        const user: IUserEntity = await repo.findByLogin(userLogin);
         const filter: any = { "user.login": userLogin };
-        const since: Date = user.document.created_at;
-        return await this.getReviewsStatsSince(since, filter);
+        const dateRange: any = await this.getReviewsDateRange(filter);
+        return await this.getReviewsStatsBetween(dateRange, filter);
     }
 
     public async getReviewsStatsByRepository(owner: string, name: string): Promise<any> {
-        const repo: IRepositoryRepository = this._repos.repo;
-        const repository: IRepositoryEntity = await repo.findOne({ "owner.login": owner, name });
         const filter: any = { "repository.owner": owner, "repository.name": name };
-        const since: Date = repository.document.created_at;
-        return await this.getReviewsStatsSince(since, filter);
+        const dateRange: any = await this.getReviewsDateRange(filter);
+        return await this.getReviewsStatsBetween(dateRange, filter);
     }
 
-    private async getReviewsStatsSince(since: Date, filter: any): Promise<any> {
-        const dateRange: any = {
-            start: since,
-            end: await this.getLastReviewDate()
-        };
-
+    private async getReviewsStatsBetween(dateRange: { start: Date, end: Date }, filter: any): Promise<any> {
         let stats: any = {
             labels: [],
             all: [],
@@ -80,10 +67,11 @@ export class StatsService implements IStatsService {
         return stats;
     }
 
-    private async getLastReviewDate(): Promise<Date> {
+    private async getReviewsDateRange(filter: any): Promise<any> {
         const repo: IReviewRepository = this._repos.review;
-        const lastPage: IReviewEntity[] = await repo.retrieve({ page: 1, sort: { submitted_at: -1 } });
-        return lastPage[0].document.submitted_at;
+        const firstPage: IReviewEntity[] = await repo.retrieve({ filter, page: 1, sort: { submitted_at: 1 } });
+        const lastPage: IReviewEntity[] = await repo.retrieve({ filter, page: 1, sort: { submitted_at: -1 } });
+        return { start: firstPage[0].document.submitted_at, end: lastPage[0].document.submitted_at };
     }
 
     private async getReviewsSingleStatsBetweenDates(filter: any, dates: { start: Date, end: Date }, state: string = "ALL"): Promise<number> {
