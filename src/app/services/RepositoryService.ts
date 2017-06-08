@@ -3,6 +3,7 @@ import { AbstractPersistenceService } from "../services/AbstractPersistenceServi
 import { IRepositoryEntity, RepositoryEntity } from "../entities/RepositoryEntity";
 import { RepositoryDocument } from "../entities/documents/RepositoryDocument";
 import { IRepositoryRepository } from "../data/RepositoryRepository";
+import * as math from "mathjs";
 
 /**
  * IRepositoryService interface.
@@ -17,7 +18,7 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
     getRepositoriesByReviewsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
     getRepositoriesByPullRequestsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
     getRepositoriesList(): Promise<IRepositoryEntity[]>;
-    getRepositoriesStatsAverages(): Promise<any>;
+    getRepositoriesStatsMeans(): Promise<any>;
 
 }
 
@@ -77,39 +78,35 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
         return entities;
     }
 
-    public async getRepositoriesStatsAverages(): Promise<Object> {
+    public async getRepositoriesStatsMeans(): Promise<Object> {
         const repo: IRepositoryRepository = this._repository;
         const select: string = 'stargazers_count watchers_count forks_count review_comments_count reviews_count pull_requests_count -_id';
         const entities: IRepositoryEntity[] = await repo.retrieve({ select });
+        const stargazersCounts: number[] = this.getRepositoriesStatsArray(entities, "stargazers_count");
+        const watchersCounts: number[] = this.getRepositoriesStatsArray(entities, "watchers_count");
+        const forksCounts: number[] = this.getRepositoriesStatsArray(entities, "forks_count");
+        const pullRequestCounts: number[] = this.getRepositoriesStatsArray(entities, "pull_requests_count");
+        const reviewCounts: number[] = this.getRepositoriesStatsArray(entities, "reviews_count");
+        const reviewCommentCounts: number[] = this.getRepositoriesStatsArray(entities, "review_comments_count");
 
-        let sums: any = {
-            stargazers: 0,
-            watchers: 0,
-            forks: 0,
-            review_comments: 0,
-            reviews: 0,
-            pull_requests: 0
-        }
-
-        entities.map((entity) => {
-            sums.stargazers += entity.document.stargazers_count;
-            sums.watchers += entity.document.watchers_count;
-            sums.forks += entity.document.forks_count;
-            sums.review_comments += entity.document.review_comments_count;
-            sums.reviews += entity.document.reviews_count;
-            sums.pull_requests += entity.document.pull_requests_count;
-        });
-
-        let avgs: any = {
-            stargazers: sums.stargazers / entities.length,
-            watchers: sums.watchers / entities.length,
-            forks: sums.forks / entities.length,
-            review_comments: sums.review_comments / entities.length,
-            reviews: sums.reviews / entities.length,
-            pull_requests: sums.pull_requests / entities.length
+        const means: Object = {
+            stargazers_count: math.ceil(math.mean(stargazersCounts)),
+            watchers_count: math.ceil(math.mean(watchersCounts)),
+            forks_count: math.ceil(math.mean(forksCounts)),
+            pull_requests_count: math.ceil(math.mean(pullRequestCounts)),
+            reviews_count: math.ceil(math.mean(reviewCounts)),
+            review_comments_count: math.ceil(math.mean(reviewCommentCounts))
         };
 
-        return avgs;
+        return means;
+    }
+
+    private getRepositoriesStatsArray(repositories: IRepositoryEntity[], statsField: string): number[] {
+        let array: number[] = repositories.map((repository): number => {
+            return repository.document[statsField];
+        });
+
+        return array;
     }
 
     protected async findEntity(entity: IRepositoryEntity): Promise<IRepositoryEntity> {
