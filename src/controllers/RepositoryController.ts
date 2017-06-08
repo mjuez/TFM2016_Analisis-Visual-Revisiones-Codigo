@@ -16,7 +16,7 @@ export interface IRepositoryController {
     getByReviewsPage(req: Request, res: Response): Promise<void>;
     getByPullRequestsPage(req: Request, res: Response): Promise<void>;
     getList(req: Request, res: Response): Promise<void>;
-    getStatsAverages(req: Request, res: Response): Promise<void>;
+    getStatsMeans(req: Request, res: Response): Promise<void>;
 }
 
 /**
@@ -87,12 +87,13 @@ export class RepositoryController extends AbstractController implements IReposit
         }
     }
 
-    public async getStatsAverages(req: Request, res: Response): Promise<void> {
+    public async getStatsMeans(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         try {
-            const averages: any = await service.getRepositoriesStatsAverages();
-            res.json(averages);
+            const means: any = await service.getRepositoriesStatsMeans();
+            res.json(means);
         } catch (error) {
+            console.log(error);
             res.status(500).json({ message: "Oops, something went wrong." });
         }
     }
