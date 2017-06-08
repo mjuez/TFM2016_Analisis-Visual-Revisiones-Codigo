@@ -36,6 +36,10 @@ export class ReviewRoutes {
             controller.getAllTimeStatsByUser(req, res);
         });
 
+        router.get("/reviews/filter/repo/:owner/:repository/stats/alltime", (req: express.Request, res: express.Response) => {
+            controller.getAllTimeStatsByRepository(req, res);
+        });
+
         return router;
     }
 
