@@ -4,6 +4,7 @@ import { IReviewCommentRepository } from "../data/ReviewCommentRepository";
 import { IRepositoryRepository } from "../data/RepositoryRepository";
 import { IPullRequestEntity } from "../entities/PullRequestEntity";
 import { IReviewEntity } from "../entities/ReviewEntity";
+import { IReviewCommentEntity } from "../entities/ReviewCommentEntity";
 import * as moment from "moment";
 import * as twix from "twix";
 require("twix");
@@ -54,6 +55,18 @@ export class StatsService implements IStatsService {
         return await this.getPullRequestsStatsBetween(dateRange, filter);
     }
 
+    public async getReviewCommentsStatsByUser(userLogin: string): Promise<any> {
+        const filter: any = { "user.login": userLogin };
+        const dateRange: any = await this.getReviewCommentsDateRange(filter);
+        return await this.getReviewCommentsStatsBetween(dateRange, filter);
+    }
+
+    public async getReviewCommentsStatsByRepository(owner: string, name: string): Promise<any> {
+        const filter: any = { "repository.owner": owner, "repository.name": name };
+        const dateRange: any = await this.getReviewCommentsDateRange(filter);
+        return await this.getReviewCommentsStatsBetween(dateRange, filter);
+    }
+
     private async getReviewsStatsBetween(dateRange: { start: Date, end: Date }, filter: any): Promise<any> {
         let stats: any = {
             labels: [],
@@ -95,6 +108,13 @@ export class StatsService implements IStatsService {
         return await repo.count(mixedFilter);
     }
 
+    private async getReviewsDateRange(filter: any): Promise<any> {
+        const repo: IReviewRepository = this._repos.review;
+        const firstPage: IReviewEntity[] = await repo.retrieve({ filter, page: 1, sort: { submitted_at: 1 } });
+        const lastPage: IReviewEntity[] = await repo.retrieve({ filter, page: 1, sort: { submitted_at: -1 } });
+        return { start: firstPage[0].document.submitted_at, end: lastPage[0].document.submitted_at };
+    }
+
     private async getPullRequestsStatsBetween(dateRange: { start: Date, end: Date }, filter: any): Promise<any> {
         let stats: any = {
             labels: [],
@@ -127,6 +147,48 @@ export class StatsService implements IStatsService {
         return await repo.count(mixedFilter);
     }
 
+    private async getPullRequestsDateRange(filter: any): Promise<any> {
+        const repo: IPullRequestRepository = this._repos.pull;
+        const firstPage: IPullRequestEntity[] = await repo.retrieve({ filter, page: 1, sort: { created_at: 1 } });
+        const lastPage: IPullRequestEntity[] = await repo.retrieve({ filter, page: 1, sort: { created_at: -1 } });
+        return { start: firstPage[0].document.created_at, end: lastPage[0].document.created_at };
+    }
+
+    private async getReviewCommentsStatsBetween(dateRange: { start: Date, end: Date }, filter: any): Promise<any> {
+        let stats: any = {
+            labels: [],
+            created: []
+        }
+
+        const handler = async (dates, datesLabel) => {
+            stats.labels.push(datesLabel);
+            const created: number = await this.getReviewCommentsSingleStatsBetweenDates(filter, dates);
+            stats.created.push(created);
+        };
+
+        await this.getStatsBetweenDates(dateRange, handler);
+        return stats;
+    }
+
+    private async getReviewCommentsSingleStatsBetweenDates(filter: any, dates: { start: Date, end: Date }): Promise<number> {
+        const repo: IReviewCommentRepository = this._repos.reviewComment;
+        let sharedFilter: any = {
+            $and: [
+                { created_at: { $gt: dates.start } },
+                { created_at: { $lte: dates.end } }
+            ]
+        };
+        const mixedFilter = Object.assign(sharedFilter, filter);
+        return await repo.count(mixedFilter);
+    }
+
+    private async getReviewCommentsDateRange(filter: any): Promise<any> {
+        const repo: IReviewCommentRepository = this._repos.reviewComment;
+        const firstPage: IReviewCommentEntity[] = await repo.retrieve({ filter, page: 1, sort: { created_at: 1 } });
+        const lastPage: IReviewCommentEntity[] = await repo.retrieve({ filter, page: 1, sort: { created_at: -1 } });
+        return { start: firstPage[0].document.created_at, end: lastPage[0].document.created_at };
+    }
+
     private async getStatsBetweenDates(dates: { start: Date, end: Date }, handler: any): Promise<void> {
         const startDate: moment.Moment = moment(dates.start).add(-1, 'days');
         const dateRange: any = moment(startDate).twix(dates.end);
@@ -143,20 +205,6 @@ export class StatsService implements IStatsService {
             const partialDatesLabel: string = `${partialDates.start.format("DD/MM/YYYY")} - ${partialDates.end.format("DD/MM/YYYY")}`;
             await handler(partialDates, partialDatesLabel);
         }
-    }
-
-    private async getReviewsDateRange(filter: any): Promise<any> {
-        const repo: IReviewRepository = this._repos.review;
-        const firstPage: IReviewEntity[] = await repo.retrieve({ filter, page: 1, sort: { submitted_at: 1 } });
-        const lastPage: IReviewEntity[] = await repo.retrieve({ filter, page: 1, sort: { submitted_at: -1 } });
-        return { start: firstPage[0].document.submitted_at, end: lastPage[0].document.submitted_at };
-    }
-
-    private async getPullRequestsDateRange(filter: any): Promise<any> {
-        const repo: IPullRequestRepository = this._repos.pull;
-        const firstPage: IPullRequestEntity[] = await repo.retrieve({ filter, page: 1, sort: { created_at: 1 } });
-        const lastPage: IPullRequestEntity[] = await repo.retrieve({ filter, page: 1, sort: { created_at: -1 } });
-        return { start: firstPage[0].document.created_at, end: lastPage[0].document.created_at };
     }
 
 }
