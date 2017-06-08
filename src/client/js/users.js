@@ -158,7 +158,7 @@ function printUserMeanCharts(user, meanData) {
         column_legend: `Usuario: ${user.login}`,
         y_label: 'Número de pull request creadas'
     };
-    printUserMeanChart(pullsCountConfig);
+    printMeanChart(pullsCountConfig);
     var reviewsCountConfig = {
         value: user.reviews_count,
         mean: meanData.reviews_count,
@@ -166,7 +166,7 @@ function printUserMeanCharts(user, meanData) {
         column_legend: `Usuario: ${user.login}`,
         y_label: 'Número de revisiones realizadas'
     };
-    printUserMeanChart(reviewsCountConfig);
+    printMeanChart(reviewsCountConfig);
     var reviewCommentsCountConfig = {
         value: user.review_comments_count,
         mean: meanData.review_comments_count,
@@ -174,7 +174,7 @@ function printUserMeanCharts(user, meanData) {
         column_legend: `Usuario: ${user.login}`,
         y_label: 'Número de comentarios de revisión realizados'
     };
-    printUserMeanChart(reviewCommentsCountConfig);
+    printMeanChart(reviewCommentsCountConfig);
 }
 
 function printUserReviewTypesChart(user) {
@@ -344,38 +344,6 @@ function printUserReviewCommentsAllTimeChart(stats) {
                     text: 'Nº de comentarios de revisión',
                     position: 'outer-middle'
                 }
-            }
-        }
-    });
-}
-
-function printUserMeanChart(config) {
-    $(`#${config.container}_segment`).removeClass('loading');
-    var data = ['data1', config.value];
-    var meanData = ['data2', config.mean];
-    c3.generate({
-        padding: {
-            right: 10
-        },
-        bindto: `#${config.container}`,
-        data: {
-            columns: [
-                data,
-                meanData
-            ],
-            type: 'bar',
-            names: {
-                data1: `${config.column_legend}`,
-                data2: `Media`
-            }
-        },
-        axis: {
-            x: {
-                type: 'category',
-                categories: ['Suma']
-            },
-            y: {
-                label: config.y_label
             }
         }
     });
