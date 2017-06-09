@@ -3,7 +3,7 @@ function loadPullrequestsList(apiRoute, page, url, repository = undefined) {
     $('#pullrequests_order_dropdown').dropdown({
         onChange: function (value, text) { handlePullrequestsOrder(value, repository); }
     });
-    configurePullrequestsFilter(page);
+    configurePullrequestsFilter(page, repository);
     $.get(apiRoute)
         .done(function (result) {
             printPullRequestItems(result.data);
@@ -52,6 +52,7 @@ function configurePullrequestsFilter(page, repository) {
             });
 
             if (repository != undefined) {
+                $('#pullrequests_title').html(`Pull Requests (${repository.owner}/${repository.name})`);
                 $('#pullrequests_filter_dropdown').dropdown('set selected', `${repository.owner}/${repository.name}`);
             }
 
