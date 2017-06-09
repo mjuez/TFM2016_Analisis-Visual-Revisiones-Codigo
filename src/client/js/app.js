@@ -134,6 +134,17 @@ var app = Sammy('#content', function () {
     // PULL REQUESTS //
     ///////////////////
 
+    this.get('#/pullrequest/:owner/:repository/:number', function () {
+        setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        var owner = this.params['owner'];
+        var repository = this.params['repository'];
+        var number = this.params['number'];
+        container.load('/_pullrequest.html', function () {
+            loadPullRequest(owner, repository, number);
+        });
+    });
+
     this.get('#/pullrequests', function () {
         this.redirect('#/pullrequests/page/1');
     });
