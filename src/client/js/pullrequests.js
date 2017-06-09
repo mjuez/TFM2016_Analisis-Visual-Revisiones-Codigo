@@ -1,9 +1,9 @@
 function loadPullrequestsList(apiRoute, page, url, repository = undefined) {
     showLoader();
     $('#pullrequests_order_dropdown').dropdown({
-        onChange: function (value, text) { handlePullrequestsOrder(value, page, repository); }
+        onChange: function (value, text) { handlePullrequestsOrder(value, repository); }
     });
-    configurePullrequestsFilter(page);
+    configurePullrequestsFilter(page, repository);
     $.get(apiRoute)
         .done(function (result) {
             printPullRequestItems(result.data);
@@ -17,25 +17,140 @@ function loadPullrequestsList(apiRoute, page, url, repository = undefined) {
         });
 }
 
-function handlePullrequestsOrder(value, page, repository) {
+function handlePullrequestsOrder(value, repository) {
     var repositoryFilter = '';
     if (repository != undefined) {
         repositoryFilter = `filter/${repository.owner}/${repository.name}/`;
     }
     switch (value) {
-        case 'date_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/date/asc/page/${page}`);
+        case 'date_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/date/asc/page/1`);
             break;
-        case 'date_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/date/desc/page/${page}`);
+        case 'date_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/date/desc/page/1`);
             break;
-        case 'name_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/name/asc/page/${page}`);
+        case 'name_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/name/asc/page/1`);
             break;
-        case 'name_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/name/desc/page/${page}`);
+        case 'name_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/name/desc/page/1`);
             break;
-        case 'reviews_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/reviews/asc/page/${page}`);
+        case 'reviews_asc': app.setLocation(`#/pullrequests/${repositoryFilter}order/reviews/asc/page/1`);
             break;
-        case 'reviews_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/reviews/desc/page/${page}`);
+        case 'reviews_desc': app.setLocation(`#/pullrequests/${repositoryFilter}order/reviews/desc/page/1`);
             break;
     }
+}
+
+function loadPullRequest(owner, repository, number) {
+    showLoader();
+    $.get(`/api/pull/${owner}/${repository}/${number}`)
+        .done(function (result) {
+            $('#pullrequest_title').html(`Pull Request: #${result.number} ${result.title}`);
+            configurePullRequestButtons(result);
+            loadPullRequestCharts(result);
+            hideLoader();
+        })
+        .fail(function (error) {
+            app.setLocation(`#/notfound`);
+            hideLoader();
+        });
+}
+
+function configurePullRequestButtons(pullrequest) {
+    $('#pullrequest_viewgithub_button').on('click', function () {
+        $(location).attr('href', pullrequest.html_url);
+    });
+}
+
+function loadPullRequestCharts(pullrequest) {
+    $.get(`/api/pulls/stats/means`)
+        .done(function (result) {
+            printPullRequestMeanCharts(pullrequest, result);
+            printPullRequestAdditionsDeletionsChart(pullrequest)
+        })
+        .fail(function (error) {
+            // todo
+        });
+}
+
+function printPullRequestMeanCharts(pullrequest, meanData) {
+    var changedFilesConfig = {
+        value: pullrequest.changed_files,
+        mean: meanData.changed_files,
+        container: 'pullrequest_changedfiles_chart',
+        column_legend: `Pull Request: #${pullrequest.number}`,
+        y_label: 'Número de ficheros modificados'
+    };
+    printMeanChart(changedFilesConfig);
+    var additionsConfig = {
+        value: pullrequest.additions,
+        mean: meanData.additions,
+        container: 'pullrequest_additions_chart',
+        column_legend: `Pull Request: #${pullrequest.number}`,
+        y_label: 'Número de líneas añadidas'
+    };
+    printMeanChart(additionsConfig);
+    var deletionsConfig = {
+        value: pullrequest.deletions,
+        mean: meanData.deletions,
+        container: 'pullrequest_deletions_chart',
+        column_legend: `Pull Request: #${pullrequest.number}`,
+        y_label: 'Número de líneas eliminadas'
+    };
+    printMeanChart(deletionsConfig);
+    var commitsConfig = {
+        value: pullrequest.commits,
+        mean: meanData.commits,
+        container: 'pullrequest_commits_chart',
+        column_legend: `Pull Request: #${pullrequest.number}`,
+        y_label: 'Número de commits'
+    };
+    printMeanChart(commitsConfig);
+    var commentsConfig = {
+        value: pullrequest.comments,
+        mean: meanData.comments,
+        container: 'pullrequest_comments_chart',
+        column_legend: `Pull Request: #${pullrequest.number}`,
+        y_label: 'Número de comentarios'
+    };
+    printMeanChart(commentsConfig);
+    var reviewsConfig = {
+        value: pullrequest.reviews,
+        mean: meanData.reviews,
+        container: 'pullrequest_reviews_chart',
+        column_legend: `Pull Request: #${pullrequest.number}`,
+        y_label: 'Número de Revisiones'
+    };
+    printMeanChart(reviewsConfig);
+    var reviewCommentsConfig = {
+        value: pullrequest.review_comments,
+        mean: meanData.review_comments,
+        container: 'pullrequest_reviewcomments_chart',
+        column_legend: `Pull Request: #${pullrequest.number}`,
+        y_label: 'Número de comentarios de revisión'
+    };
+    printMeanChart(reviewCommentsConfig);
+}
+
+function printPullRequestAdditionsDeletionsChart(pullrequest) {
+    $(`#pullrequest_adddel_chart_segment`).removeClass('loading');
+    c3.generate({
+        padding: {
+            right: 10
+        },
+        bindto: `#pullrequest_adddel_chart`,
+        data: {
+            columns: [
+                ['Añadidas', pullrequest.additions],
+                ['Eliminadas', pullrequest.deletions]
+            ],
+            type: 'donut',
+            colors: {
+                Añadidas: '#2ca02c',
+                Eliminadas: '#d62728'
+            }
+        },
+        donut: {
+            title: 'Líneas de código'
+        }
+    });
 }
 
 function configurePullrequestsFilter(page, repository) {
@@ -52,40 +167,24 @@ function configurePullrequestsFilter(page, repository) {
             });
 
             if (repository != undefined) {
+                $('#pullrequests_title').html(`Pull Requests (${repository.owner}/${repository.name})`);
                 $('#pullrequests_filter_dropdown').dropdown('set selected', `${repository.owner}/${repository.name}`);
             }
 
             $('#pullrequests_filter_dropdown').dropdown({
-                onChange: function (value, text) { handlePullrequestsFilter(value, page); }
+                onChange: function (value, text) { handlePullrequestsFilter(value); }
             });
         });
 }
 
-function handlePullrequestsFilter(value, page) {
+function handlePullrequestsFilter(value) {
     var order = $('#pullrequests_order_dropdown').dropdown('get value');
     if (order === '') {
-        app.setLocation(`#/pullrequests/filter/${value}/page/${page}`);
+        app.setLocation(`#/pullrequests/filter/${value}/page/1`);
     } else {
         var repository = repositoryStringToObject(value);
-        handlePullrequestsOrder(order, page, repository);
+        handlePullrequestsOrder(order, repository);
     }
-}
-
-function getPullRequestPage(owner, repository) {
-    $('#loader').addClass('active');
-    $('#content').load(`/_generic.html`, function () {
-        history.pushState(null, `Repositorio - ${owner}/${repository}`, `/repositories/single/${owner}/${repository}`);
-        $('#generic_title').html(`Repositorio: ${owner}/${repository}`);
-        $.get(`/api/${owner}/${repository}/pulls/stats/created/alltime`)
-            .done(function (result) {
-                printCreatedAllTimeStatsGraph(result);
-                $('#loader').removeClass('active');
-            })
-            .fail(function (error) {
-                $('#generic_content').html('No se pueden obtener los repositorios en este momento.');
-                $('#loader').removeClass('active');
-            });
-    });
 }
 
 function printPullRequestItems(items) {
@@ -104,7 +203,7 @@ function pullrequestItem(pullrequestData) {
                 $('<a>', {
                     text: pullrequestData.title,
                     class: 'header',
-                    click: function () { getPullRequestPage(repositoryData.owner.login, repositoryData.name); }
+                    href: `/#/pullrequest/${pullrequestData.base.repo.owner.login}/${pullrequestData.base.repo.name}/${pullrequestData.number}`
                 }),
                 $('<div>', {
                     class: 'description',

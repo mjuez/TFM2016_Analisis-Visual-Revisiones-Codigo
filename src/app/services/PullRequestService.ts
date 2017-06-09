@@ -4,6 +4,7 @@ import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEn
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
 import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory, BetweenDatesPullRequestFilter } from "../data/filters/PullRequestFilter";
+import * as math from "mathjs";
 import * as moment from "moment";
 import * as twix from "twix";
 require("twix");
@@ -22,8 +23,7 @@ export interface IPullRequestService extends IMultiplePersistenceService<IPullRe
     getRepositoryPullRequestsPage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
     getRepositoryPullRequestsByNamePage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
     getRepositoryPullRequestsByReviewsPage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
-    getRepositoryCreatedAllTimeStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number[]>;
-    getRepositoryCreatedBetweenDatesStats(owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number>;
+    getPullRequestsStatsMeans(): Promise<Object>;
     numPagesForRepository(owner: string, repository: string): Promise<number>;
 
 }
@@ -66,6 +66,7 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         const sort: Object = { reviews: direction };
         return repo.retrieve({ page, sort });
     }
+
     public async getRepositoryPullRequestsPage(
         owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
 
@@ -74,6 +75,7 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         const sort: Object = { created_at: direction };
         return repo.retrieve({ filter, page, sort });
     }
+
     public async getRepositoryPullRequestsByNamePage(
         owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
 
@@ -82,6 +84,7 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         const sort: Object = { title: direction };
         return repo.retrieve({ filter, page, sort });
     }
+
     public async getRepositoryPullRequestsByReviewsPage(
         owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
 
@@ -91,36 +94,46 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         return repo.retrieve({ filter, page, sort });
     }
 
-    public async getRepositoryCreatedAllTimeStats(
-        owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number[]> {
-
-        let dateRange: any = moment(dates.start).twix(dates.end);
-        let portions = dateRange.count("days");
-        if (portions > 20) portions = 20;
-        const twixDates: any[] = dateRange.divide(portions);
-        let counts: number[] = await Promise.all(twixDates.map(async (date) => {
-            const partialDates = {
-                start: date.start(),
-                end: date.end()
-            }
-            return await this.getRepositoryCreatedBetweenDatesStats(owner, repository, partialDates);
-        }));
-        return counts;
-    }
-
-    public async getRepositoryCreatedBetweenDatesStats(
-        owner: string, repository: string, dates: { start: Date, end: Date }): Promise<number> {
-
-        let repo: IPullRequestRepository = this._repository;
-        let filter: BetweenDatesPullRequestFilter =
-            PullRequestFilterFactory.createBetweenDates({ owner, repository, startDate: dates.start, endDate: dates.end });
-        return await repo.count(filter);
-    }
-
     public async numPagesForRepository(owner: string, repository: string): Promise<number> {
         const repo: IPullRequestRepository = this._repository;
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
         return await repo.numPages(filter);
+    }
+
+    public async getPullRequestsStatsMeans(): Promise<Object> {
+        const repo: IPullRequestRepository = this._repository;
+        const select: string = 'changed_files additions deletions commits comments reviews review_comments -_id';
+        const entities: IPullRequestEntity[] = await repo.retrieve({ select });
+        const changedFiles: number[] = this.getPullRequestsStatsArray(entities, "changed_files");
+        const additions: number[] = this.getPullRequestsStatsArray(entities, "additions");
+        const deletions: number[] = this.getPullRequestsStatsArray(entities, "deletions");
+        const commits: number[] = this.getPullRequestsStatsArray(entities, "commits");
+        const comments: number[] = this.getPullRequestsStatsArray(entities, "comments");
+        const reviews: number[] = this.getPullRequestsStatsArray(entities, "reviews");
+        const reviewComments: number[] = this.getPullRequestsStatsArray(entities, "review_comments");
+
+        const means: Object = {
+            changed_files: math.ceil(math.mean(changedFiles)),
+            additions: math.ceil(math.mean(additions)),
+            deletions: math.ceil(math.mean(deletions)),
+            commits: math.ceil(math.mean(commits)),
+            comments: math.ceil(math.mean(comments)),
+            reviews: math.ceil(math.mean(reviews)),
+            review_comments: math.ceil(math.mean(reviewComments))
+        };
+
+        return means;
+    }
+
+    private getPullRequestsStatsArray(pulls: IPullRequestEntity[], statsField: string): number[] {
+        let array: number[] = pulls.map((pull): number => {
+            if (pull.document[statsField] != undefined) {
+                return pull.document[statsField];
+            }
+            return 0;
+        });
+
+        return array;
     }
 
     protected async findEntity(entity: IPullRequestEntity): Promise<IPullRequestEntity> {

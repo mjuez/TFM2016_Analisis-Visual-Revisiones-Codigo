@@ -11,16 +11,16 @@ export abstract class AbstractPersistenceService<T extends IRepository<E, S>, E 
 
     protected readonly _repository: T;
 
-    constructor(repository: T){
+    constructor(repository: T) {
         this._repository = repository;
     }
-    
+
     /**
      * Saves or updates an entity into database.
      * @param entity    an entity.
      * @returns a promise that returns an entity if resolved.
      */
-    public async createOrUpdate(entity: E): Promise<E>{
+    public async createOrUpdate(entity: E): Promise<E> {
         let repository: T = this._repository;
         let foundEntity: E = await this.findEntity(entity);
         if (foundEntity != null) {
@@ -44,6 +44,11 @@ export abstract class AbstractPersistenceService<T extends IRepository<E, S>, E 
         return await repo.numPages();
     }
 
+    public async getSortedPage(page: number, sort: Object): Promise<E[]> {
+        const repo: T = this._repository;
+        return repo.retrieve({ page, sort });
+    }
+
     protected abstract async findEntity(entity: E): Promise<E>;
 
 }
@@ -54,10 +59,10 @@ export abstract class AbstractPersistenceService<T extends IRepository<E, S>, E 
  */
 export abstract class AbstractMultiplePersistenceService<T extends IRepository<E, S>, E extends IEntity<S>, S extends mongoose.Document> extends AbstractPersistenceService<T, E, S> implements IMultiplePersistenceService<E> {
 
-    constructor(repository: T){
+    constructor(repository: T) {
         super(repository);
     }
-    
+
     /**
      * Saves or updates many Reviews into database.
      * @param entity    a Review array.
@@ -65,14 +70,11 @@ export abstract class AbstractMultiplePersistenceService<T extends IRepository<E
      */
     public async createOrUpdateMultiple(entities: E[]): Promise<E[]> {
         let entitiesResult: E[] = [];
-        entities.map(async (entity) => {
-            try {
-                let persisted: E = await this.createOrUpdate(entity);
-                entitiesResult.push(persisted);
-            } catch (error) {
-                throw error;
-            }
-        });
+        for (let i = 0; i < entities.length; i++) {
+            const entity: E = entities[i];
+            const persisted: E = await this.createOrUpdate(entity);
+            entitiesResult.push(persisted);
+        }
         return entitiesResult;
     }
 

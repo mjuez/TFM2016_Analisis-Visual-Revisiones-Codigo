@@ -30,6 +30,7 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
         let reviewRepo: IReviewRepository = this._repos.review;
         let startingFrom: number = this.entity.lastProcessed;
         try {
+            console.log("Starting user reviews task...");
             await this.startTask();
             let filter: Object = {
                 repository: {
@@ -69,10 +70,10 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
         try {
             let user: IUserEntity = await userRepo.findByLogin(username);
             user.document.reviews_count = await this.getStats(username);
-            user.document.reviews_approved_count = await this.getStats("APPROVED");
-            user.document.reviews_commented_count = await this.getStats("COMMENTED");
-            user.document.reviews_changes_requested_count = await this.getStats("CHANGES_REQUESTED");
-            user.document.reviews_dismissed_count = await this.getStats("DISMISSED");
+            user.document.reviews_approved_count = await this.getStats(username, "APPROVED");
+            user.document.reviews_commented_count = await this.getStats(username, "COMMENTED");
+            user.document.reviews_changes_requested_count = await this.getStats(username, "CHANGES_REQUESTED");
+            user.document.reviews_dismissed_count = await this.getStats(username, "DISMISSED");
             await userRepo.update(user);
         } catch (error) {
             this.emit("db:error", error);

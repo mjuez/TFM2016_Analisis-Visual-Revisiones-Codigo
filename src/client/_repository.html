@@ -19,42 +19,85 @@
 </div>
 <div class="ui segment">
     <h3 class="ui header">Comparativas con la media:</h3>
-    <div class="ui grid">
-        <div class="eight wide column">
+    <div class="ui three column grid">
+        <div class="column">
             <div class="ui basic loading segment" id="repository_stargazers_chart_segment">
                 <div id="repository_stargazers_chart"></div>
             </div>
         </div>
-        <div class="eight wide column">
+        <div class="column">
             <div class="ui basic loading segment" id="repository_watchers_chart_segment">
                 <div id="repository_watchers_chart"></div>
             </div>
         </div>
-        <div class="eight wide column">
+        <div class="column">
             <div class="ui basic loading segment" id="repository_forks_chart_segment">
                 <div id="repository_forks_chart"></div>
             </div>
         </div>
-        <div class="eight wide column">
+    </div>
+    <div class="ui three column grid">
+        <div class="column">
             <div class="ui basic loading segment" id="repository_pullrequests_chart_segment">
                 <div id="repository_pullrequests_chart"></div>
             </div>
         </div>
-        <div class="eight wide column">
+        <div class="column">
             <div class="ui basic loading segment" id="repository_reviews_chart_segment">
                 <div id="repository_reviews_chart"></div>
             </div>
         </div>
-        <div class="eight wide column">
+        <div class="column">
             <div class="ui basic loading segment" id="repository_reviewcomments_chart_segment">
                 <div id="repository_reviewcomments_chart"></div>
             </div>
         </div>
     </div>
     <div class="ui divider"></div>
-    <h3 class="ui header">Número de pull request creadas a lo largo del tiempo:</h3>
-    <div class="ui basic loading segment" id="repository_createdalltime_chart_segment">
-        <div id="repository_createdalltime_chart"></div>
+    <h3 class="ui header">Comparativas sobre revisiones:</h3>
+    <div class="invisible" id="repository_reviews_none_msg">
+        <p>Éste repositorio no contiene ninguna revisión.</p>
+    </div>
+    <div class="ui grid">
+        <div class="four wide column">
+            <div class="ui basic loading segment" id="repository_reviewtypes_chart_segment">
+                <div id="repository_reviewtypes_chart"></div>
+            </div>
+        </div>
+        <div class="twelve wide column">
+            <div class="ui basic loading segment" id="repository_reviews_alltime_chart_segment">
+                <div id="repository_reviews_alltime_chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <h3 class="ui header">Comparativas sobre pull requests:</h3>
+    <div class="invisible" id="repository_pulls_none_msg">
+        <p>Éste repositorio no contiene pull requests.</p>
+    </div>
+    <div class="ui grid">
+        <div class="four wide column">
+            <div class="ui basic loading segment" id="repository_pullsstates_chart_segment">
+                <div id="repository_pullsstates_chart"></div>
+            </div>
+        </div>
+        <div class="twelve wide column">
+            <div class="ui basic loading segment" id="repository_pulls_alltime_chart_segment">
+                <div id="repository_pulls_alltime_chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="ui divider"></div>
+    <h3 class="ui header">Comentarios de revisión a lo largo del tiempo:</h3>
+    <div class="invisible" id="repository_reviewcomments_none_msg">
+        <p>Éste repositorio no contiene comentarios de revisión.</p>
+    </div>
+    <div class="ui grid">
+        <div class="sixteen wide column">
+            <div class="ui basic loading segment" id="repository_reviewcomments_alltime_chart_segment">
+                <div id="repository_reviewcomments_alltime_chart"></div>
+            </div>
+        </div>
     </div>
     <div class="ui divider"></div>
 </div>

@@ -14,7 +14,7 @@ export class GitHubUtil {
      * @returns the number of the next page or null if there is no next page.
      */
     static getNextPageNumber(link: string): number {
-        let regExp: RegExp = /(?:&page=)(\d+)(?:.+"next")/g;
+        let regExp: RegExp = /(?:[&?]page=)(\d+)(?:.+"next")/g;
         let results: RegExpExecArray = regExp.exec(link);
         let pageNumber: number = null;
         if (results) {

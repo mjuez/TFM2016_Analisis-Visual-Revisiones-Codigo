@@ -33,7 +33,10 @@ export class ReviewCommentSchema {
             commit_id: String,
             original_commit_id: String,
             user: {
-                login: String,
+                login: {
+                    type: String,
+                    index: true
+                },
                 id: Number
             },
             body: String,

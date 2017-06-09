@@ -59,31 +59,39 @@ export class PullRequestRoutes {
             controller.getByReviewsPage(req, res);
         });
 
-        router.get("/pulls/filter/:owner/:repository", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/repo/:owner/:repository", (req: express.Request, res: express.Response) => {
             req.params.page = 1;
             req.params.direction = 'ASC';
             controller.getPageFromRepository(req, res);
         });
 
-        router.get("/pulls/filter/:owner/:repository/page/:page", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/repo/:owner/:repository/page/:page", (req: express.Request, res: express.Response) => {
             req.params.direction = 'ASC';
             controller.getPageFromRepository(req, res);
         });
 
-        router.get("/pulls/filter/:owner/:repository/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/repo/:owner/:repository/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getPageFromRepository(req, res);
         });
 
-        router.get("/pulls/filter/:owner/:repository/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/repo/:owner/:repository/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByNamePageFromRepository(req, res);
         });
 
-        router.get("/pulls/filter/:owner/:repository/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
+        router.get("/pulls/filter/repo/:owner/:repository/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
             controller.getByReviewsPageFromRepository(req, res);
         });
 
-        router.get("/pulls/filter/:owner/:repository/stats/created/alltime", (req: express.Request, res: express.Response) => {
-            controller.getCreatedAllTime(req, res);
+        router.get("/pulls/filter/repo/:owner/:repository/stats/alltime", (req: express.Request, res: express.Response) => {
+            controller.getAllTimeStatsByRepository(req, res);
+        });
+
+        router.get("/pulls/filter/user/:userlogin/stats/alltime", (req: express.Request, res: express.Response) => {
+            controller.getAllTimeStatsByUser(req, res);
+        });
+
+        router.get("/pulls/stats/means", (req: express.Request, res: express.Response) => {
+            controller.getStatsMeans(req, res);
         });
 
         return router;

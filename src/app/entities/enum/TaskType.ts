@@ -1,5 +1,6 @@
 export enum TaskType {
     ALL,
+    PULL_REQUESTS,
     REVIEWS,
     REVIEW_COMMENTS,
     USERS_PULLS,

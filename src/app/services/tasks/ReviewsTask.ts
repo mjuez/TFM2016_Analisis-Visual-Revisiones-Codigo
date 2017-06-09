@@ -40,6 +40,7 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
             PullRequestFilterFactory.createRepository({ owner: this.entity.owner, repository: this.entity.repository });
         const startingFrom: number = this.entity.lastProcessed;
         try {
+            console.log("Starting reviews task...");
             await this.startTask();
             const numPages: number = await pullRepo.numPages(filter, startingFrom);
             for (let page: number = 1; page <= numPages; page++) {
@@ -89,7 +90,7 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
     private async processPage(page: any): Promise<void> {
         let api: GitHubAPI = this.API;
         let reviews: IReviewEntity[] = ReviewEntity.toEntityArray(page.data);
-        console.log(`[${new Date()}] - Getting page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
+        console.log(`[${new Date()}] - Getting reviews page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
             await this._reviewService.createOrUpdateMultiple(reviews);
             if (api.hasNextPage(page)) {
@@ -111,12 +112,13 @@ export class ReviewsTask extends GitHubTask implements IReviewsTask {
         let filter: Object = {
             pull_request_number: pull.document.number,
             repository: {
-                name: this.entity.repository,
-                owner: this.entity.owner
+                name: pull.document.base.repo.name,
+                owner: pull.document.base.repo.owner.login
             }
         }
         try {
             let reviewsCount: number = await reviewRepo.count(filter);
+            console.log(`Updating pull reviews count, pull: #${pull.document.number} (${pull.document.base.repo.owner.login}/${pull.document.base.repo.name}, count: ${reviewsCount})`);
             pull.document["reviews"] = reviewsCount;
             await pullRepo.update(pull);
         } catch (error) {
