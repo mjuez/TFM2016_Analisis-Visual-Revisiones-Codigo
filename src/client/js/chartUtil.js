@@ -24,7 +24,8 @@ function printMeanChart(config) {
                 categories: ['Suma']
             },
             y: {
-                label: config.y_label
+                label: config.y_label,
+                position: 'outer-middle'
             }
         }
     });
