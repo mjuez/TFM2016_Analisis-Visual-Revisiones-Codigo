@@ -29,6 +29,7 @@ export interface IPullRequestController {
     getByReviewsPageFromRepository(req: Request, res: Response): Promise<void>;
     getAllTimeStatsByUser(req: Request, res: Response): Promise<void>;
     getAllTimeStatsByRepository(req: Request, res: Response): Promise<void>;
+    getStatsMeans(req: Request, res: Response): Promise<void>;
 
 }
 
@@ -150,6 +151,17 @@ export class PullRequestController extends AbstractController implements IPullRe
         try {
             const stats: any = await service.getPullRequestsStatsByRepository(owner, repository);
             res.json(stats);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: "Oops, something went wrong." });
+        }
+    }
+
+    public async getStatsMeans(req: Request, res: Response): Promise<void> {
+        const service: IPullRequestService = this._services.pull;
+        try {
+            const means: any = await service.getPullRequestsStatsMeans();
+            res.json(means);
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: "Oops, something went wrong." });

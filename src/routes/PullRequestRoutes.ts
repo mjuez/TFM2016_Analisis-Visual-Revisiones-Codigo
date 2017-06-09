@@ -90,6 +90,10 @@ export class PullRequestRoutes {
             controller.getAllTimeStatsByUser(req, res);
         });
 
+        router.get("/pulls/stats/means", (req: express.Request, res: express.Response) => {
+            controller.getStatsMeans(req, res);
+        });
+
         return router;
     }
 
