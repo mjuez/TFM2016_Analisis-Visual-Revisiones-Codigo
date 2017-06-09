@@ -4,6 +4,7 @@ import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEn
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
 import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory, BetweenDatesPullRequestFilter } from "../data/filters/PullRequestFilter";
+import * as math from "mathjs";
 import * as moment from "moment";
 import * as twix from "twix";
 require("twix");
@@ -74,7 +75,7 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         const sort: Object = { created_at: direction };
         return repo.retrieve({ filter, page, sort });
     }
-    
+
     public async getRepositoryPullRequestsByNamePage(
         owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
 
@@ -117,7 +118,8 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
             deletions: math.ceil(math.mean(deletions)),
             commits: math.ceil(math.mean(commits)),
             comments: math.ceil(math.mean(comments)),
-            reviews: math.ceil(math.mean(reviews))
+            reviews: math.ceil(math.mean(reviews)),
+            review_comments: math.ceil(math.mean(reviewComments))
         };
 
         return means;
@@ -125,7 +127,10 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
 
     private getPullRequestsStatsArray(pulls: IPullRequestEntity[], statsField: string): number[] {
         let array: number[] = pulls.map((pull): number => {
-            return pull.document[statsField];
+            if (pull.document[statsField] != undefined) {
+                return pull.document[statsField];
+            }
+            return 0;
         });
 
         return array;
