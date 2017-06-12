@@ -24,7 +24,7 @@ export class RepositorySchema {
             private: Boolean,
             fork: Boolean,
             html_url: String,
-            languge: String,
+            language: String,
             forks_count: Number,
             stargazers_count: Number,
             watchers_count: Number,

@@ -17,7 +17,7 @@ export interface RepositoryDocument extends mongoose.Document {
     private: boolean,
     fork: boolean,
     html_url: string,
-    languge: string,
+    language: string,
     forks_count: number,
     stargazers_count: number,
     watchers_count: number,
