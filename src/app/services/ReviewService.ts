@@ -1,5 +1,6 @@
 import { IMultiplePersistenceService } from "../services/IPersistenceService";
 import { IPullRequestService } from "../services/PullRequestService";
+import { IUserService } from "../services/UserService";
 import { IReviewEntity, ReviewEntity } from "../entities/ReviewEntity";
 import { IPullRequestEntity } from "../entities/PullRequestEntity";
 import { ReviewDocument } from "../entities/documents/ReviewDocument";
@@ -24,15 +25,20 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
     /** Pull Request service. */
     private readonly _pullRequestService: IPullRequestService;
 
+    /** User service. */
+    private readonly _userService: IUserService;
+
     /**
-     * Class constructor with Review repository and
-     * pull request service dependency injection.
+     * Class constructor with Review repository,
+     * pull request service and user service dependency injection.
      * @param repository            Injected Review repository.
      * @param pullRequestService    Injected pull request service.
+     * @param userService           Injected user service.
      */
-    constructor(repository: IReviewRepository, pullRequestService: IPullRequestService) {
+    constructor(repository: IReviewRepository, pullRequestService: IPullRequestService, userService: IUserService) {
         super(repository);
         this._pullRequestService = pullRequestService;
+        this._userService = userService;
     }
 
     protected async findEntity(entity: IReviewEntity): Promise<IReviewEntity> {
