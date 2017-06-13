@@ -109,15 +109,17 @@ export class RepositoryController extends AbstractController implements IReposit
         try {
             const filter: any = { "repository.owner": owner, "repository.name": repository };
             const lastPage: number = await reviewService.numPages(filter);
-            const fields: string[] = ["review_id", "repository_id", "repository_owner", "repository_name",
+            const fields: string[][] = [["review_id", "repository_id", "repository_owner", "repository_name",
                 "language", "repository_creation_date", "repository_update_date", "pull_request_id",
-                "pull_request_title", "pull_request_body", "review_status", "review_body", "reviewer_login"];
+                "pull_request_title", "pull_request_body", "review_state", "review_body", "reviewer_login"]];
             res.setHeader('Content-disposition', `attachment; filename=reviews_${owner}_${repository}.csv`);
             res.set('Content-Type', 'text/csv');
+            const title: string = json2csv({ data: fields, hasCSVColumnTitle: false });
+            res.write(`${title}\n`);
             for (let i = 1; i <= lastPage; i++) {
                 const csvPage: any[] = await service.getRepositoryCSVPage(owner, repository, i);
-                const csv = json2csv({ data: csvPage, fields });
-                if (i < lastPage) res.write(csv);
+                const csv: string = json2csv({ data: csvPage, hasCSVColumnTitle: false });
+                if (i < lastPage) res.write(`${csv}\n`);
                 else res.end(csv);
             }
         } catch (error) {
