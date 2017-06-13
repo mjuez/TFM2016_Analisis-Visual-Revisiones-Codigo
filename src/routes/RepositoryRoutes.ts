@@ -71,7 +71,7 @@ export class RepositoryRoutes {
             controller.getStatsMeans(req, res);
         });
 
-        router.get("/repo/:owner/:repository/csv/page/:page", (req: express.Request, res: express.Response) => {
+        router.get("/repo/:owner/:repository/csv", (req: express.Request, res: express.Response) => {
             controller.getCSV(req, res);
         });
 
