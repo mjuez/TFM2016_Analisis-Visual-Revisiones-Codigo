@@ -122,26 +122,22 @@ export class UserController extends AbstractController implements IUserControlle
 
     /** @inheritdoc */
     public getPage = async (req: Request, res: Response): Promise<void> => {
-        const service: IUserService = this._services.user;
-        await this.getOrderedPage(req, res, service, service.getUsersPage);
+        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersPage);
     }
 
     /** @inheritdoc */
     public getByNamePage = async (req: Request, res: Response): Promise<void> => {
-        const service: IUserService = this._services.user;
-        await this.getOrderedPage(req, res, service, service.getUsersByNamePage);
+        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersByNamePage);
     }
 
     /** @inheritdoc */
     public getByPullRequestsPage = async (req: Request, res: Response): Promise<void> => {
-        const service: IUserService = this._services.user;
-        await this.getOrderedPage(req, res, service, service.getUsersByPullRequestsPage);
+        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersByPullRequestsPage);
     }
 
     /** @inheritdoc */
     public getByReviewsPage = async (req: Request, res: Response): Promise<void> => {
-        const service: IUserService = this._services.user;
-        await this.getOrderedPage(req, res, service, service.getUsersByReviewsPage);
+        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersByReviewsPage);
     }
 
     /** @inheritdoc */
@@ -156,8 +152,7 @@ export class UserController extends AbstractController implements IUserControlle
 
     /** @inheritdoc */
     public getByReviewCommentsPage = async (req: Request, res: Response): Promise<void> => {
-        const service: IUserService = this._services.user;
-        await this.getOrderedPage(req, res, service, service.getUsersByReviewCommentsPage);
+        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersByReviewCommentsPage);
     }
 
     /** @inheritdoc */
