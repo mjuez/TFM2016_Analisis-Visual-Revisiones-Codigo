@@ -57,6 +57,11 @@ function configureRepositoryButtons(repository) {
         app.setLocation(`#/pullrequests/filter/${repository.full_name}/page/1`);
     });
 
+    $('#repository_download_button').on('click', function () {
+        //app.setLocation(`api/repo/${repository.full_name}/csv`);
+        $(location).attr('href', `/api/repo/${repository.full_name}/csv`);
+    });
+
     $('#repository_viewgithub_button').on('click', function () {
         $(location).attr('href', repository.html_url);
     });
