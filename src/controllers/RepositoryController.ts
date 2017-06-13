@@ -5,7 +5,7 @@ import { RepositoryDocument } from "../app/entities/documents/RepositoryDocument
 import { IRepositoryEntity, RepositoryEntity } from "../app/entities/RepositoryEntity";
 import { IReviewService } from "../app/services/ReviewService";
 import { EntityUtil } from "../app/util/EntityUtil";
-import * as csvStringify from "csv-stringify";
+import * as json2csv from "json2csv";
 
 /**
  * Repository controller interface.
@@ -106,21 +106,20 @@ export class RepositoryController extends AbstractController implements IReposit
         const reviewService: IReviewService = this._services.review;
         const owner: string = req.params.owner;
         const repository: string = req.params.repository;
-        const page: number = req.params.page;
         try {
-            const csvPage: any[] = await service.getRepositoryCSVPage(owner, repository, page);
             const filter: any = { "repository.owner": owner, "repository.name": repository };
             const lastPage: number = await reviewService.numPages(filter);
-            csvStringify(csvPage, (error, csv) => {
-                if (!error) {
-                    res.setHeader('Content-disposition', 'attachment; filename=testing.csv');
-                    res.set('Content-Type', 'text/csv');
-                    res.send(csv);
-                    //res.json({ data: csv, last_page: lastPage });
-                } else {
-                    throw error;
-                }
-            });
+            const fields: string[] = ["review_id", "repository_id", "repository_owner", "repository_name",
+                "language", "repository_creation_date", "repository_update_date", "pull_request_id",
+                "pull_request_title", "pull_request_body", "review_status", "review_body", "reviewer_login"];
+            res.setHeader('Content-disposition', `attachment; filename=reviews_${owner}_${repository}.csv`);
+            res.set('Content-Type', 'text/csv');
+            for (let i = 1; i <= lastPage; i++) {
+                const csvPage: any[] = await service.getRepositoryCSVPage(owner, repository, i);
+                const csv = json2csv({ data: csvPage, fields });
+                if (i < lastPage) res.write(csv);
+                else res.end(csv);
+            }
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: "Oops, something went wrong." });
