@@ -3,7 +3,9 @@ import { AbstractController } from "./AbstractController";
 import { IRepositoryService } from "../app/services/RepositoryService";
 import { RepositoryDocument } from "../app/entities/documents/RepositoryDocument";
 import { IRepositoryEntity, RepositoryEntity } from "../app/entities/RepositoryEntity";
+import { IReviewService } from "../app/services/ReviewService";
 import { EntityUtil } from "../app/util/EntityUtil";
+import * as csvStringify from "csv-stringify";
 
 /**
  * Repository controller interface.
@@ -17,6 +19,7 @@ export interface IRepositoryController {
     getByPullRequestsPage(req: Request, res: Response): Promise<void>;
     getList(req: Request, res: Response): Promise<void>;
     getStatsMeans(req: Request, res: Response): Promise<void>;
+    getCSV(req: Request, res: Response): Promise<void>;
 }
 
 /**
@@ -96,6 +99,33 @@ export class RepositoryController extends AbstractController implements IReposit
             console.log(error);
             res.status(500).json({ message: "Oops, something went wrong." });
         }
+    }
+
+    public async getCSV(req: Request, res: Response): Promise<void> {
+        const service: IRepositoryService = this._services.repo;
+        const reviewService: IReviewService = this._services.review;
+        const owner: string = req.params.owner;
+        const repository: string = req.params.repository;
+        const page: number = req.params.page;
+        try {
+            const csvPage: any[] = await service.getRepositoryCSVPage(owner, repository, page);
+            const filter: any = { "repository.owner": owner, "repository.name": repository };
+            const lastPage: number = await reviewService.numPages(filter);
+            csvStringify(csvPage, (error, csv) => {
+                if (!error) {
+                    res.setHeader('Content-disposition', 'attachment; filename=testing.csv');
+                    res.set('Content-Type', 'text/csv');
+                    res.send(csv);
+                    //res.json({ data: csv, last_page: lastPage });
+                } else {
+                    throw error;
+                }
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: "Oops, something went wrong." });
+        }
+
     }
 
 }
