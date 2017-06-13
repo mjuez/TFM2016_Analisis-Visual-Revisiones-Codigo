@@ -153,7 +153,7 @@ class App {
     this._services.review = new ReviewService(this._repositories.review, this._services.pull);
     this._services.reviewComment = new ReviewCommentService(this._repositories.reviewComment);
     this._services.user = new UserService(this._repositories.user);
-    this._services.repo = new RepositoryService(this._repositories.repo);
+    this._services.repo = new RepositoryService(this._repositories.repo, this._services.review);
     this._services.taskManager = new TaskManagerService(this._repositories, this._services);
     this._services.stats = new StatsService(this._repositories);
   }
