@@ -52,7 +52,7 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
                 body_pull_request: pull.document.body,
                 state_review: review.document.state,
                 body_review: review.document.body,
-                reviewer_login: review.document.user.login
+                login_reviewer: review.document.user.login
             }
             pageForCSV.push(reviewForCSV);
         }
