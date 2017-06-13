@@ -120,7 +120,7 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
             const column: any[] = [reviewData.id_review, repositoryEntity.id, repositoryEntity.document.owner.login,
             repositoryEntity.document.name, repositoryEntity.document.language, repositoryEntity.document.created_at,
             repositoryEntity.document.updated_at, reviewData.id_pull_request, reviewData.title_pull_request,
-            reviewData.body_pull_request, reviewData.title_pull_request, reviewData.state_review, reviewData.body_review,
+            reviewData.body_pull_request, reviewData.state_review, reviewData.body_review,
             reviewData.login_reviewer];
             dataArray.push(column);
         }
