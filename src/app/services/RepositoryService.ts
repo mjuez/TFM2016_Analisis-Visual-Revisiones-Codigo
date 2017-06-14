@@ -120,8 +120,12 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
             const column: any[] = [reviewData.id_review, repositoryEntity.id, repositoryEntity.document.owner.login,
             repositoryEntity.document.name, repositoryEntity.document.language, repositoryEntity.document.created_at,
             repositoryEntity.document.updated_at, reviewData.id_pull_request, reviewData.title_pull_request,
-            reviewData.body_pull_request, reviewData.state_review, reviewData.body_review,
-            reviewData.login_reviewer];
+            reviewData.body_pull_request, reviewData.state_pull_request, reviewData.locked_pull_request,
+            reviewData.created_at_pull_request, reviewData.updated_at_pull_request, reviewData.closed_at_pull_request, 
+            reviewData.merged_pull_request, reviewData.mergeable_pull_request, reviewData.comments_pull_request, 
+            reviewData.reviews_pull_request, reviewData.review_comments_pull_request, reviewData.commits_pull_request, 
+            reviewData.additions_pull_request, reviewData.deletions_pull_request, reviewData.changed_files_pull_request, 
+            reviewData.state_review, reviewData.body_review, reviewData.login_reviewer];
             dataArray.push(column);
         }
 
