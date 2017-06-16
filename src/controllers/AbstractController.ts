@@ -1,48 +1,55 @@
 import { Request, Response } from "express";
 import { IPersistenceService } from "../app/services/IPersistenceService";
-import { IPullRequestService } from "../app/services/PullRequestService";
-import { ITaskManagerService } from "../app/services/TaskManagerService";
-import { IReviewService } from "../app/services/ReviewService";
-import { IReviewCommentService } from "../app/services/ReviewCommentService";
-import { IUserService } from "../app/services/UserService";
-import { IRepositoryService } from "../app/services/RepositoryService";
-import { IStatsService } from "../app/services/StatsService";
 import { EntityUtil } from "../app/util/EntityUtil";
 import { RoutesUtil } from "../app/util/RoutesUtil";
+import { IServices } from "../app/services/IServices";
 
-interface Services {
-  pull: IPullRequestService,
-  review: IReviewService,
-  reviewComment: IReviewCommentService,
-  user: IUserService,
-  repo: IRepositoryService,
-  taskManager: ITaskManagerService,
-  stats: IStatsService
-}
-
+/**
+ * Abstract Controller.
+ * Implements shared functionality for other controllers.
+ * 
+ * @author Mario Juez <mario@mjuez.com>
+ */
 export abstract class AbstractController {
 
-    protected readonly _services: Services;
+    /** Services instances. */
+    protected readonly _services: IServices;
 
-    constructor(services: Services){
+    /**
+     * Injects services instances.
+     * @param services List of services instances.
+     */
+    constructor(services: IServices) {
         this._services = services;
     }
 
-    protected async getOrderedPage(req: Request, res: Response, service: IPersistenceService<any>, handler: any){
+    /**
+     * Obtains an ordered page of any entities.
+     * If the page is empty it sends a 404 response.
+     * @param req       Express request.
+     * @param res       Express response.
+     * @param service   A persistence service for getting the number of page.
+     * @param handler   A handler for getting entities list.
+     */
+    protected getOrderedPage = async (req: Request, res: Response, service: IPersistenceService<any>, handler: any): Promise<void> => {
         const page: number = req.params.page;
         const direction: number = RoutesUtil.directionNameToNumber(req.params.direction);
         if (direction === 0) {
-            res.status(404).json({ message: "Page not found." });
+            RoutesUtil.notFoundResponse(res);
         }
         else {
             try {
                 const entities: any[] = await handler(page, direction);
-                const jsonRepos: Object[] = EntityUtil.toJSONArray(entities);
+                const jsonEntities: Object[] = EntityUtil.toJSONArray(entities);
                 const lastPage: number = await service.numPages();
-                res.json({ data: jsonRepos, last_page: lastPage });
+                if (jsonEntities.length === 0) {
+                    RoutesUtil.notFoundResponse(res);
+                } else {
+                    res.json({ data: jsonEntities, last_page: lastPage });
+                }
             } catch (error) {
                 console.log(error);
-                res.status(500).json({ message: "Oops, something went wrong." });
+                RoutesUtil.errorResponse(res);
             }
         }
     }
