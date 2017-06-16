@@ -63,7 +63,10 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
     /**
      * Pull Requests processing for obtaining some kind
      * of entities or data related with each pull request.
+     * 
+     * Template Method.
      * @param pulls Pull Request entities list.
+     * @returns if successfull processing.
      */
     protected abstract processPullRequests(pulls: IPullRequestEntity[]): Promise<boolean>;
 
