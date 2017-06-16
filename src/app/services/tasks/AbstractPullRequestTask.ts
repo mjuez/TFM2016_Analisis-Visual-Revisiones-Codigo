@@ -39,6 +39,7 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
      * Loops over all pull requests from a repository and processes
      * each one to obtain some kind of entities or data related with
      * the pull requests.
+     * @async
      */
     public async run(): Promise<void> {
         const pullRepo: IPullRequestRepository = this._repositories.pull;
