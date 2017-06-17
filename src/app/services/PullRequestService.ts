@@ -25,6 +25,8 @@ export interface IPullRequestService extends IMultiplePersistenceService<IPullRe
     getRepositoryPullRequestsByReviewsPage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
     getPullRequestsStatsMeans(): Promise<Object>;
     numPagesForRepository(owner: string, repository: string): Promise<number>;
+    getPageHandler(type?: string): any;
+    getFilteredPageHandler(type?: string): any;
 
 }
 
