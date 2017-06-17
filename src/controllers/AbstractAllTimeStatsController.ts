@@ -13,7 +13,7 @@ import { AbstractController } from "./AbstractController";
  */
 export abstract class AbstractAllTimeStatsController extends AbstractController {
 
-    protected async getAllTimeStatsByUser(req: Request, res: Response, userStatsHandler: any): Promise<void> {
+    protected async _getAllTimeStatsByUser(req: Request, res: Response, userStatsHandler: any): Promise<void> {
         const userLogin: string = req.params.userlogin;
         try {
             const stats: any = await userStatsHandler(userLogin);
