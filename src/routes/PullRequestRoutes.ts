@@ -39,47 +39,47 @@ export class PullRequestRoutes {
         router.get("/pulls", (req: express.Request, res: express.Response) => {
             req.params.page = 1;
             req.params.direction = 'ASC';
-            controller.getPage(req, res);
+            controller.getPageBy(req, res);
         });
 
         router.get("/pulls/page/:page", (req: express.Request, res: express.Response) => {
             req.params.direction = 'ASC';
-            controller.getPage(req, res);
+            controller.getPageBy(req, res);
         });
 
         router.get("/pulls/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getPage(req, res);
+            controller.getPageBy(req, res);
         });
 
         router.get("/pulls/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByNamePage(req, res);
+            controller.getPageBy(req, res, "NAME");
         });
 
         router.get("/pulls/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByReviewsPage(req, res);
+            controller.getPageBy(req, res, "REVIEWS");
         });
 
         router.get("/pulls/filter/repo/:owner/:repository", (req: express.Request, res: express.Response) => {
             req.params.page = 1;
             req.params.direction = 'ASC';
-            controller.getPageFromRepository(req, res);
+            controller.getPageFromRepositoryBy(req, res);
         });
 
         router.get("/pulls/filter/repo/:owner/:repository/page/:page", (req: express.Request, res: express.Response) => {
             req.params.direction = 'ASC';
-            controller.getPageFromRepository(req, res);
+            controller.getPageFromRepositoryBy(req, res);
         });
 
         router.get("/pulls/filter/repo/:owner/:repository/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getPageFromRepository(req, res);
+            controller.getPageFromRepositoryBy(req, res);
         });
 
         router.get("/pulls/filter/repo/:owner/:repository/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByNamePageFromRepository(req, res);
+            controller.getPageFromRepositoryBy(req, res, "NAME");
         });
 
         router.get("/pulls/filter/repo/:owner/:repository/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByReviewsPageFromRepository(req, res);
+            controller.getPageFromRepositoryBy(req, res, "REVIEWS");
         });
 
         router.get("/pulls/filter/repo/:owner/:repository/stats/alltime", (req: express.Request, res: express.Response) => {
