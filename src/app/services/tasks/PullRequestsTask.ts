@@ -2,6 +2,8 @@ import { ITask } from "./ITask";
 import { IPullRequestEntity, PullRequestEntity } from "../../entities/PullRequestEntity";
 import { AbstractPullRequestTask } from "./AbstractPullRequestTask";
 import * as GitHubAPI from "github";
+import { IPullRequestService } from "../PullRequestService";
+import { IRepositories } from "../../data/IRepositories";
 
 /**
  * Pull Requests Task interface.
@@ -21,6 +23,21 @@ export interface IPullRequestsTask extends ITask { }
  * @author Mario Juez <mario@mjuez.com>
  */
 export class PullRequestsTask extends AbstractPullRequestTask implements IPullRequestsTask {
+
+    /** Pull Request Service. */
+    protected readonly _pullRequestService: IPullRequestService;
+
+    /**
+     * Creates the task instance.
+     * @param repos                 Repositories list.
+     * @param pullRequestService    Pull Request service.
+     * @param api                   optional GitHub API.
+     * @param apiAuth               optional GitHub API Authorization.
+     */
+    constructor(repos: IRepositories, pullRequestService: IPullRequestService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repos, api, apiAuth);
+        this._pullRequestService = pullRequestService;
+    }
 
     /**
      * Processes a pull request entity list.
