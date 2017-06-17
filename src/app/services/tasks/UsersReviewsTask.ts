@@ -74,7 +74,7 @@ export class UsersReviewsTask extends GitHubTask implements IUsersReviewsTask {
         return true;
     }
 
-    protected async updateStats(username: string): Promise<void> {
+    private updateStats = async (username: string): Promise<void> => {
         let userRepo: IUserRepository = this._repos.user;
         try {
             let user: IUserEntity = await userRepo.findByLogin(username);
@@ -90,7 +90,7 @@ export class UsersReviewsTask extends GitHubTask implements IUsersReviewsTask {
         }
     }
 
-    private async getStats(username: string, state: string = null): Promise<number> {
+    private getStats = async (username: string, state: string = null): Promise<number> => {
         let reviewRepo: IReviewRepository = this._repos.review;
         let filter: Object = { "user.login": username };
         if (state != null) filter["state"] = state;

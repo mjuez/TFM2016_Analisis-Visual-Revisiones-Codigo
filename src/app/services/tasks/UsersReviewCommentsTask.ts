@@ -74,7 +74,7 @@ export class UsersReviewCommentsTask extends GitHubTask implements IUsersReviewC
         return true;
     }
 
-    private async updateStats(username: string): Promise<void> {
+    private updateStats = async (username: string): Promise<void> => {
         let userRepo: IUserRepository = this._repos.user;
         let reviewCommentRepo: IReviewCommentRepository = this._repos.reviewComment;
         let filter: Object = { "user.login": username };
