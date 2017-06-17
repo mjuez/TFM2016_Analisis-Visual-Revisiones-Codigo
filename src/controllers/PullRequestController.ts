@@ -1,18 +1,10 @@
-import { Router, Request, Response, NextFunction } from "express";
-import { AbstractController } from "./AbstractController";
+import { Request, Response } from "express";
 import { IPullRequestService } from "../app/services/PullRequestService";
-import { IRepositoryService } from "../app/services/RepositoryService";
-import { IReviewService } from "../app/services/ReviewService";
-import { ITaskManagerService } from "../app/services/TaskManagerService";
 import { IStatsService } from "../app/services/StatsService";
-import { PullRequestDocument } from "../app/entities/documents/PullRequestDocument";
-import { IPullRequestEntity, PullRequestEntity } from "../app/entities/PullRequestEntity";
-import { IRepositoryEntity } from "../app/entities/RepositoryEntity";
+import { IPullRequestEntity } from "../app/entities/PullRequestEntity";
 import { EntityUtil } from "../app/util/EntityUtil";
 import { RoutesUtil } from "../app/util/RoutesUtil";
-import * as mongoose from "mongoose";
-import * as GitHubAPI from "github";
-import * as BluebirdPromise from "bluebird";
+import { AbstractAllTimeStatsController } from "./AbstractAllTimeStatsController";
 
 /**
  * Pull Request controller interface.
@@ -39,7 +31,7 @@ export interface IPullRequestController {
  * @extends GitHubController.
  * @implements IPullRequestController.
  */
-export class PullRequestController extends AbstractController implements IPullRequestController {
+export class PullRequestController extends AbstractAllTimeStatsController implements IPullRequestController {
 
     public async get(req: Request, res: Response): Promise<void> {
         const service: IPullRequestService = this._services.pull;
@@ -60,7 +52,7 @@ export class PullRequestController extends AbstractController implements IPullRe
         const service: IPullRequestService = this._services.pull;
         await this.getOrderedPage(req, res, service, handler);
 
-        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]>{
+        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]> {
             return service.getPullRequestsPage(page, direction);
         }
     }
@@ -69,7 +61,7 @@ export class PullRequestController extends AbstractController implements IPullRe
         const service: IPullRequestService = this._services.pull;
         await this.getOrderedPage(req, res, service, handler);
 
-        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]>{
+        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]> {
             return service.getPullRequestsByNamePage(page, direction);
         }
     }
@@ -78,7 +70,7 @@ export class PullRequestController extends AbstractController implements IPullRe
         const service: IPullRequestService = this._services.pull;
         await this.getOrderedPage(req, res, service, handler);
 
-        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]>{
+        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]> {
             return service.getPullRequestsByReviewsPage(page, direction);
         }
     }
@@ -87,7 +79,7 @@ export class PullRequestController extends AbstractController implements IPullRe
         const service: IPullRequestService = this._services.pull;
         await this.getOrderedPageFromRepository(req, res, handler);
 
-        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]>{
+        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]> {
             return service.getRepositoryPullRequestsPage(owner, repository, page, direction);
         }
     }
@@ -96,7 +88,7 @@ export class PullRequestController extends AbstractController implements IPullRe
         const service: IPullRequestService = this._services.pull;
         await this.getOrderedPageFromRepository(req, res, handler);
 
-        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]>{
+        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]> {
             return service.getRepositoryPullRequestsByNamePage(owner, repository, page, direction);
         }
     }
@@ -105,7 +97,7 @@ export class PullRequestController extends AbstractController implements IPullRe
         const service: IPullRequestService = this._services.pull;
         await this.getOrderedPageFromRepository(req, res, handler);
 
-        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]>{
+        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]> {
             return service.getRepositoryPullRequestsByReviewsPage(owner, repository, page, direction);
         }
     }
@@ -131,30 +123,11 @@ export class PullRequestController extends AbstractController implements IPullRe
     }
 
     public async getAllTimeStatsByUser(req: Request, res: Response): Promise<void> {
-        const userLogin: string = req.params.userlogin;
-        const service: IStatsService = this._services.stats;
-
-        try {
-            const stats: any = await service.getPullRequestsStatsByUser(userLogin);
-            res.json(stats);
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Oops, something went wrong." });
-        }
+        await this._getAllTimeStatsByUser(req, res, this._services.stats.getPullRequestsStatsByUser);
     }
 
     public async getAllTimeStatsByRepository(req: Request, res: Response): Promise<void> {
-        const owner: string = req.params.owner;
-        const repository: string = req.params.repository;
-        const service: IStatsService = this._services.stats;
-
-        try {
-            const stats: any = await service.getPullRequestsStatsByRepository(owner, repository);
-            res.json(stats);
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Oops, something went wrong." });
-        }
+        await this._getAllTimeStatsByRepository(req, res, this._services.stats.getPullRequestsStatsByRepository);
     }
 
     public async getStatsMeans(req: Request, res: Response): Promise<void> {
