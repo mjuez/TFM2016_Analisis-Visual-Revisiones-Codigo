@@ -20,31 +20,16 @@ import { IReviewService } from "../../services/ReviewService";
 import { IReviewCommentService } from "../../services/ReviewCommentService";
 import { IUserService } from "../../services/UserService";
 import { IRepositoryService } from "../../services/RepositoryService";
-
-interface Repositories {
-    pull: IPullRequestRepository,
-    review: IReviewRepository,
-    reviewComment: IReviewCommentRepository,
-    user: IUserRepository,
-    repo: IRepositoryRepository,
-    task: ITaskRepository
-}
-
-interface Services {
-    pull: IPullRequestService,
-    review: IReviewService,
-    reviewComment: IReviewCommentService,
-    user: IUserService,
-    repo: IRepositoryService
-}
+import { IServices } from "../IServices";
+import { IRepositories } from "../../data/IRepositories";
 
 export class TaskFactory {
 
-    private readonly _repositories: Repositories;
+    private readonly _repositories: IRepositories;
 
-    private readonly _services: Services;
+    private readonly _services: IServices;
 
-    constructor(repositories: Repositories, services: Services) {
+    constructor(repositories: IRepositories, services: IServices) {
         this._repositories = repositories;
         this._services = services;
     }
