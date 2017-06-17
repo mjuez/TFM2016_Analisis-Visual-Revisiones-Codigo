@@ -33,37 +33,37 @@ export class StatsService implements IStatsService {
         this._repos = repos;
     }
 
-    public async getReviewsStatsByUser(userLogin: string): Promise<any> {
+    public getReviewsStatsByUser = async (userLogin: string): Promise<any> => {
         const filter: any = { "user.login": userLogin };
         const dateRange: any = await this.getReviewsDateRange(filter);
         return await this.getReviewsStatsBetween(dateRange, filter);
     }
 
-    public async getReviewsStatsByRepository(owner: string, name: string): Promise<any> {
+    public getReviewsStatsByRepository = async (owner: string, name: string): Promise<any> => {
         const filter: any = { "repository.owner": owner, "repository.name": name };
         const dateRange: any = await this.getReviewsDateRange(filter);
         return await this.getReviewsStatsBetween(dateRange, filter);
     }
 
-    public async getPullRequestsStatsByUser(userLogin: string): Promise<any> {
+    public getPullRequestsStatsByUser = async (userLogin: string): Promise<any> => {
         const filter: any = { "user.login": userLogin };
         const dateRange: any = await this.getPullRequestsDateRange(filter);
         return await this.getPullRequestsStatsBetween(dateRange, filter);
     }
 
-    public async getPullRequestsStatsByRepository(owner: string, name: string): Promise<any> {
+    public getPullRequestsStatsByRepository = async (owner: string, name: string): Promise<any> => {
         const filter: any = { "base.repo.owner.login": owner, "base.repo.name": name };
         const dateRange: any = await this.getPullRequestsDateRange(filter);
         return await this.getPullRequestsStatsBetween(dateRange, filter);
     }
 
-    public async getReviewCommentsStatsByUser(userLogin: string): Promise<any> {
+    public getReviewCommentsStatsByUser = async (userLogin: string): Promise<any> => {
         const filter: any = { "user.login": userLogin };
         const dateRange: any = await this.getReviewCommentsDateRange(filter);
         return await this.getReviewCommentsStatsBetween(dateRange, filter);
     }
 
-    public async getReviewCommentsStatsByRepository(owner: string, name: string): Promise<any> {
+    public getReviewCommentsStatsByRepository = async (owner: string, name: string): Promise<any> => {
         const filter: any = { "repository.owner": owner, "repository.name": name };
         const dateRange: any = await this.getReviewCommentsDateRange(filter);
         return await this.getReviewCommentsStatsBetween(dateRange, filter);
