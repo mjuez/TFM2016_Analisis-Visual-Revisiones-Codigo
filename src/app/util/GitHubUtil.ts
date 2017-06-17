@@ -1,5 +1,8 @@
 import * as cheerio from "cheerio";
 import * as rp from "request-promise";
+import * as GitHubAPI from "github";
+import { IEntity } from "../entities/IEntity";
+import { IMultiplePersistenceService } from "../services/IPersistenceService";
 
 /**
  * GitHub Utilities.
@@ -79,6 +82,22 @@ export class GitHubUtil {
             return description != undefined;
         } catch (error) {
             return false;
+        }
+    }
+
+    public static async processPage(page: any, api: GitHubAPI, entityArrayHandler: any, service: IMultiplePersistenceService<any>, updatePageHandler: any): Promise<void> {
+        const entities: IEntity<any>[] = entityArrayHandler(page.data);
+        try {
+            await service.createOrUpdateMultiple(entities);
+            if (api.hasNextPage(page)) {
+                let links: string = page.meta.link;
+                let nextPageNumber: number = GitHubUtil.getNextPageNumber(links);
+                updatePageHandler(nextPageNumber);
+                let nextPage: any = await api.getNextPage(page);
+                await GitHubUtil.processPage(nextPage, api, entityArrayHandler, service, updatePageHandler);
+            }
+        } catch (error) {
+            throw error;
         }
     }
 }
