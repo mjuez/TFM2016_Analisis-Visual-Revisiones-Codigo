@@ -122,22 +122,22 @@ export class UserController extends AbstractController implements IUserControlle
 
     /** @inheritdoc */
     public getPage = async (req: Request, res: Response): Promise<void> => {
-        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersPage);
+        await this.getOrderedUserPage(req, res, this._services.user.getUsersPage);
     }
 
     /** @inheritdoc */
     public getByNamePage = async (req: Request, res: Response): Promise<void> => {
-        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersByNamePage);
+        await this.getOrderedUserPage(req, res, this._services.user.getUsersByNamePage);
     }
 
     /** @inheritdoc */
     public getByPullRequestsPage = async (req: Request, res: Response): Promise<void> => {
-        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersByPullRequestsPage);
+        await this.getOrderedUserPage(req, res, this._services.user.getUsersByPullRequestsPage);
     }
 
     /** @inheritdoc */
     public getByReviewsPage = async (req: Request, res: Response): Promise<void> => {
-        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersByReviewsPage);
+        await this.getOrderedUserPage(req, res, this._services.user.getUsersByReviewsPage);
     }
 
     /** @inheritdoc */
@@ -147,12 +147,12 @@ export class UserController extends AbstractController implements IUserControlle
         const handler = async (page: number, direction: number): Promise<IUserEntity[]> => {
             return await service.getUsersByReviewsByStatePage(page, state, direction);
         }
-        await this.getOrderedPage(req, res, service, handler);
+        await this.getOrderedUserPage(req, res, handler);
     }
 
     /** @inheritdoc */
     public getByReviewCommentsPage = async (req: Request, res: Response): Promise<void> => {
-        await this.getOrderedPage(req, res, this._services.user, this._services.user.getUsersByReviewCommentsPage);
+        await this.getOrderedUserPage(req, res, this._services.user.getUsersByReviewCommentsPage);
     }
 
     /** @inheritdoc */
@@ -164,6 +164,10 @@ export class UserController extends AbstractController implements IUserControlle
         } catch (error) {
             res.status(500).json({ message: "Oops, something went wrong." });
         }
+    }
+
+    private getOrderedUserPage = async (req: Request, res: Response, handler: any): Promise<void> => {
+        await this.getOrderedPage(req, res, this._services.user, handler);
     }
 
 }
