@@ -15,7 +15,7 @@ import * as GitHubAPI from "github";
 export abstract class AbstractPullRequestTask extends GitHubTask {
 
     /** Repositories instances list. */
-    private readonly _repositories: IRepositories;
+    protected readonly _repositories: IRepositories;
 
     /**
      * Creates the task instance.
