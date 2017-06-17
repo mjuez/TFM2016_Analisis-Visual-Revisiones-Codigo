@@ -20,6 +20,7 @@ export interface IUserService extends IPersistenceService<IUserEntity> {
     getUsersByReviewsByStatePage(page: number, state: string, direction: number): Promise<IUserEntity[]>;
     getUsersByReviewCommentsPage(page: number, direction: number): Promise<IUserEntity[]>;
     getUsersStatsMeans(): Promise<Object>;
+    getHandler(type: string): any;
 
 }
 
@@ -101,6 +102,23 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
         };
 
         return means;
+    }
+
+    public getHandler = (type: string = "NONE"): any => {
+        switch (type) {
+            case "NONE":
+                return this.getUsersPage;
+            case "NAME":
+                return this.getUsersByNamePage;
+            case "PULLREQUESTS":
+                return this.getUsersByPullRequestsPage;
+            case "REVIEWS":
+                return this.getUsersByReviewsPage;
+            case "REVIEWSSTATE":
+                return this.getUsersByReviewsByStatePage;
+            case "REVIEWCOMMENTS":
+                return this.getUsersByReviewCommentsPage;
+        }
     }
 
     private getUsersStatsArray(users: IUserEntity[], statsField: string): number[] {
