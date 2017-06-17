@@ -39,28 +39,28 @@ export class UserRoutes {
         router.get("/users", (req: express.Request, res: express.Response) => {
             req.params.page = 1;
             req.params.direction = 'ASC';
-            controller.getPage(req, res);
+            controller.getPageBy(req, res);
         });
 
         router.get("/users/page/:page", (req: express.Request, res: express.Response) => {
             req.params.direction = 'ASC';
-            controller.getPage(req, res);
+            controller.getPageBy(req, res);
         });
 
         router.get("/users/order/date/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getPage(req, res);
+            controller.getPageBy(req, res);
         });
 
         router.get("/users/order/name/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByNamePage(req, res);
+            controller.getPageBy(req, res, "NAME");
         });
 
         router.get("/users/order/pullrequests/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByPullRequestsPage(req, res);
+            controller.getPageBy(req, res, "PULLREQUESTS");
         });
 
         router.get("/users/order/reviews/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByReviewsPage(req, res);
+            controller.getPageBy(req, res, "REVIEWS");
         });
 
         router.get("/users/order/reviews/:state/:direction/page/:page", (req: express.Request, res: express.Response) => {
@@ -68,7 +68,7 @@ export class UserRoutes {
         });
 
         router.get("/users/order/reviewcomments/:direction/page/:page", (req: express.Request, res: express.Response) => {
-            controller.getByReviewCommentsPage(req, res);
+            controller.getPageBy(req, res, "REVIEWCOMMENTS");
         });
 
         router.get("/users/stats/means", (req: express.Request, res: express.Response) => {
