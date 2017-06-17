@@ -77,7 +77,7 @@ export class UserController extends AbstractController implements IUserControlle
     }
 
     public getPageBy = async (req: Request, res: Response, type?: string): Promise<void> => {
-        const handler: any = this._services.user.getHandler(type);
+        const handler: any = this._services.user.getPageHandler(type);
         await this.getOrderedPage(req, res, this._services.user, handler);
     }
 
