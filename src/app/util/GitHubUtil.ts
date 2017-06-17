@@ -1,38 +1,5 @@
 import * as cheerio from "cheerio";
 import * as rp from "request-promise";
-import { IUserRepository } from "../data/UserRepository";
-import { IUserEntity, UserEntity } from "../entities/UserEntity";
-import { IUserService } from "../services/UserService";
-import * as GitHubAPI from "github";
-
-/**
- * Get user parameters interface.
- * 
- * @author Mario Juez <mario[at]mjuez.com>
- */
-export interface GetUserParams {
-    
-    /** User login. */
-    username: string,
-
-    /** User repository. */
-    userRepo: IUserRepository,
-
-    /** User Service. */
-    userService: IUserService,
-
-    /** Task id. */
-    taskId: any,
-
-    /** Function handler for stats calculation. */
-    statsHandler: any,
-
-    /** Function handler for errors. */
-    errorHandler: any,
-
-    /** GitHub API. */
-    api: GitHubAPI
-}
 
 /**
  * GitHub Utilities.
@@ -114,58 +81,4 @@ export class GitHubUtil {
             return false;
         }
     }
-
-    /**
-     * Gets an user from GitHub for save or update it.
-     * If an user was retrieved before in the same task
-     * it wont be retrieved again.
-     * After getting an user, its stats should be updated.
-     * 
-     * @async
-     * @param params Needed parameters for getting the user:
-     *  - username
-     *  - user repository
-     *  - user service
-     *  - task id
-     *  - stats handler
-     *  - error handler
-     *  - api dependency
-     */
-    public static async processUser(params: GetUserParams): Promise<void> {
-        if(params.username === undefined) return;
-        try {
-            const foundUser: IUserEntity = await params.userRepo.findOne({
-                login: params.username,
-                updated_on_task: params.taskId
-            });
-            if (foundUser === null) {
-                let user: IUserEntity = await GitHubUtil.makeUserApiCall(params.username, params.api);
-                user.document.updated_on_task = params.taskId;
-                await params.userService.createOrUpdate(user);
-            }
-            await params.statsHandler(params.username);
-        } catch (error) {
-            params.errorHandler(error);
-            throw error;
-        }
-    }
-
-    /**
-     * Makes a call to GitHub API to retrieve an user.
-     * 
-     * @async
-     * @param username  User login.
-     * @param api       GitHub API dependency.
-     * @returns user entity.
-     */
-    private static async makeUserApiCall(username: string, api: GitHubAPI): Promise<IUserEntity> {
-        try {
-            let userData: any = await api.users.getForUser(<GitHubAPI.Username>{ username });
-            console.log(`[${new Date()}] - Getting user @${username}, remaining reqs: ${userData.meta['x-ratelimit-remaining']}`);
-            return UserEntity.toEntity(userData.data);
-        } catch (error) {
-            throw error;
-        }
-    }
-
 }
