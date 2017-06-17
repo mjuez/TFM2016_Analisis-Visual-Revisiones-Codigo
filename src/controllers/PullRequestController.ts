@@ -13,12 +13,8 @@ import { AbstractAllTimeStatsController } from "./AbstractAllTimeStatsController
 export interface IPullRequestController {
 
     get(req: Request, res: Response): Promise<void>;
-    getPage(req: Request, res: Response): Promise<void>;
-    getByNamePage(req: Request, res: Response): Promise<void>;
-    getByReviewsPage(req: Request, res: Response): Promise<void>;
-    getPageFromRepository(req: Request, res: Response): Promise<void>;
-    getByNamePageFromRepository(req: Request, res: Response): Promise<void>;
-    getByReviewsPageFromRepository(req: Request, res: Response): Promise<void>;
+    getPageBy(req: Request, res: Response, type?: string): Promise<void>;
+    getPageFromRepositoryBy(req: Request, res: Response, type?: string): Promise<void>;
     getAllTimeStatsByUser(req: Request, res: Response): Promise<void>;
     getAllTimeStatsByRepository(req: Request, res: Response): Promise<void>;
     getStatsMeans(req: Request, res: Response): Promise<void>;
@@ -48,58 +44,14 @@ export class PullRequestController extends AbstractAllTimeStatsController implem
         }
     }
 
-    public async getPage(req: Request, res: Response): Promise<void> {
-        const service: IPullRequestService = this._services.pull;
-        await this.getOrderedPage(req, res, service, handler);
-
-        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]> {
-            return service.getPullRequestsPage(page, direction);
-        }
+    public getPageBy = async (req: Request, res: Response, type?: string): Promise<void> => {
+        const handler: any = this._services.pull.getPageHandler(type);
+        await this.getOrderedPage(req, res, this._services.pull, handler);
     }
 
-    public async getByNamePage(req: Request, res: Response): Promise<void> {
-        const service: IPullRequestService = this._services.pull;
-        await this.getOrderedPage(req, res, service, handler);
-
-        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]> {
-            return service.getPullRequestsByNamePage(page, direction);
-        }
-    }
-
-    public async getByReviewsPage(req: Request, res: Response): Promise<void> {
-        const service: IPullRequestService = this._services.pull;
-        await this.getOrderedPage(req, res, service, handler);
-
-        async function handler(page: number, direction: number): Promise<IPullRequestEntity[]> {
-            return service.getPullRequestsByReviewsPage(page, direction);
-        }
-    }
-
-    public async getPageFromRepository(req: Request, res: Response): Promise<void> {
-        const service: IPullRequestService = this._services.pull;
+    public getPageFromRepositoryBy = async (req: Request, res: Response, type?: string): Promise<void> => {
+        const handler: any = this._services.pull.getFilteredPageHandler(type);
         await this.getOrderedPageFromRepository(req, res, handler);
-
-        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]> {
-            return service.getRepositoryPullRequestsPage(owner, repository, page, direction);
-        }
-    }
-
-    public async getByNamePageFromRepository(req: Request, res: Response): Promise<void> {
-        const service: IPullRequestService = this._services.pull;
-        await this.getOrderedPageFromRepository(req, res, handler);
-
-        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]> {
-            return service.getRepositoryPullRequestsByNamePage(owner, repository, page, direction);
-        }
-    }
-
-    public async getByReviewsPageFromRepository(req: Request, res: Response): Promise<void> {
-        const service: IPullRequestService = this._services.pull;
-        await this.getOrderedPageFromRepository(req, res, handler);
-
-        async function handler(owner: string, repository: string, page: number, direction: number): Promise<IPullRequestEntity[]> {
-            return service.getRepositoryPullRequestsByReviewsPage(owner, repository, page, direction);
-        }
     }
 
     private async getOrderedPageFromRepository(req: Request, res: Response, handler: any): Promise<void> {
