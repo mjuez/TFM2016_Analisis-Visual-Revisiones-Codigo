@@ -31,7 +31,7 @@ export class ReviewCommentEntity extends AbstractEntity<ReviewCommentDocument> i
      * @param data  raw data.
      * @returns a review comment entity.
      */
-    public static toEntity(data: any): IReviewCommentEntity {
+    public static toEntity = (data: any): IReviewCommentEntity => {
         if (data) {
             let entity: IReviewCommentEntity = new ReviewCommentEntity(<ReviewCommentDocument>data);
             if (entity.document.pull_request_number === undefined) {
@@ -52,11 +52,11 @@ export class ReviewCommentEntity extends AbstractEntity<ReviewCommentDocument> i
      * @param data  raw data.
      * @returns an array of review comment entities.
      */
-    public static toEntityArray(data: any[]): IReviewCommentEntity[] {
+    public static toEntityArray = (data: any[]): IReviewCommentEntity[] => {
         let entityArray: IReviewCommentEntity[] = [];
         if (data.length > 0) {
             data.map((jsonObject) => {
-                let entity: IReviewCommentEntity = this.toEntity(jsonObject);
+                let entity: IReviewCommentEntity = ReviewCommentEntity.toEntity(jsonObject);
                 entityArray.push(entity);
             });
         }
