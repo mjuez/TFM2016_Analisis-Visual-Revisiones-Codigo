@@ -1,5 +1,4 @@
 import { ITask } from "./ITask";
-import { AbstractUserTask } from "./AbstractUserTask";
 import { IUserEntity } from "../../entities/UserEntity";
 import { ITaskEntity } from "../../entities/TaskEntity";
 import { IReviewEntity } from "../../entities/ReviewEntity";
@@ -7,23 +6,23 @@ import { ITaskRepository } from "../../data/TaskRepository";
 import { IReviewRepository } from "../../data/ReviewRepository";
 import { IUserRepository } from "../../data/UserRepository";
 import { IUserService } from "../../services/UserService";
+import { GitHubTask } from "./GitHubTask";
+import { IRepositories } from "../../data/IRepositories";
+import { GetUserParams, GitHubUtil } from "../../util/GitHubUtil";
 import * as GitHubAPI from "github";
-
-interface Repositories {
-    review: IReviewRepository,
-    task: ITaskRepository,
-    user: IUserRepository
-}
 
 export interface IUsersReviewsTask extends ITask { }
 
-export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsTask {
+export class UsersReviewsTask extends GitHubTask implements IUsersReviewsTask {
 
-    private readonly _repos: Repositories;
+    private readonly _repos: IRepositories;
 
-    constructor(repos: Repositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super({ task: repos.task, user: repos.user }, userService, api, apiAuth);
+    private readonly _userService: IUserService;
+
+    constructor(repos: IRepositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repos.task, api, apiAuth);
         this._repos = repos;
+        this._userService = userService;
     }
 
     public async run(): Promise<void> {
@@ -51,10 +50,20 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
     }
 
     private async processReviews(reviews: IReviewEntity[]): Promise<boolean> {
+        let parameters: GetUserParams = {
+            username: null,
+            userRepo: this._repos.user,
+            userService: this._userService,
+            taskId: this.entity.parentTask.document._id,
+            statsHandler: this.updateStats,
+            errorHandler: this.emitError,
+            api: this.API
+        };
         for (let i: number = 0; i < reviews.length; i++) {
             let review: IReviewEntity = reviews[i];
             try {
-                await this.processUser(review.document.user.login);
+                parameters.username = review.document.user.login;
+                await GitHubUtil.processUser(parameters);
                 this.entity.lastProcessed = review.document.id;
                 this.entity.currentPage = 1;
                 await this.persist();

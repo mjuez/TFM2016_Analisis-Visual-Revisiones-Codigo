@@ -1,5 +1,4 @@
 import { ITask } from "./ITask";
-import { AbstractUserTask } from "./AbstractUserTask";
 import { IUserEntity } from "../../entities/UserEntity";
 import { ITaskEntity } from "../../entities/TaskEntity";
 import { IPullRequestEntity } from "../../entities/PullRequestEntity";
@@ -7,56 +6,41 @@ import { ITaskRepository } from "../../data/TaskRepository";
 import { IPullRequestRepository } from "../../data/PullRequestRepository";
 import { IUserRepository } from "../../data/UserRepository";
 import { IUserService } from "../../services/UserService";
-import {
-    RepositoryPullRequestFilter,
-    PullRequestFilterFactory
-} from "../../data/filters/PullRequestFilter";
+import { AbstractPullRequestTask } from "./AbstractPullRequestTask";
+import { IRepositories } from "../../data/IRepositories";
 import * as GitHubAPI from "github";
-
-interface Repositories {
-    pull: IPullRequestRepository,
-    task: ITaskRepository,
-    user: IUserRepository
-}
+import { GetUserParams, GitHubUtil } from "../../util/GitHubUtil";
 
 export interface IUsersPullsTask extends ITask { }
 
-export class UsersPullsTask extends AbstractUserTask implements IUsersPullsTask {
+export class UsersPullsTask extends AbstractPullRequestTask implements IUsersPullsTask {
 
-    private readonly _repos: Repositories;
+    private readonly _userService: IUserService;
 
-    constructor(repos: Repositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super({ task: repos.task, user: repos.user }, userService, api, apiAuth);
-        this._repos = repos;
+    constructor(repos: IRepositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repos, api, apiAuth);
+        this._userService = userService;
     }
 
-    public async run(): Promise<void> {
-        const pullRepo: IPullRequestRepository = this._repos.pull;
-        const filter: RepositoryPullRequestFilter =
-            PullRequestFilterFactory.createRepository({ owner: this.entity.owner, repository: this.entity.repository });
-        const startingFrom: number = this.entity.lastProcessed;
-        try {
-            console.log("Starting user pulls task...");
-            await this.startTask();
-            const numPages: number = await pullRepo.numPages(filter, startingFrom);
-            for (let page: number = 1; page <= numPages; page++) {
-                const pulls: IPullRequestEntity[] = await pullRepo.retrieve({ filter, page, startingFrom });
-                const success: boolean = await this.processPullRequests(pulls);
-                if (!success) return;
-            }
-            await this.completeTask();
-        } catch (error) {
-            this.emit("db:error", error);
+    protected async processPullRequests(pulls: IPullRequestEntity[]): Promise<boolean> {
+        let parameters: GetUserParams = {
+            username: null,
+            userRepo: this._repositories.user,
+            userService: this._userService,
+            taskId: this.entity.parentTask.document._id,
+            statsHandler: this.updateStats,
+            errorHandler: this.emitError,
+            api: this.API
         }
-    }
-
-    private async processPullRequests(pulls: IPullRequestEntity[]): Promise<boolean> {
         for (let i: number = 0; i < pulls.length; i++) {
             let pull: IPullRequestEntity = pulls[i];
             try {
-                await this.processUser(pull.document.user.login);
-                await this.processUser(pull.document.base.user.login);
-                await this.processUser(pull.document.head.user.login);
+                parameters.username = pull.document.user.login;
+                await GitHubUtil.processUser(parameters);
+                parameters.username = pull.document.base.user.login;
+                await GitHubUtil.processUser(parameters);
+                parameters.username = pull.document.head.user.login;
+                await GitHubUtil.processUser(parameters);
                 this.entity.lastProcessed = pull.document.number;
                 this.entity.currentPage = 1;
                 await this.persist();
@@ -67,9 +51,9 @@ export class UsersPullsTask extends AbstractUserTask implements IUsersPullsTask 
         return true;
     }
 
-    protected async updateStats(username: string): Promise<void> {
-        let pullRepo: IPullRequestRepository = this._repos.pull;
-        let userRepo: IUserRepository = this._repos.user;
+    private updateStats = async (username: string): Promise<void> => {
+        let pullRepo: IPullRequestRepository = this._repositories.pull;
+        let userRepo: IUserRepository = this._repositories.user;
         let filter: Object = { "user.login": username };
         try {
             let user: IUserEntity = await userRepo.findByLogin(username);
