@@ -1,5 +1,4 @@
 import { GitHubTask } from "./GitHubTask";
-import { IPullRequestService } from "../PullRequestService";
 import { IRepositories } from "../../data/IRepositories";
 import { IPullRequestRepository } from "../../data/PullRequestRepository";
 import { RepositoryPullRequestFilter, PullRequestFilterFactory } from "../../data/filters/PullRequestFilter";
@@ -15,23 +14,18 @@ import * as GitHubAPI from "github";
  */
 export abstract class AbstractPullRequestTask extends GitHubTask {
 
-    /** Pull Request Service. */
-    protected readonly _pullRequestService: IPullRequestService;
-
     /** Repositories instances list. */
     private readonly _repositories: IRepositories;
 
     /**
      * Creates the task instance.
      * @param repos                 Repositories list.
-     * @param pullRequestService    Pull Request service.
      * @param api                   optional GitHub API.
      * @param apiAuth               optional GitHub API Authorization.
      */
-    constructor(repos: IRepositories, pullRequestService: IPullRequestService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+    constructor(repos: IRepositories, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
         super(repos.task, api, apiAuth);
         this._repositories = repos;
-        this._pullRequestService = pullRequestService;
     }
 
     /**
