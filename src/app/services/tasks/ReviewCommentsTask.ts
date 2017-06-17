@@ -7,21 +7,17 @@ import { IReviewCommentEntity, ReviewCommentEntity } from "../../entities/Review
 import { IReviewCommentService } from "../../services/ReviewCommentService";
 import { GitHubUtil } from "../../util/GitHubUtil";
 import * as GitHubAPI from "github";
-
-interface Repositories {
-    task: ITaskRepository,
-    reviewComment: IReviewCommentRepository
-}
+import { IRepositories } from "../../data/IRepositories";
 
 export interface IReviewCommentsTask extends ITask { }
 
 export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTask {
 
-    private readonly _repositories: Repositories;
+    private readonly _repositories: IRepositories;
 
     private readonly _reviewCommentService: IReviewCommentService;
 
-    constructor(repositories: Repositories, reviewCommentService: IReviewCommentService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+    constructor(repositories: IRepositories, reviewCommentService: IReviewCommentService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
         super(repositories.task, api, apiAuth);
         this._reviewCommentService = reviewCommentService;
         this._repositories = repositories;
@@ -47,26 +43,7 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
                 direction: `asc`,
                 page: this.entity.currentPage
             });
-            await this.processPage(page);
-        } catch (error) {
-            this.emit("api:error", error);
-        }
-    }
-
-    private async processPage(page: any): Promise<void> {
-        let api: GitHubAPI = this.API;
-        let reviewComments: IReviewCommentEntity[] = ReviewCommentEntity.toEntityArray(page.data);
-        console.log(`[${new Date()}] - Getting reviewcomment page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
-        try {
-            await this._reviewCommentService.createOrUpdateMultiple(reviewComments);
-            if (api.hasNextPage(page)) {
-                let links: string = page.meta.link;
-                let nextPageNumber: number = GitHubUtil.getNextPageNumber(links);
-                this.entity.currentPage = nextPageNumber;
-                await this.persist();
-                let nextPage: any = await api.getNextPage(page);
-                await this.processPage(nextPage);
-            }
+            await GitHubUtil.processPage(page, this.API, ReviewCommentEntity.toEntityArray, this._reviewCommentService, this.updateCurrentPage);
         } catch (error) {
             this.emitError(error);
         }

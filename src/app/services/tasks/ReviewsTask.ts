@@ -49,28 +49,9 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
                 direction: `asc`,
                 page: this.entity.currentPage
             });
-            await this.processPage(page);
+            await GitHubUtil.processPage(page, this.API, ReviewEntity.toEntityArray, this._reviewService, this.updateCurrentPage);
         } catch (error) {
             this.emitError(error);
-            throw error;
-        }
-    }
-
-    private async processPage(page: any): Promise<void> {
-        let api: GitHubAPI = this.API;
-        let reviews: IReviewEntity[] = ReviewEntity.toEntityArray(page.data);
-        console.log(`[${new Date()}] - Getting reviews page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
-        try {
-            await this._reviewService.createOrUpdateMultiple(reviews);
-            if (api.hasNextPage(page)) {
-                let links: string = page.meta.link;
-                let nextPageNumber: number = GitHubUtil.getNextPageNumber(links);
-                this.entity.currentPage = nextPageNumber;
-                await this.persist();
-                let nextPage: any = await api.getNextPage(page);
-                await this.processPage(nextPage);
-            }
-        } catch (error) {
             throw error;
         }
     }
