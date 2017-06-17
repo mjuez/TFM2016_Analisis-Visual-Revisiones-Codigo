@@ -82,6 +82,11 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
         }
     }
 
+    public updateCurrentPage = async (pageNumber: number) => {
+        this.entity.currentPage = pageNumber;
+        await this.persist();
+    }
+
     protected async startTask(): Promise<void> {
         this.entity.startDate = new Date();
         try {
