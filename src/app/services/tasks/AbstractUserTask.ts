@@ -19,4 +19,16 @@ export abstract class AbstractUserTask extends GitHubTask {
         this._userTaskUtil = userTaskUtil;
     }
 
+    protected async process(userLogin: string, lastProcessed: number): Promise<void> {
+        const taskId: any = this.entity.parentTask.document._id;
+        try {
+            await this._userTaskUtil.processUser(userLogin, taskId, this.API, this.emitError);
+            this.entity.lastProcessed = lastProcessed;
+            this.entity.currentPage = 1;
+            await this.persist();
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }

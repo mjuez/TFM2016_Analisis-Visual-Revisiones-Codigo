@@ -1,15 +1,7 @@
 import { ITask } from "./ITask";
-import { IUserEntity } from "../../entities/UserEntity";
-import { ITaskEntity } from "../../entities/TaskEntity";
 import { IReviewCommentEntity } from "../../entities/ReviewCommentEntity";
-import { ITaskRepository } from "../../data/TaskRepository";
 import { IReviewCommentRepository } from "../../data/ReviewCommentRepository";
-import { IUserRepository } from "../../data/UserRepository";
-import { IUserService } from "../../services/UserService";
-import { IRepositories } from "../../data/IRepositories";
 import { AbstractUserTask } from "./AbstractUserTask";
-import { GetUserParams, GitHubUtil } from "../../util/GitHubUtil";
-import * as GitHubAPI from "github";
 
 export interface IUsersReviewCommentsTask extends ITask { }
 
@@ -41,14 +33,10 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
     }
 
     private async processReviewComments(reviewComments: IReviewCommentEntity[]): Promise<boolean> {
-        const taskId: any = this.entity.parentTask.document._id;
         for (let i: number = 0; i < reviewComments.length; i++) {
-            let reviewComment: IReviewCommentEntity = reviewComments[i];
+            const reviewComment: IReviewCommentEntity = reviewComments[i];
             try {
-                await this._userTaskUtil.processUser(reviewComment.document.user.login, taskId, this.API, this.emitError);
-                this.entity.lastProcessed = reviewComment.document.id;
-                this.entity.currentPage = 1;
-                await this.persist();
+                await this.process(reviewComment.document.user.login, reviewComment.id);
             } catch (error) {
                 return false;
             }
