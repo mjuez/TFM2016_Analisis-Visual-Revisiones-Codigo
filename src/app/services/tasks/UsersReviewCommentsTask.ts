@@ -7,23 +7,13 @@ import { IReviewCommentRepository } from "../../data/ReviewCommentRepository";
 import { IUserRepository } from "../../data/UserRepository";
 import { IUserService } from "../../services/UserService";
 import { IRepositories } from "../../data/IRepositories";
-import { GitHubTask } from "./GitHubTask";
+import { AbstractUserTask } from "./AbstractUserTask";
 import { GetUserParams, GitHubUtil } from "../../util/GitHubUtil";
 import * as GitHubAPI from "github";
 
 export interface IUsersReviewCommentsTask extends ITask { }
 
-export class UsersReviewCommentsTask extends GitHubTask implements IUsersReviewCommentsTask {
-
-    private readonly _repos: IRepositories;
-
-    private readonly _userService: IUserService;
-
-    constructor(repos: IRepositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(repos.task, api, apiAuth);
-        this._repos = repos;
-        this._userService = userService;
-    }
+export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersReviewCommentsTask {
 
     public async run(): Promise<void> {
         let reviewCommentRepo: IReviewCommentRepository = this._repos.reviewComment;
@@ -43,6 +33,7 @@ export class UsersReviewCommentsTask extends GitHubTask implements IUsersReviewC
                 let success: boolean = await this.processReviewComments(reviewComments);
                 if (!success) return;
             }
+            await this._userTaskUtil.updateStats(this.entity.parentTask.document._id, this.emitError);
             await this.completeTask();
         } catch (error) {
             this.emit("db:error", error);
@@ -50,20 +41,11 @@ export class UsersReviewCommentsTask extends GitHubTask implements IUsersReviewC
     }
 
     private async processReviewComments(reviewComments: IReviewCommentEntity[]): Promise<boolean> {
-        let parameters: GetUserParams = {
-            username: null,
-            userRepo: this._repos.user,
-            userService: this._userService,
-            taskId: this.entity.parentTask.document._id,
-            statsHandler: this.updateStats,
-            errorHandler: this.emitError,
-            api: this.API
-        };
+        const taskId: any = this.entity.parentTask.document._id;
         for (let i: number = 0; i < reviewComments.length; i++) {
             let reviewComment: IReviewCommentEntity = reviewComments[i];
             try {
-                parameters.username = reviewComment.document.user.login;
-                await GitHubUtil.processUser(parameters);
+                await this._userTaskUtil.processUser(reviewComment.document.user.login, taskId, this.API, this.emitError);
                 this.entity.lastProcessed = reviewComment.document.id;
                 this.entity.currentPage = 1;
                 await this.persist();
@@ -72,20 +54,5 @@ export class UsersReviewCommentsTask extends GitHubTask implements IUsersReviewC
             }
         }
         return true;
-    }
-
-    private updateStats = async (username: string): Promise<void> => {
-        let userRepo: IUserRepository = this._repos.user;
-        let reviewCommentRepo: IReviewCommentRepository = this._repos.reviewComment;
-        let filter: Object = { "user.login": username };
-        try {
-            let user: IUserEntity = await userRepo.findByLogin(username);
-            let reviewCommentsCount: number = await reviewCommentRepo.count(filter);
-            user.document.review_comments_count = reviewCommentsCount;
-            await userRepo.update(user);
-        } catch (error) {
-            this.emit("db:error", error);
-            throw error;
-        }
     }
 }
