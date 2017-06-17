@@ -7,54 +7,23 @@ import { ITaskRepository } from "../../data/TaskRepository";
 import { IPullRequestRepository } from "../../data/PullRequestRepository";
 import { IReviewRepository } from "../../data/ReviewRepository";
 import { IReviewService } from "../../services/ReviewService";
-import {
-    RepositoryPullRequestFilter,
-    PullRequestFilterFactory
-} from "../../data/filters/PullRequestFilter";
 import { GitHubUtil } from "../../util/GitHubUtil";
 import * as GitHubAPI from "github";
-
-interface Repositories {
-    pull: IPullRequestRepository,
-    task: ITaskRepository,
-    review: IReviewRepository
-}
+import { AbstractPullRequestTask } from "./AbstractPullRequestTask";
+import { IRepositories } from "../../data/IRepositories";
 
 export interface IReviewsTask extends ITask { }
 
-export class ReviewsTask extends GitHubTask implements IReviewsTask {
-
-    private readonly _repositories: Repositories;
+export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask {
 
     private readonly _reviewService: IReviewService;
 
-    constructor(repos: Repositories, reviewService: IReviewService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(repos.task, api, apiAuth);
-        this._repositories = repos;
+    constructor(repos: IRepositories, reviewService: IReviewService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repos, api, apiAuth);
         this._reviewService = reviewService;
     }
 
-    public async run(): Promise<void> {
-        const pullRepo: IPullRequestRepository = this._repositories.pull;
-        const filter: RepositoryPullRequestFilter =
-            PullRequestFilterFactory.createRepository({ owner: this.entity.owner, repository: this.entity.repository });
-        const startingFrom: number = this.entity.lastProcessed;
-        try {
-            console.log("Starting reviews task...");
-            await this.startTask();
-            const numPages: number = await pullRepo.numPages(filter, startingFrom);
-            for (let page: number = 1; page <= numPages; page++) {
-                const pulls: IPullRequestEntity[] = await pullRepo.retrieve({ filter, page, startingFrom });
-                const success: boolean = await this.processPullRequests(pulls);
-                if (!success) return;
-            }
-            await this.completeTask();
-        } catch (error) {
-            this.emit("db:error", error);
-        }
-    }
-
-    private async processPullRequests(pulls: IPullRequestEntity[]): Promise<boolean> {
+    protected async processPullRequests(pulls: IPullRequestEntity[]): Promise<boolean> {
         for (let i: number = 0; i < pulls.length; i++) {
             let pull: IPullRequestEntity = pulls[i];
             try {
