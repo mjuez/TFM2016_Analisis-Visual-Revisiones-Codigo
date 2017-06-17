@@ -16,23 +16,8 @@ import { ITask } from "./tasks/ITask";
 import { TaskFactory } from "./tasks/TaskFactory";
 import { TaskUtil } from "../util/TaskUtil";
 import { GitHubUtil } from "../util/GitHubUtil";
-
-interface Repositories {
-    pull: IPullRequestRepository,
-    review: IReviewRepository,
-    reviewComment: IReviewCommentRepository,
-    user: IUserRepository,
-    repo: IRepositoryRepository,
-    task: ITaskRepository
-}
-
-interface Services {
-    pull: IPullRequestService,
-    review: IReviewService,
-    reviewComment: IReviewCommentService,
-    user: IUserService,
-    repo: IRepositoryService
-}
+import { IRepositories } from "../data/IRepositories";
+import { IServices } from "./IServices";
 
 interface TaskManagerError {
     code: number,
@@ -61,9 +46,9 @@ export interface ITaskManagerService {
  */
 export class TaskManagerService implements ITaskManagerService {
 
-    private readonly _repositories: Repositories;
+    private readonly _repositories: IRepositories;
 
-    private readonly _services: Services;
+    private readonly _services: IServices;
 
     private readonly _taskFactory: TaskFactory;
 
@@ -74,7 +59,7 @@ export class TaskManagerService implements ITaskManagerService {
     /**
      * Class constructor
      */
-    constructor(repositories: Repositories, services: Services) {
+    constructor(repositories: IRepositories, services: IServices) {
         this._repositories = repositories;
         this._services = services;
         this._taskFactory = new TaskFactory(repositories, services);
