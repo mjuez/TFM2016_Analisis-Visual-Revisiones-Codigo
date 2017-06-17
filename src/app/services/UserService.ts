@@ -45,23 +45,19 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
     }
 
     public getUsersPage = async (page: number, direction: number): Promise<IUserEntity[]> => {
-        const sort: Object = { created_at: direction };
-        return await this.getSortedPage(page, sort);
+        return await this.getSortedPage(page, { created_at: direction });
     }
 
     public getUsersByNamePage = async (page: number, direction: number): Promise<IUserEntity[]> => {
-        const sort: Object = { login: direction };
-        return await this.getSortedPage(page, sort);
+        return await this.getSortedPage(page, { login: direction });
     }
 
     public getUsersByPullRequestsPage = async (page: number, direction: number): Promise<IUserEntity[]> => {
-        const sort: Object = { pull_request_count: direction };
-        return await this.getSortedPage(page, sort);
+        return await this.getSortedPage(page, { pull_request_count: direction });
     }
 
     public getUsersByReviewsPage = async (page: number, direction: number): Promise<IUserEntity[]> => {
-        const sort: Object = { reviews_count: direction };
-        return await this.getSortedPage(page, sort);
+        return await this.getSortedPage(page, { reviews_count: direction });
     }
 
     public getUsersByReviewsByStatePage = async (page: number, state: string, direction: number): Promise<IUserEntity[]> => {
@@ -87,8 +83,7 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
     }
 
     public getUsersByReviewCommentsPage = async (page: number, direction: number): Promise<IUserEntity[]> => {
-        const sort: Object = { review_comments_count: direction };
-        return await this.getSortedPage(page, sort);
+        return await this.getSortedPage(page, { review_comments_count: direction });
     }
 
     public getUsersStatsMeans = async (): Promise<Object> => {
