@@ -1,6 +1,4 @@
-import * as mongoose from "mongoose";
 import { ReviewCommentDocument } from "./documents/ReviewCommentDocument";
-import { ReviewCommentSchema } from "../data/schemas/ReviewCommentSchema";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
 import { GitHubUtil } from "../util/GitHubUtil";
@@ -8,26 +6,35 @@ import { GitHubUtil } from "../util/GitHubUtil";
 /**
  * IReviewCommentEntity interface. Describes custom functionality for
  * Review Comment mongoose documents.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IReviewCommentEntity extends IEntity<ReviewCommentDocument> {
+    
     /** Gets Review Comment GitHub id. */
     id: number;
+
 }
 
 /**
  * Review Comment Entity.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class ReviewCommentEntity extends AbstractEntity<ReviewCommentDocument> implements IReviewCommentEntity {
 
-    /** @inheritdoc */
+    /** 
+     * Gets Review Comment GitHub id.
+     * 
+     * @returns review comment id.
+     */
     public get id(): number {
         return this.document.id;
     }
 
     /**
      * Transforms raw data to IReviewCommentEntity.
+     * 
      * @param data  raw data.
      * @returns a review comment entity.
      */
