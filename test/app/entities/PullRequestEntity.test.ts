@@ -24,7 +24,7 @@ describe("Checking Pull Request entities", () => {
 
     it("Should transform an array of objects to a IPullRequestEntity array", () => {
         let data: Object[] = [new Object(), new Object()];
-        let entityArray: IPullRequestEntity[] = PullRequestEntity.toEntityArray(data);
+        let entityArray: IPullRequestEntity[] = PullRequestEntity.toPullRequestEntityArray(data);
         return expect(entityArray.length).to.be.equal(2);
     });
 
