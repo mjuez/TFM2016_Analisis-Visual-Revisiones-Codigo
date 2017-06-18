@@ -41,16 +41,9 @@ export class ReviewCommentEntity extends AbstractEntity<ReviewCommentDocument> i
      */
     public static toEntity = (data: any): IReviewCommentEntity => {
         if (data) {
-            let entity: IReviewCommentEntity = new ReviewCommentEntity(<ReviewCommentDocument>data);
-            if (entity.document.pull_request_number === undefined) {
-                let pullData: any = GitHubUtil.getPullData(entity.document.pull_request_url);
-                entity.document.pull_request_number = pullData.number;
-                entity.document.repository = {
-                    name: pullData.repository,
-                    owner: pullData.owner
-                };
-            }
-            return entity;
+            let reviewCommentEntity: IReviewCommentEntity = new ReviewCommentEntity(<ReviewCommentDocument>data);
+            reviewCommentEntity = <IReviewCommentEntity>EntityUtil.fillPullData(reviewCommentEntity);
+            return reviewCommentEntity;
         }
         return null;
     }

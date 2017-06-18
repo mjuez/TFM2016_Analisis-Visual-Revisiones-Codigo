@@ -32,9 +32,9 @@ export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IRev
      */
     public static toEntity = (data: any): IReviewEntity => {
         if (data) {
-            let entity: IReviewEntity = new ReviewEntity(<ReviewDocument>data);
-            entity = <IReviewEntity>EntityUtil.fillPullData(entity);
-            return entity;
+            let reviewEntity: IReviewEntity = new ReviewEntity(<ReviewDocument>data);
+            reviewEntity = <IReviewEntity>EntityUtil.fillPullData(reviewEntity);
+            return reviewEntity;
         }
         return null;
     }
