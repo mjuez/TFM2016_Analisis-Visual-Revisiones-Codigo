@@ -72,24 +72,6 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
     }
 
     /**
-     * Retrieves an array of repositories from database
-     * given retrieving options.
-     * 
-     * @param param0    optional retrieving options.
-     * @returns an array of repository entities.
-     *
-    public async retrieve({
-        filter = {},
-        page,
-        startingFrom = 0,
-        where = 'id',
-        sort = { id: 1 },
-        select = '' }: RetrieveOptions = {}): Promise<IRepositoryEntity[]> {
-
-        return await this._retrieve({ filter, page, startingFrom, where, sort, select });
-    }*/
-
-    /**
      * Obtains the number of pages given a filter and 
      * a starting from value.
      * It allows to count the number of pages starting

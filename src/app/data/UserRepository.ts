@@ -65,17 +65,6 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
         return this.findOne({ login: login });
     }
 
-    /*public async retrieve({
-        filter = {},
-        page,
-        startingFrom = 0,
-        where = 'id',
-        sort = { id: 1 },
-        select = '' }: RetrieveOptions = {}): Promise<IUserEntity[]> {
-
-        return this._retrieve({ filter, page, startingFrom, where, sort, select });
-    }*/
-
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
         return this._numPages(filter, startingFrom, 'id');
     }
