@@ -77,7 +77,7 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
         return this.retrieve({ filter, page, startingFrom });
     }
 
-    public async retrieve({
+    /*public async retrieve({
         filter = {},
         page,
         startingFrom = 0,
@@ -86,7 +86,7 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
         select = '' }: RetrieveOptions = {}): Promise<IReviewEntity[]> {
 
         return this._retrieve({ filter, page, startingFrom, where, sort, select });
-    }
+    }*/
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
         return this._numPages(filter, startingFrom, 'id');

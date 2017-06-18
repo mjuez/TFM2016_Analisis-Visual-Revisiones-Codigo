@@ -67,7 +67,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
         sort = { number: 1 },
         select = '' }: RetrieveOptions = {}): Promise<IPullRequestEntity[]> {
 
-        return await this._retrieve({ filter, page, startingFrom, where, sort, select });
+        return await super.retrieve({ filter, page, startingFrom, where, sort, select });
     }
 
     /**

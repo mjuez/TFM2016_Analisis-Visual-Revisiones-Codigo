@@ -123,12 +123,19 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @param options   Retrieving options.
      * @returns an array of entities.
      */
-    protected async _retrieve(options: RetrieveOptions): Promise<T[]> {
+    public async retrieve({ 
+        filter = {},
+        page,
+        startingFrom = 0,
+        where = 'id',
+        sort = { id: 1 },
+        select = '' }: RetrieveOptions = {}): Promise<T[]> {
+            
         try {
-            if (options.page === undefined) {
-                return await this._retrieveAll(options);
+            if (page === undefined) {
+                return await this._retrieveAll({ filter, page, startingFrom, where, sort, select });
             } else {
-                return await this._retrievePage(options);
+                return await this._retrievePage({ filter, startingFrom, where, sort, select });
             }
         } catch (error) {
             throw error;
@@ -222,8 +229,8 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * 
      * @param options   retrieving options.
      * @returns an array of entities.
-     */
-    public abstract async retrieve(options: RetrieveOptions): Promise<T[]>;
+     
+    public abstract async retrieve(options: RetrieveOptions): Promise<T[]>;*/
 
     /**
      * Template method.

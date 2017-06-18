@@ -3,13 +3,13 @@ import { AbstractRepository } from "./AbstractRepository";
 import { IReviewCommentEntity, ReviewCommentEntity } from "../entities/ReviewCommentEntity";
 import { ReviewCommentDocument } from "../entities/documents/ReviewCommentDocument";
 import { ReviewCommentSchema } from "./schemas/ReviewCommentSchema";
-import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
 import * as mongoose from "mongoose";
 
 /**
  * IReviewCommentRepository interface.
  * Defines custom CRUD operations for a Review Comment.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IReviewCommentRepository extends IRepository<IReviewCommentEntity, ReviewCommentDocument> {
 
@@ -61,16 +61,9 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
         return this.findOne({ id: id });
     }
 
-    public async retrieve({
-        filter = {},
-        page,
-        startingFrom = 0,
-        where = 'id',
-        sort = { id: 1 },
-        select = '' }: RetrieveOptions = {}): Promise<IReviewCommentEntity[]> {
-
-        return this._retrieve({ filter, page, startingFrom, where, sort, select });
-    }
+    /*public async retrieve(options: RetrieveOptions = {}): Promise<IReviewCommentEntity[]> {
+        return super.retrieve(options);
+    }*/
 
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
         return this._numPages(filter, startingFrom, 'id');
