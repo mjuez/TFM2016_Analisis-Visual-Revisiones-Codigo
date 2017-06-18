@@ -7,26 +7,35 @@ import { AbstractEntity } from "./AbstractEntity";
 /**
  * IPullRequestEntity interface. Describes custom functionality for
  * Pull Request mongoose documents.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IPullRequestEntity extends IEntity<PullRequestDocument> {
+    
     /** Gets Pull Request GitHub id. */
     id: number;
+
 }
 
 /**
  * Pull Request Entity.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class PullRequestEntity extends AbstractEntity<PullRequestDocument> implements IPullRequestEntity {
 
-    /** @inheritdoc */
+    /** 
+     * Gets Pull Request GitHub id.
+     * 
+     * @returns pull request id.
+     */
     public get id(): number {
         return this.document.id;
     }
 
     /**
      * Transforms raw data to IPullRequestEntity.
+     * 
      * @param data  raw data.
      * @returns a pull request entity.
      */
@@ -43,6 +52,7 @@ export class PullRequestEntity extends AbstractEntity<PullRequestDocument> imple
 
     /**
      * Transforms raw data to IPullRequestEntity array.
+     * 
      * @param data  raw data.
      * @returns an array of pull request entities.
      */
