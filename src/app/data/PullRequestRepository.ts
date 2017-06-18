@@ -15,8 +15,9 @@ export interface IPullRequestRepository extends IRepository<IPullRequestEntity, 
 
     /**
      * Retrieves a Pull Request given its GitHub id.
+     * 
      * @param id        Pull Request GitHub id.
-     * @returns a promise that returns a pull request entity if resolved.
+     * @returns a pull request entity.
      */
     findById(id: number): Promise<IPullRequestEntity>;
 }
@@ -34,6 +35,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
     /**
      * Class constructor.
      * Creates the repository using the collection name and the Pull Request schema.
+     * 
      * @param model     Optional mongoose model dependency injection.
      */
     constructor(model?: mongoose.Model<PullRequestDocument>) {
@@ -42,8 +44,9 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
 
     /**
      * Retrieves a Pull Request given its GitHub id.
+     * 
      * @param id        Pull Request GitHub id.
-     * @returns a promise that returns a pull request entity if resolved.
+     * @returns a pull request entity.
      */
     public async findById(id: number): Promise<IPullRequestEntity> {
         return await this.findOne({ id: id });
@@ -54,8 +57,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * given retrieving options.
      * 
      * @param param0    optional retrieving options.
-     * @returns an array of entities.
-     *
+     * @returns an array of pull request entities.
      */
     public async retrieve({
         filter = {},
