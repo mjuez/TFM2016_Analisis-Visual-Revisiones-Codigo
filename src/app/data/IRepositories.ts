@@ -9,7 +9,7 @@ import { ITaskRepository } from "./TaskRepository";
  * Interface with different repositories list.
  * Useful for dependency injection.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IRepositories {
 
