@@ -120,7 +120,7 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * Retrieves elements from database given a list of
      * retrieving options like filtering, sorting...
      * 
-     * @param options   Retrieving options.
+     * @param param0    optional retrieving options.
      * @returns an array of entities.
      */
     public async retrieve({ 
@@ -130,7 +130,7 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
         where = 'id',
         sort = { id: 1 },
         select = '' }: RetrieveOptions = {}): Promise<T[]> {
-            
+
         try {
             if (page === undefined) {
                 return await this._retrieveAll({ filter, page, startingFrom, where, sort, select });
@@ -221,16 +221,6 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
      * @returns number of pages.
      */
     public abstract async numPages(filter: Object, startingFrom: number): Promise<number>;
-
-    /**
-     * Template method.
-     * Retrieves an array of entities from database given
-     * retrieving options.
-     * 
-     * @param options   retrieving options.
-     * @returns an array of entities.
-     
-    public abstract async retrieve(options: RetrieveOptions): Promise<T[]>;*/
 
     /**
      * Template method.
