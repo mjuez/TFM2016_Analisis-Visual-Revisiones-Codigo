@@ -3,7 +3,7 @@ import { AbstractMultiplePersistenceService } from "../services/AbstractPersiste
 import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
-import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory, BetweenDatesPullRequestFilter } from "../data/filters/PullRequestFilter";
+import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory} from "../data/filters/PullRequestFilter";
 import * as math from "mathjs";
 import * as moment from "moment";
 import * as twix from "twix";
