@@ -103,7 +103,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @returns a pull request entity array.
      */
     protected convertToEntityArray(documentArray: PullRequestDocument[]): IPullRequestEntity[] {
-        return PullRequestEntity.toEntityArray(documentArray);
+        return PullRequestEntity.toPullRequestEntityArray(documentArray);
     }
 
     /**

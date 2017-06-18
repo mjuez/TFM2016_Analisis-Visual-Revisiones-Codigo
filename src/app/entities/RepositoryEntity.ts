@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 import { RepositoryDocument } from "./documents/RepositoryDocument";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
+import { EntityUtil } from "../util/EntityUtil";
 
 /**
  * IRepositoryEntity interface. Describes custom functionality for
@@ -10,7 +11,7 @@ import { AbstractEntity } from "./AbstractEntity";
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IRepositoryEntity extends IEntity<RepositoryDocument> {
-    
+
     /** Gets Repository GitHub id. */
     id: number;
 
@@ -64,15 +65,10 @@ export class RepositoryEntity extends AbstractEntity<RepositoryDocument> impleme
      * @param data  raw data.
      * @returns an array of repository entities.
      */
-    public static toEntityArray(data: any[]): IRepositoryEntity[] {
-        let entityArray: IRepositoryEntity[] = [];
-        if (data.length > 0) {
-            data.map((jsonObject) => {
-                let entity: IRepositoryEntity = this.toEntity(jsonObject);
-                entityArray.push(entity);
-            });
-        }
-        return entityArray;
+    public static toRepositoryEntityArray(data: any[]): IRepositoryEntity[] {
+        const repositoryEntityArray: IRepositoryEntity[] = <IRepositoryEntity[]>
+            EntityUtil.toEntityArray(data, RepositoryEntity.toEntity);
+        return repositoryEntityArray;
     }
 
 }

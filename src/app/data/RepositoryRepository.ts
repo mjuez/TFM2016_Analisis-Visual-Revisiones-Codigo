@@ -104,7 +104,7 @@ export class RepositoryRepository extends AbstractRepository<IRepositoryEntity, 
      * @returns a repository entity array.
      */
     protected convertToEntityArray(documentArray: RepositoryDocument[]): IRepositoryEntity[] {
-        return RepositoryEntity.toEntityArray(documentArray);
+        return RepositoryEntity.toRepositoryEntityArray(documentArray);
     }
 
     /**

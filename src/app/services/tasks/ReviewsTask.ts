@@ -49,7 +49,7 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
                 direction: `asc`,
                 page: this.entity.currentPage
             });
-            await GitHubUtil.processPage(page, this.API, ReviewEntity.toEntityArray, this._reviewService, this.updateCurrentPage);
+            await GitHubUtil.processPage(page, this.API, ReviewEntity.toReviewEntityArray, this._reviewService, this.updateCurrentPage);
         } catch (error) {
             this.emitError(error);
             throw error;

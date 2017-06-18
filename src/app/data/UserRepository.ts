@@ -104,7 +104,7 @@ export class UserRepository extends AbstractRepository<IUserEntity, UserDocument
      * @returns an user entity array.
      */
     protected convertToEntityArray(documentArray: UserDocument[]): IUserEntity[] {
-        return UserEntity.toEntityArray(documentArray);
+        return UserEntity.toUserEntityArray(documentArray);
     }
 
     /**

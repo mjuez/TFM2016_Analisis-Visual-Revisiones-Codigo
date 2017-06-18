@@ -2,6 +2,7 @@ import { TaskDocument } from "./documents/TaskDocument";
 import { AbstractEntity } from "./AbstractEntity";
 import { IEntity } from "./IEntity";
 import { TaskType } from "./enum/TaskType";
+import { EntityUtil } from "../util/EntityUtil";
 
 export interface ITaskEntity extends IEntity<TaskDocument> {
     type: TaskType,
@@ -133,15 +134,10 @@ export class TaskEntity extends AbstractEntity<TaskDocument> implements ITaskEnt
      * @param data  raw data.
      * @returns an array of task entities.
      */
-    public static toEntityArray(data: any[]): ITaskEntity[] {
-        let entityArray: ITaskEntity[] = [];
-        if (data.length > 0) {
-            data.map((jsonObject) => {
-                let entity: ITaskEntity = this.toEntity(jsonObject);
-                entityArray.push(entity);
-            });
-        }
-        return entityArray;
+    public static toTaskEntityArray(data: any[]): ITaskEntity[] {
+        const taskEntityArray: ITaskEntity[] = <ITaskEntity[]>
+            EntityUtil.toEntityArray(data, TaskEntity.toEntity);
+        return taskEntityArray;
     }
 
 }

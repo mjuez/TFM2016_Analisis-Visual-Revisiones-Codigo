@@ -104,7 +104,7 @@ export class ReviewCommentRepository extends AbstractRepository<IReviewCommentEn
      * @returns a review comment entity array.
      */
     protected convertToEntityArray(documentArray: ReviewCommentDocument[]): IReviewCommentEntity[] {
-        return ReviewCommentEntity.toEntityArray(documentArray);
+        return ReviewCommentEntity.toReviewCommentEntityArray(documentArray);
     }
 
     /**

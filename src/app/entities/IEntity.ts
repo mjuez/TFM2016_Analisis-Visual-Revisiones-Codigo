@@ -10,4 +10,6 @@ export interface IEntity<T extends mongoose.Document> {
 
     /** The mongoose document. */
     document: T;
+
+    
 }

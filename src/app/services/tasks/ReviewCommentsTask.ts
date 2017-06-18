@@ -43,7 +43,7 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
                 direction: `asc`,
                 page: this.entity.currentPage
             });
-            await GitHubUtil.processPage(page, this.API, ReviewCommentEntity.toEntityArray, this._reviewCommentService, this.updateCurrentPage);
+            await GitHubUtil.processPage(page, this.API, ReviewCommentEntity.toReviewCommentEntityArray, this._reviewCommentService, this.updateCurrentPage);
         } catch (error) {
             this.emitError(error);
         }

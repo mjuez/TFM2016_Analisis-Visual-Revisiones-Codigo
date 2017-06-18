@@ -2,6 +2,7 @@ import { ReviewCommentDocument } from "./documents/ReviewCommentDocument";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
 import { GitHubUtil } from "../util/GitHubUtil";
+import { EntityUtil } from "../util/EntityUtil";
 
 /**
  * IReviewCommentEntity interface. Describes custom functionality for
@@ -59,15 +60,10 @@ export class ReviewCommentEntity extends AbstractEntity<ReviewCommentDocument> i
      * @param data  raw data.
      * @returns an array of review comment entities.
      */
-    public static toEntityArray = (data: any[]): IReviewCommentEntity[] => {
-        let entityArray: IReviewCommentEntity[] = [];
-        if (data.length > 0) {
-            data.map((jsonObject) => {
-                let entity: IReviewCommentEntity = ReviewCommentEntity.toEntity(jsonObject);
-                entityArray.push(entity);
-            });
-        }
-        return entityArray;
+    public static toReviewCommentEntityArray = (data: any[]): IReviewCommentEntity[] => {
+        const reviewCommentEntityArray: IReviewCommentEntity[] = <IReviewCommentEntity[]>
+            EntityUtil.toEntityArray(data, ReviewCommentEntity.toEntity);
+        return reviewCommentEntityArray;
     }
 
 }

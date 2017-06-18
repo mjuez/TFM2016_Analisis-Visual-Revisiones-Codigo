@@ -86,7 +86,7 @@ export class ReviewRepository extends AbstractRepository<IReviewEntity, ReviewDo
     }
 
     protected convertToEntityArray(documentArray: ReviewDocument[]): IReviewEntity[] {
-        return ReviewEntity.toEntityArray(documentArray);
+        return ReviewEntity.toReviewEntityArray(documentArray);
     }
 
     protected updateFilter(item: IReviewEntity): Object {

@@ -1,13 +1,12 @@
-import * as mongoose from "mongoose";
 import { ReviewDocument } from "./documents/ReviewDocument";
-import { ReviewSchema } from "../data/schemas/ReviewSchema";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
-import { GitHubUtil } from "../util/GitHubUtil";
+import { EntityUtil } from "../util/EntityUtil";
 
 /**
  * IReviewEntity interface. Describes custom functionality for
  * Review mongoose documents.
+ * 
  * @author Mario Juez <mario@mjuez.com>
  */
 export interface IReviewEntity extends IEntity<ReviewDocument> {
@@ -34,14 +33,7 @@ export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IRev
     public static toEntity = (data: any): IReviewEntity => {
         if (data) {
             let entity: IReviewEntity = new ReviewEntity(<ReviewDocument>data);
-            if (entity.document.pull_request_number === undefined) {
-                const pullData: any = GitHubUtil.getPullData(entity.document.pull_request_url);
-                entity.document.pull_request_number = pullData.number;
-                entity.document.repository = {
-                    name: pullData.repository,
-                    owner: pullData.owner
-                };
-            }
+            entity = <IReviewEntity>EntityUtil.fillPullData(entity);
             return entity;
         }
         return null;
@@ -52,15 +44,10 @@ export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IRev
      * @param data  raw data.
      * @returns an array of review entities.
      */
-    public static toEntityArray = (data: any[]): IReviewEntity[] => {
-        let entityArray: IReviewEntity[] = [];
-        if (data.length > 0) {
-            data.map((jsonObject) => {
-                const entity: IReviewEntity = ReviewEntity.toEntity(jsonObject);
-                entityArray.push(entity);
-            });
-        }
-        return entityArray;
+    public static toReviewEntityArray = (data: any[]): IReviewEntity[] => {
+        const reviewEntityArray: IReviewEntity[] = <IReviewEntity[]>
+            EntityUtil.toEntityArray(data, ReviewEntity.toEntity);
+        return reviewEntityArray;
     }
 
 }

@@ -116,7 +116,7 @@ export class TaskRepository extends AbstractRepository<ITaskEntity, TaskDocument
     }
 
     protected convertToEntityArray(documentArray: TaskDocument[]): ITaskEntity[] {
-        return TaskEntity.toEntityArray(documentArray);
+        return TaskEntity.toTaskEntityArray(documentArray);
     }
 
     protected updateFilter(item: ITaskEntity): Object {
