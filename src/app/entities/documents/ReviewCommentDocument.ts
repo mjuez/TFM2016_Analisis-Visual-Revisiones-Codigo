@@ -3,7 +3,8 @@ import * as mongoose from "mongoose";
 /**
  * Review Comment mongoose document.
  * Maps a Review Comment.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface ReviewCommentDocument extends mongoose.Document {
     id: number,

@@ -3,7 +3,8 @@ import * as mongoose from "mongoose";
 /**
  * User mongoose document.
  * Maps an User.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface UserDocument extends mongoose.Document {
     login: string,

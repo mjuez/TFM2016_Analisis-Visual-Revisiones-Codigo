@@ -3,7 +3,8 @@ import * as mongoose from "mongoose";
 /**
  * Rpository mongoose document.
  * Maps a Repository.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface RepositoryDocument extends mongoose.Document {
     id: number,
