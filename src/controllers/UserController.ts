@@ -29,7 +29,7 @@ export interface IUserController {
      * @param req   express request object.
      * @param res   express response object.
      */
-    getPageBy(req: Request, res: Response, type?: string): Promise<void>;
+    getUserPageBy(req: Request, res: Response, type?: string): Promise<void>;
 
     /**
      * Gets a page of user entities and returns it as 
@@ -76,9 +76,9 @@ export class UserController extends AbstractController implements IUserControlle
         }
     }
 
-    public getPageBy = async (req: Request, res: Response, type?: string): Promise<void> => {
-        const handler: any = this._services.user.getPageHandler(type);
-        await this.getOrderedPage(req, res, this._services.user, handler);
+    public getUserPageBy = async (req: Request, res: Response, type?: string): Promise<void> => {
+        const userPageHandler: any = this._services.user.getUserPageHandler(type);
+        await this.getOrderedPage(req, res, this._services.user, userPageHandler);
     }
 
     /** @inheritdoc */
