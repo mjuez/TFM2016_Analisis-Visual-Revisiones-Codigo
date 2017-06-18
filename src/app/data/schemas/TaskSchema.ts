@@ -28,7 +28,7 @@ export class TaskSchema extends AbstractSchema {
         },
         parent: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: TaskRepository.COLLECTION_NAME
+            ref: "task"
         },
         last_processed: Number
     };
