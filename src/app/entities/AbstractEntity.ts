@@ -4,7 +4,8 @@ import { IEntity } from "./IEntity";
 /**
  * Abstract Entity class. Includes all functionality that every
  * entity should have.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export abstract class AbstractEntity<T extends mongoose.Document> implements IEntity<T>{
 
@@ -13,6 +14,7 @@ export abstract class AbstractEntity<T extends mongoose.Document> implements IEn
 
     /**
      * Class constructor. Sets the document.
+     * 
      * @param document  a Mongoose Document.
      */
     constructor(document: T) {
@@ -21,6 +23,8 @@ export abstract class AbstractEntity<T extends mongoose.Document> implements IEn
 
     /**
      * Gets the mongoose Document.
+     * 
+     * @returns a mongoose document.
      */
     public get document(): T {
         return this._document;
