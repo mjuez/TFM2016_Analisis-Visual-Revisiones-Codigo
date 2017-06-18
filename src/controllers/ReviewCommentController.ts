@@ -1,6 +1,6 @@
-import { Router, Request, Response, NextFunction } from "express";
-import { AbstractController } from "./AbstractController";
+import { Request, Response } from "express";
 import { IStatsService } from "../app/services/StatsService";
+import { AbstractAllTimeStatsController } from "./AbstractAllTimeStatsController";
 
 /**
  * ReviewComment controller interface.
@@ -19,33 +19,14 @@ export interface IReviewCommentController {
  * @extends AbstractController.
  * @implements IReviewCommentController.
  */
-export class ReviewCommentController extends AbstractController implements IReviewCommentController {
+export class ReviewCommentController extends AbstractAllTimeStatsController implements IReviewCommentController {
 
     public async getAllTimeStatsByUser(req: Request, res: Response): Promise<void> {
-        const userLogin: string = req.params.userlogin;
-        const service: IStatsService = this._services.stats;
-
-        try {
-            const stats: any = await service.getReviewCommentsStatsByUser(userLogin);
-            res.json(stats);
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Oops, something went wrong." });
-        }
+        await this._getAllTimeStatsByUser(req, res, this._services.stats.getReviewCommentsStatsByUser);
     }
 
     public async getAllTimeStatsByRepository(req: Request, res: Response): Promise<void> {
-        const owner: string = req.params.owner;
-        const repository: string = req.params.repository;
-        const service: IStatsService = this._services.stats;
-
-        try {
-            const stats: any = await service.getReviewCommentsStatsByRepository(owner, repository);
-            res.json(stats);
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Oops, something went wrong." });
-        }
+        await this._getAllTimeStatsByRepository(req, res, this._services.stats.getReviewCommentsStatsByRepository);
     }
 
 }

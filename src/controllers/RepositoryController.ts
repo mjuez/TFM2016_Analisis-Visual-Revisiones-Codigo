@@ -3,7 +3,9 @@ import { AbstractController } from "./AbstractController";
 import { IRepositoryService } from "../app/services/RepositoryService";
 import { RepositoryDocument } from "../app/entities/documents/RepositoryDocument";
 import { IRepositoryEntity, RepositoryEntity } from "../app/entities/RepositoryEntity";
+import { IReviewService } from "../app/services/ReviewService";
 import { EntityUtil } from "../app/util/EntityUtil";
+import * as json2csv from "json2csv";
 
 /**
  * Repository controller interface.
@@ -17,6 +19,7 @@ export interface IRepositoryController {
     getByPullRequestsPage(req: Request, res: Response): Promise<void>;
     getList(req: Request, res: Response): Promise<void>;
     getStatsMeans(req: Request, res: Response): Promise<void>;
+    getCSV(req: Request, res: Response): Promise<void>;
 }
 
 /**
@@ -96,6 +99,38 @@ export class RepositoryController extends AbstractController implements IReposit
             console.log(error);
             res.status(500).json({ message: "Oops, something went wrong." });
         }
+    }
+
+    public async getCSV(req: Request, res: Response): Promise<void> {
+        const service: IRepositoryService = this._services.repo;
+        const reviewService: IReviewService = this._services.review;
+        const owner: string = req.params.owner;
+        const repository: string = req.params.repository;
+        try {
+            const filter: any = { "repository.owner": owner, "repository.name": repository };
+            const lastPage: number = await reviewService.numPages(filter);
+            const fields: string[][] = [["review_id", "repository_id", "repository_owner", "repository_name",
+                "language", "repository_creation_date", "repository_update_date", "pull_request_id",
+                "pull_request_title", "pull_request_body", "pull_request_state", "pull_request_locked",
+                "pull_request_creation_date", "pull_request_update_date", "pull_request_close_date",
+                "pull_request_merged", "pull_request_mergeable", "pull_request_comments", "pull_request_reviews", 
+                "pull_request_review_comments", "pull_request_commits", "pull_request_additions", "pull_request_deletions", 
+                "pull_request_changed_files", "review_state", "review_body", "reviewer_login"]];
+            res.setHeader('Content-disposition', `attachment; filename=reviews_${owner}_${repository}.csv`);
+            res.set('Content-Type', 'text/csv');
+            const title: string = json2csv({ data: fields, hasCSVColumnTitle: false });
+            res.write(`${title}\n`);
+            for (let i = 1; i <= lastPage; i++) {
+                const csvPage: any[] = await service.getRepositoryCSVPage(owner, repository, i);
+                const csv: string = json2csv({ data: csvPage, hasCSVColumnTitle: false });
+                if (i < lastPage) res.write(`${csv}\n`);
+                else res.end(csv);
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: "Oops, something went wrong." });
+        }
+
     }
 
 }

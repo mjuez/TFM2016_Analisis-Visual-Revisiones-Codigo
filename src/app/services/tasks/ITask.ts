@@ -6,4 +6,5 @@ export interface ITask extends Events.EventEmitter {
     setEntity(entity: ITaskEntity): Promise<void>
     run(): Promise<void>;
     persist(): Promise<void>;
+    updateCurrentPage(pageNumber: number): Promise<void>;
 }

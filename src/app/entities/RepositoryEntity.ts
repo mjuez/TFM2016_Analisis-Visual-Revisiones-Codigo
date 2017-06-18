@@ -2,37 +2,52 @@ import * as mongoose from "mongoose";
 import { RepositoryDocument } from "./documents/RepositoryDocument";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
+import { EntityUtil } from "../util/EntityUtil";
 
 /**
  * IRepositoryEntity interface. Describes custom functionality for
  * Rpository mongoose documents.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IRepositoryEntity extends IEntity<RepositoryDocument> {
+
     /** Gets Repository GitHub id. */
     id: number;
+
     /** Gets Repository name. */
     name: string;
+
 }
 
 /**
  * Repository Entity.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class RepositoryEntity extends AbstractEntity<RepositoryDocument> implements IRepositoryEntity {
 
-    /** @inheritdoc */
+    /**
+     * Gets Repository GitHub id.
+     * 
+     * @returns repository id.
+     */
     public get id(): number {
         return this.document.id;
     }
 
-    /** @inheritdoc */
+    /**
+     * Gets Repository name.
+     * 
+     * @returns repository name.
+     */
     public get name(): string {
         return this.document.name;
     }
 
     /**
      * Transforms raw data to IRepositoryEntity.
+     * 
      * @param data  raw data.
      * @returns a repository entity.
      */
@@ -46,18 +61,14 @@ export class RepositoryEntity extends AbstractEntity<RepositoryDocument> impleme
 
     /**
      * Transforms raw data to IRepositoryEntity array.
+     * 
      * @param data  raw data.
      * @returns an array of repository entities.
      */
-    public static toEntityArray(data: any[]): IRepositoryEntity[] {
-        let entityArray: IRepositoryEntity[] = [];
-        if (data.length > 0) {
-            data.map((jsonObject) => {
-                let entity: IRepositoryEntity = this.toEntity(jsonObject);
-                entityArray.push(entity);
-            });
-        }
-        return entityArray;
+    public static toRepositoryEntityArray(data: any[]): IRepositoryEntity[] {
+        const repositoryEntityArray: IRepositoryEntity[] = <IRepositoryEntity[]>
+            EntityUtil.toEntityArray(data, RepositoryEntity.toEntity);
+        return repositoryEntityArray;
     }
 
 }

@@ -20,31 +20,17 @@ import { IReviewService } from "../../services/ReviewService";
 import { IReviewCommentService } from "../../services/ReviewCommentService";
 import { IUserService } from "../../services/UserService";
 import { IRepositoryService } from "../../services/RepositoryService";
-
-interface Repositories {
-    pull: IPullRequestRepository,
-    review: IReviewRepository,
-    reviewComment: IReviewCommentRepository,
-    user: IUserRepository,
-    repo: IRepositoryRepository,
-    task: ITaskRepository
-}
-
-interface Services {
-    pull: IPullRequestService,
-    review: IReviewService,
-    reviewComment: IReviewCommentService,
-    user: IUserService,
-    repo: IRepositoryService
-}
+import { IServices } from "../IServices";
+import { IRepositories } from "../../data/IRepositories";
+import { IUserTaskUtil, UserTaskUtil } from "../../util/UserTaskUtil";
 
 export class TaskFactory {
 
-    private readonly _repositories: Repositories;
+    private readonly _repositories: IRepositories;
 
-    private readonly _services: Services;
+    private readonly _services: IServices;
 
-    constructor(repositories: Repositories, services: Services) {
+    constructor(repositories: IRepositories, services: IServices) {
         this._repositories = repositories;
         this._services = services;
     }
@@ -62,12 +48,16 @@ export class TaskFactory {
             task = new ReviewCommentsTask(this._repositories, this._services.reviewComment);
         } else if (entity.type === TaskType.REVIEWS) {
             task = new ReviewsTask(this._repositories, this._services.review);
-        } else if (entity.type === TaskType.USERS_PULLS) {
-            task = new UsersPullsTask(this._repositories, this._services.user);
-        } else if (entity.type === TaskType.USERS_REVIEW_COMMENTS) {
-            task = new UsersReviewCommentsTask(this._repositories, this._services.user);
-        } else if (entity.type === TaskType.USERS_REVIEWS) {
-            task = new UsersReviewsTask(this._repositories, this._services.user);
+        } else {
+            const userTaskUtil: IUserTaskUtil = new UserTaskUtil(this._repositories, this._services.user);
+
+            if (entity.type === TaskType.USERS_PULLS) {
+                task = new UsersPullsTask(this._repositories, this._services.user, userTaskUtil);
+            } else if (entity.type === TaskType.USERS_REVIEW_COMMENTS) {
+                task = new UsersReviewCommentsTask(this._repositories, this._services.user, userTaskUtil);
+            } else if (entity.type === TaskType.USERS_REVIEWS) {
+                task = new UsersReviewsTask(this._repositories, this._services.user, userTaskUtil);
+            }
         }
 
         try {

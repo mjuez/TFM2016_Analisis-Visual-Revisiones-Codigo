@@ -1,4 +1,5 @@
 import { IPersistenceService } from "../services/IPersistenceService";
+import { IReviewService } from "../services/ReviewService";
 import { AbstractPersistenceService } from "../services/AbstractPersistenceService";
 import { IRepositoryEntity, RepositoryEntity } from "../entities/RepositoryEntity";
 import { RepositoryDocument } from "../entities/documents/RepositoryDocument";
@@ -19,6 +20,7 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
     getRepositoriesByPullRequestsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
     getRepositoriesList(): Promise<IRepositoryEntity[]>;
     getRepositoriesStatsMeans(): Promise<any>;
+    getRepositoryCSVPage(owner: string, repository: string, page: number): Promise<any>;
 
 }
 
@@ -28,13 +30,18 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
  */
 export class RepositoryService extends AbstractPersistenceService<IRepositoryRepository, IRepositoryEntity, RepositoryDocument> implements IRepositoryService {
 
+    /** Review service. */
+    private readonly _reviewService: IReviewService;
+
     /**
      * Class constructor with Repository repository and
-     * pull request service dependency injection.
+     * review service dependency injection.
      * @param repository    Injected Repository repository.
+     * @param reviewService Injected Review Service.
      */
-    constructor(repository: IRepositoryRepository) {
+    constructor(repository: IRepositoryRepository, reviewService: IReviewService) {
         super(repository);
+        this._reviewService = reviewService;
     }
 
     public async getRepository(owner: string, repository: string): Promise<IRepositoryEntity> {
@@ -99,6 +106,30 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
         };
 
         return means;
+    }
+
+    public async getRepositoryCSVPage(owner: string, repository: string, page: number): Promise<any> {
+        const reviewService: IReviewService = this._reviewService;
+        const filter: any = { "repository.owner": owner, "repository.name": repository };
+        const repositoryEntity: IRepositoryEntity = await this.getRepository(owner, repository);
+        let dataArray: any[] = [];
+
+        const pageData: any[] = await reviewService.getReviewPageForCSV(filter, page);
+        for (let i = 0; i < pageData.length; i++) {
+            const reviewData: any = pageData[i];
+            const column: any[] = [reviewData.id_review, repositoryEntity.id, repositoryEntity.document.owner.login,
+            repositoryEntity.document.name, repositoryEntity.document.language, repositoryEntity.document.created_at,
+            repositoryEntity.document.updated_at, reviewData.id_pull_request, reviewData.title_pull_request,
+            reviewData.body_pull_request, reviewData.state_pull_request, reviewData.locked_pull_request,
+            reviewData.created_at_pull_request, reviewData.updated_at_pull_request, reviewData.closed_at_pull_request, 
+            reviewData.merged_pull_request, reviewData.mergeable_pull_request, reviewData.comments_pull_request, 
+            reviewData.reviews_pull_request, reviewData.review_comments_pull_request, reviewData.commits_pull_request, 
+            reviewData.additions_pull_request, reviewData.deletions_pull_request, reviewData.changed_files_pull_request, 
+            reviewData.state_review, reviewData.body_review, reviewData.login_reviewer];
+            dataArray.push(column);
+        }
+
+        return dataArray;
     }
 
     private getRepositoriesStatsArray(repositories: IRepositoryEntity[], statsField: string): number[] {

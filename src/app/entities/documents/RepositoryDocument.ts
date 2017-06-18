@@ -3,7 +3,8 @@ import * as mongoose from "mongoose";
 /**
  * Rpository mongoose document.
  * Maps a Repository.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface RepositoryDocument extends mongoose.Document {
     id: number,
@@ -17,7 +18,7 @@ export interface RepositoryDocument extends mongoose.Document {
     private: boolean,
     fork: boolean,
     html_url: string,
-    languge: string,
+    language: string,
     forks_count: number,
     stargazers_count: number,
     watchers_count: number,

@@ -1,6 +1,6 @@
 import { IPersistenceService } from "../services/IPersistenceService";
 import { AbstractPersistenceService } from "../services/AbstractPersistenceService";
-import { IUserEntity, UserEntity } from "../entities/UserEntity";
+import { IUserEntity } from "../entities/UserEntity";
 import { UserDocument } from "../entities/documents/UserDocument";
 import { IUserRepository } from "../data/UserRepository";
 import * as math from "mathjs";
@@ -20,6 +20,7 @@ export interface IUserService extends IPersistenceService<IUserEntity> {
     getUsersByReviewsByStatePage(page: number, state: string, direction: number): Promise<IUserEntity[]>;
     getUsersByReviewCommentsPage(page: number, direction: number): Promise<IUserEntity[]>;
     getUsersStatsMeans(): Promise<Object>;
+    getUserPageHandler(type: string): any;
 
 }
 
@@ -38,54 +39,55 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
         super(repository);
     }
 
-    public async getUser(username: string): Promise<IUserEntity> {
+    public getUser = async (username: string): Promise<IUserEntity> => {
         const repo: IUserRepository = this._repository;
         const filter: Object = { login: username };
-        return repo.findOne(filter);
+        return await repo.findOne(filter);
     }
 
-    public async getUsersPage(page: number, direction: number): Promise<IUserEntity[]> {
-        const sort: Object = { created_at: direction };
-        return this.getSortedPage(page, sort);
+    public getUsersPage = async (page: number, direction: number): Promise<IUserEntity[]> => {
+        return await this.getSortedPage(page, { created_at: direction });
     }
 
-    public async getUsersByNamePage(page: number, direction: number): Promise<IUserEntity[]> {
-        const sort: Object = { login: direction };
-        return this.getSortedPage(page, sort);
+    public getUsersByNamePage = async (page: number, direction: number): Promise<IUserEntity[]> => {
+        return await this.getSortedPage(page, { login: direction });
     }
 
-    public async getUsersByPullRequestsPage(page: number, direction: number): Promise<IUserEntity[]> {
-        const sort: Object = { pull_request_count: direction };
-        return this.getSortedPage(page, sort);
+    public getUsersByPullRequestsPage = async (page: number, direction: number): Promise<IUserEntity[]> => {
+        return await this.getSortedPage(page, { pull_request_count: direction });
     }
 
-    public async getUsersByReviewsPage(page: number, direction: number): Promise<IUserEntity[]> {
-        const sort: Object = { reviews_count: direction };
-        return this.getSortedPage(page, sort);
+    public getUsersByReviewsPage = async (page: number, direction: number): Promise<IUserEntity[]> => {
+        return await this.getSortedPage(page, { reviews_count: direction });
     }
 
-    public async getUsersByReviewsByStatePage(page: number, state: string, direction: number): Promise<IUserEntity[]> {
+    public getUsersByReviewsByStatePage = async (page: number, state: string, direction: number): Promise<IUserEntity[]> => {
         let sort: Object;
-        if (state.toUpperCase() === "APPROVED") {
-            sort = { reviews_approved_count: direction };
-        } else if (state.toUpperCase() === "COMMENTED") {
-            sort = { reviews_commented_count: direction };
-        } else if (state.toUpperCase() === "CHANGES_REQUESTED") {
-            sort = { reviews_changes_requested_count: direction };
-        } else if (state.toUpperCase() === "DISMISSED") {
-            sort = { reviews_dismissed_count: direction };
-        } else {
-            return [];
-        }
-        return this.getSortedPage(page, sort);
+        const upperCaseState: string = state.toUpperCase();
+        switch (upperCaseState) {
+            case "APPROVED":
+                sort = { reviews_approved_count: direction };
+                break;
+            case "COMMENTED":
+                sort = { reviews_commented_count: direction };
+                break;
+            case "CHANGES_REQUESTED":
+                sort = { reviews_changes_requested_count: direction };
+                break;
+            case "DISMISSED":
+                sort = { reviews_dismissed_count: direction };
+                break;
+            default:
+                return [];
+        };
+        return await this.getSortedPage(page, sort);
     }
 
-    public async getUsersByReviewCommentsPage(page: number, direction: number): Promise<IUserEntity[]> {
-        const sort: Object = { review_comments_count: direction };
-        return this.getSortedPage(page, sort);
+    public getUsersByReviewCommentsPage = async (page: number, direction: number): Promise<IUserEntity[]> => {
+        return await this.getSortedPage(page, { review_comments_count: direction });
     }
 
-    public async getUsersStatsMeans(): Promise<Object> {
+    public getUsersStatsMeans = async (): Promise<Object> => {
         const repo: IUserRepository = this._repository;
         const select: string = 'pull_request_count reviews_count review_comments_count -_id';
         const entities: IUserEntity[] = await repo.retrieve({ select });
@@ -100,6 +102,23 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
         };
 
         return means;
+    }
+
+    public getUserPageHandler = (type: string = "NONE"): any => {
+        switch (type) {
+            case "NONE":
+                return this.getUsersPage;
+            case "NAME":
+                return this.getUsersByNamePage;
+            case "PULLREQUESTS":
+                return this.getUsersByPullRequestsPage;
+            case "REVIEWS":
+                return this.getUsersByReviewsPage;
+            case "REVIEWSSTATE":
+                return this.getUsersByReviewsByStatePage;
+            case "REVIEWCOMMENTS":
+                return this.getUsersByReviewCommentsPage;
+        }
     }
 
     private getUsersStatsArray(users: IUserEntity[], statsField: string): number[] {

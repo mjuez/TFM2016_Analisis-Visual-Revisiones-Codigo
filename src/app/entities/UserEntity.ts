@@ -2,6 +2,7 @@ import * as mongoose from "mongoose";
 import { UserDocument } from "./documents/UserDocument";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
+import { EntityUtil } from "../util/EntityUtil";
 
 /**
  * IUserEntity interface. Describes custom functionality for
@@ -50,15 +51,10 @@ export class UserEntity extends AbstractEntity<UserDocument> implements IUserEnt
      * @param data  raw data.
      * @returns an array of user entities.
      */
-    public static toEntityArray(data: any[]): IUserEntity[] {
-        let entityArray: IUserEntity[] = [];
-        if (data.length > 0) {
-            data.map((jsonObject) => {
-                let entity: IUserEntity = this.toEntity(jsonObject);
-                entityArray.push(entity);
-            });
-        }
-        return entityArray;
+    public static toUserEntityArray(data: any[]): IUserEntity[] {
+        const userEntityArray: IUserEntity[] = <IUserEntity[]>
+            EntityUtil.toEntityArray(data, UserEntity.toEntity);
+        return userEntityArray;
     }
 
 }

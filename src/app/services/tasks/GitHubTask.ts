@@ -82,6 +82,11 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
         }
     }
 
+    public updateCurrentPage = async (pageNumber: number) => {
+        this.entity.currentPage = pageNumber;
+        await this.persist();
+    }
+
     protected async startTask(): Promise<void> {
         this.entity.startDate = new Date();
         try {
@@ -102,8 +107,8 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
         }
     }
 
-    protected emitError(error): void {
-        let isApiError: boolean = 'code' in error;
+    protected emitError = (error): void => {
+        const isApiError: boolean = 'code' in error;
         if (isApiError) {
             this.emit("api:error", error);
         } else {

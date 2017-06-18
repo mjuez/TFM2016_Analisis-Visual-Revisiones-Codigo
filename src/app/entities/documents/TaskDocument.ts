@@ -4,7 +4,8 @@ import { TaskType } from "../enum/TaskType";
 /**
  * Task mongoose document.
  * Maps a Task.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface TaskDocument extends mongoose.Document {
     type: TaskType,

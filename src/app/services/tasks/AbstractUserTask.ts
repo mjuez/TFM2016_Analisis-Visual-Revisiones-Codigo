@@ -1,58 +1,34 @@
 import { GitHubTask } from "./GitHubTask";
-import { IUserEntity, UserEntity } from "../../entities/UserEntity";
-import { ITaskEntity } from "../../entities/TaskEntity";
-import { ITaskRepository } from "../../data/TaskRepository";
-import { IUserRepository } from "../../data/UserRepository";
-import { IUserService } from "../../services/UserService";
+import { IRepositories } from "../../data/IRepositories";
+import { IUserService } from "../UserService";
 import * as GitHubAPI from "github";
-
-interface Repositories {
-    task: ITaskRepository,
-    user: IUserRepository
-}
+import { IUserTaskUtil } from "../../util/UserTaskUtil";
 
 export abstract class AbstractUserTask extends GitHubTask {
 
-    private readonly _repositories: Repositories;
-    
+    protected readonly _repos: IRepositories;
+
     protected readonly _userService: IUserService;
 
-    constructor(repositories: Repositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super(repositories.task, api, apiAuth);
+    protected readonly _userTaskUtil: IUserTaskUtil;
+
+    constructor(repos: IRepositories, userService: IUserService, userTaskUtil: IUserTaskUtil, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+        super(repos.task, api, apiAuth);
+        this._repos = repos;
         this._userService = userService;
-        this._repositories = repositories;
+        this._userTaskUtil = userTaskUtil;
     }
 
-    protected async processUser(username: string): Promise<void> {
-        if(username === undefined) return;
+    protected async process(userLogin: string, lastProcessed: number): Promise<void> {
+        const taskId: any = this.entity.parentTask.document._id;
         try {
-            let userRepo: IUserRepository = this._repositories.user;
-            let foundUser: IUserEntity = await userRepo.findOne({
-                login: username,
-                updated_on_task: this.entity.parentTask.document._id
-            });
-            if (foundUser === null) {
-                let user: IUserEntity = await this.makeApiCall(username);
-                user.document.updated_on_task = this.entity.parentTask.document._id;
-                await this._userService.createOrUpdate(user);
-            }
-            await this.updateStats(username);
-        } catch (error) {
-            this.emitError(error);
-            throw error;
-        }
-    }
-
-    protected async makeApiCall(username: string): Promise<IUserEntity> {
-        try {
-            let userData: any = await this.API.users.getForUser(<GitHubAPI.Username>{ username });
-            console.log(`[${new Date()}] - Getting user @${username}, remaining reqs: ${userData.meta['x-ratelimit-remaining']}`);
-            return UserEntity.toEntity(userData.data);
+            await this._userTaskUtil.processUser(userLogin, taskId, this.API, this.emitError);
+            this.entity.lastProcessed = lastProcessed;
+            this.entity.currentPage = 1;
+            await this.persist();
         } catch (error) {
             throw error;
         }
     }
-
-    protected abstract async updateStats(username: string): Promise<void>;
 
 }

@@ -56,7 +56,7 @@ export class MainTask extends GitHubTask implements IMainTask {
 
     private async processPage(page: any): Promise<void> {
         let api: GitHubAPI = this.API;
-        let pullRequests: IPullRequestEntity[] = PullRequestEntity.toEntityArray(page.data);
+        let pullRequests: IPullRequestEntity[] = PullRequestEntity.toPullRequestEntityArray(page.data);
         console.log(`[${new Date()}] - Getting page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
         try {
             await this._pullService.createOrUpdateMultiple(pullRequests);

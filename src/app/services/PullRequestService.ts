@@ -3,7 +3,7 @@ import { AbstractMultiplePersistenceService } from "../services/AbstractPersiste
 import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
 import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
-import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory, BetweenDatesPullRequestFilter } from "../data/filters/PullRequestFilter";
+import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory} from "../data/filters/PullRequestFilter";
 import * as math from "mathjs";
 import * as moment from "moment";
 import * as twix from "twix";
@@ -25,6 +25,8 @@ export interface IPullRequestService extends IMultiplePersistenceService<IPullRe
     getRepositoryPullRequestsByReviewsPage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
     getPullRequestsStatsMeans(): Promise<Object>;
     numPagesForRepository(owner: string, repository: string): Promise<number>;
+    getPageHandler(type?: string): any;
+    getFilteredPageHandler(type?: string): any;
 
 }
 
@@ -49,58 +51,40 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         return repo.findOne(filter);
     }
 
-    public async getPullRequestsPage(page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
-        const repo: IPullRequestRepository = this._repository;
-        const sort: Object = { created_at: direction };
-        return repo.retrieve({ page, sort });
+    public getPullRequestsPage = async (page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
+        return await this.getSortedPage(page, { created_at: direction });
     }
 
-    public async getPullRequestsByNamePage(page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
-        const repo: IPullRequestRepository = this._repository;
-        const sort: Object = { title: direction };
-        return repo.retrieve({ page, sort });
+    public getPullRequestsByNamePage = async (page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
+        return await this.getSortedPage(page, { title: direction });
     }
 
-    public async getPullRequestsByReviewsPage(page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
-        const repo: IPullRequestRepository = this._repository;
-        const sort: Object = { reviews: direction };
-        return repo.retrieve({ page, sort });
+    public getPullRequestsByReviewsPage = async (page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
+        return await this.getSortedPage(page, { reviews: direction });
     }
 
-    public async getRepositoryPullRequestsPage(
-        owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
-
-        const repo: IPullRequestRepository = this._repository;
+    public getRepositoryPullRequestsPage = async (owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
-        const sort: Object = { created_at: direction };
-        return repo.retrieve({ filter, page, sort });
+        return await this.getFilteredPage(filter, page, { created_at: direction });
     }
 
-    public async getRepositoryPullRequestsByNamePage(
-        owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
-
-        const repo: IPullRequestRepository = this._repository;
+    public getRepositoryPullRequestsByNamePage = async (owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
-        const sort: Object = { title: direction };
-        return repo.retrieve({ filter, page, sort });
+        return await this.getFilteredPage(filter, page, { title: direction });
     }
 
-    public async getRepositoryPullRequestsByReviewsPage(
-        owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> {
-
-        const repo: IPullRequestRepository = this._repository;
+    public getRepositoryPullRequestsByReviewsPage = async (owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
-        const sort: Object = { reviews: direction };
-        return repo.retrieve({ filter, page, sort });
+        return await this.getFilteredPage(filter, page, { reviews: direction });
     }
 
-    public async numPagesForRepository(owner: string, repository: string): Promise<number> {
+    public numPagesForRepository = async (owner: string, repository: string): Promise<number> => {
         const repo: IPullRequestRepository = this._repository;
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
         return await repo.numPages(filter);
     }
 
-    public async getPullRequestsStatsMeans(): Promise<Object> {
+    public getPullRequestsStatsMeans = async (): Promise<Object> => {
         const repo: IPullRequestRepository = this._repository;
         const select: string = 'changed_files additions deletions commits comments reviews review_comments -_id';
         const entities: IPullRequestEntity[] = await repo.retrieve({ select });
@@ -125,7 +109,29 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         return means;
     }
 
-    private getPullRequestsStatsArray(pulls: IPullRequestEntity[], statsField: string): number[] {
+    public getPageHandler = (type: string = "NONE"): any => {
+        switch (type) {
+            case "NONE":
+                return this.getPullRequestsPage;
+            case "NAME":
+                return this.getPullRequestsByNamePage;
+            case "REVIEWS":
+                return this.getPullRequestsByReviewsPage;
+        }
+    }
+
+    public getFilteredPageHandler = (type: string = "NONE"): any => {
+        switch (type) {
+            case "NONE":
+                return this.getRepositoryPullRequestsPage;
+            case "NAME":
+                return this.getRepositoryPullRequestsByNamePage;
+            case "REVIEWS":
+                return this.getRepositoryPullRequestsByReviewsPage;
+        }
+    }
+
+    private getPullRequestsStatsArray = (pulls: IPullRequestEntity[], statsField: string): number[] => {
         let array: number[] = pulls.map((pull): number => {
             if (pull.document[statsField] != undefined) {
                 return pull.document[statsField];
@@ -134,6 +140,11 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         });
 
         return array;
+    }
+
+    private getFilteredPage = (filter: any, page: number, sort: any): Promise<IPullRequestEntity[]> => {
+        const repo: IPullRequestRepository = this._repository;
+        return repo.retrieve({ filter, page, sort });
     }
 
     protected async findEntity(entity: IPullRequestEntity): Promise<IPullRequestEntity> {

@@ -39,9 +39,9 @@ export abstract class AbstractPersistenceService<T extends IRepository<E, S>, E 
         }
     }
 
-    public async numPages(): Promise<number> {
+    public async numPages(filter: Object = {}): Promise<number> {
         let repo: T = this._repository;
-        return await repo.numPages();
+        return await repo.numPages(filter);
     }
 
     public async getSortedPage(page: number, sort: Object): Promise<E[]> {

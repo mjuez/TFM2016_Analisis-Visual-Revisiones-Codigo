@@ -1,30 +1,11 @@
 import { ITask } from "./ITask";
-import { AbstractUserTask } from "./AbstractUserTask";
-import { IUserEntity } from "../../entities/UserEntity";
-import { ITaskEntity } from "../../entities/TaskEntity";
 import { IReviewCommentEntity } from "../../entities/ReviewCommentEntity";
-import { ITaskRepository } from "../../data/TaskRepository";
 import { IReviewCommentRepository } from "../../data/ReviewCommentRepository";
-import { IUserRepository } from "../../data/UserRepository";
-import { IUserService } from "../../services/UserService";
-import * as GitHubAPI from "github";
-
-interface Repositories {
-    reviewComment: IReviewCommentRepository,
-    task: ITaskRepository,
-    user: IUserRepository
-}
+import { AbstractUserTask } from "./AbstractUserTask";
 
 export interface IUsersReviewCommentsTask extends ITask { }
 
 export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersReviewCommentsTask {
-
-    private readonly _repos: Repositories;
-
-    constructor(repos: Repositories, userService: IUserService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
-        super({ task: repos.task, user: repos.user }, userService, api, apiAuth);
-        this._repos = repos;
-    }
 
     public async run(): Promise<void> {
         let reviewCommentRepo: IReviewCommentRepository = this._repos.reviewComment;
@@ -44,6 +25,7 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
                 let success: boolean = await this.processReviewComments(reviewComments);
                 if (!success) return;
             }
+            await this._userTaskUtil.updateStats(this.entity.parentTask.document._id, this.emitError);
             await this.completeTask();
         } catch (error) {
             this.emit("db:error", error);
@@ -52,31 +34,13 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
 
     private async processReviewComments(reviewComments: IReviewCommentEntity[]): Promise<boolean> {
         for (let i: number = 0; i < reviewComments.length; i++) {
-            let reviewComment: IReviewCommentEntity = reviewComments[i];
+            const reviewComment: IReviewCommentEntity = reviewComments[i];
             try {
-                await this.processUser(reviewComment.document.user.login);
-                this.entity.lastProcessed = reviewComment.document.id;
-                this.entity.currentPage = 1;
-                await this.persist();
+                await this.process(reviewComment.document.user.login, reviewComment.id);
             } catch (error) {
                 return false;
             }
         }
         return true;
-    }
-
-    protected async updateStats(username: string): Promise<void> {
-        let userRepo: IUserRepository = this._repos.user;
-        let reviewCommentRepo: IReviewCommentRepository = this._repos.reviewComment;
-        let filter: Object = { "user.login": username };
-        try {
-            let user: IUserEntity = await userRepo.findByLogin(username);
-            let reviewCommentsCount: number = await reviewCommentRepo.count(filter);
-            user.document.review_comments_count = reviewCommentsCount;
-            await userRepo.update(user);
-        } catch (error) {
-            this.emit("db:error", error);
-            throw error;
-        }
     }
 }
