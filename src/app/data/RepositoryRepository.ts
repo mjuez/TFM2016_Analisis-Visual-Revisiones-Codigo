@@ -3,7 +3,6 @@ import { AbstractRepository } from "./AbstractRepository";
 import { IRepositoryEntity, RepositoryEntity } from "../entities/RepositoryEntity";
 import { RepositoryDocument } from "../entities/documents/RepositoryDocument";
 import { RepositorySchema } from "./schemas/RepositorySchema";
-import { SinglePullRequestFilter } from "./filters/PullRequestFilter";
 import * as mongoose from "mongoose";
 
 /**
