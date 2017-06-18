@@ -46,7 +46,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @returns a promise that returns a pull request entity if resolved.
      */
     public async findById(id: number): Promise<IPullRequestEntity> {
-        return this.findOne({ id: id });
+        return await this.findOne({ id: id });
     }
 
     /**
@@ -65,7 +65,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
         sort = { number: 1 },
         select = '' }: RetrieveOptions = {}): Promise<IPullRequestEntity[]> {
 
-        return this._retrieve({ filter, page, startingFrom, where, sort, select });
+        return await this._retrieve({ filter, page, startingFrom, where, sort, select });
     }
 
     /**
@@ -79,7 +79,7 @@ export class PullRequestRepository extends AbstractRepository<IPullRequestEntity
      * @returns number of pages.
      */
     public async numPages(filter: Object = {}, startingFrom: number = 0): Promise<number> {
-        return this._numPages(filter, startingFrom, 'number');
+        return await this._numPages(filter, startingFrom, 'number');
     }
 
     /**
