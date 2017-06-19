@@ -4,7 +4,8 @@ import { IRepositoryController } from "../controllers/RepositoryController";
 /**
  * Repository express Routes.
  * Defines our API routes.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class RepositoryRoutes {
 
@@ -16,6 +17,7 @@ export class RepositoryRoutes {
 
     /**
      * Class constructor. Injects controller and router dependencies.
+     * 
      * @param controller    Repository controller.
      * @param router        A express router.
      */
@@ -26,6 +28,7 @@ export class RepositoryRoutes {
 
     /**
      * Gets Repository API routes.
+     * 
      * @returns  the router.
      */
     public get routes(): express.Router {

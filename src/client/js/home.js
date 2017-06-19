@@ -1,3 +1,13 @@
+/**
+ * home.js
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
+
+/**
+ * Binds listeners to close message buttons
+ * and create task buton (go).
+ */
 function bindHomeListeners() {
     $('.message .close')
         .on('click', function () {
@@ -8,6 +18,12 @@ function bindHomeListeners() {
     $('#home_go_button').on('click', createTask);
 }
 
+/**
+ * Task creation.
+ * Sends a POST to Anvireco API and
+ * shows loading and then task creation
+ * information message.
+ */
 function createTask() {
     var owner = $('#home_owner_input').val();
     var repository = $('#home_repository_input').val();

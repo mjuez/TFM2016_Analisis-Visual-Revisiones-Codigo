@@ -7,26 +7,34 @@ import { EntityUtil } from "../util/EntityUtil";
  * IReviewEntity interface. Describes custom functionality for
  * Review mongoose documents.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IReviewEntity extends IEntity<ReviewDocument> {
+    
     /** Gets Review GitHub id. */
     id: number;
+
 }
 
 /**
  * Review Entity.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IReviewEntity {
 
-    /** @inheritdoc */
+    /** 
+     * Gets Review GitHub id.
+     * 
+     * @returns review id.
+     */
     public get id(): number {
         return this.document.id;
     }
 
     /**
      * Transforms raw data to IReviewEntity.
+     * 
      * @param data  raw data.
      * @returns a review entity.
      */
@@ -41,6 +49,7 @@ export class ReviewEntity extends AbstractEntity<ReviewDocument> implements IRev
 
     /**
      * Transforms raw data to IReviewEntity array.
+     * 
      * @param data  raw data.
      * @returns an array of review entities.
      */

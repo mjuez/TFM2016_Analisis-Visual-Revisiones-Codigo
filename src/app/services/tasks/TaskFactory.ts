@@ -24,17 +24,38 @@ import { IServices } from "../IServices";
 import { IRepositories } from "../../data/IRepositories";
 import { IUserTaskUtil, UserTaskUtil } from "../../util/UserTaskUtil";
 
+/**
+ * Task Factory.
+ * Builds specific tasks from a task entity.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export class TaskFactory {
 
+    /** Repositories list. */
     private readonly _repositories: IRepositories;
 
+    /** Services list. */
     private readonly _services: IServices;
 
+    /**
+     * Creates the factory.
+     * 
+     * @param repositories  Repositories list.
+     * @param services      Services list.
+     */
     constructor(repositories: IRepositories, services: IServices) {
         this._repositories = repositories;
         this._services = services;
     }
 
+    /**
+     * Builds a specific task from a task entity.
+     * 
+     * @async
+     * @param entity    Task entity.
+     * @returns A task.
+     */
     public async buildTask(entity: ITaskEntity): Promise<ITask> {
         let task: ITask = null;
 
@@ -50,7 +71,6 @@ export class TaskFactory {
             task = new ReviewsTask(this._repositories, this._services.review);
         } else {
             const userTaskUtil: IUserTaskUtil = new UserTaskUtil(this._repositories, this._services.user);
-
             if (entity.type === TaskType.USERS_PULLS) {
                 task = new UsersPullsTask(this._repositories, this._services.user, userTaskUtil);
             } else if (entity.type === TaskType.USERS_REVIEW_COMMENTS) {

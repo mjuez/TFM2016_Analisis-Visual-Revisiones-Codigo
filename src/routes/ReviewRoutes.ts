@@ -4,7 +4,8 @@ import { IReviewController } from "../controllers/ReviewController";
 /**
  * Review express Routes.
  * Defines our API routes.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class ReviewRoutes {
 
@@ -16,6 +17,7 @@ export class ReviewRoutes {
 
     /**
      * Class constructor. Injects controller and router dependencies.
+     * 
      * @param controller    Review controller.
      * @param router        A express router.
      */
@@ -26,6 +28,7 @@ export class ReviewRoutes {
 
     /**
      * Gets Review API routes.
+     * 
      * @returns  the router.
      */
     public get routes(): express.Router {

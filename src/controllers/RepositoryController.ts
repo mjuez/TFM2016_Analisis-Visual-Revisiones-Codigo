@@ -1,34 +1,113 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { AbstractController } from "./AbstractController";
 import { IRepositoryService } from "../app/services/RepositoryService";
-import { RepositoryDocument } from "../app/entities/documents/RepositoryDocument";
-import { IRepositoryEntity, RepositoryEntity } from "../app/entities/RepositoryEntity";
+import { IRepositoryEntity } from "../app/entities/RepositoryEntity";
 import { IReviewService } from "../app/services/ReviewService";
 import { EntityUtil } from "../app/util/EntityUtil";
+import { RoutesUtil } from "../app/util/RoutesUtil";
 import * as json2csv from "json2csv";
 
 /**
- * Repository controller interface.
- * @author Mario Juez <mario@mjuez.com>
+ * Repository controller interface
+ * Defines the controllers of API routes related
+ * with repository data.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IRepositoryController {
+    
+    /**
+     * Sends an HTTP response with JSON data of
+     * one repository.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     get(req: Request, res: Response): Promise<void>;
+
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of repositories.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     getPage(req: Request, res: Response): Promise<void>;
+
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of repositories ordered 
+     * by name.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     getByNamePage(req: Request, res: Response): Promise<void>;
+
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of repositories ordered 
+     * by number of reviews.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     getByReviewsPage(req: Request, res: Response): Promise<void>;
+
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of repositories ordered 
+     * by number of pull requests.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     getByPullRequestsPage(req: Request, res: Response): Promise<void>;
+
+    /**
+     * Sends an HTTP response with JSON array of
+     * all repositories full names (owner/name).
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     getList(req: Request, res: Response): Promise<void>;
+
+    /**
+     * Sends an HTTP response with repositories
+     * mean statistics.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     getStatsMeans(req: Request, res: Response): Promise<void>;
+
+    /**
+     * Sends an HTTP response a CSV file
+     * containing repository data like pull
+     * requests or reviews.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     getCSV(req: Request, res: Response): Promise<void>;
 }
 
 /**
- * Repository controller.
- * Defines Repository requests handling.
- * @implements IRepositoryController.
+ * Repository controller implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class RepositoryController extends AbstractController implements IRepositoryController {
 
+    /**
+     * Sends an HTTP response with JSON data of
+     * one repository.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async get(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         const owner: string = req.params.owner;
@@ -38,10 +117,18 @@ export class RepositoryController extends AbstractController implements IReposit
             const json: Object = EntityUtil.toJSON(entity);
             res.json(json);
         } catch (error) {
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
     }
 
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of repositories.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getPage(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         await this.getOrderedPage(req, res, service, handler);
@@ -51,6 +138,15 @@ export class RepositoryController extends AbstractController implements IReposit
         }
     }
 
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of repositories ordered 
+     * by name.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getByNamePage(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         await this.getOrderedPage(req, res, service, handler);
@@ -60,6 +156,15 @@ export class RepositoryController extends AbstractController implements IReposit
         }
     }
 
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of repositories ordered 
+     * by number of reviews.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getByReviewsPage(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         await this.getOrderedPage(req, res, service, handler);
@@ -69,6 +174,15 @@ export class RepositoryController extends AbstractController implements IReposit
         }
     }
 
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of repositories ordered 
+     * by number of pull requests.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getByPullRequestsPage(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         await this.getOrderedPage(req, res, service, handler);
@@ -78,6 +192,14 @@ export class RepositoryController extends AbstractController implements IReposit
         }
     }
 
+    /**
+     * Sends an HTTP response with JSON array of
+     * all repositories full names (owner/name).
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getList(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         try {
@@ -86,10 +208,18 @@ export class RepositoryController extends AbstractController implements IReposit
             let list: string[] = json.map((jsonobj) => { return jsonobj.full_name });
             res.json(list);
         } catch (error) {
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
     }
 
+    /**
+     * Sends an HTTP response with repositories
+     * mean statistics.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getStatsMeans(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         try {
@@ -97,10 +227,19 @@ export class RepositoryController extends AbstractController implements IReposit
             res.json(means);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
     }
 
+    /**
+     * Sends an HTTP response a CSV file
+     * containing repository data like pull
+     * requests or reviews.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getCSV(req: Request, res: Response): Promise<void> {
         const service: IRepositoryService = this._services.repo;
         const reviewService: IReviewService = this._services.review;
@@ -128,7 +267,7 @@ export class RepositoryController extends AbstractController implements IReposit
             }
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
 
     }

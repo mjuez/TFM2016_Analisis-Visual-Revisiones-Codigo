@@ -133,9 +133,9 @@ export abstract class AbstractRepository<T extends IEntity<E>, E extends mongoos
 
         try {
             if (page === undefined) {
-                return await this._retrieveAll({ filter, page, startingFrom, where, sort, select });
+                return await this._retrieveAll({ filter, startingFrom, where, sort, select });
             } else {
-                return await this._retrievePage({ filter, startingFrom, where, sort, select });
+                return await this._retrievePage({ filter, page, startingFrom, where, sort, select });
             }
         } catch (error) {
             throw error;

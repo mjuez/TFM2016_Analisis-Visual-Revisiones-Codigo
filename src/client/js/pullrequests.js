@@ -1,3 +1,17 @@
+/**
+ * pullrequests.js
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
+
+/**
+ * Pull Request list loader.
+ * 
+ * @param {string} apiRoute     Anvireco GET api route.
+ * @param {number} page         page number.
+ * @param {string} url          base url.
+ * @param {Object} repository   repository object.
+ */
 function loadPullrequestsList(apiRoute, page, url, repository = undefined) {
     showLoader();
     $('#pullrequests_order_dropdown').dropdown({
@@ -17,6 +31,12 @@ function loadPullrequestsList(apiRoute, page, url, repository = undefined) {
         });
 }
 
+/**
+ * Handles pull request ordering.
+ * 
+ * @param {string} value        order value. 
+ * @param {Object} repository   repository object.
+ */
 function handlePullrequestsOrder(value, repository) {
     var repositoryFilter = '';
     if (repository != undefined) {
@@ -38,6 +58,13 @@ function handlePullrequestsOrder(value, repository) {
     }
 }
 
+/**
+ * Loads a single pull request page.
+ * 
+ * @param {string} owner        repository owner.
+ * @param {string} repository   repository name. 
+ * @param {number} number       pull request number.
+ */
 function loadPullRequest(owner, repository, number) {
     showLoader();
     $.get(`/api/pull/${owner}/${repository}/${number}`)
@@ -53,23 +80,36 @@ function loadPullRequest(owner, repository, number) {
         });
 }
 
+/**
+ * Configures the top buttons of a single pull request page.
+ * 
+ * @param {Object} pullrequest  pull request object.
+ */
 function configurePullRequestButtons(pullrequest) {
     $('#pullrequest_viewgithub_button').on('click', function () {
         $(location).attr('href', pullrequest.html_url);
     });
 }
 
+/**
+ * Loads a single pull request charts.
+ * 
+ * @param {Object} pullrequest  pull request object
+ */
 function loadPullRequestCharts(pullrequest) {
     $.get(`/api/pulls/stats/means`)
         .done(function (result) {
             printPullRequestMeanCharts(pullrequest, result);
             printPullRequestAdditionsDeletionsChart(pullrequest)
-        })
-        .fail(function (error) {
-            // todo
         });
 }
 
+/**
+ * Prints all pull request mean charts.
+ * 
+ * @param {Object} pullrequest  pull request object
+ * @param {Object} meanData     mean statistics.
+ */
 function printPullRequestMeanCharts(pullrequest, meanData) {
     var changedFilesConfig = {
         value: pullrequest.changed_files,
@@ -129,6 +169,11 @@ function printPullRequestMeanCharts(pullrequest, meanData) {
     printMeanChart(reviewCommentsConfig);
 }
 
+/**
+ * Prints additions vs deletions donut chart.
+ * 
+ * @param {Object} pullrequest  pull request object
+ */
 function printPullRequestAdditionsDeletionsChart(pullrequest) {
     $(`#pullrequest_adddel_chart_segment`).removeClass('loading');
     c3.generate({
@@ -153,6 +198,12 @@ function printPullRequestAdditionsDeletionsChart(pullrequest) {
     });
 }
 
+/**
+ * Configures the pull request repository filter.
+ * 
+ * @param {number} page         page number.
+ * @param {Object} repository   repository object.
+ */
 function configurePullrequestsFilter(page, repository) {
     $('#pullrequests_filter_repositories').html('');
     $.get(`/api/repos/all`)
@@ -177,6 +228,11 @@ function configurePullrequestsFilter(page, repository) {
         });
 }
 
+/**
+ * Handles pull request list filtering.
+ * 
+ * @param {string} value    filter selected value.
+ */
 function handlePullrequestsFilter(value) {
     var order = $('#pullrequests_order_dropdown').dropdown('get value');
     if (order === '') {
@@ -187,6 +243,11 @@ function handlePullrequestsFilter(value) {
     }
 }
 
+/**
+ * Prints the list of pull requests.
+ * 
+ * @param {Array} items Pull request items.
+ */
 function printPullRequestItems(items) {
     $('#pullrequest_list').html('');
     items.map(function (item) {
@@ -194,6 +255,11 @@ function printPullRequestItems(items) {
     });
 }
 
+/**
+ * Creates a pull request list item.
+ * 
+ * @param {Object} pullrequestData  Pull request data object.
+ */
 function pullrequestItem(pullrequestData) {
     const item = $('<div>', {
         class: 'item',

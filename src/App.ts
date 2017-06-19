@@ -86,7 +86,7 @@ interface IRoutes {
  * Application main class.
  * It sets up an express instance.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 class App {
 

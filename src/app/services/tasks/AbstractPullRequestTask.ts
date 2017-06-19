@@ -10,7 +10,7 @@ import * as GitHubAPI from "github";
  * for those tasks that loops over the pull request list
  * for obtaining data linked to a specific pull request.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export abstract class AbstractPullRequestTask extends GitHubTask {
 
@@ -19,6 +19,7 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
 
     /**
      * Creates the task instance.
+     * 
      * @param repos                 Repositories list.
      * @param api                   optional GitHub API.
      * @param apiAuth               optional GitHub API Authorization.
@@ -33,6 +34,7 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
      * Loops over all pull requests from a repository and processes
      * each one to obtain some kind of entities or data related with
      * the pull requests.
+     * 
      * @async
      */
     public async run(): Promise<void> {
@@ -55,10 +57,10 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
     }
 
     /**
+     * Template Method.
      * Pull Requests processing for obtaining some kind
      * of entities or data related with each pull request.
      * 
-     * Template Method.
      * @param pulls Pull Request entities list.
      * @returns if successfull processing.
      */

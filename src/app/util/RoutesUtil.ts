@@ -3,7 +3,7 @@ import { Response } from "express";
 /**
  * Static API routing utilities.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class RoutesUtil {
 

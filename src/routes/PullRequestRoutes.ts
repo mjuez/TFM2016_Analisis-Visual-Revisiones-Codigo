@@ -4,7 +4,8 @@ import { IPullRequestController } from "../controllers/PullRequestController";
 /**
  * Pull Request express Routes.
  * Defines our API routes.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class PullRequestRoutes {
 
@@ -16,6 +17,7 @@ export class PullRequestRoutes {
 
     /**
      * Class constructor. Injects controller and router dependencies.
+     * 
      * @param controller    Pull Request controller.
      * @param router        A express router.
      */
@@ -26,6 +28,7 @@ export class PullRequestRoutes {
 
     /**
      * Gets Pull Request API routes.
+     * 
      * @returns  the router.
      */
     public get routes(): express.Router {

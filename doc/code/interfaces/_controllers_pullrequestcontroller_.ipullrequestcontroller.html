@@ -72,11 +72,13 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Pull Request controller interface.</p>
+						<p>Pull request controller interface
+							Defines the controllers of API routes related
+						with pull request data.</p>
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#109;&#97;&#114;&#x69;&#x6f;&#64;&#109;&#106;&#x75;&#x65;&#x7a;&#x2e;&#x63;&#111;&#109;">&#109;&#97;&#114;&#x69;&#x6f;&#64;&#109;&#106;&#x75;&#x65;&#x7a;&#x2e;&#x63;&#111;&#109;</a></p>
+						<dd><p>Mario Juez <mario[at]mjuez.com></p>
 						</dd>
 					</dl>
 				</div>
@@ -102,8 +104,12 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#count" class="tsd-kind-icon">count</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#retrieve" class="tsd-kind-icon">retrieve</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#get" class="tsd-kind-icon">get</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getalltimestatsbyrepository" class="tsd-kind-icon">get<wbr>All<wbr>Time<wbr>Stats<wbr>ByRepository</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getalltimestatsbyuser" class="tsd-kind-icon">get<wbr>All<wbr>Time<wbr>Stats<wbr>ByUser</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getpageby" class="tsd-kind-icon">get<wbr>Page<wbr>By</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getpagefromrepositoryby" class="tsd-kind-icon">get<wbr>Page<wbr>From<wbr>Repository<wbr>By</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getstatsmeans" class="tsd-kind-icon">get<wbr>Stats<wbr>Means</a></li>
 							</ul>
 						</section>
 					</div>
@@ -112,23 +118,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="count" class="tsd-anchor"></a>
-					<h3>count</h3>
+					<a name="get" class="tsd-anchor"></a>
+					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">count<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/controllers/PullRequestController.ts#L32">controllers/PullRequestController.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/controllers/PullRequestController.ts#L24">controllers/PullRequestController.ts:24</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Counts Pull Request number from GitHub given an owner and a repository.
-										It creates (if not exist) or updates the pull request in our database.
-									Then, the pull request object is returned as response.</p>
+									<p>Sends an HTTP response with JSON data of
+									one pull request.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -136,39 +141,37 @@
 								<li>
 									<h5>req: <span class="tsd-signature-type">Request</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>API request.</p>
+										<p>Express request.</p>
 									</div>
 								</li>
 								<li>
 									<h5>res: <span class="tsd-signature-type">Response</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>API response.</p>
+										<p>Express response.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="retrieve" class="tsd-anchor"></a>
-					<h3>retrieve</h3>
+					<a name="getalltimestatsbyrepository" class="tsd-anchor"></a>
+					<h3>get<wbr>All<wbr>Time<wbr>Stats<wbr>ByRepository</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">retrieve<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Time<wbr>Stats<wbr>ByRepository<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/controllers/PullRequestController.ts#L23">controllers/PullRequestController.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/controllers/PullRequestController.ts#L63">controllers/PullRequestController.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Retrieves a Pull Request from GitHub given an owner, a repository
-										and a pull request id.
-										It creates (if not exist) or updates the pull request in our database.
-									Then, the pull request object is returned as response.</p>
+									<p>Sends an HTTP response with all time
+									statistics of a repository.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -176,17 +179,182 @@
 								<li>
 									<h5>req: <span class="tsd-signature-type">Request</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>API request.</p>
+										<p>Express request.</p>
 									</div>
 								</li>
 								<li>
 									<h5>res: <span class="tsd-signature-type">Response</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>API response.</p>
+										<p>Express response.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="getalltimestatsbyuser" class="tsd-anchor"></a>
+					<h3>get<wbr>All<wbr>Time<wbr>Stats<wbr>ByUser</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Time<wbr>Stats<wbr>ByUser<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/controllers/PullRequestController.ts#L54">controllers/PullRequestController.ts:54</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sends an HTTP response with all time
+									statistics of an user.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <span class="tsd-signature-type">Request</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Express request.</p>
+									</div>
+								</li>
+								<li>
+									<h5>res: <span class="tsd-signature-type">Response</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Express response.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="getpageby" class="tsd-anchor"></a>
+					<h3>get<wbr>Page<wbr>By</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Page<wbr>By<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/controllers/PullRequestController.ts#L34">controllers/PullRequestController.ts:34</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sends an HTTP response with JSON array of
+									a page with data of pull requests.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <span class="tsd-signature-type">Request</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Express request.</p>
+									</div>
+								</li>
+								<li>
+									<h5>res: <span class="tsd-signature-type">Response</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Express response.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optional page type.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="getpagefromrepositoryby" class="tsd-anchor"></a>
+					<h3>get<wbr>Page<wbr>From<wbr>Repository<wbr>By</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Page<wbr>From<wbr>Repository<wbr>By<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span>, type<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/controllers/PullRequestController.ts#L45">controllers/PullRequestController.ts:45</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sends an HTTP response with JSON array of
+										a page with data of pull requests filtered
+									by repository.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <span class="tsd-signature-type">Request</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Express request.</p>
+									</div>
+								</li>
+								<li>
+									<h5>res: <span class="tsd-signature-type">Response</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Express response.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> type: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Optional page type.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="getstatsmeans" class="tsd-anchor"></a>
+					<h3>get<wbr>Stats<wbr>Means</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Stats<wbr>Means<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Request</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/controllers/PullRequestController.ts#L72">controllers/PullRequestController.ts:72</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sends an HTTP response with pull requests
+									mean statistics.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <span class="tsd-signature-type">Request</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Express request.</p>
+									</div>
+								</li>
+								<li>
+									<h5>res: <span class="tsd-signature-type">Response</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Express response.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -198,56 +366,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_.html">"<wbr>App"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_abstractrepository_.html">"app/data/<wbr>Abstract<wbr>Repository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_irepository_.html">"app/data/IRepository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_pullrequestrepository_.html">"app/data/<wbr>Pull<wbr>Request<wbr>Repository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_schemas_pullrequestschema_.html">"app/data/schemas/<wbr>Pull<wbr>Request<wbr>Schema"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_abstractentity_.html">"app/entities/<wbr>Abstract<wbr>Entity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_ientity_.html">"app/entities/IEntity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_pullrequestentity_.html">"app/entities/<wbr>Pull<wbr>Request<wbr>Entity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_githubservice_.html">"app/services/<wbr>Git<wbr>Hub<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_iapiservice_.html">"app/services/IApi<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_ipersistenceservice_.html">"app/services/IPersistence<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_routes_pullrequestroutes_.html">"routes/<wbr>Pull<wbr>Request<wbr>Routes"</a>
 					</li>
 				</ul>
 			</nav>
@@ -262,10 +382,22 @@
 						<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html" class="tsd-kind-icon">IPull<wbr>Request<wbr>Controller</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#count" class="tsd-kind-icon">count</a>
+								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#get" class="tsd-kind-icon">get</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#retrieve" class="tsd-kind-icon">retrieve</a>
+								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getalltimestatsbyrepository" class="tsd-kind-icon">get<wbr>All<wbr>Time<wbr>Stats<wbr>ByRepository</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getalltimestatsbyuser" class="tsd-kind-icon">get<wbr>All<wbr>Time<wbr>Stats<wbr>ByUser</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getpageby" class="tsd-kind-icon">get<wbr>Page<wbr>By</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getpagefromrepositoryby" class="tsd-kind-icon">get<wbr>Page<wbr>From<wbr>Repository<wbr>By</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_controllers_pullrequestcontroller_.ipullrequestcontroller.html#getstatsmeans" class="tsd-kind-icon">get<wbr>Stats<wbr>Means</a>
 							</li>
 						</ul>
 					</li>

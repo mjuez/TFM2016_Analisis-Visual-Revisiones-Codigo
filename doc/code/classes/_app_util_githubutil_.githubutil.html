@@ -76,7 +76,7 @@
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#109;&#97;&#114;&#105;&#x6f;&#x40;&#x6d;&#106;&#117;&#101;&#122;&#46;&#x63;&#x6f;&#109;">&#109;&#97;&#114;&#105;&#x6f;&#x40;&#x6d;&#106;&#117;&#101;&#122;&#46;&#x63;&#x6f;&#109;</a></p>
+						<dd><p>Mario Juez <mario[at]mjuez.com></p>
 						</dd>
 					</dl>
 				</div>
@@ -96,7 +96,10 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_app_util_githubutil_.githubutil.html#checkrepository" class="tsd-kind-icon">check<wbr>Repository</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_app_util_githubutil_.githubutil.html#getnextpagenumber" class="tsd-kind-icon">get<wbr>Next<wbr>Page<wbr>Number</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_app_util_githubutil_.githubutil.html#getpulldata" class="tsd-kind-icon">get<wbr>Pull<wbr>Data</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_app_util_githubutil_.githubutil.html#processpage" class="tsd-kind-icon">process<wbr>Page</a></li>
 							</ul>
 						</section>
 					</div>
@@ -104,6 +107,54 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="checkrepository" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> check<wbr>Repository</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">check<wbr>Repository<span class="tsd-signature-symbol">(</span>owner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, repository<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/app/util/GitHubUtil.ts#L72">app/util/GitHubUtil.ts:72</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if a repository exists in GitHub database.
+										This method does not consume any GitHub API request.
+										It obtains the HTML response of the request to a
+										GitHub repository page.
+										If the response contains the description META TAG
+										means that the repository exists and is not a 404
+									error page.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>async</dt>
+									<dd></dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>owner: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Repository owner login.</p>
+									</div>
+								</li>
+								<li>
+									<h5>repository: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Repository name.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>if the repository exists.</p>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a name="getnextpagenumber" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Next<wbr>Page<wbr>Number</h3>
@@ -114,7 +165,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/util/GitHubUtil.ts#L13">app/util/GitHubUtil.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/app/util/GitHubUtil.ts#L21">app/util/GitHubUtil.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -137,6 +188,116 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="getpulldata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Pull<wbr>Data</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Pull<wbr>Data<span class="tsd-signature-symbol">(</span>pullRequestLink<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/app/util/GitHubUtil.ts#L42">app/util/GitHubUtil.ts:42</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets pull request data from API link.
+									Three fields are obtained:</p>
+									<ul>
+										<li>Pull Request Number.</li>
+										<li>Repository owner.</li>
+										<li>Repository name.</li>
+									</ul>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>pullRequestLink: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>link string.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<p>an object containing the three fields.</p>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>number<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>owner<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>repository<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="processpage" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> process<wbr>Page</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">process<wbr>Page<span class="tsd-signature-symbol">(</span>page<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, api<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GitHubAPI</span>, entityArrayHandler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, service<span class="tsd-signature-symbol">: </span><a href="../interfaces/_app_services_ipersistenceservice_.imultiplepersistenceservice.html" class="tsd-signature-type">IMultiplePersistenceService</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, updatePageHandler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/app/util/GitHubUtil.ts#L103">app/util/GitHubUtil.ts:103</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Processes a GitHub page obtained from the API.
+										Builds the entities with obtained data and stores
+										them into database. It processes next pages if
+									there are more.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>page: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A page obtained from
+										GitHub API.</p>
+									</div>
+								</li>
+								<li>
+									<h5>api: <span class="tsd-signature-type">GitHubAPI</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>GitHub API wrapper.</p>
+									</div>
+								</li>
+								<li>
+									<h5>entityArrayHandler: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Entity array creator
+										handler.</p>
+									</div>
+								</li>
+								<li>
+									<h5>service: <a href="../interfaces/_app_services_ipersistenceservice_.imultiplepersistenceservice.html" class="tsd-signature-type">IMultiplePersistenceService</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Entity related service.</p>
+									</div>
+								</li>
+								<li>
+									<h5>updatePageHandler: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Handler for updating the
+										task current page.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -145,56 +306,8 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_.html">"<wbr>App"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_abstractrepository_.html">"app/data/<wbr>Abstract<wbr>Repository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_irepository_.html">"app/data/IRepository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_pullrequestrepository_.html">"app/data/<wbr>Pull<wbr>Request<wbr>Repository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_schemas_pullrequestschema_.html">"app/data/schemas/<wbr>Pull<wbr>Request<wbr>Schema"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_abstractentity_.html">"app/entities/<wbr>Abstract<wbr>Entity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_ientity_.html">"app/entities/IEntity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_pullrequestentity_.html">"app/entities/<wbr>Pull<wbr>Request<wbr>Entity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_githubservice_.html">"app/services/<wbr>Git<wbr>Hub<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_iapiservice_.html">"app/services/IApi<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_ipersistenceservice_.html">"app/services/IPersistence<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_routes_pullrequestroutes_.html">"routes/<wbr>Pull<wbr>Request<wbr>Routes"</a>
 					</li>
 				</ul>
 			</nav>
@@ -206,7 +319,16 @@
 						<a href="_app_util_githubutil_.githubutil.html" class="tsd-kind-icon">Git<wbr>Hub<wbr>Util</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_app_util_githubutil_.githubutil.html#checkrepository" class="tsd-kind-icon">check<wbr>Repository</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_app_util_githubutil_.githubutil.html#getnextpagenumber" class="tsd-kind-icon">get<wbr>Next<wbr>Page<wbr>Number</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_app_util_githubutil_.githubutil.html#getpulldata" class="tsd-kind-icon">get<wbr>Pull<wbr>Data</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="_app_util_githubutil_.githubutil.html#processpage" class="tsd-kind-icon">process<wbr>Page</a>
 							</li>
 						</ul>
 					</li>

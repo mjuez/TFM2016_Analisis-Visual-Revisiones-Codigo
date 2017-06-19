@@ -4,7 +4,8 @@ import { IUserController } from "../controllers/UserController";
 /**
  * User express Routes.
  * Defines our API routes.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class UserRoutes {
 
@@ -16,6 +17,7 @@ export class UserRoutes {
 
     /**
      * Class constructor. Injects controller and router dependencies.
+     * 
      * @param controller    User controller.
      * @param router        A express router.
      */
@@ -26,6 +28,7 @@ export class UserRoutes {
 
     /**
      * Gets Pull Request API routes.
+     * 
      * @returns  the router.
      */
     public get routes(): express.Router {

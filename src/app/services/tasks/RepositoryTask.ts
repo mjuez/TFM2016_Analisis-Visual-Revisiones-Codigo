@@ -1,45 +1,61 @@
 import { ITask } from "./ITask";
 import { GitHubTask } from "./GitHubTask";
-import { ITaskRepository } from "../../data/TaskRepository";
-import { IRepositoryRepository } from "../../data/RepositoryRepository";
-import { IPullRequestRepository } from "../../data/PullRequestRepository";
-import { IReviewRepository } from "../../data/ReviewRepository";
-import { IReviewCommentRepository } from "../../data/ReviewCommentRepository";
 import { RepositoryPullRequestFilter, PullRequestFilterFactory } from "../../data/filters/PullRequestFilter";
-import { ITaskEntity } from "../../entities/TaskEntity";
 import { IRepositoryEntity, RepositoryEntity } from "../../entities/RepositoryEntity";
 import { IRepositoryService } from "../../services/RepositoryService";
+import { IRepositories } from "../../data/IRepositories";
 import * as GitHubAPI from "github";
 
-interface Repositories {
-    task: ITaskRepository,
-    repo: IRepositoryRepository,
-    pull: IPullRequestRepository,
-    review: IReviewRepository,
-    reviewComment: IReviewCommentRepository
-}
-
+/**
+ * Repository Task interface.
+ * 
+ * This task type is intended to obtain a repository
+ * data from GitHub.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export interface IRepositoryTask extends ITask { }
 
+/**
+ * Repository task implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export class RepositoryTask extends GitHubTask implements IRepositoryTask {
 
-    private readonly _repositories: Repositories;
+    /** Repositories list. */
+    private readonly _repositories: IRepositories;
 
+    /** Repository service. */
     private readonly _repoService: IRepositoryService;
 
-    constructor(repositories: Repositories, repoService: IRepositoryService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
+    /**
+     * Creates the task instance.
+     * 
+     * @param repositories  Repositories list.
+     * @param repoService   Repository service.
+     * @param api           optional GitHub API.
+     * @param apiAuth       optional GitHub API Authorization.
+     */
+    constructor(repositories: IRepositories, repoService: IRepositoryService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
         super(repositories.task, api, apiAuth);
         this._repoService = repoService;
         this._repositories = repositories;
     }
 
+    /**
+     * Runs the repository task.
+     * Retrieves the repository data from GitHub
+     * and then updates its stats.
+     * 
+     * @async
+     */
     public async run(): Promise<void> {
-        let service: IRepositoryService = this._repoService;
+        const service: IRepositoryService = this._repoService;
         try {
-            console.log('Starting repository task...');
             await this.startTask();
-            let repositoryEntity: IRepositoryEntity = await this.makeApiCall();
-            let updatedEntity: IRepositoryEntity = await this.updateStats(repositoryEntity);
+            const repositoryEntity: IRepositoryEntity = await this.makeApiCall();
+            const updatedEntity: IRepositoryEntity = await this.updateStats(repositoryEntity);
             await service.createOrUpdate(updatedEntity);
             await this.completeTask();
         } catch (error) {
@@ -47,6 +63,12 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
         }
     }
 
+    /**
+     * Makes a GitHub API call.
+     * Obtains repository data.
+     * 
+     * @async
+     */
     private async makeApiCall(): Promise<IRepositoryEntity> {
         try {
             let repoData: any = await this.API.repos.get(<GitHubAPI.ReposGetParams>{
@@ -60,6 +82,13 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
         }
     }
 
+    /**
+     * Updates the pull requests count, reviews count
+     * and review comments count of the repository.
+     * 
+     * @param entity    Repository entity.
+     * @returns updated repository entity.
+     */
     private async updateStats(entity: IRepositoryEntity): Promise<IRepositoryEntity> {
         try {
             let pullFilter: RepositoryPullRequestFilter =

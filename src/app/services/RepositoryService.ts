@@ -1,34 +1,116 @@
 import { IPersistenceService } from "../services/IPersistenceService";
 import { IReviewService } from "../services/ReviewService";
 import { AbstractPersistenceService } from "../services/AbstractPersistenceService";
-import { IRepositoryEntity, RepositoryEntity } from "../entities/RepositoryEntity";
-import { RepositoryDocument } from "../entities/documents/RepositoryDocument";
+import { IRepositoryEntity } from "../entities/RepositoryEntity";
 import { IRepositoryRepository } from "../data/RepositoryRepository";
 import * as math from "mathjs";
 
 /**
- * IRepositoryService interface.
- * Describes specific functionality for Repository entities.
- * @author Mario Juez <mario@mjuez.com> 
+ * Repository service interface.
+ * Describes services for getting repositories in many ways.
+ * Filtered, sorted... It also defines services for obtaining
+ * repository related data like stats.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com> 
  */
 export interface IRepositoryService extends IPersistenceService<IRepositoryEntity> {
 
+    /**
+     * Gets a single repository.
+     * 
+     * @param owner         repository owner login.
+     * @param repository    repository name.
+     * @returns a repository entity.
+     */
     getRepository(owner: string, repository: string): Promise<IRepositoryEntity>;
+    
+    /**
+     * Gets a repositories page.
+     * It retrieves a page from ALL repositories
+     * stored in the database without filtering or
+     * sorting.
+     * 
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of repositories.
+     */
     getRepositoriesPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
+    
+    /**
+     * Gets a repositories page.
+     * It retrieves a page from ALL repositories
+     * stored in the database ordered by name.
+     * 
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of repositories.
+     */
     getRepositoriesByNamePage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
+    
+    /**
+     * Gets a repositories page.
+     * It retrieves a page from ALL repositories
+     * stored in the database ordered by number of reviews.
+     * 
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of repositories.
+     */
     getRepositoriesByReviewsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
+    
+    /**
+     * Gets a repositories page.
+     * It retrieves a page from ALL repositories
+     * stored in the database ordered by number of
+     * pull requests.
+     * 
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of repositories.
+     */
     getRepositoriesByPullRequestsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
+    
+    /**
+     * Gets a list of all repositories.
+     * Only the full_name field is filled.
+     * 
+     * @returns a list of repositories.
+     */
     getRepositoriesList(): Promise<IRepositoryEntity[]>;
-    getRepositoriesStatsMeans(): Promise<any>;
-    getRepositoryCSVPage(owner: string, repository: string, page: number): Promise<any>;
+
+    /**
+     * Calculates all repositories statistics means for:
+     *  - stargazers.
+     *  - watchers.
+     *  - forks.
+     *  - pull requests.
+     *  - reviews.
+     *  - review comments.
+     * 
+     * @returns a JSON object with all statistics.
+     */
+    getRepositoriesStatsMeans(): Promise<Object>;
+
+    /**
+     * Gets a page of data of repositories and its
+     * pull requests and reviews. The data is prepared
+     * to be easily converted to CSV.
+     * 
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @param page          page number.
+     * @returns an array of repositories data.
+     */
+    getRepositoryCSVPage(owner: string, repository: string, page: number): Promise<any[]>;
 
 }
 
 /**
- * Repository services.
- * @author Mario Juez <mario@mjuez.com>
+ * Repository services implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
-export class RepositoryService extends AbstractPersistenceService<IRepositoryRepository, IRepositoryEntity, RepositoryDocument> implements IRepositoryService {
+export class RepositoryService extends AbstractPersistenceService<IRepositoryRepository, IRepositoryEntity> implements IRepositoryService {
 
     /** Review service. */
     private readonly _reviewService: IReviewService;
@@ -36,6 +118,7 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
     /**
      * Class constructor with Repository repository and
      * review service dependency injection.
+     * 
      * @param repository    Injected Repository repository.
      * @param reviewService Injected Review Service.
      */
@@ -44,39 +127,84 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
         this._reviewService = reviewService;
     }
 
+    /**
+     * Gets a single repository.
+     * 
+     * @async
+     * @param owner         repository owner login.
+     * @param repository    repository name.
+     * @returns a repository entity.
+     */
     public async getRepository(owner: string, repository: string): Promise<IRepositoryEntity> {
         const repo: IRepositoryRepository = this._repository;
         return await repo.findOne({ "owner.login": owner, "name": repository });
     }
 
+    /**
+     * Gets a repositories page.
+     * It retrieves a page from ALL repositories
+     * stored in the database without filtering or
+     * sorting.
+     * 
+     * @async
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of repositories.
+     */
     public async getRepositoriesPage(page: number, direction: number = 1): Promise<IRepositoryEntity[]> {
-        const repo: IRepositoryRepository = this._repository;
-        const sort: Object = { created_at: direction };
-        const entities: IRepositoryEntity[] = await repo.retrieve({ page, sort });
-        return entities;
+        return await this.getSortedPage(page, { created_at: direction });
     }
 
+    /**
+     * Gets a repositories page.
+     * It retrieves a page from ALL repositories
+     * stored in the database ordered by name.
+     * 
+     * @async
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of repositories.
+     */
     public async getRepositoriesByNamePage(page: number, direction: number = 1): Promise<IRepositoryEntity[]> {
-        const repo: IRepositoryRepository = this._repository;
-        const sort: Object = { full_name: direction };
-        const entities: IRepositoryEntity[] = await repo.retrieve({ page, sort });
-        return entities;
+        return await this.getSortedPage(page, { full_name: direction });
     }
 
+    /**
+     * Gets a repositories page.
+     * It retrieves a page from ALL repositories
+     * stored in the database ordered by number of reviews.
+     * 
+     * @async
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of repositories.
+     */
     public async getRepositoriesByReviewsPage(page: number, direction: number = 1): Promise<IRepositoryEntity[]> {
-        const repo: IRepositoryRepository = this._repository;
-        const sort: Object = { reviews_count: direction };
-        const entities: IRepositoryEntity[] = await repo.retrieve({ page, sort });
-        return entities;
+        return await this.getSortedPage(page, { reviews_count: direction });
     }
 
+    /**
+     * Gets a repositories page.
+     * It retrieves a page from ALL repositories
+     * stored in the database ordered by number of
+     * pull requests.
+     * 
+     * @async
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of repositories.
+     */
     public async getRepositoriesByPullRequestsPage(page: number, direction: number = 1): Promise<IRepositoryEntity[]> {
-        const repo: IRepositoryRepository = this._repository;
-        const sort: Object = { pull_requests_count: direction };
-        const entities: IRepositoryEntity[] = await repo.retrieve({ page, sort });
-        return entities;
+        return await this.getSortedPage(page, { pull_requests_count: direction });
     }
 
+    /**
+     * Gets a list of all repositories.
+     * Only the full_name field is filled.
+     * 
+     * @async
+     * @returns a list of repositories.
+     */
     public async getRepositoriesList(): Promise<IRepositoryEntity[]> {
         const repo: IRepositoryRepository = this._repository;
         const sort: Object = { full_name: 1 };
@@ -85,6 +213,18 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
         return entities;
     }
 
+    /**
+     * Calculates all repositories statistics means for:
+     *  - stargazers.
+     *  - watchers.
+     *  - forks.
+     *  - pull requests.
+     *  - reviews.
+     *  - review comments.
+     * 
+     * @async
+     * @returns a JSON object with all statistics.
+     */
     public async getRepositoriesStatsMeans(): Promise<Object> {
         const repo: IRepositoryRepository = this._repository;
         const select: string = 'stargazers_count watchers_count forks_count review_comments_count reviews_count pull_requests_count -_id';
@@ -108,7 +248,18 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
         return means;
     }
 
-    public async getRepositoryCSVPage(owner: string, repository: string, page: number): Promise<any> {
+    /**
+     * Gets a page of data of repositories and its
+     * pull requests and reviews. The data is prepared
+     * to be easily converted to CSV.
+     * 
+     * @async
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @param page          page number.
+     * @returns an array of repositories data.
+     */
+    public async getRepositoryCSVPage(owner: string, repository: string, page: number): Promise<any[]> {
         const reviewService: IReviewService = this._reviewService;
         const filter: any = { "repository.owner": owner, "repository.name": repository };
         const repositoryEntity: IRepositoryEntity = await this.getRepository(owner, repository);
@@ -132,6 +283,14 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
         return dataArray;
     }
 
+    /**
+     * Gets a specific field stats from a list
+     * of reviews.
+     * 
+     * @param pulls         list of reviews.
+     * @param statsField    field name.
+     * @returns an array of stats.
+     */
     private getRepositoriesStatsArray(repositories: IRepositoryEntity[], statsField: string): number[] {
         let array: number[] = repositories.map((repository): number => {
             return repository.document[statsField];
@@ -140,6 +299,13 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
         return array;
     }
 
+    /**
+     * Finds a persisted repository by its id.
+     *
+     * @async 
+     * @param entity    A in-memory repository.
+     * @returns the persisted repository.
+     */
     protected async findEntity(entity: IRepositoryEntity): Promise<IRepositoryEntity> {
         return await this._repository.findById(entity.id);
     }

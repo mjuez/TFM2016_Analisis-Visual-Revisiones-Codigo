@@ -10,7 +10,7 @@ import { IStatsService } from "./StatsService";
  * Interface with different services list.
  * Useful for dependency injection.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IServices {
 
