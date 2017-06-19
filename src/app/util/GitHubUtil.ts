@@ -85,6 +85,21 @@ export class GitHubUtil {
         }
     }
 
+    /**
+     * Processes a GitHub page obtained from the API.
+     * Builds the entities with obtained data and stores
+     * them into database. It processes next pages if
+     * there are more.
+     * 
+     * @param page                  A page obtained from
+     *                              GitHub API.
+     * @param api                   GitHub API wrapper.
+     * @param entityArrayHandler    Entity array creator
+     *                              handler.
+     * @param service               Entity related service.
+     * @param updatePageHandler     Handler for updating the
+     *                              task current page.
+     */
     public static async processPage(page: any, api: GitHubAPI, entityArrayHandler: any, service: IMultiplePersistenceService<any>, updatePageHandler: any): Promise<void> {
         const entities: IEntity<any>[] = entityArrayHandler(page.data);
         try {
