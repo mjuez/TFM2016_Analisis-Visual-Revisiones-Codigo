@@ -62,7 +62,7 @@
 					<a href="_app_services_ipersistenceservice_.ipersistenceservice.html">IPersistenceService</a>
 				</li>
 			</ul>
-			<h1>Interface IPersistenceService&lt;IEntity&gt;</h1>
+			<h1>Interface IPersistenceService&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -72,11 +72,12 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>IPersistenceService interface.</p>
+						<p>IPersistenceService interface.
+						Declares shared functionality for all persistence services.</p>
 					</div>
 					<dl class="tsd-comment-tags">
 						<dt>author</dt>
-						<dd><p>Mario Juez <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#97;&#114;&#x69;&#111;&#64;&#109;&#x6a;&#117;&#x65;&#122;&#x2e;&#x63;&#111;&#109;">&#109;&#97;&#114;&#x69;&#111;&#64;&#109;&#x6a;&#117;&#x65;&#122;&#x2e;&#x63;&#111;&#109;</a></p>
+						<dd><p>Mario Juez <mario[at]mjuez.com></p>
 						</dd>
 					</dl>
 				</div>
@@ -85,7 +86,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>IEntity</h4>
+						<h4>T<span class="tsd-signature-symbol">: </span><a href="_app_entities_ientity_.ientity.html" class="tsd-signature-type">IEntity</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -96,10 +97,28 @@
 						<span class="target">IPersistenceService</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="_app_services_pullrequestservice_.ipullrequestservice.html" class="tsd-signature-type">IPullRequestService</a>
+								<a href="_app_services_ipersistenceservice_.imultiplepersistenceservice.html" class="tsd-signature-type">IMultiplePersistenceService</a>
+							</li>
+							<li>
+								<a href="_app_services_userservice_.iuserservice.html" class="tsd-signature-type">IUserService</a>
+							</li>
+							<li>
+								<a href="_app_services_repositoryservice_.irepositoryservice.html" class="tsd-signature-type">IRepositoryService</a>
 							</li>
 						</ul>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implemented by</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../classes/_app_services_abstractpersistenceservice_.abstractmultiplepersistenceservice.html" class="tsd-signature-type">AbstractMultiplePersistenceService</a></li>
+					<li><a href="../classes/_app_services_abstractpersistenceservice_.abstractpersistenceservice.html" class="tsd-signature-type">AbstractPersistenceService</a></li>
+					<li><a href="../classes/_app_services_pullrequestservice_.pullrequestservice.html" class="tsd-signature-type">PullRequestService</a></li>
+					<li><a href="../classes/_app_services_repositoryservice_.repositoryservice.html" class="tsd-signature-type">RepositoryService</a></li>
+					<li><a href="../classes/_app_services_reviewcommentservice_.reviewcommentservice.html" class="tsd-signature-type">ReviewCommentService</a></li>
+					<li><a href="../classes/_app_services_reviewservice_.reviewservice.html" class="tsd-signature-type">ReviewService</a></li>
+					<li><a href="../classes/_app_services_userservice_.userservice.html" class="tsd-signature-type">UserService</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -110,7 +129,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_app_services_ipersistenceservice_.ipersistenceservice.html#createorupdate" class="tsd-kind-icon">create<wbr>OrUpdate</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_app_services_ipersistenceservice_.ipersistenceservice.html#createorupdatemultiple" class="tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_app_services_ipersistenceservice_.ipersistenceservice.html#numpages" class="tsd-kind-icon">num<wbr>Pages</a></li>
 							</ul>
 						</section>
 					</div>
@@ -122,13 +141,13 @@
 					<a name="createorupdate" class="tsd-anchor"></a>
 					<h3>create<wbr>OrUpdate</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<span class="tsd-signature-symbol">(</span>entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/IPersistenceService.ts#L15">app/services/IPersistenceService.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/app/services/IPersistenceService.ts#L18">app/services/IPersistenceService.ts:18</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -139,46 +158,46 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>entity: <span class="tsd-signature-type">IEntity</span></h5>
+									<h5>entity: <span class="tsd-signature-type">T</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>an entity.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>a promise that returns an entity if resolved.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>the persisted entity.</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="createorupdatemultiple" class="tsd-anchor"></a>
-					<h3>create<wbr>OrUpdate<wbr>Multiple</h3>
+					<a name="numpages" class="tsd-anchor"></a>
+					<h3>num<wbr>Pages</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple<span class="tsd-signature-symbol">(</span>entities<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">num<wbr>Pages<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/36a875a/src/app/services/IPersistenceService.ts#L22">app/services/IPersistenceService.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo/blob/d0ac51c/src/app/services/IPersistenceService.ts#L26">app/services/IPersistenceService.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Saves or updates many entities into database.</p>
+									<p>Calculates the number of pages of results.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>entities: <span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <span class="tsd-signature-type">Object</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>an array of entities.</p>
+										<p>optional filter</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/_app_services_githubservice_.githubservice.html#_api_options.promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">IEntity</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>a promise that retrns an array of entities if resolved.</p>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>the number of pages.</p>
 						</li>
 					</ul>
 				</section>
@@ -190,61 +209,16 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_.html">"<wbr>App"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_abstractrepository_.html">"app/data/<wbr>Abstract<wbr>Repository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_irepository_.html">"app/data/IRepository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_pullrequestrepository_.html">"app/data/<wbr>Pull<wbr>Request<wbr>Repository"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_data_schemas_pullrequestschema_.html">"app/data/schemas/<wbr>Pull<wbr>Request<wbr>Schema"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_abstractentity_.html">"app/entities/<wbr>Abstract<wbr>Entity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_ientity_.html">"app/entities/IEntity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_pullrequestentity_.html">"app/entities/<wbr>Pull<wbr>Request<wbr>Entity"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_entities_documents_pullrequestdocument_.html">"app/entities/documents/<wbr>Pull<wbr>Request<wbr>Document"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_githubservice_.html">"app/services/<wbr>Git<wbr>Hub<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_iapiservice_.html">"app/services/IApi<wbr>Service"</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_app_services_ipersistenceservice_.html">"app/services/IPersistence<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_services_pullrequestservice_.html">"app/services/<wbr>Pull<wbr>Request<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_app_util_githubutil_.html">"app/util/<wbr>Git<wbr>Hub<wbr>Util"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_controllers_pullrequestcontroller_.html">"controllers/<wbr>Pull<wbr>Request<wbr>Controller"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_index_.html">"index"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_routes_pullrequestroutes_.html">"routes/<wbr>Pull<wbr>Request<wbr>Routes"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="_app_services_ipersistenceservice_.imultiplepersistenceservice.html" class="tsd-kind-icon">IMultiple<wbr>Persistence<wbr>Service</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
@@ -254,7 +228,7 @@
 								<a href="_app_services_ipersistenceservice_.ipersistenceservice.html#createorupdate" class="tsd-kind-icon">create<wbr>OrUpdate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_app_services_ipersistenceservice_.ipersistenceservice.html#createorupdatemultiple" class="tsd-kind-icon">create<wbr>OrUpdate<wbr>Multiple</a>
+								<a href="_app_services_ipersistenceservice_.ipersistenceservice.html#numpages" class="tsd-kind-icon">num<wbr>Pages</a>
 							</li>
 						</ul>
 					</li>
