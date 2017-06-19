@@ -1,48 +1,70 @@
-import { Router, Request, Response, NextFunction } from "express";
-import { ITaskManagerService, TaskManagerService } from "../app/services/TaskManagerService";
+import { Request, Response } from "express";
+import { ITaskManagerService } from "../app/services/TaskManagerService";
 import { AbstractController } from "./AbstractController";
-import * as mongoose from "mongoose";
-import * as GitHubAPI from "github";
-import * as BluebirdPromise from "bluebird";
+import { RoutesUtil } from "../app/util/RoutesUtil";
 
 /**
  * TaskManager controller interface.
- * @author Mario Juez <mario@mjuez.com>
+ * Defines the controllers of API routes related
+ * with the task manager.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface ITaskManagerController {
 
     /**
-     * Gets the task manager status.
-     * @param req   API request.
-     * @param res   API response.
+     * Sends an HTTP response with the
+     * task manager status.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
      */
     getStatus(req: Request, res: Response): Promise<void>;
 
     /**
-     * Gets the list of pending tasks.
-     * @param req   API request.
-     * @param res   API response.
+     * Sends an HTTP response with a list
+     * of pending tasks.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
      */
     getPendingTasks(req: Request, res: Response): Promise<void>;
 
     /**
-     * Gets the list of all tasks.
-     * @param req   API request.
-     * @param res   API response.
+     * Sends an HTTP response with a list
+     * of all tasks.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
      */
     getAllTasks(req: Request, res: Response): Promise<void>;
 
+    /**
+     * Creates a task and sends an HTTP 
+     * response with information about if
+     * was successfull or not.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     createTask(req: Request, res: Response): Promise<void>;
 }
 
 /**
- * Task Manager controller.
- * Defines Task manager requests handling.
- * @implements ITaskManagerController.
+ * TaskManager controller implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class TaskManagerController extends AbstractController implements ITaskManagerController {
 
-    /** @inheritdoc */
+    /**
+     * Sends an HTTP response with the
+     * task manager status.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getStatus(req: Request, res: Response): Promise<void> {
         let service: ITaskManagerService = this._services.taskManager;
 
@@ -57,18 +79,41 @@ export class TaskManagerController extends AbstractController implements ITaskMa
         }
     }
 
-    /** @inheritdoc */
+    /**
+     * Sends an HTTP response with a list
+     * of pending tasks.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getPendingTasks(req: Request, res: Response): Promise<void> {
         let service: ITaskManagerService = this._services.taskManager;
         res.json(await service.getPendingTasks());
     }
 
-    /** @inheritdoc */
+    /**
+     * Sends an HTTP response with a list
+     * of all tasks.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async getAllTasks(req: Request, res: Response): Promise<void> {
         let service: ITaskManagerService = this._services.taskManager;
         res.json(await service.getAllTasks());
     }
 
+    /**
+     * Creates a task and sends an HTTP 
+     * response with information about if
+     * was successfull or not.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public async createTask(req: Request, res: Response): Promise<void> {
         let owner: string = req.params.owner;
         let repository: string = req.params.repository;
@@ -78,7 +123,7 @@ export class TaskManagerController extends AbstractController implements ITaskMa
         if (created) {
             res.json({ message: "task created successfully." });
         } else {
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
     }
 

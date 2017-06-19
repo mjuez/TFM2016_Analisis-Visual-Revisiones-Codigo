@@ -1,18 +1,24 @@
 import { Request, Response } from "express";
-import { IPersistenceService } from "../app/services/IPersistenceService";
-import { EntityUtil } from "../app/util/EntityUtil";
 import { RoutesUtil } from "../app/util/RoutesUtil";
-import { IServices } from "../app/services/IServices";
 import { AbstractController } from "./AbstractController";
 
 /**
  * Abstract all time stats Controller.
  * Implements shared functionality for other controllers.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export abstract class AbstractAllTimeStatsController extends AbstractController {
 
+    /**
+     * Sends an HTTP response with all time 
+     * statistics of an user.
+     * 
+     * @async
+     * @param req               Express request.
+     * @param res               Express response.
+     * @param userStatsHandler  user stats getter handler.
+     */
     protected async _getAllTimeStatsByUser(req: Request, res: Response, userStatsHandler: any): Promise<void> {
         const userLogin: string = req.params.userlogin;
         try {
@@ -20,10 +26,19 @@ export abstract class AbstractAllTimeStatsController extends AbstractController 
             res.json(stats);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
     }
     
+    /**
+     * Sends an HTTP response with all time 
+     * statistics of a repository.
+     * 
+     * @async
+     * @param req               Express request.
+     * @param res               Express response.
+     * @param repoStatsHandler  repository stats getter handler.
+     */
     protected async _getAllTimeStatsByRepository(req: Request, res: Response, repoStatsHandler: any): Promise<void> {
         const owner: string = req.params.owner;
         const repository: string = req.params.repository;
@@ -32,7 +47,7 @@ export abstract class AbstractAllTimeStatsController extends AbstractController 
             res.json(stats);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
     }
 

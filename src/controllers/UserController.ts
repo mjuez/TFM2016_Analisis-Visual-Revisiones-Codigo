@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { AbstractController } from "./AbstractController";
 import { IUserService } from "../app/services/UserService";
 import { IUserEntity } from "../app/entities/UserEntity";
@@ -7,62 +7,70 @@ import { RoutesUtil } from "../app/util/RoutesUtil";
 
 /**
  * User controller interface.
- * @author Mario Juez <mario@mjuez.com>
+ * Defines the controllers of API routes related
+ * with user data.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IUserController {
 
     /**
-     * Gets an user entity and returns it as JSON data
-     * through HTTP response.
-     * @async
-     * @param req   express request object.
-     * @param res   express response object.
+     * Sends an HTTP response with JSON data of
+     * one user.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
      */
     get(req: Request, res: Response): Promise<void>;
 
     /**
-     * Gets a page of user entities and returns it as 
-     * JSON data through HTTP response.
-     * User entities are ordered by date depending the
-     * direction parameter from HTTP request.
-     * @async
-     * @param req   express request object.
-     * @param res   express response object.
+     * Sends an HTTP response with JSON array of
+     * a page with data of users.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
+     * @param type  Optional page type.
      */
     getUserPageBy(req: Request, res: Response, type?: string): Promise<void>;
 
     /**
-     * Gets a page of user entities and returns it as 
-     * JSON data through HTTP response.
+     * Sends an HTTP response with JSON array of
+     * a page with data of users
      * User entities are ordered by number of reviews of
      * a specific state (APPROVED, COMMENTED, CHANGES_REQUESTED, DISMISSED)
      * depending the direction parameter from HTTP request.
-     * @async
-     * @param req   express request object.
-     * @param res   express response object.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
      */
     getByReviewsByStatePage(req: Request, res: Response): Promise<void>;
 
     /**
-     * Gets an object with user mean statistics and 
-     * returns it as JSON data through HTTP response.
-     * @async
-     * @param req   express request object.
-     * @param res   express response object.
+     * Sends an HTTP response with users
+     * mean statistics.
+     * 
+     * @param req   Express request.
+     * @param res   Express response.
      */
     getStatsMeans(req: Request, res: Response): Promise<void>;
 
 }
 
 /**
- * User controller.
- * Defines User HTTP requests handling.
- * @extends AbstractController.
- * @implements IUserController.
+ * User controller implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class UserController extends AbstractController implements IUserController {
 
-    /** @inheritdoc */
+    /**
+     * Sends an HTTP response with JSON data of
+     * one user.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public get = async (req: Request, res: Response): Promise<void> => {
         const service: IUserService = this._services.user;
         const username: string = req.params.username;
@@ -72,16 +80,35 @@ export class UserController extends AbstractController implements IUserControlle
             const json: Object = EntityUtil.toJSON(user);
             res.json(json);
         } catch (error) {
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
     }
 
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of users.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     * @param type  Optional page type.
+     */
     public getUserPageBy = async (req: Request, res: Response, type?: string): Promise<void> => {
         const userPageHandler: any = this._services.user.getUserPageHandler(type);
         await this.getOrderedPage(req, res, this._services.user, userPageHandler);
     }
 
-    /** @inheritdoc */
+    /**
+     * Sends an HTTP response with JSON array of
+     * a page with data of users
+     * User entities are ordered by number of reviews of
+     * a specific state (APPROVED, COMMENTED, CHANGES_REQUESTED, DISMISSED)
+     * depending the direction parameter from HTTP request.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public getByReviewsByStatePage = async (req: Request, res: Response): Promise<void> => {
         const service: IUserService = this._services.user;
         const state: string = req.params.state;
@@ -91,14 +118,21 @@ export class UserController extends AbstractController implements IUserControlle
         await this.getOrderedPage(req, res, service, handler);
     }
 
-    /** @inheritdoc */
+    /**
+     * Sends an HTTP response with users
+     * mean statistics.
+     * 
+     * @async
+     * @param req   Express request.
+     * @param res   Express response.
+     */
     public getStatsMeans = async (req: Request, res: Response): Promise<void> => {
         const service: IUserService = this._services.user;
         try {
             const means: Object = await service.getUsersStatsMeans();
             res.json(means);
         } catch (error) {
-            res.status(500).json({ message: "Oops, something went wrong." });
+            RoutesUtil.errorResponse(res);
         }
     }
 

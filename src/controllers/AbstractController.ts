@@ -8,7 +8,7 @@ import { IServices } from "../app/services/IServices";
  * Abstract Controller.
  * Implements shared functionality for other controllers.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export abstract class AbstractController {
 
@@ -24,8 +24,9 @@ export abstract class AbstractController {
     }
 
     /**
-     * Obtains an ordered page of any entities.
+     * Sends an HTTP response with an ordered page of any entities.
      * If the page is empty it sends a 404 response.
+     * 
      * @param req       Express request.
      * @param res       Express response.
      * @param service   A persistence service for getting the number of page.
