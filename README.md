@@ -17,6 +17,10 @@ Anvireco es una herramienta para la extracción y visualización de datos sobre 
 - Carlos López Nozal - [clopezno@ubu.es](mailto:clopezno@ubu.es)
 - Raúl Marticorena Sánchez - [rmartico@ubu.es](mailto:rmartico@ubu.es)
 
+## Wiki
+
+En la [wiki](../../wiki) se pueden encontrar los manuales de usuario tanto de la API como del cliente.
+
 ## Requisitos
 
 ### Requisitos mínimos
@@ -29,6 +33,8 @@ Anvireco es una herramienta para la extracción y visualización de datos sobre 
 - [**GitHub Developer application**](https://github.com/settings/developers): Permite aumentar el límite de peticiones/hora a la API de GitHub de 60 a 5000.
 
 ## Dependencias
+
+### Dependencias de la API (backend)
 
 | Nombre | Licencia | Imprescindible |
 |--------|----------| -------------- |
@@ -43,6 +49,12 @@ Anvireco es una herramienta para la extracción y visualización de datos sobre 
 | [gulp](https://github.com/gulpjs/gulp) | MIT | Sí |
 | [gulp-sourcemaps](https://github.com/gulp-sourcemaps/gulp-sourcemaps) | ISC | Sí |
 | [gulp-typescript](https://github.com/ivogabe/gulp-typescript) | MIT | Sí |
+| [request](https://github.com/request/request) | Apache-2.0 | Sí |
+| [request-promise](https://github.com/request/request-promise) | ISC | Sí |
+| [twix](https://github.com/icambron/twix.js) | MIT | Sí |
+| [moment](https://github.com/moment/moment) | MIT | Sí |
+| [json2csv](https://github.com/zemirco/json2csv) | MIT | Sí |
+| [cheerio](https://github.com/cheeriojs/cheerio) | MIT | Sí |
 | [gulp-typedoc](https://github.com/rogierschouten/gulp-typedoc) | ISC | No |
 | [chai](https://github.com/chaijs/chai) | MIT | No |
 | [chai-as-promised](https://github.com/domenic/chai-as-promised) | WTFPL | No |
@@ -50,6 +62,16 @@ Anvireco es una herramienta para la extracción y visualización de datos sobre 
 | [sinon](https://github.com/sinonjs/sinon) | BSD | No |
 | [mocha](https://github.com/mochajs/mocha) | MIT | No |
 | [typedoc](https://github.com/TypeStrong/typedoc) | Apache-2.0 | No |
+
+### Dependencias del cliente (frontend)
+
+| Nombre | Licencia | Imprescindible |
+|--------|----------| -------------- |
+| [jQuery](https://github.com/jquery/jquery) | MIT | Sí |
+| [sammy](https://github.com/quirkey/sammy) | MIT | Sí |
+| [semantic-ui](https://github.com/Semantic-Org/Semantic-UI) | MIT | Sí |
+| [d3](https://github.com/d3/d3) | BSD-3-Clause | Sí |
+| [c3](https://github.com/c3js/c3) | MIT | Sí |
 
 ## Instalación
 
