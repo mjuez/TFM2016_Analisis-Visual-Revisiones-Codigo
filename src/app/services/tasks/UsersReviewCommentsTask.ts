@@ -3,15 +3,35 @@ import { IReviewCommentEntity } from "../../entities/ReviewCommentEntity";
 import { IReviewCommentRepository } from "../../data/ReviewCommentRepository";
 import { AbstractUserTask } from "./AbstractUserTask";
 
+/**
+ * User review comments Task interface.
+ * 
+ * This task type is intended to obtain the authors
+ * of all review comments of a repository.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export interface IUsersReviewCommentsTask extends ITask { }
 
+/**
+ * User review comments task implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersReviewCommentsTask {
 
+    /**
+     * Runs the task.
+     * Obtains all review comments of a repository from database
+     * and processes its users.
+     * At the end of the task, users stats are updated.
+     * 
+     * @async
+     */
     public async run(): Promise<void> {
         let reviewCommentRepo: IReviewCommentRepository = this._repos.reviewComment;
         let startingFrom: number = this.entity.lastProcessed;
         try {
-            console.log("Starting user review comments task...");
             await this.startTask();
             let filter: Object = {
                 repository: {
@@ -32,6 +52,13 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
         }
     }
 
+    /**
+     * Processes the users of all review comments.
+     * 
+     * @async
+     * @param reviewComments    Review Comment List.
+     * @returns if successfull processing.
+     */
     private async processReviewComments(reviewComments: IReviewCommentEntity[]): Promise<boolean> {
         for (let i: number = 0; i < reviewComments.length; i++) {
             const reviewComment: IReviewCommentEntity = reviewComments[i];

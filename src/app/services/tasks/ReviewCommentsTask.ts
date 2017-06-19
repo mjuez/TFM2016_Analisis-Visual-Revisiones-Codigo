@@ -1,31 +1,55 @@
 import { ITask } from "./ITask";
 import { GitHubTask } from "./GitHubTask";
-import { ITaskRepository } from "../../data/TaskRepository";
-import { IReviewCommentRepository } from "../../data/ReviewCommentRepository";
-import { ITaskEntity } from "../../entities/TaskEntity";
-import { IReviewCommentEntity, ReviewCommentEntity } from "../../entities/ReviewCommentEntity";
+import { ReviewCommentEntity } from "../../entities/ReviewCommentEntity";
 import { IReviewCommentService } from "../../services/ReviewCommentService";
 import { GitHubUtil } from "../../util/GitHubUtil";
-import * as GitHubAPI from "github";
 import { IRepositories } from "../../data/IRepositories";
+import * as GitHubAPI from "github";
 
+/**
+ * Review Comment Task interface.
+ * 
+ * This task type is intended to obtain all review
+ * comments from a GitHub repository.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export interface IReviewCommentsTask extends ITask { }
 
+/**
+ * Review Comment task implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTask {
 
+    /** Repositories list. */
     private readonly _repositories: IRepositories;
 
+    /** Review comment service. */
     private readonly _reviewCommentService: IReviewCommentService;
 
+    /**
+     * Creates the task instance.
+     * 
+     * @param repositories          Repositories list.
+     * @param reviewCommentService  Review comment service.
+     * @param api                   optional GitHub API.
+     * @param apiAuth               optional GitHub API Authorization.
+     */
     constructor(repositories: IRepositories, reviewCommentService: IReviewCommentService, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
         super(repositories.task, api, apiAuth);
         this._reviewCommentService = reviewCommentService;
         this._repositories = repositories;
     }
 
+    /**
+     * Runs the review comment task.
+     * 
+     * @async
+     */
     public async run(): Promise<void> {
         try {
-            console.log("Starting review comments task...");
             await this.startTask();
             await this.makeApiCall();
             await this.completeTask();
@@ -34,6 +58,12 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
         }
     }
 
+    /**
+     * Makes a GitHub API Call.
+     * Gets all pages of review comments.
+     * 
+     * @async
+     */
     private async makeApiCall(): Promise<void> {
         try {
             let page: any = await this.API.pullRequests.getCommentsForRepo(<GitHubAPI.PullRequestsGetCommentsForRepoParams>{

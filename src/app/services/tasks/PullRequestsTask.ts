@@ -1,9 +1,9 @@
 import { ITask } from "./ITask";
 import { IPullRequestEntity, PullRequestEntity } from "../../entities/PullRequestEntity";
 import { AbstractPullRequestTask } from "./AbstractPullRequestTask";
-import * as GitHubAPI from "github";
 import { IPullRequestService } from "../PullRequestService";
 import { IRepositories } from "../../data/IRepositories";
+import * as GitHubAPI from "github";
 
 /**
  * Pull Requests Task interface.
@@ -20,7 +20,7 @@ export interface IPullRequestsTask extends ITask { }
 /**
  * Pull Requests task implementation.
  * 
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class PullRequestsTask extends AbstractPullRequestTask implements IPullRequestsTask {
 
@@ -29,6 +29,7 @@ export class PullRequestsTask extends AbstractPullRequestTask implements IPullRe
 
     /**
      * Creates the task instance.
+     * 
      * @param repos                 Repositories list.
      * @param pullRequestService    Pull Request service.
      * @param api                   optional GitHub API.
@@ -43,6 +44,7 @@ export class PullRequestsTask extends AbstractPullRequestTask implements IPullRe
      * Processes a pull request entity list.
      * Each pull request fires a GitHub API call for obtaining
      * all data of that pull request.
+     * 
      * @async
      * @param pulls List of pull request entities.
      * @returns if successfull processing.
@@ -67,6 +69,7 @@ export class PullRequestsTask extends AbstractPullRequestTask implements IPullRe
     /**
      * Makes a GitHub API call for obtaining all pull request
      * data given its number.
+     * 
      * @async
      * @param pullNumber Pull Request number.
      * @returns obtained pull request entity.

@@ -1,30 +1,59 @@
 import { ITask } from "./ITask";
-import { IUserEntity } from "../../entities/UserEntity";
-import { ITaskEntity } from "../../entities/TaskEntity";
 import { IPullRequestEntity } from "../../entities/PullRequestEntity";
-import { ITaskRepository } from "../../data/TaskRepository";
-import { IPullRequestRepository } from "../../data/PullRequestRepository";
-import { IUserRepository } from "../../data/UserRepository";
 import { IUserService } from "../../services/UserService";
 import { AbstractPullRequestTask } from "./AbstractPullRequestTask";
 import { IRepositories } from "../../data/IRepositories";
-import * as GitHubAPI from "github";
 import { IUserTaskUtil } from "../../util/UserTaskUtil";
+import * as GitHubAPI from "github";
 
+/**
+ * User pulls Task interface.
+ * 
+ * This task type is intended to obtain the three
+ * possible users of a pull request:
+ *  - who creates it.
+ *  - base user.
+ *  - head user.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export interface IUsersPullsTask extends ITask { }
 
+/**
+ * User pulls task implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
 export class UsersPullsTask extends AbstractPullRequestTask implements IUsersPullsTask {
 
+    /** User service. */
     private readonly _userService: IUserService;
 
+    /** User task util. */
     private readonly _userTaskUtil: IUserTaskUtil;
 
+    /**
+     * Creates the task instance.
+     * 
+     * @param repos         Repositories list.
+     * @param userService   User service. 
+     * @param userTaskUtil  User task util.
+     * @param api           optional GitHub API.
+     * @param apiAuth       optional GitHub API Authorization.
+     */
     constructor(repos: IRepositories, userService: IUserService, userTaskUtil: IUserTaskUtil, api?: GitHubAPI, apiAuth?: GitHubAPI.Auth) {
         super(repos, api, apiAuth);
         this._userService = userService;
         this._userTaskUtil = userTaskUtil;
     }
 
+    /**
+     * Processes the users of all pull requests.
+     * 
+     * @async
+     * @param pulls Pull Request List.
+     * @returns if successfull processing.
+     */
     protected async processPullRequests(pulls: IPullRequestEntity[]): Promise<boolean> {
         const taskId: any = this.entity.parentTask.document._id;
         for (let i: number = 0; i < pulls.length; i++) {
