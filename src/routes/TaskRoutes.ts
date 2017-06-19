@@ -4,7 +4,7 @@ import { ITaskManagerController } from "../controllers/TaskManagerController";
 /**
  * Task Manager express Routes.
  * Defines our API routes.
- * @author Mario Juez <mario@mjuez.com>
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class TaskRoutes {
 
@@ -16,6 +16,7 @@ export class TaskRoutes {
 
     /**
      * Class constructor. Injects controller and router dependencies.
+     * 
      * @param controller    Task Manager controller.
      * @param router        A express router.
      */
@@ -26,6 +27,7 @@ export class TaskRoutes {
 
     /**
      * Gets Task Manager API routes.
+     * 
      * @returns  the router.
      */
     public get routes(): express.Router {

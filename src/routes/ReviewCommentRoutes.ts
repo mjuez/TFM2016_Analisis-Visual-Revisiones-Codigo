@@ -4,7 +4,8 @@ import { IReviewCommentController } from "../controllers/ReviewCommentController
 /**
  * ReviewComment express Routes.
  * Defines our API routes.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class ReviewCommentRoutes {
 
@@ -16,6 +17,7 @@ export class ReviewCommentRoutes {
 
     /**
      * Class constructor. Injects controller and router dependencies.
+     * 
      * @param controller    ReviewComment controller.
      * @param router        A express router.
      */
@@ -26,6 +28,7 @@ export class ReviewCommentRoutes {
 
     /**
      * Gets ReviewComment API routes.
+     * 
      * @returns  the router.
      */
     public get routes(): express.Router {
