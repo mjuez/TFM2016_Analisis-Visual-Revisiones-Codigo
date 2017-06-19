@@ -1,25 +1,36 @@
 import { IMultiplePersistenceService } from "../services/IPersistenceService";
 import { IPullRequestService } from "../services/PullRequestService";
-import { IReviewEntity, ReviewEntity } from "../entities/ReviewEntity";
+import { IReviewEntity } from "../entities/ReviewEntity";
 import { IPullRequestEntity } from "../entities/PullRequestEntity";
-import { ReviewDocument } from "../entities/documents/ReviewDocument";
 import { IReviewRepository } from "../data/ReviewRepository";
 import { AbstractMultiplePersistenceService } from "./AbstractPersistenceService";
 
 /**
- * IReviewService interface.
- * Describes specific functionality for Review entities.
- * @author Mario Juez <mario@mjuez.com> 
+ * Review service interface.
+ * Describes services for getting reviews data.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com> 
  */
 export interface IReviewService extends IMultiplePersistenceService<IReviewEntity> {
+    
+    /**
+     * Gets a page of data of filtered reviews.
+     * The data is prepared to be easily converted to CSV.
+     * 
+     * @param filter    reviews filter (usually by repository).
+     * @param page      page number.
+     * @returns an array of reviews data.
+     */
     getReviewPageForCSV(filter: any, page: number): Promise<any[]>;
+
 }
 
 /**
- * Review services.
- * @author Mario Juez <mario@mjuez.com>
+ * Review services implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
-export class ReviewService extends AbstractMultiplePersistenceService<IReviewRepository, IReviewEntity, ReviewDocument> implements IReviewService {
+export class ReviewService extends AbstractMultiplePersistenceService<IReviewRepository, IReviewEntity> implements IReviewService {
 
     /** Pull Request service. */
     private readonly _pullRequestService: IPullRequestService;
@@ -27,6 +38,7 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
     /**
      * Class constructor with Review repository and
      * pull request service dependency injection.
+     * 
      * @param repository            Injected Review repository.
      * @param pullRequestService    Injected pull request service.
      */
@@ -35,8 +47,17 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
         this._pullRequestService = pullRequestService;
     }
 
+    /**
+     * Gets a page of data of filtered reviews.
+     * The data is prepared to be easily converted to CSV.
+     * 
+     * @async
+     * @param filter    reviews filter (usually by repository).
+     * @param page      page number.
+     * @returns an array of reviews data.
+     */
     public async getReviewPageForCSV(filter: any, page: number): Promise<any[]> {
-        const reviews: IReviewEntity[] = await this.getReviewPageByRepository(filter, page);
+        const reviews: IReviewEntity[] = await this.getReviewPageBy(filter, page);
         const pageForCSV: any[] = [];
         for (let i = 0; i < reviews.length; i++) {
             const review: IReviewEntity = reviews[i];
@@ -72,11 +93,26 @@ export class ReviewService extends AbstractMultiplePersistenceService<IReviewRep
         return pageForCSV;
     }
 
-    private async getReviewPageByRepository(filter: any, page: number): Promise<IReviewEntity[]> {
+    /**
+     * Gets a filtered page of reviews.
+     * 
+     * @async
+     * @param filter    reviews filter (usually by repository).
+     * @param page      page number.
+     * @returns an array of review entities.
+     */
+    private async getReviewPageBy(filter: any, page: number): Promise<IReviewEntity[]> {
         const repo: IReviewRepository = this._repository;
         return await repo.retrieve({ filter, page });
     }
 
+    /**
+     * Finds a persisted review by its id.
+     *
+     * @async 
+     * @param entity    A in-memory review.
+     * @returns the persisted review.
+     */
     protected async findEntity(entity: IReviewEntity): Promise<IReviewEntity> {
         return await this._repository.findById(entity.id);
     }

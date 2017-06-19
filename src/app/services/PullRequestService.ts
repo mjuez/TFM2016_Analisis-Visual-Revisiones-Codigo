@@ -1,7 +1,6 @@
 import { IMultiplePersistenceService } from "../services/IPersistenceService";
 import { AbstractMultiplePersistenceService } from "../services/AbstractPersistenceService";
-import { IPullRequestEntity, PullRequestEntity } from "../entities/PullRequestEntity";
-import { PullRequestDocument } from "../entities/documents/PullRequestDocument";
+import { IPullRequestEntity } from "../entities/PullRequestEntity";
 import { IPullRequestRepository } from "../data/PullRequestRepository";
 import { SinglePullRequestFilter, RepositoryPullRequestFilter, PullRequestFilterFactory} from "../data/filters/PullRequestFilter";
 import * as math from "mathjs";
@@ -10,80 +9,301 @@ import * as twix from "twix";
 require("twix");
 
 /**
- * IPullRequestService interface.
- * Describes specific functionality for Pull Request entities.
- * @author Mario Juez <mario@mjuez.com> 
+ * Pull Request service interface.
+ * Describes services for getting pull requests in many ways.
+ * Filtered, sorted... It also defines services for obtaining
+ * pull request related data like stats.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com> 
  */
 export interface IPullRequestService extends IMultiplePersistenceService<IPullRequestEntity> {
 
+    /**
+     * Gets a single pull request.
+     * 
+     * @param owner         repository owner login.
+     * @param repository    repository name.
+     * @param number        pull request number.
+     * @returns a pull request entity.
+     */
     getPullRequest(owner: string, repository: string, number: number): Promise<IPullRequestEntity>;
+
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from ALL pull requests
+     * stored in the database without filtering or
+     * sorting.
+     * 
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     getPullRequestsPage(page: number, direction?: number): Promise<IPullRequestEntity[]>;
+
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from ALL pull requests
+     * stored in the database ordered by title (name).
+     * 
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     getPullRequestsByNamePage(page: number, direction?: number): Promise<IPullRequestEntity[]>;
+
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from ALL pull requests
+     * stored in the database ordered by number of reviews.
+     * 
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     getPullRequestsByReviewsPage(page: number, direction?: number): Promise<IPullRequestEntity[]>;
+
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from pull requests of a
+     * specific repository stored in the database.
+     *
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @param page          page number.
+     * @param direction     optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     getRepositoryPullRequestsPage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from pull requests of a
+     * specific repository stored in the database
+     * ordered by title (name).
+     *
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @param page          page number.
+     * @param direction     optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     getRepositoryPullRequestsByNamePage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from pull requests of a
+     * specific repository stored in the database
+     * ordered by number of reviews.
+     *
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @param page          page number.
+     * @param direction     optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     getRepositoryPullRequestsByReviewsPage(owner: string, repository: string, page: number, direction?: number): Promise<IPullRequestEntity[]>;
+    
+    /**
+     * Calculates all pull requests statistics means for:
+     *  - changed files.
+     *  - additions.
+     *  - deletions. 
+     *  - commits.
+     *  - comments.
+     *  - reviews.
+     *  - review comments.
+     * 
+     * @returns a JSON object with all statistics.
+     */
     getPullRequestsStatsMeans(): Promise<Object>;
+
+    /**
+     * Gets the number of pages of pull requests
+     * of a specific repository.
+     * 
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @returns the number of pages.
+     */
     numPagesForRepository(owner: string, repository: string): Promise<number>;
+
+    /**
+     * Gets a page obtaining handler.
+     * 
+     * @param type  optional parameter. Can take
+     *              values "NAME" and "REVIEWS".
+     * @returns a page obtaining handler.
+     */
     getPageHandler(type?: string): any;
+
+    /**
+     * Gets a filtered by repository page
+     * obtaining handler.
+     * 
+     * @param type  optional parameter. Can take
+     *              values "NAME" and "REVIEWS".
+     * @returns a page obtaining handler.
+     */
     getFilteredPageHandler(type?: string): any;
 
 }
 
 /**
- * Pull Request services.
- * @author Mario Juez <mario@mjuez.com>
+ * Pull Request services implementation.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
-export class PullRequestService extends AbstractMultiplePersistenceService<IPullRequestRepository, IPullRequestEntity, PullRequestDocument> implements IPullRequestService {
+export class PullRequestService extends AbstractMultiplePersistenceService<IPullRequestRepository, IPullRequestEntity> implements IPullRequestService {
 
     /**
      * Class constructor with Pull Request repository dependency
      * injection.
+     * 
      * @param repository    Injected Pull Request repository.
      */
     constructor(repository: IPullRequestRepository) {
         super(repository);
     }
 
+    /**
+     * Gets a single pull request.
+     * 
+     * @async
+     * @param owner         repository owner login.
+     * @param repository    repository name.
+     * @param number        pull request number.
+     * @returns a pull request entity.
+     */
     public async getPullRequest(owner: string, repository: string, number: number): Promise<IPullRequestEntity> {
         const repo: IPullRequestRepository = this._repository;
         const filter: SinglePullRequestFilter = PullRequestFilterFactory.createSingle({ owner, repository, number });
         return repo.findOne(filter);
     }
 
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from ALL pull requests
+     * stored in the database without filtering or
+     * sorting.
+     * 
+     * @async
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     public getPullRequestsPage = async (page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         return await this.getSortedPage(page, { created_at: direction });
     }
 
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from ALL pull requests
+     * stored in the database ordered by title (name).
+     * 
+     * @async
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     public getPullRequestsByNamePage = async (page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         return await this.getSortedPage(page, { title: direction });
     }
 
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from ALL pull requests
+     * stored in the database ordered by number of reviews.
+     * 
+     * @async
+     * @param page      page number.
+     * @param direction optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     public getPullRequestsByReviewsPage = async (page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         return await this.getSortedPage(page, { reviews: direction });
     }
 
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from pull requests of a
+     * specific repository stored in the database.
+     *
+     * @async
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @param page          page number.
+     * @param direction     optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     public getRepositoryPullRequestsPage = async (owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
         return await this.getFilteredPage(filter, page, { created_at: direction });
     }
 
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from pull requests of a
+     * specific repository stored in the database
+     * ordered by title (name).
+     *
+     * @async
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @param page          page number.
+     * @param direction     optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     public getRepositoryPullRequestsByNamePage = async (owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
         return await this.getFilteredPage(filter, page, { title: direction });
     }
 
+    /**
+     * Gets a pull requests page.
+     * It retrieves a page from pull requests of a
+     * specific repository stored in the database
+     * ordered by number of reviews.
+     *
+     * @async
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @param page          page number.
+     * @param direction     optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
     public getRepositoryPullRequestsByReviewsPage = async (owner: string, repository: string, page: number, direction: number = 1): Promise<IPullRequestEntity[]> => {
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
         return await this.getFilteredPage(filter, page, { reviews: direction });
     }
 
+    /**
+     * Gets the number of pages of pull requests
+     * of a specific repository.
+     * 
+     * @async
+     * @param owner         repository owner login.
+     * @param repository    repository name. 
+     * @returns the number of pages.
+     */
     public numPagesForRepository = async (owner: string, repository: string): Promise<number> => {
         const repo: IPullRequestRepository = this._repository;
         const filter: RepositoryPullRequestFilter = PullRequestFilterFactory.createRepository({ owner, repository });
         return await repo.numPages(filter);
     }
 
+    /**
+     * Calculates all pull requests statistics means for:
+     *  - changed files.
+     *  - additions.
+     *  - deletions. 
+     *  - commits.
+     *  - comments.
+     *  - reviews.
+     *  - review comments.
+     * 
+     * @async
+     * @returns a JSON object with all statistics.
+     */
     public getPullRequestsStatsMeans = async (): Promise<Object> => {
         const repo: IPullRequestRepository = this._repository;
         const select: string = 'changed_files additions deletions commits comments reviews review_comments -_id';
@@ -109,6 +329,13 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         return means;
     }
 
+    /**
+     * Gets a page obtaining handler.
+     * 
+     * @param type  optional parameter. Can take
+     *              values "NAME" and "REVIEWS".
+     * @returns a page obtaining handler.
+     */
     public getPageHandler = (type: string = "NONE"): any => {
         switch (type) {
             case "NONE":
@@ -120,6 +347,14 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         }
     }
 
+    /**
+     * Gets a filtered by repository page
+     * obtaining handler.
+     * 
+     * @param type  optional parameter. Can take
+     *              values "NAME" and "REVIEWS".
+     * @returns a page obtaining handler.
+     */
     public getFilteredPageHandler = (type: string = "NONE"): any => {
         switch (type) {
             case "NONE":
@@ -131,6 +366,14 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         }
     }
 
+    /**
+     * Gets a specific field stats from a list
+     * of pull requests.
+     * 
+     * @param pulls         list of pull requests.
+     * @param statsField    field name.
+     * @returns an array of stats.
+     */
     private getPullRequestsStatsArray = (pulls: IPullRequestEntity[], statsField: string): number[] => {
         let array: number[] = pulls.map((pull): number => {
             if (pull.document[statsField] != undefined) {
@@ -142,11 +385,26 @@ export class PullRequestService extends AbstractMultiplePersistenceService<IPull
         return array;
     }
 
-    private getFilteredPage = (filter: any, page: number, sort: any): Promise<IPullRequestEntity[]> => {
+    /**
+     * Gets a filtered pull requests page.
+     * 
+     * @async
+     * @param page      page number.
+     * @param sort   optional direction 1 (asc), -1 (desc).
+     * @returns a list of pull requests.
+     */
+    private getFilteredPage = async (filter: any, page: number, sort: any): Promise<IPullRequestEntity[]> => {
         const repo: IPullRequestRepository = this._repository;
-        return repo.retrieve({ filter, page, sort });
+        return await repo.retrieve({ filter, page, sort });
     }
 
+    /**
+     * Finds a persisted pull request by its id.
+     *
+     * @async 
+     * @param entity    A in-memory pull request.
+     * @returns the persisted pull request.
+     */
     protected async findEntity(entity: IPullRequestEntity): Promise<IPullRequestEntity> {
         return await this._repository.findById(entity.id);
     }

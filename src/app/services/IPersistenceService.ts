@@ -2,32 +2,46 @@ import { IEntity } from "../entities/IEntity";
 
 /**
  * IPersistenceService interface.
- * @author Mario Juez <mario@mjuez.com>
+ * Declares shared functionality for all persistence services.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
-export interface IPersistenceService<IEntity> {
+
+export interface IPersistenceService<T extends IEntity<any>> {
 
     /**
      * Saves or updates an entity into database.
+     * 
      * @param entity    an entity.
-     * @returns a promise that returns an entity if resolved.
+     * @returns the persisted entity.
      */
-    createOrUpdate(entity: IEntity): Promise<IEntity>;
+    createOrUpdate(entity: T): Promise<T>;
 
+    /**
+     * Calculates the number of pages of results.
+     * 
+     * @param filter    optional filter
+     * @returns the number of pages.
+     */
     numPages(filter?: Object): Promise<number>;
 
 }
 
 /**
  * IMultiplePersistenceService interface.
- * @author Mario Juez <mario@mjuez.com>
+ * Declares functionality for those services that can
+ * persist multiple entities.
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
-export interface IMultiplePersistenceService<IEntity> extends IPersistenceService<IEntity> {
+export interface IMultiplePersistenceService<T extends IEntity<any>> extends IPersistenceService<T> {
 
     /**
      * Saves or updates many entities into database.
-     * @param entity    a entity array.
-     * @returns a promise that returns an array of entities if resolved.
+     * 
+     * @param entities    an entity array.
+     * @returns a list of persisted entities.
      */
-    createOrUpdateMultiple(entities: IEntity[]): Promise<IEntity[]>
+    createOrUpdateMultiple(entities: T[]): Promise<T[]>;
 
 }
