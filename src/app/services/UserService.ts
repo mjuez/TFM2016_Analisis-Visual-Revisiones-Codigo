@@ -1,7 +1,6 @@
 import { IPersistenceService } from "../services/IPersistenceService";
 import { AbstractPersistenceService } from "../services/AbstractPersistenceService";
 import { IUserEntity } from "../entities/UserEntity";
-import { UserDocument } from "../entities/documents/UserDocument";
 import { IUserRepository } from "../data/UserRepository";
 import * as math from "mathjs";
 
