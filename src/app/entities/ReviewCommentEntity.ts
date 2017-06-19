@@ -50,6 +50,7 @@ export class ReviewCommentEntity extends AbstractEntity<ReviewCommentDocument> i
 
     /**
      * Transforms raw data to IReviewCommentEntity array.
+     * 
      * @param data  raw data.
      * @returns an array of review comment entities.
      */

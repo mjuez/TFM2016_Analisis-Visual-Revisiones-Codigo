@@ -1,4 +1,3 @@
-import * as mongoose from "mongoose";
 import { UserDocument } from "./documents/UserDocument";
 import { IEntity } from "./IEntity";
 import { AbstractEntity } from "./AbstractEntity";
@@ -7,9 +6,11 @@ import { EntityUtil } from "../util/EntityUtil";
 /**
  * IUserEntity interface. Describes custom functionality for
  * User mongoose documents.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IUserEntity extends IEntity<UserDocument> {
+    
     /** Gets User GitHub id. */
     id: number;
 
@@ -19,22 +20,32 @@ export interface IUserEntity extends IEntity<UserDocument> {
 
 /**
  * User Entity.
- * @author Mario Juez <mario@mjuez.com>
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
  */
 export class UserEntity extends AbstractEntity<UserDocument> implements IUserEntity {
 
-    /** @inheritdoc */
+    /** 
+     * Gets user GitHub id.
+     *
+     * @returns user id.
+     */
     public get id(): number {
         return this.document.id;
     }
 
-    /** @inheritdoc */
+    /** 
+     * Gets user login.
+     * 
+     * @returns user login.
+     */
     public get login(): string {
         return this.document.login;
     }
 
     /**
      * Transforms raw data to IUserEntity.
+     * 
      * @param data  raw data.
      * @returns a user entity.
      */
@@ -48,6 +59,7 @@ export class UserEntity extends AbstractEntity<UserDocument> implements IUserEnt
 
     /**
      * Transforms raw data to IUserEntity array.
+     * 
      * @param data  raw data.
      * @returns an array of user entities.
      */
