@@ -1,3 +1,8 @@
+/**
+ * Sammy routes.
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
+
 var app = Sammy('#content', function () {
 
     //////////

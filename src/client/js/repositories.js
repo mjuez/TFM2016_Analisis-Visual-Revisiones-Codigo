@@ -1,3 +1,16 @@
+/**
+ * repositories.js
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
+
+/**
+ * Repositories list loader.
+ * 
+ * @param {string} apiRoute     Anvireco GET api route.
+ * @param {number} page         page number.
+ * @param {string} url          base url.
+ */
 function loadRepositoryList(apiRoute, page, url) {
     showLoader();
     $('#repositories_order_dropdown').dropdown({
@@ -16,6 +29,11 @@ function loadRepositoryList(apiRoute, page, url) {
         });
 }
 
+/**
+ * Handles repository ordering.
+ * 
+ * @param {string} value    order value. 
+ */
 function handleRepositoriesOrder(value) {
     switch (value) {
         case 'date_asc': app.setLocation(`#/repositories/order/date/asc/page/1`);
@@ -37,6 +55,12 @@ function handleRepositoriesOrder(value) {
     }
 }
 
+/**
+ * Loads a single repository page.
+ * 
+ * @param {string} owner        repository owner.
+ * @param {string} repository   repository name. 
+ */
 function loadRepository(owner, repository) {
     showLoader();
     $.get(`/api/repo/${owner}/${repository}`)
@@ -52,13 +76,17 @@ function loadRepository(owner, repository) {
         });
 }
 
+/**
+ * Configures the top buttons of a single repository page.
+ * 
+ * @param {Object} repository   repository object.
+ */
 function configureRepositoryButtons(repository) {
     $('#repository_pullrequests_button').on('click', function () {
         app.setLocation(`#/pullrequests/filter/${repository.full_name}/page/1`);
     });
 
     $('#repository_download_button').on('click', function () {
-        //app.setLocation(`api/repo/${repository.full_name}/csv`);
         $(location).attr('href', `/api/repo/${repository.full_name}/csv`);
     });
 
@@ -67,13 +95,15 @@ function configureRepositoryButtons(repository) {
     });
 }
 
+/**
+ * Loads a single repository charts.
+ * 
+ * @param {Object} repository  repository object
+ */
 function loadRepositoryCharts(repository) {
     $.get(`/api/repos/stats/means`)
         .done(function (result) {
             printRepositoryMeanCharts(repository, result);
-        })
-        .fail(function (error) {
-            // todo
         });
 
     if (repository.reviews_count > 0) {
@@ -81,9 +111,6 @@ function loadRepositoryCharts(repository) {
             .done(function (result) {
                 printRepositoryReviewsAllTimeChart(result);
                 printRepositoryReviewTypesChart(result);
-            })
-            .fail(function (error) {
-                // todo
             });
     } else {
         $('#repository_reviews_none_msg').removeClass("invisible");
@@ -96,9 +123,6 @@ function loadRepositoryCharts(repository) {
             .done(function (result) {
                 printRepositoryPullsStatesChart(result);
                 printRepositoryPullsAllTimeChart(result);
-            })
-            .fail(function (error) {
-                // todo
             });
     } else {
         $('#repository_pulls_none_msg').removeClass("invisible");
@@ -110,9 +134,6 @@ function loadRepositoryCharts(repository) {
         $.get(`/api/reviewcomments/filter/repo/${repository.full_name}/stats/alltime`)
             .done(function (result) {
                 printRepositoryReviewCommentsAllTimeChart(result);
-            })
-            .fail(function (error) {
-                // todo
             });
     } else {
         $('#repository_reviewcomments_none_msg').removeClass("invisible");
@@ -121,6 +142,12 @@ function loadRepositoryCharts(repository) {
 
 }
 
+/**
+ * Prints all repository mean charts.
+ * 
+ * @param {Object} repository  repository object
+ * @param {Object} meanData     mean statistics.
+ */
 function printRepositoryMeanCharts(repository, meanData) {
     var stargazersCountConfig = {
         value: repository.stargazers_count,
@@ -172,6 +199,11 @@ function printRepositoryMeanCharts(repository, meanData) {
     printMeanChart(reviewcommentsCountConfig);
 }
 
+/**
+ * Prints a donut chart with review types comparison.
+ * 
+ * @param {Object} stats    Review types statistics.
+ */
 function printRepositoryReviewTypesChart(stats) {
     $(`#repository_reviewtypes_chart_segment`).removeClass('loading');
     var reviewsCommented = stats.commented.reduce(function (x, y) { return x + y; });
@@ -198,6 +230,12 @@ function printRepositoryReviewTypesChart(stats) {
     });
 }
 
+/**
+ * Prints an area chart of all time 
+ * reviews statistics.
+ * 
+ * @param {Object} stats all time statistics. 
+ */
 function printRepositoryReviewsAllTimeChart(stats) {
     $(`#repository_reviews_alltime_chart_segment`).removeClass('loading');
     var data = $.extend(true, {}, stats);
@@ -247,6 +285,12 @@ function printRepositoryReviewsAllTimeChart(stats) {
     });
 }
 
+/**
+ * Prints a donut chart with pull request
+ * state comparison (open/closed).
+ * 
+ * @param {Object} stats open/closed statistics.
+ */
 function printRepositoryPullsStatesChart(stats) {
     $(`#repository_pullsstates_chart_segment`).removeClass('loading');
     c3.generate({
@@ -271,6 +315,12 @@ function printRepositoryPullsStatesChart(stats) {
     });
 }
 
+/**
+ * Prints an area chart of all time 
+ * pull requests statistics.
+ * 
+ * @param {Object} stats all time statistics. 
+ */
 function printRepositoryPullsAllTimeChart(stats) {
     $(`#repository_pulls_alltime_chart_segment`).removeClass('loading');
     var data = $.extend(true, {}, stats);
@@ -311,6 +361,12 @@ function printRepositoryPullsAllTimeChart(stats) {
     });
 }
 
+/**
+ * Prints an area chart of all time 
+ * review comments statistics.
+ * 
+ * @param {Object} stats all time statistics. 
+ */
 function printRepositoryReviewCommentsAllTimeChart(stats) {
     $(`#repository_reviewcomments_alltime_chart_segment`).removeClass('loading');
     stats.created.unshift('created');
@@ -350,6 +406,11 @@ function printRepositoryReviewCommentsAllTimeChart(stats) {
     });
 }
 
+/**
+ * Prints the list of repositories.
+ * 
+ * @param {Array} items repositories items.
+ */
 function printRepositoryItems(items) {
     $('#repository_list').html('');
     items.map(function (item) {
@@ -357,6 +418,11 @@ function printRepositoryItems(items) {
     });
 }
 
+/**
+ * Creates a repository list item.
+ * 
+ * @param {Object} repositoryData  repository data object.
+ */
 function repositoryItem(repositoryData) {
     const item = $('<div>', {
         class: 'item',

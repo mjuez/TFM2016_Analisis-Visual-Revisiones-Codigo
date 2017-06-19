@@ -1,3 +1,16 @@
+/**
+ * users.js
+ * 
+ * @author Mario Juez <mario[at]mjuez.com>
+ */
+
+/**
+ * Users list loader.
+ * 
+ * @param {string} apiRoute     Anvireco GET api route.
+ * @param {number} page         page number.
+ * @param {string} url          base url.
+ */
 function loadUsersList(apiRoute, page, url) {
     showLoader();
     $('#users_order_dropdown').dropdown({
@@ -16,6 +29,11 @@ function loadUsersList(apiRoute, page, url) {
         });
 }
 
+/**
+ * Handles user ordering.
+ * 
+ * @param {string} value    order value. 
+ */
 function handleUsersOrder(value) {
     switch (value) {
         case 'date_asc':
@@ -75,6 +93,11 @@ function handleUsersOrder(value) {
     }
 }
 
+/**
+ * Loads a single user page.
+ * 
+ * @param {string} login    user login.
+ */
 function loadUser(login) {
     showLoader();
     $.get(`/api/user/${login}`)
@@ -90,19 +113,26 @@ function loadUser(login) {
         });
 }
 
+/**
+ * Configures the top buttons of a single user page.
+ * 
+ * @param {Object} user user object.
+ */
 function configureUserButtons(user) {
     $('#user_viewgithub_button').on('click', function () {
         $(location).attr('href', user.html_url);
     });
 }
 
+/**
+ * Loads a single user charts.
+ * 
+ * @param {Object} user user object
+ */
 function loadUserCharts(user) {
     $.get(`/api/users/stats/means`)
         .done(function (result) {
             printUserMeanCharts(user, result);
-        })
-        .fail(function (error) {
-            // todo
         });
 
     if (user.reviews_count > 0) {
@@ -110,9 +140,6 @@ function loadUserCharts(user) {
             .done(function (result) {
                 printUserReviewsAllTimeChart(result);
                 printUserReviewTypesChart(user);
-            })
-            .fail(function (error) {
-                // todo
             });
     } else {
         $('#user_reviews_none_msg').removeClass("invisible");
@@ -125,9 +152,6 @@ function loadUserCharts(user) {
             .done(function (result) {
                 printUserPullsStatesChart(result);
                 printUserPullsAllTimeChart(result);
-            })
-            .fail(function (error) {
-                // todo
             });
     } else {
         $('#user_pulls_none_msg').removeClass("invisible");
@@ -139,9 +163,6 @@ function loadUserCharts(user) {
         $.get(`/api/reviewcomments/filter/user/${user.login}/stats/alltime`)
             .done(function (result) {
                 printUserReviewCommentsAllTimeChart(result);
-            })
-            .fail(function (error) {
-                // todo
             });
     } else {
         $('#user_reviewcomments_none_msg').removeClass("invisible");
@@ -150,6 +171,12 @@ function loadUserCharts(user) {
 
 }
 
+/**
+ * Prints all user mean charts.
+ * 
+ * @param {Object} user     user object
+ * @param {Object} meanData mean statistics.
+ */
 function printUserMeanCharts(user, meanData) {
     var pullsCountConfig = {
         value: user.pull_request_count,
@@ -177,6 +204,11 @@ function printUserMeanCharts(user, meanData) {
     printMeanChart(reviewCommentsCountConfig);
 }
 
+/**
+ * Prints a donut chart with review types comparison.
+ * 
+ * @param {Object} stats    Review types statistics.
+ */
 function printUserReviewTypesChart(user) {
     $(`#user_reviewtypes_chart_segment`).removeClass('loading');
     c3.generate({
@@ -199,6 +231,12 @@ function printUserReviewTypesChart(user) {
     });
 }
 
+/**
+ * Prints an area chart of all time 
+ * reviews statistics.
+ * 
+ * @param {Object} stats all time statistics. 
+ */
 function printUserReviewsAllTimeChart(stats) {
     $(`#user_reviews_alltime_chart_segment`).removeClass('loading');
     stats.all.unshift('all');
@@ -247,6 +285,12 @@ function printUserReviewsAllTimeChart(stats) {
     });
 }
 
+/**
+ * Prints a donut chart with pull request
+ * state comparison (open/closed).
+ * 
+ * @param {Object} stats open/closed statistics.
+ */
 function printUserPullsStatesChart(stats) {
     $(`#user_pullsstates_chart_segment`).removeClass('loading');
     c3.generate({
@@ -271,6 +315,12 @@ function printUserPullsStatesChart(stats) {
     });
 }
 
+/**
+ * Prints an area chart of all time 
+ * pull requests statistics.
+ * 
+ * @param {Object} stats all time statistics. 
+ */
 function printUserPullsAllTimeChart(stats) {
     $(`#user_pulls_alltime_chart_segment`).removeClass('loading');
     stats.created.unshift('created');
@@ -310,6 +360,12 @@ function printUserPullsAllTimeChart(stats) {
     });
 }
 
+/**
+ * Prints an area chart of all time 
+ * review comments statistics.
+ * 
+ * @param {Object} stats all time statistics. 
+ */
 function printUserReviewCommentsAllTimeChart(stats) {
     $(`#user_reviewcomments_alltime_chart_segment`).removeClass('loading');
     stats.created.unshift('created');
@@ -349,6 +405,11 @@ function printUserReviewCommentsAllTimeChart(stats) {
     });
 }
 
+/**
+ * Prints the list of users.
+ * 
+ * @param {Array} items users items.
+ */
 function printUserItems(items) {
     $('#user_list').html('');
     items.map(function (item) {
@@ -356,6 +417,11 @@ function printUserItems(items) {
     });
 }
 
+/**
+ * Creates a user list item.
+ * 
+ * @param {Object} userData user data object.
+ */
 function userItem(userData) {
     const item = $('<div>', {
         class: 'item',
