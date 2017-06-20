@@ -144,3 +144,7 @@ La aplicación se ejecuta mediante el comando `npm start`. La aplicación es acc
 
 - Producción: http://anvireco.herokuapp.com/
 - Desarrollo: http://anvireco-dev.herokuapp.com/
+
+## Licencia
+
+[MIT](../../blob/master/LICENSE)
