@@ -180,3 +180,16 @@ El tablero de tareas se debe actualizar con frecuencia para mantener cada tarea 
 
 Una prueba unitaria es un pequeño fragmento de programa escrito y mantenido por el equipo de desarrollo, su misión es ejecutar una parte del código y comparar el resultado de la ejecución con el resultado esperado. La salida de una prueba unitaria es binaria, indicando que la prueba ha pasado si cumple las expectativas, o que ha fallado en caso contrario. Comúnmente se debe desarrollar un número de pruebas unitarias acorde al tamaño del código que va a ser probado, dichas pruebas son agrupadas en lo que se denomina conjunto de pruebas unitarias o ``test suite''.
 
+\section{Otros conceptos}
+
+En esta parte se definen otros conceptos relacionados con el proyecto.
+
+\subsection{Herramienta de obtención de datos}
+
+Una herramienta de obtención de datos tiene como finalidad la descarga y almacenamiento de datos desde una fuente remota.
+
+Dependiendo de la fuente remota, la obtención de datos puede tomar cierta complejidad. Si tomamos GitHub como fuente de datos, existe un límite de 5000 peticiones por hora a su API pública. Una herramienta de obtención de datos de GitHub deberá tener en cuenta dicha limitación.
+
+\subsection{Herramienta de visualización de datos}
+
+Una herramienta de visualización de datos tiene como finalidad la transformación de datos brutos en una representación gráfica de los mismos.
