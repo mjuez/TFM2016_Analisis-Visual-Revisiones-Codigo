@@ -1,7 +1,101 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
-Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, comentados por los autores del mismo.
-Debe incluir desde la exposición del ciclo de vida utilizado, hasta los detalles de mayor relevancia de las fases de análisis, diseño e implementación.
-Se busca que no sea una mera operación de copiar y pegar diagramas y extractos del código fuente, sino que realmente se justifiquen los caminos de solución que se han tomado, especialmente aquellos que no sean triviales.
-Puede ser el lugar más adecuado para documentar los aspectos más interesantes del diseño y de la implementación, con un mayor hincapié en aspectos tales como el tipo de arquitectura elegido, los índices de las tablas de la base de datos, normalización y desnormalización, distribución en ficheros3, reglas de negocio dentro de las bases de datos (EDVHV GH GDWRV DFWLYDV), aspectos de desarrollo relacionados con el WWW...
-Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
+En este apartado se recogen los aspectos más interesantes del desarrollo del proyecto.
+
+\section{Ciclo de vida del proyecto}
+
+Este proyecto tiene una duración total de 4 meses y 22 días, con inicio el 10 de febrero de 2017 y fin el 3 de julio de 2017.
+
+Como se ha utilizado la metodología ágil Scrum, el proyecto está dividido en sprints (o iteraciones), concretamente 14. Inicialmente las iteraciones tenían una duración de 2 semanas, y a partir del sexto sprint la periodicidad pasó a ser semanal.
+
+Se pueden distinguir tres fases principales:
+
+\begin{description}
+	\item[Prototipado] En esta fase se deciden, estudian y prueban diversas tecnologías como paso previo a la decisión de cuales utilizar en el desarrollo del producto final.
+	\item[Desarrollo de la aplicación] Se trata de la fase más importante, abarca todo el desarrollo de la aplicación que a su vez se podría dividir en dos: desarrollo de la parte backend (API REST) y desarrollo de la parte frontend (cliente SPA).
+	\item[Desarrollo de la memoria] Esta fase consiste en escribir toda la documentación relativa al proyecto (memoria y anexos).
+\end{description}
+
+En el siguiente gráfico se muestra el porcentaje de sprints dedicados a cada una de las fases. Es un gráfico orientativo puesto que no hay un punto exacto en el cual termina la fase de prototipado y empieza la de desarrollo de la aplicación. Asimismo, en la fase de prototipado, una vez decididas las herramientas y tecnologías hubo avances en la fase de desarrollo de memoria.
+
+\imagen{graficoTipoIteraciones}{Porcentaje de sprints dedicados a cada fase.}
+
+\subsection{Gestión de sprints mediante GitHub y ZenHub}
+
+Cada sprint está formado por una serie de tareas concretas.
+
+Para la gestión y planificación de dichas tareas se han utilizado las issue de GitHub junto con el plug-in de ZenHub que permite, entre otras cosas, incluir estimaciones de tiempo.
+
+\imagen{issueGitHub}{Una tarea de GitHub con ZenHub habilitado.}
+
+\section{Estableciendo la base}
+
+TODO
+
+\subsection{Entornos: producción y desarrollo}
+
+TODO
+
+\subsection{Travis y la integración continua}
+
+TODO
+
+\subsection{Variables de entorno frente a fichero de configuración}
+
+TODO
+
+\subsection{TypeScript (JavaScript tipado)}
+
+TODO
+
+\subsection{Documentos JSON y MongoDB}
+
+TODO -> aqui mlab?
+
+\subsection{Arquitectura cliente-servidor}
+
+TODO
+
+\subsubsection{API REST independiente del cliente}
+
+TODO
+
+\subsubsection{Cliente SPA}
+
+TODO
+
+\subsection{Revisiones automáticas con Codebeat}
+
+TODO
+
+\section{Obteniendo datos de GitHub}
+
+TODO
+
+\subsection{¿Qué datos son necesarios?}
+
+TODO
+
+\subsection{El problema de las 5000 peticiones/hora}
+
+TODO
+
+\subsection{Algoritmo de gestión de tareas}
+
+TODO
+
+\section{Visualizando datos mediante gráficas}
+
+TODO
+
+\section{Otros aspectos}
+
+TODO
+
+\subsection{Gestión de memoria: paginando resultados}
+
+TODO
+
+\subsection{Testing y la inyección de dependencias}
+
+TODO
