@@ -28,39 +28,64 @@ Para la gestión y planificación de dichas tareas se han utilizado las issue de
 
 \imagen{issueGitHub}{Una tarea de GitHub con ZenHub habilitado.}
 
+Se utilizan tres ramas:
+
+\begin{description}
+	\item[master] Rama principal, contiene los últimos cambios estables.
+	\item[dev] Rama de desarrollo, se va actualizando a medida que se realizan tareas. Es una rama inestable, la aplicación puede no tener el comportamiento esperado.
+	\item[memo] Rama de memoria, contiene los cambios no definitivos de la documentación del proyecto.
+\end{description}
+
+\imagen{ramasGitHub}{Ejemplo de uso de rama dev en GitHub.}
+
+El ciclo de vida de un sprint en GitHub consiste en:
+
+\begin{enumerate}
+	\item Apertura de issues (tareas) a realizar durante la iteración.
+	\item Selección de rama dev o memo, dependiendo del tipo de tarea que se está llevando a cabo.
+	\item Desarrollo de las diferentes tareas.
+	\item Revisión y comprobación de que los cambios satisfacen los requisitos.
+	\item Apertura de pull request para ejecutar los checks de integración continua y revisión automática.
+	\item Cierre de pull request y fusión de los cambios en la rama master.
+\end{enumerate}
+
+%\imagen{checksPullRequest}{Checks de integración continua y revisión automática.}
+
 \section{Estableciendo la base}
 
-TODO
+Antes de empezar con el desarrollo software del proyecto se tomaron ciertas decisiones que marcaron el resto del proceso.
+
+\subsection{Anvireco como aplicación distribuida}
+
+La herramienta desarrollada tiene una arquitectura cliente-servidor en la cual el servidor es completamente independiente del cliente.
+
+Pese a que en este proyecto únicamente hay un tipo de cliente, en el futuro podrían existir otros, por ejemplo un consumidor de datos para realizar tareas de minería con ellos. Por ello es importante la independencia cliente-servidor.
+
+\imagen{aplicacionDistribuida}{Anvireco como aplicación distribuida.}
+
+En el servidor se optó por implementar una API REST con la cual podrá comunicarse cualquier cliente que conozca el protocolo HTTP.
+
+El cliente de visualización de datos es una aplicación web de tipo SPA por los beneficios que ofrece el uso de AJAX en cuanto a optimización de peticiones y disminución de los refrescos de página, ofreciendo así una mejor experiencia de usuario.
+
+\imagen{tradicionalVersusSPA}{Página web tradicional vs Aplicación SPA \cite{msdn:spa}}
 
 \subsection{Entornos: producción y desarrollo}
 
-TODO
+En la sección del ciclo de vida del proyecto se ha indicado el uso de diferentes ramas Git durante el desarrollo. Esto se traduce en la utilización de dos entornos diferentes e independientes donde se despliega la aplicación:
+
+\begin{description}
+	\item[Entorno de producción] En este entorno se despliegan los cambios de la rama master, es decir, la aplicación en un estado estable.
+	\item[Entorno de desarrollo] En este entorno se despliegan los cambios de la rama dev, es decir, la aplicación puede tener un comportamiento inestable.
+\end{description}
+
+\imagen{entornos}{Entornos de producción y desarrollo del proyecto.}
+
 
 \subsection{Travis y la integración continua}
 
 TODO
 
 \subsection{Variables de entorno frente a fichero de configuración}
-
-TODO
-
-\subsection{TypeScript (JavaScript tipado)}
-
-TODO
-
-\subsection{Documentos JSON y MongoDB}
-
-TODO -> aqui mlab?
-
-\subsection{Arquitectura cliente-servidor}
-
-TODO
-
-\subsubsection{API REST independiente del cliente}
-
-TODO
-
-\subsubsection{Cliente SPA}
 
 TODO
 
