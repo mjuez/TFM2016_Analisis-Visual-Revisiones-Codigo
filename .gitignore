@@ -77,3 +77,5 @@ release/
 /.vs/VSWorkspaceState.json
 /.vs/slnx.sqlite-journal
 /.vs
+
+doc/memo/_minted-*
