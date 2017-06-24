@@ -10,11 +10,12 @@ Como se ha utilizado la metodología ágil Scrum, el proyecto está dividido en 
 
 Se pueden distinguir tres fases principales:
 
-\begin{description}
-	\item[Prototipado] En esta fase se deciden, estudian y prueban diversas tecnologías como paso previo a la decisión de cuales utilizar en el desarrollo del producto final.
-	\item[Desarrollo de la aplicación] Se trata de la fase más importante, abarca todo el desarrollo de la aplicación que a su vez se podría dividir en dos: desarrollo de la parte backend (API REST) y desarrollo de la parte frontend (cliente SPA).
-	\item[Desarrollo de la memoria] Esta fase consiste en escribir toda la documentación relativa al proyecto (memoria y anexos).
-\end{description}
+\begin{itemize}
+\tightlist
+	\item \textbf{Prototipado:} En esta fase se deciden, estudian y prueban diversas tecnologías como paso previo a la decisión de cuales utilizar en el desarrollo del producto final.
+	\item \textbf{Desarrollo de la aplicación:} Se trata de la fase más importante, abarca todo el desarrollo de la aplicación que a su vez se podría dividir en dos: desarrollo de la parte backend (API REST) y desarrollo de la parte frontend (cliente SPA).
+	\item \textbf{Desarrollo de la memoria:} Esta fase consiste en escribir toda la documentación relativa al proyecto (memoria y anexos).
+\end{itemize}
 
 En el siguiente gráfico se muestra el porcentaje de sprints dedicados a cada una de las fases. Es un gráfico orientativo puesto que no hay un punto exacto en el cual termina la fase de prototipado y empieza la de desarrollo de la aplicación. Asimismo, en la fase de prototipado, una vez decididas las herramientas y tecnologías hubo avances en la fase de desarrollo de memoria.
 
@@ -30,11 +31,12 @@ Para la gestión y planificación de dichas tareas se han utilizado las issue de
 
 Se utilizan tres ramas:
 
-\begin{description}
-	\item[master] Rama principal, contiene los últimos cambios estables.
-	\item[dev] Rama de desarrollo, se va actualizando a medida que se realizan tareas. Es una rama inestable, la aplicación puede no tener el comportamiento esperado.
-	\item[memo] Rama de memoria, contiene los cambios no definitivos de la documentación del proyecto.
-\end{description}
+\begin{itemize}
+\tightlist
+	\item \textbf{master:} Rama principal, contiene los últimos cambios estables.
+	\item \textbf{dev:} Rama de desarrollo, se va actualizando a medida que se realizan tareas. Es una rama inestable, la aplicación puede no tener el comportamiento esperado.
+	\item \textbf{memo:} Rama de memoria, contiene los cambios no definitivos de la documentación del proyecto.
+\end{itemize}
 
 \imagen{ramasGitHub}{Ejemplo de uso de rama dev en GitHub.}
 
@@ -73,41 +75,244 @@ El cliente de visualización de datos es una aplicación web de tipo SPA por los
 
 En la sección del ciclo de vida del proyecto se ha indicado el uso de diferentes ramas Git durante el desarrollo. Esto se traduce en la utilización de dos entornos diferentes e independientes donde se despliega la aplicación:
 
-\begin{description}
-	\item[Entorno de producción] En este entorno se despliegan los cambios de la rama master, es decir, la aplicación en un estado estable.
-	\item[Entorno de desarrollo] En este entorno se despliegan los cambios de la rama dev, es decir, la aplicación puede tener un comportamiento inestable.
-\end{description}
+\begin{itemize}
+	\item \textbf{Entorno de producción:} En este entorno se despliegan los cambios de la rama master, es decir, la aplicación en un estado estable.
+	\item \textbf{Entorno de desarrollo:} En este entorno se despliegan los cambios de la rama dev, es decir, la aplicación puede tener un comportamiento inestable.
+\end{itemize}
 
 \imagen{entornos}{Entornos de producción y desarrollo del proyecto.}
 
 
 \subsection{Travis y la integración continua}
 
-TODO
+Mediante el uso de Travis CI, el despliegue de los cambios incluidos en las ramas dev y master se realiza de forma automática en su entorno correspondiente.
+
+\imagen{integracionContinua}{Proceso de integración continua con Travis CI.}
+
+En nuestro caso concreto, Travis está configurado para realizar una serie de comprobaciones previas al despliegue en Heroku:
+
+\begin{enumerate}
+	\item Descarga e instalación de dependencias del proyecto (npm install)
+	\item Compilación de código TypeScript a JavaScript (gulp compile).
+	\item Ejecución de pruebas unitarias (npm test).
+\end{enumerate}
+
+Si alguno de estos pasos no se completa correctamente, el despliegue se cancela. En este caso se dice que la construcción con Travis ha fallado, y se muestra como tal en GitHub.
+
+Otro estado posible es un error debido a que en ese momento Travis no funcionaba correctamente.
+
+\imagen{estadoTravis}{Posibles estados de Travis CI}
 
 \subsection{Variables de entorno frente a fichero de configuración}
 
-TODO
+El funcionamiento de este proyecto requiere de una serie de valores de configuración:
+
+\begin{itemize}
+	\item Cadena de conexión a la base de datos.
+	\item Nombre de la aplicación GitHub Developer Application.
+	\item Identificador de la aplicación GitHub Developer Application.
+	\item Clave secreta de la aplicación GitHub Developer Application.
+	\item Número de puerto (opcional, por defecto 3000).
+\end{itemize}
+
+Una posible solución para fijar el valor de las diferentes variables de configuración es mediante un fichero de configuración. Ésta estrategia es común en el desarrollo de aplicaciones ASP.NET, las cuales cuentan con un fichero web.config para tal propósito.
+
+En nuestro caso concreto, esta estrategia no es útil por dos motivos principales:
+
+\begin{itemize}
+	\item Tenemos dos entornos, cuyas variables de configuración deben tomar valores diferentes. En el proceso de integración continua se desplegaría el mismo fichero de configuración en ambos entornos.
+	\item Las variables de configuración contienen información sensible como las credenciales de acceso a la base de datos. Para el proceso de integración continua es necesario que el fichero de configuración se encuentre publicado en el repositorio, lo que significa que la información sensible sería también publica.
+\end{itemize}
+
+El uso de variables de entorno es la alternativa al uso de un fichero de configuración. En cada entorno concreto se deben definir los valores de las variables, y dichos valores de las variables de entorno no son públicos, únicamente son accesibles desde dentro del entorno. Lo cual soluciona ambos problemas descritos anteriormente.
+
+La desventaja principal del uso de variables de entorno es que el proceso de declaración de las mismas es diferente en cada sistema operativo (Windows, Linux, Mac).
 
 \subsection{Revisiones automáticas con Codebeat}
 
-TODO
+Como medio para desarrollar un código con buena calidad y menos defectos se optó por el uso de un sistema de revisiones automáticas como Codebeat.
+
+Este tipo de sistemas evalúan la calidad del código en base a ciertas métricas que penalizan, entre otras cosas, duplicidad de código, clases y métodos de gran tamaño, etc.
+
+Codebeat evalúa la calidad del código de la rama master, y de los cambios que se están intentando introducir a dicha rama desde una pull request. En este proyecto, la calidad del código se ha evaluado de forma automática en el cierre de cada sprint.
+
+Actualmente la herramienta desarrollada tiene una calidad de 3.21 GPA (sobre un máximo de 4), lo que supone una calificación B (donde A es la mejor y F la peor).
+
+\imagen{evolucionGPA}{Evolución del GPA de la última semana.}
+
+En la ilustración anterior, además de la evolución del valor de GPA, también se puede observar un indicador de la cantidad de ficheros sin defectos (verde), con defectos leves (naranja), y con defectos graves (rojo).
 
 \section{Obteniendo datos de GitHub}
 
-TODO
+Una de las dos funcionalidades principales de la herramienta desarrollada es la obtención de datos sobre revisiones de código realizadas en GitHub.
+
+Para ello se ha hecho uso de la API pública de GitHub. Dicha API ofrece los datos de la plataforma en formato JSON.
 
 \subsection{¿Qué datos son necesarios?}
 
-TODO
+Un repositorio de GitHub está formado por una serie de entidades, de las cuales solo algunas de ellas son de nuestro interés:
 
-\subsection{El problema de las 5000 peticiones/hora}
+\tablaSmall{Tipos de entidades de GitHub}{l c}{entidades-github}
+{ Tipo de entidad & Necesaria \\}{ 
+Gists & No \\
+Gist Comments & No \\
+Blobs & No \\
+Commits & No \\
+References & No \\
+Tags & No \\
+Trees & No \\
+Issues & No \\
+Issue Comments & No \\
+Issue Events & No \\
+Labels & No \\
+Milestones & No \\
+Organizations & No \\
+Projects & No \\
+Pull Requests & Sí \\
+Reviews & Sí \\
+Review Comments & Sí \\
+Repositories & Si \\
+Branches & No \\
+Commits & No \\
+Releases & No \\
+Users & Sí \\
+}
 
-TODO
+\subsubsection{Entidad Pull Request}
+
+Es la entidad de mayor importancia para nuestra herramienta. Las revisiones se realizan dentro de las pull request.
+
+La obtención se realiza en dos fases:
+
+\begin{itemize}
+\item Una fase inicial a través de la cual se recuperan páginas de 100 entidades pull request parciales (no contienen todos los datos).
+\item Otra fase en la cual se obtienen las pull request completas una a una a partir de las parciales.
+\end{itemize}
+
+\imagen{pullRequest}{Ejemplo de pull request.}
+
+Son necesarias $\lceil\frac{n}{100}\rceil + n$ peticiones, donde $n$ es el número de pull requests del repositorio.
+
+\subsubsection{Entidad Review}
+
+Una pull request, entre otros elementos, puede contener entidades de tipo Review. Este tipo de entidad contiene un comentario general sobre los cambios realizados, y un estado de revisión que puede ser:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Approved:} Los cambios son aceptados por el revisor.
+	\item \textbf{Commented:} El revisor hace un comentario sobre los cambios, pero ni los acepta ni los rechaza.
+	\item \textbf{Changes requested:} El revisor rechaza los cambios y hace una petición de modificaciones que se deben realizar para que los cambios sean aceptados.
+	\item \textbf{Dismissed:} Es un estado especial, únicamente se puede fijar a través de la API. Descarta una revisión.
+\end{itemize}
+
+La obtención se realiza por cada pull request, en páginas de 100 revisiones.
+
+\imagen{review}{Ejemplo de revisión aceptada.}
+
+Son necesarias $\sum_{i=1}^{n}\lceil\frac{r_{i}}{100}\rceil$ peticiones, donde $n$ es el número de pull requests del repositorio, $i$ es la pull request actual, y $r$ es el número de revisiones de dicha pull request.
+
+\subsubsection{Entidad Review Comment}
+
+Una revisión puede contener entidades de tipo Review Comment. Este tipo de entidad tiene como finalidad hacer un comentario en una parte específica de los cambios realizados, por ejemplo una parte de código de un fichero.
+
+Es posible obtener todos los comentarios de revisión de un repositorio en páginas de 100 elementos.
+
+\imagen{reviewComment}{Ejemplo de comentario de revisión.}
+
+Son necesarias $\lceil\frac{x}{100}\rceil$ donde $x$ es el número de comentarios de revisión que se han hecho en un repositorio.
+
+\subsubsection{Entidad User}
+
+Tanto Pull Request, revisiones y comentarios de revisión, tienen asociada una entidad de tipo User. Este tipo de entidad es de nuestro interés por que un usuario que realiza una revisión es un revisor.
+
+Por cada Pull Request, revisión y comentario de revisión se obtiene un usuario asociado.
+
+Son necesarias tantas peticiones como usuarios diferentes tengan asociados los tres tipos de entidades.
+
+\subsubsection{Entidad Repository}
+
+Una entidad de tipo Repository contiene una serie de entidades Pull Request. Un repositorio incluye una serie de datos estadísticos útiles para la posterior visualización de los datos.
+
+Se necesita una petición.
+
+\subsection{El problema del límite de 5000 peticiones por hora}
+
+La API REST de GitHub tiene una limitación de 5000 peticiones por hora, lo cual supone un problema para nuestra herramienta, ya que repositorios de gran tamaño precisan de un número de peticiones mucho mayor.
+
+Una vez superado el límite de peticiones, la API responde con un código de error 403, e información acerca de cuando se reinicia el número de peticiones disponibles.
+
+\begin{listing}
+\begin{minted}[frame=single,
+               framesep=3mm,
+               linenos=true,
+               xleftmargin=21pt,
+               tabsize=4]{js}
+HTTP/1.1 403 Forbidden
+Date: Sat, 24 Aug 2017 14:50:41 GMT
+Status: 403 Forbidden
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1377013266
+
+{
+   "message": "API rate limit exceeded for... ",
+   "documentation_url": "https://developer.github.com..."
+}
+\end{minted}
+\caption{Error 403 API GitHub.} 
+\label{error-403}
+\end{listing}
 
 \subsection{Algoritmo de gestión de tareas}
 
-TODO
+La obtención de datos se ha modelado como un problema de gestión de tareas tolerante a fallos.
+
+La idea principal de nuestro gestor de tareas es que sea capaz de pausar su ejecución cuando no sea posible obtener datos, y reanudarla cuando sí sea posible. Si la aplicación se detiene, también debe ser capaz de reanudar el proceso cuando ésta se vuelva a ejecutar.
+
+Por ello las tareas son persistentes, y además tienen estado. Como se ha descrito anteriormente, existen diferentes tipos de entidades a obtener desde GitHub, por tanto nuestro algoritmo trabaja con diferentes tipos de tareas.
+
+Una tarea tiene la siguiente estructura (compartida por todos los tipos de tarea):
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Tipo:} Tipo de tarea, depende del tipo de datos que se obtienen.
+	\item \textbf{Repositorio:} El repositorio del que obtener datos sobre revisiones. Está definido por el par login del propietario, nombre del repositorio.
+	\item \textbf{Completada:} Bandera que indica si la tarea está completada.
+	\item \textbf{Fecha de creación:} Fecha de creación de la tarea. Es necesaria en la política de planificación.
+	\item \textbf{Fecha de inicio:} Fecha en la cual la tarea comienza a ejecutarse.
+	\item \textbf{Fecha de fin:} Fecha en la cual la tarea termina su ejecución.
+	\item \textbf{Página actual:} Algunos datos se obtienen en páginas de 100 elementos. Esta propiedad permite conocer qué página se debe obtener cuando la tarea se reanuda.
+	\item \textbf{Última entidad procesada:} Algunas tareas iteran sobre una lista de entidades (por ejemplo pull requests). Esta propiedad permite saber cual fue la última entidad procesada para reanudarla a partir de ahí si fuese necesario.
+\end{itemize}
+
+\subsubsection{Tipos de tareas}
+
+La herramienta cuenta con un total de ocho tipos de tareas diferentes, una tarea principal y siete derivadas. A continuación se enumeran en orden de ejecución:
+
+\begin{enumerate}
+\tightlist
+	\item \textbf{Principal:} Obtención de todas las pull requests del repositorio con paginación de 100 entidades por petición. Las pull request obtenidas no contienen el conjunto de datos completo.
+	\item \textbf{Pull Requests:} Itera sobre todas las pull requests obtenidas en la tarea anterior y las solicita una a una para obtener los datos restantes.
+	\item \textbf{Revisiones:} Itera sobre todas las pull requests obtenidas y solicita sus revisiones por páginas de 100 elementos por petición.
+	\item \textbf{Comentarios de revisión:} Obtención de todos los comentarios de revisión del repositorio con paginación de 100 entidades por petición.
+	\item \textbf{Usuarios de pull request:} Itera sobre todas las pull requests obtenidas y solicita los usuarios creadores, de la base y de la cabeza de las mismas. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
+	\item \textbf{Usuarios de revisión:} Itera sobre todas las revisiones obtenidas y solicita los usuarios creadores de las mismas. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
+	\item \textbf{Usuarios de comentario de revisión:} Itera sobre todos los comentarios de revisión obtenidos y solicita los usuarios creadores de los mismos. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
+	\item \textbf{Repositorio:} El último tipo de tarea sirve para obtener los datos del repositorio.
+\end{enumerate}
+
+No es posible crear un subconjunto de las tareas descritas anteriormente. Al crear una tarea de tipo principal se crean todas las subtareas correspondientes.
+
+\subsubsection{Política de planificación: FIFO}
+
+La política de planificación escogida para el gestor de tareas es la política FIFO (First Input First Output), es decir, la tarea más prioritaria es la más antigua no completa.
+
+\imagen{pilaTareas}{Ejemplo de cola de tareas FIFO.}
+
+\subsubsection{Posibles errores y modo de tratarlos}
+
+-> tarea invalida
+-----> repositorio inexistente.
 
 \section{Visualizando datos mediante gráficas}
 

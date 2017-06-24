@@ -5,6 +5,10 @@
 \selectlanguage{spanish}
 \usepackage[utf8]{inputenc}
 \usepackage{placeins}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{minted}
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -91,7 +95,7 @@
 %
 % Nuevo comando para tablas pequeñas (menos de una página).
 \newcommand{\tablaSmall}[5]{%
- \begin{table}
+ \begin{table}[H]
   \begin{center}
    \rowcolors {2}{gray!35}{}
    \begin{tabular}{#2}
