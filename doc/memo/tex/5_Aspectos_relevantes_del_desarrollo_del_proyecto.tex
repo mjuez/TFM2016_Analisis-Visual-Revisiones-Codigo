@@ -241,7 +241,7 @@ La API REST de GitHub tiene una limitación de 5000 peticiones por hora, lo cual
 
 Una vez superado el límite de peticiones, la API responde con un código de error 403, e información acerca de cuando se reinicia el número de peticiones disponibles.
 
-\begin{listing}
+\begin{figure}[H]
 \begin{minted}[frame=single,
                framesep=3mm,
                linenos=true,
@@ -261,7 +261,7 @@ X-RateLimit-Reset: 1377013266
 \end{minted}
 \caption{Error 403 API GitHub.} 
 \label{error-403}
-\end{listing}
+\end{figure}
 
 \subsection{Algoritmo de gestión de tareas}
 
@@ -311,21 +311,132 @@ La política de planificación escogida para el gestor de tareas es la política
 
 \subsubsection{Posibles errores y modo de tratarlos}
 
--> tarea invalida
------> repositorio inexistente.
+Durante el proceso de obtención de datos pueden surgir dos tipos de error:
 
-\section{Visualizando datos mediante gráficas}
+\begin{itemize}
+\tightlist
+	\item \textbf{Error de API:} Error al obtener datos desde la API de GitHub, por ejemplo cuando se excede el límite de peticiones.
+	\item \textbf{Error de base de datos:} Error al almacenar los datos en la base de datos, por ejemplo si el servicio, en nuestro caso mLab, no se encuentra disponible en ese momento.
+\end{itemize}
 
-TODO
+\imagen{posiblesErrores}{Posibles errores en la obtención de datos.}
+
+Se ha elegido una política de reintento para el tratamiento de los errores, en la cual, se pausa la ejecución de tareas durante un tiempo y tras ello se reanuda el proceso. Dependiendo del tipo de error, el tiempo de espera será diferente.
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Error 403 API:} Indica que se ha excedido el límite de peticiones por hora a la API de GitHub. La cabecera del error contiene una marca de tiempo que indica en qué momento se pueden volver a realizar peticiones. El gestor de tareas pausará su ejecución hasta esa marca de tiempo.
+	\item \textbf{Otros errores de API:} Para el resto de errores de la API de GitHub, el gestor de tareas pausa su ejecución durante un minuto.
+	\item \textbf{Error de base de datos:} Para cualquier error de conexión a la base de datos, el gestor de tareas pausa su ejecución durante un minuto.
+\end{itemize}
+
+\begin{figure}[H]
+\begin{minted}[frame=single,
+               framesep=3mm,
+               linenos=true,
+               xleftmargin=21pt,
+               tabsize=4]{js}
+{ [Error: {"message":"API rate limit exceeded..."}]
+  code: 403,
+  status: 'Forbidden',
+  headers: 
+   { server: 'GitHub.com',
+     date: 'Tue, 20 Jun 2017 02:50:02 GMT',
+     'content-type': 'application/json; charset=utf-8',
+     status: '403 Forbidden',
+     'x-ratelimit-limit': '5000',
+     'x-ratelimit-remaining': '0',
+     'x-ratelimit-reset': '1497928505', } }
+Going to retry on: Tue Jun 20 2017 05:15:05 GMT+0200 (CEST)
+[Tue Jun 20 2017 05:15:05 GMT+0200 (CEST)] - Continuing...
+\end{minted}
+\caption{Ejemplo de reintento tras error 403.} 
+\label{reintento-error-403}
+\end{figure}
+
+De forma adicional, antes de crear una tarea, se comprueba si el repositorio existe. Esta comprobación no se realiza a través de la API por que podría encontrarse bloqueada por haber superado el límite de peticiones. La comprobación se hace mediante una petición HTTP a la página HTML del repositorio. El contenido HTML de la página de un repositorio contiene ciertas meta etiquetas como por ejemplo "description" que no existe en el contenido HTML de la página de error 404, de ese modo se verifica la existencia de un repositorio.
+
+\subsubsection{Un ejemplo del algoritmo en funcionamiento}
+
+A continuación se describe un ejemplo del funcionamiento del algoritmo donde se puede observar cuánto tiempo lleva el proceso de obtención de datos.
+
+Se han encolado los siguientes repositorios:
+
+\tablaSmall{Repositorios encolados (20-06-2017).}{l r r r}{repositorios-encolados}
+{ Repositorio & Pull Requests & Revisiones & C. revisión \\}{ 
+\path{elastic/elasticsearch} & 11698 & 8410 & 45274 \\
+\path{pallets/flask} & 1139 & 243 & 722 \\
+\path{Leaflet/Leaflet} & 2198 & 241 & 615 \\
+\path{playframework/playframework} & 4863 & 1567 & 5798 \\
+\path{google/WebFundamentals} & 2376 & 2141 & 3500 \\
+}
+
+A continuación se muestra un gráfico que ilustra la duración de la ejecución de las tareas y subtareas. Cada repositorio tiene 8 divisiones que se corresponden con los 8 tipos de tarea descritos anteriormente (en el mismo orden):
+
+\imagen{graficoTiempoTareas}{Planificación de la cola de tareas.}
+
+\subsubsection{Interfaz para la creación de tareas}
+
+Se pueden crear tareas a través de la API, o desde el cliente web. La interfaz del cliente web es la siguiente:
+
+\imagen{crearTarea}{Interfaz web para crear tareas.}
+
+El formulario de la parte central cuenta con dos campos (propietario y repositorio), si se introduce un par de valores válidos, se encolarán las 8 tareas necesarias para obtener datos de dicho repositorio.
+
+\imagen{avisosTarea}{Mensajes de información sobre correcta o incorrecta creación de tareas.}
+
+\subsubsection{Estado del gestor de tareas}
+
+Una vez encolada una petición para obtener todos los datos de un repositorio, no es posible saber en que momento va a finalizar. Sin embargo, en el cliente web se muestra información sobre el estado del gestor de tareas. Tiene tres posibles estados:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Esperando tareas:} Actualmente no hay ninguna tarea en la cola pendiente de ser ejecutada.
+	\item \textbf{Obteniendo datos:} Se está ejecutando una tarea de obtención de datos de GitHub. Actualmente se están realizando peticiones a su API.
+	\item \textbf{Error API GitHub:} Hay tareas pendientes pero su ejecución está pausada debido a un error de la API de GitHub, posiblemente por exceder el límite de peticiones.
+\end{itemize}
+
+\imagen{estadosGestor}{Los tres posibles estados del gestor de tareas.}
+
+\section{Visualización de los datos}
+
+La segunda funcionalidad principal de la herramienta es la visualización de los datos obtenidos a través de gráficas.
+
+La información se muestra en tres niveles:
+
+\begin{itemize}
+	\item A nivel de repositorio.
+	\item A nivel de pull request.
+	\item A nivel de usuario.
+\end{itemize}
+
+Se han utilizado tres tipos de gráficos:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Gráfico de barras:} La finalidad de este tipo de gráfico es comparar una estadística concreta de un repositorio, pull request o usuario con el valor medio de todas las entidades almacenadas de ese tipo.
+	\item \textbf{Gráfico donut:} La finalidad de este tipo de gráfico es comparar el porcentaje de ciertas entidades como pull request o revisiones dependiendo de su tipo.
+	\item \textbf{Gráfico de área temporal:} La finalidad de este tipo de gráfico es mostrar  el número de entidades creadas en un periodo concreto. El gráfico se divide en un máximo de 20 periodos.
+\end{itemize}
+
+\imagen{ejemploGraficos}{Ejemplos de los tres tipos de gráfico.}
+
 
 \section{Otros aspectos}
 
-TODO
+A continuación se describen otros aspectos relevantes como la gestión de memoria o las pruebas.
 
 \subsection{Gestión de memoria: paginando resultados}
 
-TODO
+Durante el desarrollo del proyecto hemos tenido problemas de rendimiento relacionados con la memoria y el uso de la red debido al elevado número de entidades que se retornaban al solicitar un listado.
+
+Por ejemplo, al solicitar todas las pull request del repositorio elasticsearch, la lista resultante contiene cerca de 12.000 entidades, las cuales tienen un tamaño aproximado de 35 MB. Mantener arrays con esa cantidad de datos en memoria supone un problema en entornos donde los recursos son limitados (Heroku ofrece 500 MB). Asimismo, enviar esa cantidad de datos al cliente en una sola petición penaliza gravemente los tiempos de carga.
+
+Basándonos en el funcionamiento de la API de GitHub, se implementaron consultas a la base de datos con paginación de resultados, obteniendo páginas de un máximo 100 entidades.
 
 \subsection{Testing y la inyección de dependencias}
 
-TODO
+Las diferentes clases de la aplicación hacen uso del patrón de inyección de dependencias. Gracias al uso de este patrón y al uso de interfaces se reduce el acoplamiento, lo cual resulta muy útil para realizar pruebas unitarias con stubs y mocks (dependencias simuladas).
+
+Esta estrategia permite probar el funcionamiento de un subsistema independientemente de la dependencia de otros sistemas.
+
