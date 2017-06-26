@@ -1,4 +1,29 @@
 \capitulo{7}{Conclusiones y Líneas de trabajo futuras}
 
-Todo proyecto debe incluir las conclusiones que se derivan de su desarrollo. Éstas pueden ser de diferente índole, dependiendo de la tipología del proyecto, pero normalmente van a estar presentes un conjunto de conclusiones relacionadas con los resultados del proyecto y un conjunto de conclusiones técnicas. 
-Además, resulta muy útil realizar un informe crítico indicando cómo se puede mejorar el proyecto, o cómo se puede continuar trabajando en la línea del proyecto realizado. 
+En esta parte de la memoria se exponen las conclusiones extraídas del desarrollo del proyecto y de las posibles líneas de trabajo futuras.
+
+\section{Conclusiones}
+
+Tras el desarrollo del proyecto se han obtenido las siguientes conclusiones:
+
+\begin{itemize}
+	\item El estudio del proceso de revisión en el desarrollo software nos ha permitido observar que se trata de una técnica cada vez más extendida, sobre todo en grandes proyectos, lo cual es indicativo de su positivo impacto en aspectos como la calidad del código.
+	\item Al inicio del desarrollo de la herramienta, el sistema de revisiones de código en GitHub se encontraba en fase de pruebas. Durante el desarrollo hemos podido ver cómo ha evolucionado y madurado añadiendo nuevas características. Este entorno cambiante ha supuesto una adaptación continua de nuestra herramienta a las funcionalidades de GitHub, pero también nos ha permitido ser uno de los primeros proyectos en trabajar con ellas.
+	\item La decisión de utilizar TypeScript tiene una repercusión positiva en el código desarrollado. Los lenguajes tipados permiten detectar errores rápidamente, y mejorar la legibilidad y mantenibilidad. La principal desventaja es que requiere ser compilado a JavaScript para su ejecución, lo cual se traduce en un mayor esfuerzo en la configuración inicial, y una menor flexibilidad en tareas como la depuración de código.
+	\item El uso de un tipo de base de datos NoSQL como MongoDB que almacena documentos JSON ha resultado muy positivo debido a que los datos son persistidos tal como los obtenemos desde la API de GitHub, sin la necesidad de hacer grandes transformaciones que serían necesarias para guardarlos en una base de datos relacional. Inicialmente el uso de este tipo de bases de datos nos provocaba cierta incertidumbre por no cumplir con el principio ACID, pero ha resultado ser la mejor solución posible para nuestro proyecto concreto.
+	\item La práctica de técnicas de integración continua, aunque precisan de una configuración inicial que puede resultar algo compleja, permiten automatizar procesos repetitivos como la ejecución de pruebas o el despliegue de la aplicación, lo que supone un ahorro de tiempo a medio y largo plazo. También asegura que la versión desplegada pasa todas las pruebas.
+	\item Este proyecto tiene un fuerte componente tecnológico. Varias de las tecnologías utilizadas han sido nuevas para nosotros. Gracias a los conocimientos generales obtenidos durante el grado y el máster, el esfuerzo necesario para el aprendizaje de las mismas, no ha sido muy elevado, y nos ha permitido adaptarnos con cierta facilidad.
+\end{itemize}
+
+\section{Líneas de trabajo futuras}
+
+Actualmente, nuestra herramienta permite obtener, visualizar y analizar datos relacionados con revisiones de código realizadas en GitHub. La herramienta tiene diversas posibilidades de ser mejorada en varias líneas:
+
+\begin{itemize}
+	\item En la fase final del desarrollo, GitHub liberó la cuarta versión de su API basada en GraphQL \cite{github:api:v4} en lugar de REST. Esta API es más flexible y puede ser interesante su uso en futuras versiones de la herramienta.
+	\item La herramienta GHTorrent permite obtener datos de GitHub de forma distribuida. Una posible mejora para nuestra herramienta pasa por adaptar nuestro algoritmo de gestión de tareas para trabajar de forma distribuida para disminuir el tiempo de obtención de datos.
+	\item Actualmente trabajamos únicamente con datos de revisiones realizadas en GitHub, pero existen alternativas como Gerrit Code Review que también son ampliamente utilizadas. Una mejora de la herramienta pasa por implementar funcionalidades que permitan obtener y visualizar datos de Gerrit Code Review.
+	\item Aunque se han desarrollado pruebas unitarias, el conjunto de las mismas no cubre todo el código desarrollado. Se puede continuar trabajando en el desarrollo de nuevas pruebas unitarias, así como en pruebas de interfaz o de estrés.
+	\item Nuestra herramienta expone una API REST para acceder a los datos obtenidos, actualmente contamos con un cliente web. En el futuro se podrían implementar nuevos clientes, por ejemplo aplicaciones móviles.
+	\item Actualmente el cliente web únicamente está disponible en castellano. Sería interesante la implementación de soporte multi-lenguaje.
+\end{itemize}
