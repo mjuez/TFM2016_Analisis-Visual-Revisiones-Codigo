@@ -28,6 +28,9 @@
 % Ecuaciones
 \usepackage{amsmath}
 
+\newenvironment{pcr}{\fontfamily{pcr}\selectfont}{\par}
+\DeclareTextFontCommand{\textcourier}{\pcr}
+
 % Rutas de fichero / paquete
 \newcommand{\ruta}[1]{{\sffamily #1}}
 
@@ -365,7 +368,7 @@
 % Datos de portada
 \title{Análisis Visual de Revisiones de Código}
 \author{\nombre}
-\tutor{Carlos López Nozal, Raúl Marticorena Sánchez}
+\tutor{Dr. Carlos López Nozal, Dr. Raúl Marticorena Sánchez}
 \date{\today}
 
 \begin{document}
@@ -406,7 +409,7 @@ D. Carlos López Nozal
 \hfill
 \begin{minipage}{0.45\textwidth}
 \begin{flushleft} %\large
-Vº. Bº. del co-tutor:\\[2cm]
+Vº. Bº. del Tutor:\\[2cm]
 D. Raúl Marticorena Sánchez
 \end{flushleft}
 \end{minipage}
