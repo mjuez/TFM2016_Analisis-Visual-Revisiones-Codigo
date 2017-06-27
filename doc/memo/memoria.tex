@@ -5,6 +5,11 @@
 \selectlanguage{spanish}
 \usepackage[utf8]{inputenc}
 \usepackage{placeins}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{amssymb}
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -14,17 +19,25 @@
 % Links
 \usepackage[colorlinks]{hyperref}
 \hypersetup{
-	allcolors = {red}
+	colorlinks,
+	linkcolor={black},
+	citecolor={blue!50!black},
+	urlcolor={blue!80!black}
 }
 
 % Ecuaciones
 \usepackage{amsmath}
+
+\newenvironment{pcr}{\fontfamily{pcr}\selectfont}{\par}
+\DeclareTextFontCommand{\textcourier}{\pcr}
 
 % Rutas de fichero / paquete
 \newcommand{\ruta}[1]{{\sffamily #1}}
 
 % Párrafos
 \nonzeroparskip
+
+\renewcommand{\lstlistingname}{Código}
 
 
 % Imagenes
@@ -91,7 +104,7 @@
 %
 % Nuevo comando para tablas pequeñas (menos de una página).
 \newcommand{\tablaSmall}[5]{%
- \begin{table}
+ \begin{table}[H]
   \begin{center}
    \rowcolors {2}{gray!35}{}
    \begin{tabular}{#2}
@@ -288,7 +301,7 @@
 \graphicspath{ {./img/} }
 
 % Capítulos
-\chapterstyle{bianchi}
+%\chapterstyle{hansen}
 \newcommand{\capitulo}[2]{
 	\setcounter{chapter}{#1}
 	\setcounter{section}{0}
@@ -355,7 +368,7 @@
 % Datos de portada
 \title{Análisis Visual de Revisiones de Código}
 \author{\nombre}
-\tutor{Carlos López Nozal, Raúl Marticorena Sánchez}
+\tutor{Dr. Carlos López Nozal, Dr. Raúl Marticorena Sánchez}
 \date{\today}
 
 \begin{document}
@@ -372,9 +385,9 @@
 
 \noindent\includegraphics[width=\textwidth]{cabecera}\vspace{1cm}
 
-\noindent D. Carlos López Nozal, profesor del departamento de Ingeniería Civil, área de Lenguajes y Sistemas Informáticos.
+\noindent D. Carlos López Nozal y Raúl Marticorena Sánchez, profesores del departamento de Ingeniería Civil, área de Lenguajes y Sistemas Informáticos.
 
-\noindent Expone:
+\noindent Exponen:
 
 \noindent Que el alumno D. \nombre, con DNI 71308224J, ha realizado el Trabajo final de Máster en Ingeniería Informática titulado Análisis Visual de Revisiones de Código. 
 
@@ -396,7 +409,7 @@ D. Carlos López Nozal
 \hfill
 \begin{minipage}{0.45\textwidth}
 \begin{flushleft} %\large
-Vº. Bº. del co-tutor:\\[2cm]
+Vº. Bº. del Tutor:\\[2cm]
 D. Raúl Marticorena Sánchez
 \end{flushleft}
 \end{minipage}
@@ -420,12 +433,16 @@ D. Raúl Marticorena Sánchez
 % Abstract en castellano
 \renewcommand*\abstractname{Resumen}
 \begin{abstract}
-En este primer apartado se hace una \textbf{breve} presentación del tema que se aborda en el proyecto.
+El proceso de revisión de código se considera una buena práctica de desarrollo ágil. Aporta beneficios como la transferencia de conocimiento, la reducción de errores o la mejora de la calidad de código.
+
+Recientemente GitHub ha incorporado herramientas para realizar revisiones de código a través de su plataforma, y grandes proyectos de código abierto como Elasticsearch ya lo utilizan en su proceso de desarrollo.
+
+Este trabajo se centra en la creación de una herramienta que permita obtener y visualizar datos sobre revisiones de código realizadas en GitHub para su análisis posterior.
 \end{abstract}
 
 \renewcommand*\abstractname{Descriptores}
 \begin{abstract}
-Palabras separadas por comas que identifiquen el contenido del proyecto Ej: servidor web, buscador de vuelos, android \ldots
+Revisión de código, revisor, calidad de código, GitHub, API REST, aplicación web SPA.
 \end{abstract}
 
 \clearpage
@@ -433,12 +450,16 @@ Palabras separadas por comas que identifiquen el contenido del proyecto Ej: serv
 % Abstract en inglés
 \renewcommand*\abstractname{Abstract}
 \begin{abstract}
-A \textbf{brief} presentation of the topic addressed in the project.
+The code review process is considered an agile practice. It provides benefits as knowledge sharing, mistakes reduction, or better code quality.
+
+GitHub has recently included code review tools for performing this process through their platform, which are currently being used by big open source projects as Elasticsearch in their development process.
+
+The main goal of this project is to develop a tool which allows to obtain and visualize code review data from GitHub for its subsequent analysis.
 \end{abstract}
 
 \renewcommand*\abstractname{Keywords}
 \begin{abstract}
-keywords separated by commas.
+Code review, reviewer, code quality, GitHub, REST API, SPA web application.
 \end{abstract}
 
 \clearpage

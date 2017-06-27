@@ -1,3 +1,91 @@
 \capitulo{6}{Trabajos relacionados}
 
-Este apartado sería parecido a un estado del arte de una tesis o tesina. En un trabajo final grado no parece obligada su presencia, aunque se puede dejar a juicio del tutor el incluir un pequeño resumen comentado de los trabajos y proyectos ya realizados en el campo del proyecto en curso. 
+En este apartado se exponen tres herramientas relacionadas con la desarrollada en este proyecto, una dedicada a la obtención de datos y dos al análisis.
+
+\section{GHTorrent}
+
+GHTorrent \cite{Gousi13} es una herramienta que obtiene datos desde la API de GitHub y los almacena en dos bases de datos:
+
+\begin{itemize}
+	\item MongoDB no relacional, guarda los datos en bruto.
+	\item Base de datos relacional con entidades enlazadas.
+\end{itemize}
+
+GHTorrent es utilizado por investigadores y empresas, como fuente procesos software y analíticas de productos.
+
+A continuación se muestra una tabla comparativa entre nuestra herramienta y GHTorrent:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Característica & Anvireco & GHTorrent \\
+\midrule
+Obtención de entidades de GitHub & \cellcolor{green!25} {$\checkmark$} & \cellcolor{green!25} {$\checkmark$} \\
+API REST & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Cliente web & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Análisis visual & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Base de datos NoSQL & \cellcolor{green!25} {$\checkmark$} & \cellcolor{green!25} {$\checkmark$} \\
+Base de datos SQL & \cellcolor{red!25} {$\times$} & \cellcolor{green!25} {$\checkmark$} \\
+Ejecución distribuida & \cellcolor{red!25} {$\times$} & \cellcolor{green!25} {$\checkmark$} \\
+\bottomrule
+\end{tabular}
+\caption{Comparativa de las características de Anvireco y GHTorrent.}
+\label{comparativa-anvireco-ghtorrent}
+\end{table}
+
+\section{ReDA - Review Data Analyzer}
+
+ReDA \cite{reda2014} es una aplicación web para la visualización del proceso de revisiones en software de código libre. Para la creación de gráficos hace uso de la librería JavaScript D3.js.
+
+Actualmente permite visualizar el histórico de revisiones del repositorio Android Open Source Project basado en Gerrit.
+
+A continuación se muestra una tabla comparativa entre nuestra herramienta y ReDA:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Característica & Anvireco & ReDA \\
+\midrule
+Trabaja con datos de GitHub & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Trabaja con datos de Gerrit & \cellcolor{red!25} {$\times$} & \cellcolor{green!25} {$\checkmark$} \\
+Múltiples repositorios & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Permite solicitar repositorios & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+API REST & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Descarga de datos en CSV & \cellcolor{green!25} {$\checkmark$} & \cellcolor{green!25} {$\checkmark$} \\
+Gráficos sobre revisiones & \cellcolor{green!25} {$\checkmark$} & \cellcolor{green!25} {$\checkmark$} \\
+Gráficos sobre usuarios & \cellcolor{green!25} {$\checkmark$} & \cellcolor{green!25} {$\checkmark$} \\
+\bottomrule
+\end{tabular}
+\caption{Comparativa de las características de Anvireco y ReDA.}
+\label{comparativa-anvireco-reda}
+\end{table}
+
+\section{GiLA - GitHub Label Analyzer}
+
+GiLA \cite{gila} es una herramienta de visualización que permite el análisis del uso de etiquetas (frecuencia, relaciones, etc) en un proyecto de GitHub.
+
+También permite analizar el modo en que los usuarios utilizan las etiquetas.
+
+A continuación se muestra una tabla comparativa entre nuestra herramienta y GiLA:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Característica & Anvireco & GiLA \\
+\midrule
+Trabaja con datos de GitHub & \cellcolor{green!25} {$\checkmark$} & \cellcolor{green!25} {$\checkmark$} \\
+Trabaja con datos de Gerrit & \cellcolor{red!25} {$\times$} & \cellcolor{red!25} {$\times$} \\
+Múltiples repositorios & \cellcolor{green!25} {$\checkmark$} & \cellcolor{green!25} {$\checkmark$} \\
+Permite solicitar repositorios & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+API REST & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Descarga de datos en CSV & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Gráficos sobre revisiones & \cellcolor{green!25} {$\checkmark$} & \cellcolor{red!25} {$\times$} \\
+Gráficos sobre usuarios & \cellcolor{green!25} {$\checkmark$} & \cellcolor{green!25} {$\checkmark$} \\
+\bottomrule
+\end{tabular}
+\caption{Comparativa de las características de Anvireco y GiLA.}
+\label{comparativa-anvireco-gila}
+\end{table}

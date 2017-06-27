@@ -1,7 +1,440 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
-Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, comentados por los autores del mismo.
-Debe incluir desde la exposición del ciclo de vida utilizado, hasta los detalles de mayor relevancia de las fases de análisis, diseño e implementación.
-Se busca que no sea una mera operación de copiar y pegar diagramas y extractos del código fuente, sino que realmente se justifiquen los caminos de solución que se han tomado, especialmente aquellos que no sean triviales.
-Puede ser el lugar más adecuado para documentar los aspectos más interesantes del diseño y de la implementación, con un mayor hincapié en aspectos tales como el tipo de arquitectura elegido, los índices de las tablas de la base de datos, normalización y desnormalización, distribución en ficheros3, reglas de negocio dentro de las bases de datos (EDVHV GH GDWRV DFWLYDV), aspectos de desarrollo relacionados con el WWW...
-Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
+En este apartado se recogen los aspectos más interesantes del desarrollo del proyecto.
+
+\section{Ciclo de vida del proyecto}
+
+Este proyecto tiene una duración total de 4 meses y 22 días, con inicio el 10 de febrero de 2017 y fin el 3 de julio de 2017.
+
+Como se ha utilizado la metodología ágil Scrum, el proyecto está dividido en \emph{sprints} (o iteraciones), concretamente 14. Inicialmente las iteraciones tenían una duración de 2 semanas, y a partir del sexto \emph{sprint} la periodicidad pasó a ser semanal.
+
+Se pueden distinguir tres fases principales:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Prototipado:} en esta fase se deciden, estudian y prueban diversas tecnologías como paso previo a la decisión de cuales utilizar en el desarrollo del producto final.
+	\item \textbf{Desarrollo de la aplicación:} se trata de la fase más importante, abarca todo el desarrollo de la aplicación que a su vez se podría dividir en dos: desarrollo de la parte \emph{backend} (API REST) y desarrollo de la parte \emph{frontend} (cliente SPA).
+	\item \textbf{Desarrollo de la memoria:} esta fase consiste en escribir toda la documentación relativa al proyecto (memoria y anexos).
+\end{itemize}
+
+En el siguiente gráfico se muestra el porcentaje de \emph{sprints} dedicados a cada una de las fases. Es un gráfico orientativo puesto que no hay un punto exacto en el cual termina la fase de prototipado y empieza la de desarrollo de la aplicación. Asimismo, en la fase de prototipado, una vez decididas las herramientas y tecnologías hubo avances en la fase de desarrollo de memoria.
+
+\imagen{graficoTipoIteraciones}{Porcentaje de \emph{sprints} dedicados a cada fase.}
+
+\subsection{Gestión de \emph{sprints} mediante GitHub y ZenHub}
+
+Cada \emph{sprint} está formado por una serie de tareas concretas.
+
+Para la gestión y planificación de dichas tareas se han utilizado las \emph{issues} de GitHub junto con el \emph{plug-in} de ZenHub que permite, entre otras cosas, incluir estimaciones de tiempo.
+
+\imagen{issueGitHub}{Una tarea de GitHub con ZenHub habilitado.}
+
+Se utilizan tres ramas:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{\emph{master}:} rama principal, contiene los últimos cambios estables.
+	\item \textbf{\emph{dev}:} rama de desarrollo, se va actualizando a medida que se realizan tareas. Es una rama inestable, la aplicación puede no tener el comportamiento esperado.
+	\item \textbf{\emph{memo}:} rama de memoria, contiene los cambios no definitivos de la documentación del proyecto.
+\end{itemize}
+
+\imagen{ramasGitHub}{Ejemplo de uso de rama \emph{dev} en GitHub.}
+
+El ciclo de vida de un \emph{sprint} en GitHub consiste en:
+
+\begin{enumerate}
+	\item Apertura de \emph{issues} (tareas) a realizar durante la iteración.
+	\item Selección de rama \emph{dev} o \emph{memo}, dependiendo del tipo de tarea que se está llevando a cabo.
+	\item Desarrollo de las diferentes tareas.
+	\item Revisión y comprobación de que los cambios satisfacen los requisitos.
+	\item Apertura de \emph{pull request} para ejecutar los \emph{checks} de integración continua y revisión automática.
+	\item Cierre de \emph{pull request} e integración de los cambios en la rama \emph{master}.
+\end{enumerate}
+
+\section{Estableciendo la base}
+
+Antes de empezar con el desarrollo software del proyecto se tomaron ciertas decisiones que marcaron el resto del proceso.
+
+\subsection{Anvireco como aplicación distribuida}
+
+La herramienta desarrollada tiene una arquitectura cliente-servidor en la cual el servidor es completamente independiente del cliente.
+
+Pese a que en este proyecto únicamente hay un tipo de cliente, en el futuro podrían existir otros, por ejemplo un consumidor de datos para realizar tareas de minería. Por ello es importante la independencia cliente-servidor.
+
+\imagen{aplicacionDistribuida}{Anvireco como aplicación distribuida.}
+
+En el servidor se optó por implementar una API REST con la cual podrá comunicarse cualquier cliente que conozca el protocolo HTTP.
+
+El cliente de visualización de datos es una aplicación web de tipo SPA por los beneficios que ofrece el uso de AJAX en cuanto a optimización de peticiones y disminución de los refrescos de página, ofreciendo así una mejor experiencia de usuario.
+
+\imagen{tradicionalVersusSPA}{Página web tradicional vs Aplicación SPA \cite{msdn:spa}.}
+
+\subsection{Entornos: producción y desarrollo}
+
+En la sección del ciclo de vida del proyecto se ha descrito el uso de diferentes ramas Git durante el desarrollo. Esto se traduce en la utilización de dos entornos diferentes e independientes donde se despliega la aplicación:
+
+\begin{itemize}
+	\item \textbf{Entorno de producción:} en este entorno se despliegan los cambios de la rama \emph{master}, es decir, la aplicación en un estado estable.
+	\item \textbf{Entorno de desarrollo:} en este entorno se despliegan los cambios de la rama \emph{dev}, es decir, la aplicación puede tener un comportamiento inestable.
+\end{itemize}
+
+\imagen{entornos}{Entornos de producción y desarrollo del proyecto.}
+
+
+\subsection{Travis y la integración continua}
+
+Mediante el uso de Travis CI, el despliegue de los cambios incluidos en las ramas \emph{dev} y \emph{master} se realiza de forma automática en su entorno correspondiente.
+
+\imagen{integracionContinua}{Proceso de integración continua con Travis CI.}
+
+En nuestro caso concreto, Travis está configurado para realizar una serie de comprobaciones previas al despliegue en Heroku:
+
+\begin{enumerate}
+	\item Descarga e instalación de dependencias (\textcourier{npm install}).
+	\item Compilación de código TypeScript a JavaScript (\textcourier{gulp compile}).
+	\item Ejecución de pruebas unitarias (\textcourier{npm test}).
+\end{enumerate}
+
+Si alguno de estos pasos no se completa correctamente, el despliegue se cancela. En este caso se dice que la construcción con Travis ha fallado, y se muestra como tal en GitHub.
+
+Otro estado posible es un error debido a que en ese momento Travis no funcionaba correctamente.
+
+\imagen{estadoTravis}{Posibles estados de Travis CI}
+
+\subsection{Variables de entorno frente a fichero de configuración}
+
+El funcionamiento de este proyecto requiere de una serie de valores de configuración:
+
+\begin{itemize}
+	\item Cadena de conexión a la base de datos.
+	\item Nombre de la aplicación \emph{GitHub Developer Application}.
+	\item Identificador de la aplicación \emph{GitHub Developer Application}.
+	\item Clave secreta de la aplicación \emph{GitHub Developer Application}.
+	\item Número de puerto (opcional, por defecto 3000).
+\end{itemize}
+
+Una posible solución para fijar el valor de las diferentes variables de configuración es mediante un fichero de configuración. Esta estrategia es común en el desarrollo de aplicaciones ASP.NET, las cuales cuentan con un fichero \textcourier{web.config} para tal propósito.
+
+En nuestro caso concreto, esta estrategia no es útil por dos motivos principales:
+
+\begin{itemize}
+	\item Tenemos dos entornos, cuyas variables de configuración deben tomar valores diferentes. En el proceso de integración continua se desplegaría el mismo fichero de configuración en ambos entornos.
+	\item Las variables de configuración contienen información sensible como las credenciales de acceso a la base de datos. Para el proceso de integración continua es necesario que el fichero de configuración se encuentre publicado en el repositorio, lo que significa que la información sensible sería también publica.
+\end{itemize}
+
+El uso de variables de entorno es la alternativa al uso de un fichero de configuración. En cada entorno concreto se deben definir los valores de las variables, y dichos valores de las variables de entorno no son públicos, sino que únicamente son accesibles desde dentro del entorno. Ésto soluciona ambos problemas descritos anteriormente.
+
+La desventaja principal del uso de variables de entorno es que el proceso de declaración de las mismas es diferente en cada sistema operativo (Windows, Linux, Mac).
+
+\subsection{Revisiones automáticas con Codebeat}
+
+Como medio para desarrollar un código con buena calidad y menos defectos se optó por el uso de un sistema de revisiones automáticas como Codebeat.
+
+Este tipo de sistemas evalúan la calidad del código en base a ciertas métricas que penalizan, entre otras cosas, duplicidad de código, clases y métodos de gran tamaño, etc.
+
+Codebeat evalúa la calidad del código de la rama master, y de los cambios que se están intentando introducir a dicha rama desde una pull request. En este proyecto, la calidad del código se ha evaluado de forma automática en el cierre de cada sprint.
+
+Actualmente la herramienta desarrollada tiene una calidad de 3.21 GPA (sobre un máximo de 4), lo que supone una calificación B (donde A es la mejor y F la peor).
+
+\imagen{evolucionGPA}{Evolución del GPA de la última semana.}
+
+En la ilustración anterior, además de la evolución del valor de GPA, también se puede observar un indicador de la cantidad de ficheros sin defectos (verde), con defectos leves (naranja), y con defectos graves (rojo).
+
+\section{Obteniendo datos de GitHub}
+
+Una de las dos funcionalidades principales de la herramienta desarrollada es la obtención de datos sobre revisiones de código realizadas en GitHub.
+
+Para ello se ha hecho uso de la API pública de GitHub. Dicha API ofrece los datos de la plataforma en formato JSON.
+
+\subsection{¿Qué datos son necesarios?}
+
+Un repositorio de GitHub está formado por una serie de entidades, de las cuales solo algunas de ellas son de nuestro interés:
+
+\tablaSmall{Tipos de entidades de GitHub}{l c}{entidades-github}
+{ Tipo de entidad & Necesaria \\}{ 
+\emph{Gists} & No \\
+\emph{Gist Comments} & No \\
+\emph{Blobs} & No \\
+\emph{Commits} & No \\
+\emph{References} & No \\
+\emph{Tags} & No \\
+\emph{Trees} & No \\
+\emph{Issues} & No \\
+\emph{Issue Comments} & No \\
+\emph{Issue Events} & No \\
+\emph{Labels} & No \\
+\emph{Milestones} & No \\
+\emph{Organizations} & No \\
+\emph{Projects} & No \\
+\emph{Pull Requests} & Sí \\
+\emph{Reviews} & Sí \\
+\emph{Review Comments} & Sí \\
+\emph{Repositories} & Si \\
+\emph{Branches} & No \\
+\emph{Commits} & No \\
+\emph{Releases} & No \\
+\emph{Users} & Sí \\
+}
+
+\subsubsection{Entidad \emph{Pull Request}}
+
+Es la entidad de mayor importancia para nuestra herramienta. Las revisiones se realizan dentro de las \emph{pull requests}.
+
+La obtención se realiza en dos fases:
+
+\begin{itemize}
+\item Una fase inicial a través de la cual se recuperan páginas de 100 entidades \emph{pull request} parciales (no contienen todos los datos).
+\item Otra fase en la cual se obtienen las \emph{pull request} completas una a una a partir de las parciales.
+\end{itemize}
+
+\imagen{pullRequest}{Ejemplo de \emph{pull request}.}
+
+Son necesarias $\lceil\frac{n}{100}\rceil + n$ peticiones, donde $n$ es el número de \emph{pull requests} del repositorio.
+
+\subsubsection{Entidad \emph{Review}}
+
+Una \emph{pull request}, entre otros elementos, puede contener entidades de tipo \emph{Review}. Este tipo de entidad contiene un comentario general sobre los cambios realizados, y un estado de revisión que puede ser:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{\emph{Approved}:} los cambios son aceptados por el revisor.
+	\item \textbf{\emph{Commented}:} el revisor hace un comentario sobre los cambios, pero ni los acepta ni los rechaza.
+	\item \textbf{\emph{Changes requested}:} el revisor rechaza los cambios y hace una petición de modificaciones que se deben realizar para que los cambios sean aceptados.
+	\item \textbf{\emph{Dismissed}:} es un estado especial, únicamente se puede fijar a través de la API. Descarta una revisión.
+\end{itemize}
+
+La obtención se realiza por cada \emph{pull request}, en páginas de 100 revisiones.
+
+\imagen{review}{Ejemplo de revisión aceptada.}
+
+Son necesarias $\sum_{i=1}^{n}\lceil\frac{r_{i}}{100}\rceil$ peticiones, donde $n$ es el número de \emph{pull requests} del repositorio, $i$ es la \emph{pull request} actual, y $r$ es el número de revisiones de dicha \emph{pull request}.
+
+\subsubsection{Entidad \emph{Review Comment}}
+
+Una revisión puede contener entidades de tipo \emph{Review Comment}. Este tipo de entidad tiene como finalidad hacer un comentario en una parte específica de los cambios realizados, por ejemplo una parte de código de un fichero.
+
+Es posible obtener todos los comentarios de revisión de un repositorio en páginas de 100 elementos.
+
+\imagen{reviewComment}{Ejemplo de comentario de revisión.}
+
+Son necesarias $\lceil\frac{x}{100}\rceil$ donde $x$ es el número de comentarios de revisión que se han hecho en un repositorio.
+
+\subsubsection{Entidad \emph{User}}
+
+Tanto \emph{pull requests}, revisiones y comentarios de revisión, tienen asociada una entidad de tipo \emph{User}. Este tipo de entidad es de nuestro interés por que un usuario que realiza una revisión es un revisor.
+
+Por cada \emph{pull request}, revisión y comentario de revisión se obtiene un usuario asociado.
+
+Son necesarias tantas peticiones como usuarios diferentes tengan asociados los tres tipos de entidades.
+
+\subsubsection{Entidad \emph{Repository}}
+
+Una entidad de tipo \emph{Repository} contiene una serie de entidades \emph{pull request}. Un repositorio incluye una serie de datos estadísticos útiles para la posterior visualización de los datos.
+
+Se necesita una petición.
+
+\subsection{El problema del límite de 5000 peticiones por hora}
+
+La API REST de GitHub tiene una limitación de 5000 peticiones por hora, lo cual supone un problema para nuestra herramienta, ya que repositorios de gran tamaño precisan de un número de peticiones mucho mayor.
+
+Una vez superado el límite de peticiones, la API responde con un código de error 403, e información acerca de cuando se reinicia el número de peticiones disponibles.
+
+\begin{figure}[H]
+\begin{minted}[frame=single,
+               framesep=3mm,
+               linenos=true,
+               xleftmargin=21pt,
+               tabsize=4]{js}
+HTTP/1.1 403 Forbidden
+Date: Sat, 24 Aug 2017 14:50:41 GMT
+Status: 403 Forbidden
+X-RateLimit-Limit: 5000
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1377013266
+
+{
+   "message": "API rate limit exceeded for... ",
+   "documentation_url": "https://developer.github.com..."
+}
+\end{minted}
+\caption{Error 403 API GitHub.} 
+\label{error-403}
+\end{figure}
+
+\subsection{Algoritmo de gestión de tareas}
+
+Como solución al problema descrito en el punto anterior, la obtención de datos se ha modelado como un problema de gestión de tareas tolerante a fallos.
+
+La idea principal de nuestro gestor de tareas es que sea capaz de pausar su ejecución cuando no sea posible obtener datos, y reanudarla cuando sí sea posible. Si la aplicación se detiene, también debe ser capaz de reanudar el proceso cuando ésta se vuelva a ejecutar.
+
+Por ello las tareas son persistentes, y además tienen estado. Como se ha descrito anteriormente, existen diferentes tipos de entidades a obtener desde GitHub, por tanto nuestro algoritmo trabaja con diferentes tipos de tareas.
+
+Una tarea tiene la siguiente estructura (compartida por todos los tipos de tarea):
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Tipo:} tipo de tarea, depende del tipo de datos que se obtienen.
+	\item \textbf{Repositorio:} el repositorio del que obtener datos sobre revisiones. Está definido por el par \emph{login} del propietario, nombre del repositorio.
+	\item \textbf{Completada:} bandera que indica si la tarea está completada.
+	\item \textbf{Fecha de creación:} fecha de creación de la tarea. Es necesaria en la política de planificación.
+	\item \textbf{Fecha de inicio:} fecha en la cual la tarea comienza a ejecutarse.
+	\item \textbf{Fecha de fin:} fecha en la cual la tarea termina su ejecución.
+	\item \textbf{Página actual:} algunos datos se obtienen en páginas de 100 elementos. Esta propiedad permite conocer qué página se debe obtener cuando la tarea se reanuda.
+	\item \textbf{Última entidad procesada:} algunas tareas iteran sobre una lista de entidades (por ejemplo \emph{pull requests}). Esta propiedad permite saber cual fue la última entidad procesada para reanudarla a partir de ahí si fuese necesario.
+\end{itemize}
+
+\subsubsection{Tipos de tareas}
+
+La herramienta cuenta con un total de ocho tipos de tareas diferentes, una tarea principal y siete derivadas. A continuación se enumeran en orden de ejecución:
+
+\begin{enumerate}
+\tightlist
+	\item \textbf{Principal:} obtención de todas las \emph{pull requests} del repositorio con paginación de 100 entidades por petición. Las \emph{pull request} obtenidas no contienen el conjunto de datos completo.
+	\item \textbf{\emph{Pull Requests}:} itera sobre todas las \emph{pull requests} obtenidas en la tarea anterior y las solicita una a una para obtener los datos restantes.
+	\item \textbf{Revisiones:} itera sobre todas las \emph{pull requests} obtenidas y solicita sus revisiones por páginas de 100 elementos por petición.
+	\item \textbf{Comentarios de revisión:} obtención de todos los comentarios de revisión del repositorio con paginación de 100 entidades por petición.
+	\item \textbf{Usuarios de \emph{pull request}:} itera sobre todas las \emph{pull requests} obtenidas y solicita los usuarios creadores, de la base y de la cabeza de las mismas. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
+	\item \textbf{Usuarios de revisión:} itera sobre todas las revisiones obtenidas y solicita los usuarios creadores de las mismas. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
+	\item \textbf{Usuarios de comentario de revisión:} itera sobre todos los comentarios de revisión obtenidos y solicita los usuarios creadores de los mismos. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
+	\item \textbf{Repositorio:} el último tipo de tarea sirve para obtener los datos del repositorio.
+\end{enumerate}
+
+No es posible crear un subconjunto de las tareas descritas anteriormente. Al crear una tarea de tipo principal se crean todas las subtareas correspondientes.
+
+\subsubsection{Política de planificación: FIFO}
+
+La política de planificación escogida para el gestor de tareas es la política FIFO (\emph{First Input First Output}), es decir, la tarea más prioritaria es la más antigua no completada.
+
+\imagen{pilaTareas}{Ejemplo de cola de tareas FIFO.}
+
+\subsubsection{Posibles errores y modo de tratarlos}
+
+Durante el proceso de obtención de datos pueden surgir dos tipos de error:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Error de API:} error al obtener datos desde la API de GitHub, por ejemplo cuando se excede el límite de peticiones.
+	\item \textbf{Error de base de datos:} error al almacenar los datos en la base de datos, por ejemplo si el servicio, en nuestro caso mLab, no se encuentra disponible en ese momento.
+\end{itemize}
+
+\imagen{posiblesErrores}{Posibles errores en la obtención de datos.}
+
+Se ha elegido una estrategia de reintento para el tratamiento de los errores, en la cual, se pausa la ejecución de tareas durante un tiempo y tras ello se reanuda el proceso. Dependiendo del tipo de error, el tiempo de espera será diferente.
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Error 403 API:} indica que se ha excedido el límite de peticiones por hora a la API de GitHub. la cabecera del error contiene una marca de tiempo que indica en qué momento se pueden volver a realizar peticiones. El gestor de tareas pausará su ejecución hasta esa marca de tiempo.
+	\item \textbf{Otros errores de API:} para el resto de errores de la API de GitHub, el gestor de tareas pausa su ejecución durante un minuto.
+	\item \textbf{Error de base de datos:} para cualquier error de conexión a la base de datos, el gestor de tareas pausa su ejecución durante un minuto.
+\end{itemize}
+
+\begin{figure}[H]
+\begin{minted}[frame=single,
+               framesep=3mm,
+               linenos=true,
+               xleftmargin=21pt,
+               tabsize=4]{js}
+{ [Error: {"message":"API rate limit exceeded..."}]
+  code: 403,
+  status: 'Forbidden',
+  headers: 
+   { server: 'GitHub.com',
+     date: 'Tue, 20 Jun 2017 02:50:02 GMT',
+     'content-type': 'application/json; charset=utf-8',
+     status: '403 Forbidden',
+     'x-ratelimit-limit': '5000',
+     'x-ratelimit-remaining': '0',
+     'x-ratelimit-reset': '1497928505', } }
+Going to retry on: Tue Jun 20 2017 05:15:05 GMT+0200 (CEST)
+[Tue Jun 20 2017 05:15:05 GMT+0200 (CEST)] - Continuing...
+\end{minted}
+\caption{Ejemplo de reintento tras error 403.} 
+\label{reintento-error-403}
+\end{figure}
+
+De forma adicional, antes de crear una tarea, se comprueba si el repositorio existe. Esta comprobación no se realiza a través de la API por que podría encontrarse bloqueada por haber superado el límite de peticiones. La comprobación se hace mediante una petición HTTP a la página HTML del repositorio. El contenido HTML de la página de un repositorio contiene ciertas meta etiquetas como por ejemplo "description" que no existe en el contenido HTML de la página de error 404, de ese modo se verifica la existencia de un repositorio.
+
+\subsubsection{Un ejemplo del algoritmo en funcionamiento}
+
+A continuación se describe un ejemplo del funcionamiento del algoritmo donde se puede observar cuánto tiempo lleva el proceso de obtención de datos.
+
+Se han encolado los siguientes repositorios:
+
+\tablaSmall{Repositorios encolados (20-06-2017).}{l r r r}{repositorios-encolados}
+{ Repositorio & \emph{Pull Requests} & Revisiones & C. revisión \\}{ 
+\path{elastic/elasticsearch} & 11698 & 8410 & 45274 \\
+\path{pallets/flask} & 1139 & 243 & 722 \\
+\path{Leaflet/Leaflet} & 2198 & 241 & 615 \\
+\path{playframework/playframework} & 4863 & 1567 & 5798 \\
+\path{google/WebFundamentals} & 2376 & 2141 & 3500 \\
+}
+
+A continuación se muestra un gráfico que ilustra la duración de la ejecución de las tareas y subtareas. Cada repositorio tiene 8 divisiones que se corresponden con los 8 tipos de tarea descritos anteriormente (en el mismo orden):
+
+\imagen{graficoTiempoTareas}{Planificación de la cola de tareas.}
+
+\subsubsection{Interfaz para la creación de tareas}
+
+Se pueden crear tareas a través de la API, o desde el cliente web. La interfaz del cliente web es la siguiente:
+
+\imagen{crearTarea}{Interfaz web para crear tareas.}
+
+El formulario de la parte central cuenta con dos campos (propietario y repositorio), si se introduce un par de valores válidos, se encolarán las 8 tareas necesarias para obtener datos de dicho repositorio.
+
+\imagen{avisosTarea}{Mensajes de información sobre la correcta o incorrecta creación de tareas.}
+
+\subsubsection{Estado del gestor de tareas}
+
+Una vez encolada una petición para obtener todos los datos de un repositorio, no es posible saber en qué momento va a finalizar. Sin embargo, en el cliente web se muestra información sobre el estado del gestor de tareas. Tiene tres posibles estados:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Esperando tareas:} actualmente no hay ninguna tarea en la cola pendiente de ser ejecutada.
+	\item \textbf{Obteniendo datos:} se está ejecutando una tarea de obtención de datos de GitHub. Actualmente se están realizando peticiones a su API.
+	\item \textbf{Error API GitHub:} hay tareas pendientes pero su ejecución está pausada debido a un error de la API de GitHub, posiblemente por exceder el límite de peticiones.
+\end{itemize}
+
+\imagen{estadosGestor}{Los tres posibles estados del gestor de tareas.}
+
+\section{Visualización de los datos}
+
+La segunda funcionalidad principal de la herramienta es la visualización de los datos obtenidos a través de gráficas.
+
+La información se muestra en tres niveles:
+
+\begin{itemize}
+	\item A nivel de repositorio.
+	\item A nivel de \emph{pull request}.
+	\item A nivel de usuario.
+\end{itemize}
+
+Se han utilizado tres tipos de gráficos:
+
+\begin{itemize}
+\tightlist
+	\item \textbf{Gráfico de barras:} La finalidad de este tipo de gráfico es comparar una estadística concreta de un repositorio, \emph{pull request} o usuario con el valor medio de todas las entidades almacenadas de ese tipo.
+	\item \textbf{Gráfico \emph{donut}:} La finalidad de este tipo de gráfico es comparar el porcentaje de ciertas entidades como \emph{pull request} o revisiones dependiendo de su tipo.
+	\item \textbf{Gráfico de área temporal:} La finalidad de este tipo de gráfico es mostrar  el número de entidades creadas en un periodo concreto. El gráfico se divide en un máximo de 20 periodos.
+\end{itemize}
+
+\imagen{ejemploGraficos}{Ejemplos de los tres tipos de gráfico.}
+
+
+\section{Otros aspectos}
+
+A continuación se describen otros aspectos relevantes como la gestión de memoria o las pruebas.
+
+\subsection{Gestión de memoria: paginando resultados}
+
+Durante el desarrollo del proyecto hemos tenido problemas de rendimiento relacionados con la memoria y el uso de la red debido al elevado número de entidades que se retornaban al solicitar un listado.
+
+Por ejemplo, al solicitar todas las \emph{pull requests} del repositorio Elasticsearch, la lista resultante contiene cerca de 12.000 entidades, las cuales tienen un tamaño aproximado de 35 MB. Mantener \emph{arrays} con esa cantidad de datos en memoria supone un problema en entornos donde los recursos son limitados (Heroku ofrece 500 MB). Asimismo, enviar esa cantidad de datos al cliente en una sola petición penaliza gravemente los tiempos de carga.
+
+Basándonos en el funcionamiento de la API de GitHub, se implementaron consultas a la base de datos con paginación de resultados, obteniendo páginas de un máximo 100 entidades.
+
+\subsection{\emph{Testing} y la inyección de dependencias}
+
+Las diferentes clases de la aplicación hacen uso del patrón de inyección de dependencias. Gracias al uso de este patrón y al uso de interfaces se reduce el acoplamiento, lo cual resulta muy útil para realizar pruebas unitarias con \emph{stubs} y \emph{mocks} (dependencias simuladas).
+
+Esta estrategia permite probar el funcionamiento de un subsistema independientemente de sus dependencias externas.
+

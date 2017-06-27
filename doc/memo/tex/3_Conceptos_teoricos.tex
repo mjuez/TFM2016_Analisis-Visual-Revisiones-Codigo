@@ -20,25 +20,27 @@ La inspección de software, también conocida como inspección de Fagan, consist
 
 Las fases de dicho proceso son las siguientes \cite{Fagan:1986:ASI:10677.2412491}:
 
-\begin{description}
-	\item[Planificación] En esta fase, los materiales que van a ser inspeccionados deben coincidir con los criterios de entrada de la inspección. Tiene lugar la elección de los participantes de la inspección. También se realiza la organización de las reuniones (hora y lugar).
-	\item[Información general] En esta fase se comunica a los participantes cuales son los resultados esperados. También se realiza la asignación de roles.
-	\item[Preparación] En esta fase tiene lugar el estudio del material por parte de los participantes y su preparación para cumplir sus roles.
-	\item[Reunión de inspección] Esta es la fase donde se lleva a cabo la búsqueda de defectos.
-	\item[Repetición del trabajo] El autor debe solucionar los defectos detectados, tras ello todo el proceso vuelve a comenzar desde la fase de planificación.
-	\item[Seguimiento] El moderador o equipo completo de inspección debe verificar que todos los cambios son correctos y no introducen nuevos defectos.
-\end{description}
+\begin{itemize}
+\tightlist
+	\item \textbf{Planificación:} en esta fase, los materiales que van a ser inspeccionados deben coincidir con los criterios de entrada de la inspección. Tiene lugar la elección de los participantes de la inspección. También se realiza la organización de las reuniones (hora y lugar).
+	\item \textbf{Información general:} en esta fase se comunica a los participantes cuales son los resultados esperados. También se realiza la asignación de roles.
+	\item \textbf{Preparación:} en esta fase tiene lugar el estudio del material por parte de los participantes y su preparación para cumplir sus roles.
+	\item \textbf{Reunión de inspección:} esta es la fase donde se lleva a cabo la búsqueda de defectos.
+	\item \textbf{Repetición del trabajo:} el autor debe solucionar los defectos detectados, tras ello todo el proceso vuelve a comenzar desde la fase de planificación.
+	\item \textbf{Seguimiento:} el moderador o equipo completo de inspección debe verificar que todos los cambios son correctos y no introducen nuevos defectos.
+\end{itemize}
 
 \imagen{faganInspection}{Operaciones de la inspección de software.}
 
 Además, durante el proceso de inspección de software intervienen los siguientes roles:
 
-\begin{description}
-	\item[Autor] Responsable del desarrollo del documento a inspeccionar (código).
-	\item[Lector] Responsable de leer el documento como si fuese a desarrollarlo él mismo.
-	\item[Revisor] Responsable de examinar e inspeccionar el documento con el fin de identificar posibles defectos.
-	\item[Moderador] Responsable de coordinar la reunión de inspección.
-\end{description}
+\begin{itemize}
+\tightlist
+	\item \textbf{Autor:} responsable del desarrollo del documento a inspeccionar (código).
+	\item \textbf{Lector:} responsable de leer el documento como si fuese a desarrollarlo él mismo.
+	\item \textbf{Revisor:} responsable de examinar e inspeccionar el documento con el fin de identificar posibles defectos.
+	\item \textbf{Moderador:} responsable de coordinar la reunión de inspección.
+\end{itemize}
 
 \subsection{Revisor de código}
 
@@ -48,10 +50,11 @@ Los aportes del revisor de código también pueden proporcionar nuevos conocimie
 
 Se pueden distinguir dos tipos de revisores de código:
 
-\begin{description}
-	\item[Revisor experto] Es una persona, idealmente con experiencia y amplios conocimientos (aunque no es estrictamente necesario).
-	\item[Robot revisor] Son herramientas que permiten la revisión automática de código mediante la comprobación del código fuente para garantizar que cumpla un conjunto de reglas predefinidas, así como detectar errores \cite{wiki:001}.
-\end{description}
+\begin{itemize}
+\tightlist
+	\item \textbf{Revisor experto:} es una persona, idealmente con experiencia y amplios conocimientos (aunque no es estrictamente necesario).
+	\item \textbf{Robot revisor:} son herramientas que permiten la revisión automática de código mediante la comprobación del código fuente para garantizar que cumpla un conjunto de reglas predefinidas, así como detectar errores \cite{wiki:001}.
+\end{itemize}
 
 Actualmente es común que las revisiones cuenten con ambos tipos de revisores, en primer lugar se realiza una revisión automática, y los resultados son utilizados por el revisor experto para ofrecer una mejor revisión con un mayor nivel de detalle.
 
@@ -65,7 +68,7 @@ Gracias a este tipo de sistemas es posible revertir los cambios realizados en un
 
 Los sistemas de control de versiones están en constante evolución, actualmente herramientas como Github están empezando a implementar funcionalidades para facilitar  las revisiones de código. Por tanto, en este trabajo vamos a utilizar este tipo de sistemas como fuente de datos a extraer.
 
-A continuación se muestra un diagrama donde se muestra la figura de la revisión de código y su relación con diferentes elementos de los sistemas de control de versiones (concretamente git).
+A continuación se muestra un diagrama donde se muestra la figura de la revisión de código y su relación con diferentes elementos de los sistemas de control de versiones (concretamente Git).
 
 \imagen{diagramaRevisionCodigo}{Revisiones de código en git.}
 
@@ -96,29 +99,31 @@ Se entiende por integración a la unión de los cambios de dos ramas en una. Exi
 	\item Añadir los cambios de la rama principal en una rama donde se están implementando nuevas características con el fin de mantener la rama actualizada con los últimos parches y características. Esta práctica permite reducir el riesgo de conflictos\footnote{Existe un conflicto cuando al integrar dos ramas, un mismo fichero ha sido modificado en ambas y por ello es necesario decidir que cambios deben mantenerse en la versión final.} al unir la rama de desarrollo con la principal.
 \end{itemize}
 
+\imagen{merge}{Ejemplo de los dos patrones de integración existentes.}
+
 \subsubsection{Confirmación (commit)}
 
-Una confirmación (o commit) supone el almacenamiento en el repositorio de una nueva versión de los ficheros que contiene, en otras palabras, sirve para guardar los cambios \cite{Chacon:2014:PG:2695634}.
+Una confirmación (o \emph{commit}) supone el almacenamiento en el repositorio de una nueva versión de los ficheros que contiene, en otras palabras, sirve para guardar los cambios \cite{Chacon:2014:PG:2695634}.
 
 Cada confirmación lleva asociados uno o varios ficheros modificados, un identificador denominado revisión y un mensaje donde se describen los cambios realizados.
 
 \subsubsection{Tag}
 
-La finalidad del uso de tags es dar nombre a alguna versión para que pueda ser localizada facilmente en el futuro, es decir, permite identificar de forma sencilla revisiones importantes del proyecto \cite{wiki:002}.
+La finalidad del uso de \emph{tags} es dar nombre a alguna versión para que pueda ser localizada facilmente en el futuro, es decir, permite identificar de forma sencilla revisiones importantes del proyecto \cite{wiki:002}.
 
 \subsubsection{Issue (bug tracker)}
 
-Las ``Issues'' son una funcionalidad que ofrece la herramienta Github que permiten mantener la trazabilidad de las diferentes tareas, mejoras o fallos de los proyectos \cite{github:issues}.
+Las \emph{issues} son una funcionalidad que ofrece la herramienta GitHub que permiten mantener la trazabilidad de las diferentes tareas, mejoras o fallos de los proyectos \cite{github:issues}.
 
 \subsubsection{Pull request}
 
-Las ``Pull Requests'' son una característica concreta de la herramienta Github. Sirven para mantener conversaciones sobre los cambios donde se pueden exponer ideas, asignar tareas, tratar detalles y hacer revisiones de código \cite{github:features}.
+Las \emph{pull requests} son una característica particular de la herramienta GitHub. Sirven para mantener conversaciones sobre los cambios donde se pueden exponer ideas, asignar tareas, tratar detalles y hacer revisiones de código \cite{github:features}.
 
 \subsubsection{Etiqueta (label)}
 
-Las etiquetas (labels) de Github se pueden aplicar a las ``issues'' o ``pull requests'' como método para indicar prioridad, categoría, a que requerimiento pertenece o cualquier otra información que pueda ser de utilidad .
+Las etiquetas (\emph{labels}) de GitHub se pueden aplicar a las \emph{issues} o \emph{pull requests} como método para indicar prioridad, categoría, a que requerimiento pertenece o cualquier otra información que pueda ser de utilidad.
 
-Por defecto Github tiene siete etiquetas: ``bug'', ``duplicate'', ``enhancement'', ``help wanted'', ``invalid'', ``question'' y ``wontfix''.
+Por defecto GitHub tiene siete etiquetas: \emph{bug}, \emph{duplicate}, \emph{enhancement}, \emph{help wanted}, \emph{invalid}, \emph{question} y \emph{wontfix}.
 
 \section{Conceptos relacionados con buenas prácticas ágiles}
 
@@ -137,11 +142,11 @@ Tiene dos objetivos principales:
 	\item Permitir la creación de una versión del producto candidata a ser publicada en cualquier momento.
 \end{itemize}
 
-Para la consecución de estos objetivos se requiere un proceso de integración reproducible y altamente automatizado. Para tal fin se pueden utilizar herramientas de control de versiones, diversas políticas y convenciones, así como las propias herramientas de integración contínua.
+Para la consecución de estos objetivos se requiere un proceso de integración reproducible y altamente automatizado. Para tal fin se pueden utilizar herramientas de control de versiones, diversas políticas y convenciones, así como las propias herramientas de integración continua.
 
 \subsection{Despliegue continuo}
 
-El despliegue contínuo se puede entender como una parte de la integración contínua que busca minimizar el tiempo que va desde el inicio del desarrollo de una característica, hasta que dicha característica es utilizada por el usuario final en un entorno de producción.
+El despliegue continuo se puede entender como una parte de la integración continua que busca minimizar el tiempo que va desde el inicio del desarrollo de una característica, hasta que dicha característica es utilizada por el usuario final en un entorno de producción.
 
 \subsection{Construcción automática}
 
@@ -156,7 +161,7 @@ Por construcción se entiende al proceso de convertir ficheros y otros elementos
 
 \subsection{Diagrama ``Burn Down''}
 
-Un diagrama ``Burn Down'' permite relacionar la cantidad de trabajo restante (en el eje vertical) con el tiempo transcurrido desde el inicio del proyecto —burn down del producto— o un hito —burn down del sprint— (en el eje horizontal).
+Un diagrama \emph{Burn Down} permite relacionar la cantidad de trabajo restante (en el eje vertical) con el tiempo transcurrido desde el inicio del proyecto —\emph{burn down} del producto— o un hito —\emph{burn down} del \emph{sprint}— (en el eje horizontal).
 
 \subsection{Desarrollo iterativo e incremental}
 
@@ -168,7 +173,7 @@ Actualmente, gran parte de los proyectos ágiles además de seguir técnicas de 
 
 \subsection{Retrospectiva}
 
-La retrospectiva requiere que el equipo tenga reuniones regulares, normalmente dichas reuniones siguen el ritmo de las iteraciones. En ellas se deben reflejar los cambios más destacados tomando como referencia la anterior reunión, sirviendo como ayuda en la toma de decisiones para 
+La retrospectiva requiere que el equipo tenga reuniones regulares, normalmente dichas reuniones siguen el ritmo de las iteraciones. En ellas se deben reflejar los cambios más destacados tomando como referencia la anterior reunión, sirviendo como ayuda para la toma de decisiones.
 
 \subsection{Tablero de tareas}
 
@@ -178,5 +183,32 @@ El tablero de tareas se debe actualizar con frecuencia para mantener cada tarea 
 
 \subsection{Pruebas unitarias}
 
-Una prueba unitaria es un pequeño fragmento de programa escrito y mantenido por el equipo de desarrollo, su misión es ejecutar una parte del código y comparar el resultado de la ejecución con el resultado esperado. La salida de una prueba unitaria es binaria, indicando que la prueba ha pasado si cumple las expectativas, o que ha fallado en caso contrario. Comúnmente se debe desarrollar un número de pruebas unitarias acorde al tamaño del código que va a ser probado, dichas pruebas son agrupadas en lo que se denomina conjunto de pruebas unitarias o ``test suite''.
+Una prueba unitaria es un pequeño fragmento de programa escrito y mantenido por el equipo de desarrollo, su misión es ejecutar una parte del código y comparar el resultado de la ejecución con el resultado esperado. La salida de una prueba unitaria es binaria, indicando que la prueba ha pasado si cumple las expectativas, o que ha fallado en caso contrario. Comúnmente se debe desarrollar un número de pruebas unitarias acorde al tamaño del código que va a ser probado, dichas pruebas son agrupadas en lo que se denomina conjunto de pruebas unitarias o \emph{test suite}.
 
+\section{Otros conceptos}
+
+En esta parte se definen otros conceptos relacionados con el proyecto.
+
+\subsection{Herramienta de obtención de datos}
+
+Una herramienta de obtención de datos tiene como finalidad la descarga y almacenamiento de datos desde una fuente remota.
+
+Dependiendo de la fuente remota, la obtención de datos puede tomar cierta complejidad. Si tomamos GitHub como fuente de datos, existe un límite de 5000 peticiones por hora a su API pública. Una herramienta de obtención de datos de GitHub deberá tener en cuenta dicha limitación.
+
+\subsection{Herramienta de visualización de datos}
+
+Una herramienta de visualización de datos tiene como finalidad la transformación de datos brutos en una representación gráfica de los mismos.
+
+\subsection{API REST}
+
+El concepto REST (\emph{Representational State Transfer}) es propuesto el año 2000 por Roy Fielding \cite{fielding2000architectural}.
+
+Se trata de un tipo de arquitectura de desarrollo web que hace uso del estándar HTTP \cite{asiermarques:rest}. Gracias a esto, cualquier cliente que conozca el protocolo HTTP puede hacer uso de aplicaciones o servicios REST. Por ello resulta mucho más simple que otras alternativas como XML-RPC o SOAP.
+
+\subsection{Aplicación web SPA}
+
+El término \emph{Single-Page Applications} (o SPA) es introducido por Steve Yen en 2005. 
+
+Este tipo de aplicaciones se desarrollan para la web. Son accesibles a través de un navegador, como cualquier página web, pero ofreciendo interacciones más dinámicas como si de una aplicación de escritorio se tratase \cite{codeschool:spa}.
+
+La mayor diferencia entre una aplicación SPA y una página web convencional es que la primera requiere una reducida cantidad de refrescos de página. Las aplicaciones SPA hacen un uso elevado de AJAX para obtener los datos necesarios para el funcionamiento de la aplicación. 
