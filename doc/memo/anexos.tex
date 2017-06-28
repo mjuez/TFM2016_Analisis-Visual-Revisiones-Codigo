@@ -11,6 +11,10 @@
 \usepackage{minted}
 \usepackage{amssymb}
 \usepackage{eurosym}
+\usepackage{tabularx}
+\makeatletter
+\newcommand\cellwidth{\TX@col@width}
+\makeatother
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -28,9 +32,6 @@
 
 % Ecuaciones
 \usepackage{amsmath}
-
-\newenvironment{pcr}{\fontfamily{pcr}\selectfont}{\par}
-\DeclareTextFontCommand{\textcourier}{\pcr}
 
 % Rutas de fichero / paquete
 \newcommand{\ruta}[1]{{\sffamily #1}}
@@ -296,6 +297,65 @@
   \end{xtabular}
   \label{tabla:#4}
   \end{center}
+}
+
+\newcommand\casoDeUso[3]{
+\def\referencia{#1}%
+\def\titulo{#2}%
+\def\imprimeTabla{#3}%
+\imprimeTabla
+}
+
+\newcommand{\tablaCasoDeUso}[9]{%
+
+\def\cuversion{#1}%
+\def\reqasoc{#2}%
+\def\descripcion{#3}%
+\def\precondicion{#4}%
+\def\acciones{#5}%
+\def\postcondicion{#6}%
+\def\excepciones{#7}%
+\def\importancia{#8}%
+\def\etiqueta{#9}%
+
+\begin{table}
+\renewcommand{\arraystretch}{1.2}%
+\begin{tabularx}{\textwidth}{l| X}
+\toprule
+\textbf{\referencia} & \textbf{\titulo} \\
+\otoprule
+\textbf{Versión} & \cuversion \\
+\textbf{Autor} & Mario Juez Gil \\
+\textbf{Requisitos asociados} & \reqasoc \\
+\textbf{Descripción} & \descripcion \\
+\textbf{Precondición} & \precondicion \\
+\textbf{Acciones} & {
+\begin{tabularx}{\cellwidth}{l X}
+\textbf{Paso} & \textbf{Acción} \\
+\otoprule
+\acciones \\
+\end{tabularx}
+} \\
+\textbf{Postcondición} & \postcondicion \\
+\textbf{Excepciones} & {
+\begin{tabularx}{\cellwidth}{l X}
+\textbf{Paso} & \textbf{Acción} \\
+\otoprule
+\excepciones \\
+\end{tabularx}
+} \\
+\textbf{Importancia} & \importancia \\
+\bottomrule
+\end{tabularx}
+\caption{\referencia \titulo{}.}
+\label{\etiqueta}
+\end{table}
+
+}
+
+\newcommand{\tablaAcciones}[2]{%
+
+
 }
 
 

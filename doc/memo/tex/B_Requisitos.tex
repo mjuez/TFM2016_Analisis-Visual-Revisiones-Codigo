@@ -2,10 +2,657 @@
 
 \section{Introducción}
 
-\section{Objetivos generales}
+Este anexo está dedicado a la especificación de requisitos del proyecto. Se distingue entre requisitos funcionales y requisitos no funcionales y se utilizarán diagramas de caso de uso.
 
-\section{Catalogo de requisitos}
+La aplicación está dividida en dos subsistemas, un cliente web y una API REST, para cada uno de los cuales se ha desarrollado una especificación de requisitos particular.
+
+\section{Catálogo de requisitos}
+
+En esta parte se definen los diferentes requisitos de ambos subsistemas del proyecto.
+
+\subsection{Requisitos funcionales del cliente web}
+
+\begin{itemize}
+	\item \textbf{RFCW-1 Solicitud de datos de un repositorio:} La aplicación debe permitir la solicitud de los datos de revisiones de un repositorio de GitHub.
+	\item \textbf{RFCW-2 Listado de repositorios:} Se deben listar todos los repositorios disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación.
+	\item \textbf{RFCW-3 Análisis visual de datos de un repositorio:} Debe existir una vista que contenga gráficos creados a partir de datos sobre las revisiones de código realizadas en un repositorio.
+	\item \textbf{RFCW-4 Descarga fichero CSV de un repositorio:} El usuario debe ser capaz de descargar un fichero \texttt{.CSV} que contenga datos sobre las \textit{pull requests} y revisiones realizadas en un repositorio concreto.
+	\item \textbf{RFCW-5 Listado de \textit{pull requests}:} Se deben listar todas las \textit{pull requests} disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación y de filtrado (por repositorio).
+	\item \textbf{RFCW-6 Análisis visual de datos de una \textit{pull request}:}  Debe existir una vista que contenga gráficos creados a partir de datos de una \textit{pull request}.
+	\item \textbf{RFCW-7 Listado de usuarios:} Se deben listar todos los usuarios disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación.
+	\item \textbf{RFCW-8 Análisis visual de datos de un usuario:} Debe existir una vista que contenga gráficos creados a partir de datos sobre las revisiones de código realizadas por un usuario (revisor).
+	\item \textbf{RFCW-9 Visualización de estado de API:} El cliente web debe mostrar un indicador con el estado actual de la API para conocer si se encuentra obteniendo datos o no.
+\end{itemize}
+
+\subsection{Requisitos no funcionales del cliente web}
+
+\begin{itemize}
+	\item \textbf{RNFCW-1 Usabilidad:} El cliente web debe tener una interfaz intuitiva y fácil de utilizar.
+	\item \textbf{RNFCW-2 Rendimiento:} El cliente web debe evitar los refrescos de página y optimizar el número de peticiones HTTP necesarias.
+	\item \textbf{RNFCW-3 Portabilidad:} El cliente web debe funcionar correctamente en los tres principales navegadores web: Edge, Firefox y Chrome.
+\end{itemize}
+
+\subsection{Requisitos funcionales de la API REST}
+
+\begin{itemize}
+	\item \textbf{RFAR-1 Obtención de entidades de GitHub:} La API REST debe ser capaz de obtener todo tipo de entidad relacionada con las revisiones de código y almacenarlas para su posterior uso.
+	\item \textbf{RFAR-2 Obtención del estado del gestor de tareas:} Debe existir una ruta de la API que permita conocer el estado actual del gestor de tareas de obtención de datos.
+	\item \textbf{RFAR-3 Obtención del listado de tareas:} Debe existir una ruta en la API para obtener el listado de tareas. Dicha ruta debe contener un parámetro que permita escoger si se desean obtener todas las tareas (incluidas las completas) o únicamente las incompletas.
+	\item \textbf{RFAR-4 Obtención del listado de \textit{pull requests}:} Debe existir una ruta en la API para obtener el listado de entidades de tipo \textit{pull request}. Mediante la parametrización de la ruta se debe permitir la ordenación y filtrado (por repositorio) de la lista.
+	\item \textbf{RFAR-5 Obtención de una \textit{pull request}:} Debe existir una ruta en la API para obtener los datos de una entidad de tipo \textit{pull request}.
+	\item \textbf{RFAR-6 Obtención de estadísticas de \textit{pull requests}:} Debe existir una ruta en la API para obtener los valores medios de propiedades de una lista de \textit{pull requests} filtradas por usuario o por repositorio. Parametrizando la ruta también se debe tener acceso a estadísticas temporales para un usuario o repositorio concreto. Éstas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación de la \textit{pull request} más antigua de la lista hasta la fecha de creación más reciente de la lista.
+	\item \textbf{RFAR-7 Obtención del listado de usuarios:} Debe existir una ruta en la API para obtener el listado de entidades de tipo usuario. Mediante la parametrización de la ruta se debe permitir la ordenación de la lista.
+	\item \textbf{RFAR-8 Obtención de un usuario:} Debe existir una ruta en la API para obtener los datos de una entidad de tipo usuario.
+	\item \textbf{RFAR-9 Obtención de estadísticas de usuario:} Debe existir una ruta en la API para obtener los valores medios de propiedades de la lista de todas las entidades usuario de la aplicación.
+	\item \textbf{RFAR-10 Obtención de estadísticas de revisiones:} Debe existir una ruta en la API para obtener estadísticas sobre una lista de revisiones de un repositorio o usuario concreto. Las estadísticas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación de la revisión más antigua de la lista hasta la fecha de creación más reciente de la lista.
+	\item \textbf{RFAR-11 Obtención de estadísticas de comentarios de revisión:} Debe existir una ruta en la API para obtener estadísticas sobre una lista de comentarios de revisión de un repositorio o usuario concreto. Las estadísticas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación del comentario de revisión más antiguo de la lista hasta la fecha de creación más reciente de la lista.
+	\item \textbf{RFAR-12 Obtención del listado de repositorios:} Debe existir una ruta en la API para obtener el listado de entidades de tipo repositorio. Mediante la parametrización de la ruta se debe permitir la ordenación de la lista.
+	\item \textbf{RFAR-13 Obtención de un repositorio:} Debe existir una ruta en la API para obtener los datos de una entidad de tipo repositorio.
+	\item \textbf{RFAR-14 Obtención de estadísticas de repositorio:} Debe existir una ruta en la API para obtener los valores medios de propiedades de la lista de todas las entidades repositorio de la aplicación.
+	\item \textbf{RFAR-15 Obtención de un listado de nombres de repositorios:} Debe existir una ruta en la API para obtener el listado con todos los nombres de repositorio almacenados en la aplicación.
+	\item \textbf{RFAR-16 Obtención de un fichero CSV con datos sobre un repositorio:} Debe existir una ruta en la API para obtener un fichero \texttt{.CSV} con datos de revisiones de código y \textit{pull requests} de un repositorio concreto.
+\end{itemize}
+
+\subsection{Requisitos no funcionales de la API REST}
+
+\begin{itemize}
+	\item \textbf{RNFAR-1 Escalabilidad:} La arquitectura de la API REST debe ser escalable para que añadir soporte a otro tipo de entidades de GitHub en el futuro resulte fácil.
+	\item \textbf{RNFAR-2 Rendimiento:} La API REST debe funcionar correctamente en una máquina con un mínimo de 500 MB de memoria RAM.
+	\item \textbf{RNFAR-3 Seguridad:} Se debe evitar encolar el mismo repositorio más de una vez, ya que en caso contrario se podrían dar casos de inanición. También se debe evitar encolar repositorios inexistentes.
+	\item \textbf{RNFAR-4 Mantenibilidad:} El código de la API debe tener una calidad mínima de 3.0 GPA para asegurar su mantenibilidad.
+\end{itemize}
+
+\newpage
 
 \section{Especificación de requisitos}
 
+En esta parte se muestra el diagrama de casos de uso del proyecto y la definición de cada uno de ellos.
 
+\imagen{casosUso}{Diagrama de casos de uso de la aplicación.}
+
+\casoDeUso{
+	CU-01
+}{
+	Solicitar datos de repositorio
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-1
+	}{
+		Permite al usuario solicitar la obtención de datos de revisiones de un repositorio de GitHub.
+	}{
+		Situado en la página de inicio del cliente web.
+	}{
+		1 & Rellenar el campo propietario. \\
+		2 & Rellenar el campo repositorio. \\
+		3 & Pulsar el botón ``adelante''.
+	}{
+		El número de tareas de obtención de datos en el servidor se ha incrementado.
+	}{
+		1 & Repositorio inexistente. Se muestra un mensaje informativo. \\
+		2 & API no disponible. Se muestra un mensaje informativo.
+	}{Alta}{cu-01}
+}
+
+\casoDeUso{
+	CU-02
+}{
+	Listar repositorios
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-2
+	}{
+		Permite al usuario ver una lista de todos los repositorios almacenados en la aplicación.
+	}{
+		Cliente web Anvireco abierto.
+	}{
+		1 & Pulsar el elemento ``Repositorios'' del menú lateral. \\
+		2 & Opcionalmente se pueden ordenar los repositorios utilizando el control desplegable ``Orden...'' de la vista.
+	}{
+		El tamaño de la lista es de 100 elementos o se corresponde con el número de repositorios almacenados en la base de datos en caso contrario.
+	}{
+		1 & API no disponible. Se muestra un mensaje informativo.
+	}{Alta}{cu-02}
+}
+
+\casoDeUso{
+	CU-03
+}{
+	Análisis visual repositorio
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-3
+	}{
+		Permite al usuario ver una serie de gráficos sobre datos generales y datos de revisiones de código de un repositorio.
+	}{
+		Situado en la vista de listado de repositorios.
+	}{
+		1 & Pulsar en el nombre del repositorio objetivo. \\
+		2 & Opcionalmente se puede navegar al listado de \textit{pull requests} de ese repositorio. \\
+		3 & Opcionalmente se puede navegar a la página del repositorio en GitHub.
+	}{
+		Los gráficos mostrados se corresponden con los datos del repositorio elegido.
+	}{
+		1 & API no disponible. Se muestra un mensaje informativo.
+	}{Alta}{cu-03}
+}
+
+\casoDeUso{
+	CU-04
+}{
+	Descarga CSV con datos de revisiones
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-4
+	}{
+		Permite al usuario descargar un fichero \texttt{.CSV} con datos sobre \textit{pull requests} y revisiones del repositorio.
+	}{
+		Situado en la vista de un repositorio concreto.
+	}{
+		1 & Pulsar sobre el botón de descarga de CSV.
+	}{
+		Se muestra un diálogo de descarga del fichero \texttt{.CSV}. El fichero contiene los datos del repositorio escogido.
+	}{
+		1 & API no disponible. Se muestra un mensaje informativo.
+	}{Media}{cu-04}
+}
+
+\casoDeUso{
+	CU-05
+}{
+	Listar \textit{pull requests}
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-5
+	}{
+		Permite al usuario ver una lista de todas las \textit{pull requests} almacenadas en la aplicación.
+	}{
+		Cliente web Anvireco abierto.
+	}{
+		1 & Pulsar el elemento ``Pull Requests'' del menú lateral. \\
+		2 & Opcionalmente se pueden ordenar las \textit{pull requests} utilizando el control desplegable ``Orden...'' de la vista. \\
+		3 & Opcionalmente se pueden filtrar las \textit{pull requests} por repositorio utilizando el control desplegable ``Filtrar por repositorio'' de la vista.
+	}{
+		El tamaño de la lista es de 100 elementos o se corresponde con el número de \textit{pull requests} almacenadas en la base de datos en caso contrario.
+	}{
+		1 & API no disponible. Se muestra un mensaje informativo.
+	}{Alta}{cu-05}
+}
+
+\casoDeUso{
+	CU-06
+}{
+	Análisis visual \textit{pull request}
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-6
+	}{
+		Permite al usuario ver una serie de gráficos sobre datos generales de una \textit{pull request}.
+	}{
+		Situado en la vista de listado de \textit{pull requests}.
+	}{
+		1 & Pulsar en el nombre de la \textit{pull request} objetivo. \\
+		2 & Opcionalmente se puede navegar a la página de la \textit{pull request} en GitHub.
+	}{
+		Los gráficos mostrados se corresponden con los datos de la \textit{pull request} elegida.
+	}{
+		1 & API no disponible. Se muestra un mensaje informativo.
+	}{Alta}{cu-06}
+}
+
+\casoDeUso{
+	CU-07
+}{
+	Listar usuarios
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-7
+	}{
+		Permite al usuario ver una lista de todos los usuarios almacenadas en la aplicación.
+	}{
+		Cliente web Anvireco abierto.
+	}{
+		1 & Pulsar el elemento ``Usuarios'' del menú lateral. \\
+		2 & Opcionalmente se pueden ordenar los usuarios utilizando el control desplegable ``Orden...'' de la vista. 
+	}{
+		El tamaño de la lista es de 100 elementos o se corresponde con el número de usuarios almacenados en la base de datos en caso contrario.
+	}{
+		1 & API no disponible. Se muestra un mensaje informativo.
+	}{Alta}{cu-07}
+}
+
+\casoDeUso{
+	CU-08
+}{
+	Análisis visual usuario
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-8
+	}{
+		Permite al usuario ver una serie de gráficos sobre datos generales y datos de revisiones de un usuario.
+	}{
+		Situado en la vista de listado de usuarios.
+	}{
+		1 & Pulsar en el nombre del usuario objetivo. \\
+		2 & Opcionalmente se puede navegar a la página del usuario en GitHub.
+	}{
+		Los gráficos mostrados se corresponden con los datos del usuario elegido.
+	}{
+		1 & API no disponible. Se muestra un mensaje informativo.
+	}{Alta}{cu-08}
+}
+
+\casoDeUso{
+	CU-09
+}{
+	Ver estado API
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFCW-9
+	}{
+		Permite al usuario ver el estado actual de la API.
+	}{
+		Cliente web Anvireco abierto.
+	}{
+		1 & El estado se muestra en la parte inferior de la aplicación. \\
+	}{
+		Estado visible se corresponde con el estado del gestor de tareas.
+	}{
+		1 & API no disponible. No se muestra el estado.
+	}{Baja}{cu-09}
+}
+
+\casoDeUso{
+	CU-10
+}{
+	Crear tarea de obtención de datos
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-1
+	}{
+		Permite al usuario encolar una tarea para obtener datos de revisiones de un repositorio de GitHub.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición POST a la ruta de creación de tareas parametrizada con el propietario y nombre del repositorio. 
+	}{
+		Existen 8 tareas más en la base de datos.
+	}{
+		1 & El repositorio no existe en GitHub. No se crea ninguna tarea. \\
+		2 & La API de GitHub no está disponible. No se crea ninguna tarea. \\
+		3 & La API de Anvireco no está disponible. No se crea ninguna tarea.
+	}{Alta}{cu-10}
+}
+
+\casoDeUso{
+	CU-11
+}{
+	Obtener datos de GitHub
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-1
+	}{
+		Obtención de datos de entidades relacionadas con revisiones de código de GitHub.
+	}{
+		API REST en ejecución. API GitHub disponible.
+	}{
+		1 & Ejecución de la cola de tareas de obtención de datos pendientes.
+	}{
+		El número de entidades almacenadas en nuestra base de datos se ha incrementado.
+	}{
+		1 & La API de GitHub no está disponible. El gestor de tareas se pausa para reintentar la obtención más adelante. \\
+		2 & La base de datos de Anvireco no está disponible. El gestor de tareas se pausa para reintentar la obtención más adelante. \\
+		3 & Se ha excedido el límite de peticiones a la API de GitHub. El gestor de tareas se pausa para reintentar la obtención más adelante.
+	}{Alta}{cu-11}
+}
+
+\casoDeUso{
+	CU-12
+}{
+	Obtener estado del gestor de tareas
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-2
+	}{
+		Permite al usuario conocer el estado actual del gestor de tareas de obtención de datos.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta del estado del gestor de tareas. 
+	}{
+		El estado mostrado en la respuesta se corresponde con el estado del gestor de tareas en ese momento.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Baja}{cu-12}
+}
+
+\casoDeUso{
+	CU-13
+}{
+	Obtener listado de tareas
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-3
+	}{
+		Permite al usuario obtener un listado con las tareas de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta del listado de tareas indicando por medio de un parámetro si se quieren obtener todas las tareas, o únicamente las incompletas.
+	}{
+		El tamaño del listado de tareas se corresponde con el número de tareas almacenadas (y filtradas si fuese el caso) en la base de datos.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Baja}{cu-13}
+}
+
+\casoDeUso{
+	CU-14
+}{
+	Obtener listado de \textit{pull requests}
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-4
+	}{
+		Permite al usuario obtener un listado con las \textit{pull requests} de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta del listado de \textit{pull requests} indicando por medio de parámetros si el listado debe estar filtrado por repositorio y/o si debe estar ordenado de algún modo.
+	}{
+		El tamaño del listado de \textit{pull requests} se corresponde con el número de \textit{pull requests} almacenadas que cumplen las restricciones de filtrado y ordenación.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-14}
+}
+
+\casoDeUso{
+	CU-15
+}{
+	Obtener \textit{pull request}
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-5
+	}{
+		Permite al usuario obtener una \textit{pull request} de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de una \textit{pull request}.
+	}{
+		Los datos obtenidos de la \textit{pull request} escogida se corresponden con los datos de la \textit{pull request} en GitHub.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-15}
+}
+
+\casoDeUso{
+	CU-16
+}{
+	Obtener estadísticas de \textit{pull request}
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-6
+	}{
+		Permite al usuario obtener estadísticas sobre las \textit{pull requests} de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de estadísticas de \textit{pull requests}, indicando por medio de parámetros el usuario o repositorio concreto para el cual obtener las estadísticas, y si se esperan estadísticas de valores medios, o estadísticas temporales.
+	}{
+		Los datos estadísticos obtenidos cumplen las restricciones elegidas mediante parámetros.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-16}
+}
+
+\casoDeUso{
+	CU-17
+}{
+	Obtener listado de usuarios
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-7
+	}{
+		Permite al usuario obtener un listado con los usuarios de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta del listado de usuarios indicando por medio de parámetros si el listado debe estar ordenado de algún modo.
+	}{
+		El tamaño del listado de usuarios obtenido se corresponde con el número de usuarios almacenados que cumplen las restricciones de ordenación.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-17}
+}
+
+\casoDeUso{
+	CU-18
+}{
+	Obtener usuario
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-8
+	}{
+		Permite al usuario obtener un usuario de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de un usuario.
+	}{
+		Los datos obtenidos del usuario escogido se corresponden con los datos del usuario en GitHub.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-18}
+}
+
+\casoDeUso{
+	CU-19
+}{
+	Obtener estadísticas de usuarios
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-9
+	}{
+		Permite al usuario obtener estadísticas sobre los usuarios de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de estadísticas de todos los usuarios.
+	}{
+		Los datos estadísticos obtenidos se corresponden con los valores medios de las propiedades de todos los usuarios almacenados en la base de datos.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-19}
+}
+
+\casoDeUso{
+	CU-20
+}{
+	Obtener estadísticas de revisiones
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-10
+	}{
+		Permite al usuario obtener estadísticas sobre las revisiones de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de estadísticas de revisiones, indicando por medio de parámetros el usuario o repositorio concreto para el cual obtener las estadísticas.
+	}{
+		Los datos estadísticos obtenidos cumplen las restricciones elegidas mediante parámetros.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-20}
+}
+
+\casoDeUso{
+	CU-21
+}{
+	Obtener estadísticas de comentarios de revisión
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-11
+	}{
+		Permite al usuario obtener estadísticas sobre los comentarios de revisión de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de estadísticas de comentarios de revisión, indicando por medio de parámetros el usuario o repositorio concreto para el cual obtener las estadísticas.
+	}{
+		Los datos estadísticos obtenidos cumplen las restricciones elegidas mediante parámetros.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-21}
+}
+
+\casoDeUso{
+	CU-22
+}{
+	Obtener listado de repositorios
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-12
+	}{
+		Permite al usuario obtener un listado con los repositorios de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta del listado de repositorios indicando por medio de parámetros si el listado debe estar ordenado de algún modo.
+	}{
+		El tamaño del listado de repositorios obtenido se corresponde con el número de repositorios almacenados que cumplen las restricciones de ordenación.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-22}
+}
+
+\casoDeUso{
+	CU-23
+}{
+	Obtener repositorio
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-13
+	}{
+		Permite al usuario obtener un repositorio de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de un repositorio.
+	}{
+		Los datos obtenidos del repositorio escogido se corresponden con los datos del repositorio en GitHub.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-23}
+}
+
+\casoDeUso{
+	CU-24
+}{
+	Obtener estadísticas de repositorios
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-14
+	}{
+		Permite al usuario obtener estadísticas sobre los repositorios de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de estadísticas de todos los repositorios.
+	}{
+		Los datos estadísticos obtenidos se corresponden con los valores medios de las propiedades de todos los repositorios almacenados en la base de datos.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Alta}{cu-24}
+}
+
+\casoDeUso{
+	CU-25
+}{
+	Obtener listado de nombres de repositorios
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-15
+	}{
+		Permite al usuario obtener un listado con todos los nombres de los repositorios de la aplicación en formato JSON.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de listado de nombres de todos los repositorios.
+	}{
+		El tamaño del listado obtenido se debe corresponder con el número de repositorios almacenados en la base de datos de la aplicación.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Media}{cu-25}
+}
+
+\casoDeUso{
+	CU-26
+}{
+	Obtener datos CSV de repositorio
+}{
+	\tablaCasoDeUso{
+		1.0
+	}{
+		RFAR-16
+	}{
+		Permite al usuario obtener datos sobre revisiones de código y \textit{pull requests} de un repositorio de la aplicación, en formato CSV.
+	}{
+		API REST en ejecución.
+	}{
+		1 & Petición GET a la ruta de obtención del fichero \texttt{.CSV} parametrizada con un propietario y un nombre del repositorio.
+	}{
+		Los datos CSV obtenidos se deben corresponder con los datos almacenados en la base de datos para ese repositorio.
+	}{
+		1 & La API de Anvireco no está disponible. No hay respuesta.
+	}{Media}{cu-26}
+}
