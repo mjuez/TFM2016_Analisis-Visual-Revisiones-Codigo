@@ -5,6 +5,12 @@
 \selectlanguage{spanish}
 \usepackage[utf8]{inputenc}
 \usepackage{placeins}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{amssymb}
+\usepackage{eurosym}
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -14,11 +20,17 @@
 % Links
 \usepackage[colorlinks]{hyperref}
 \hypersetup{
-	allcolors = {red}
+	colorlinks,
+	linkcolor={black},
+	citecolor={blue!50!black},
+	urlcolor={blue!80!black}
 }
 
 % Ecuaciones
 \usepackage{amsmath}
+
+\newenvironment{pcr}{\fontfamily{pcr}\selectfont}{\par}
+\DeclareTextFontCommand{\textcourier}{\pcr}
 
 % Rutas de fichero / paquete
 \newcommand{\ruta}[1]{{\sffamily #1}}
@@ -91,7 +103,7 @@
 %
 % Nuevo comando para tablas pequeñas (menos de una página).
 \newcommand{\tablaSmall}[5]{%
- \begin{table}
+ \begin{table}[H]
   \begin{center}
    \rowcolors {2}{gray!35}{}
    \begin{tabular}{#2}
@@ -117,6 +129,24 @@
     #4
     \otoprule
     #5
+    \bottomrule
+   \end{tabular}
+   \caption{#1}
+   \label{tabla:#3}
+  \end{center}
+ \end{table}
+}
+
+\newcommand{\tablaSmallConPie}[6]{%
+ \begin{table}[H]
+  \begin{center}
+   \begin{tabular}{#2}
+    \toprule
+    #4
+    \otoprule
+    #5
+    \midrule
+    #6
     \bottomrule
    \end{tabular}
    \caption{#1}
@@ -274,7 +304,7 @@
 \graphicspath{ {./img/} }
 
 % Capítulos
-\chapterstyle{bianchi}
+%\chapterstyle{bianchi}
 \newcommand{\capitulo}[2]{
 	\setcounter{chapter}{#1}
 	\setcounter{section}{0}
@@ -284,7 +314,10 @@
 }
 
 % Apéndices
-\renewcommand{\appendixname}{Apéndice}
+\addto\captionsspanish{%
+  \renewcommand\appendixname{Anexo}
+  \renewcommand\appendixpagename{Anexos}
+}
 \renewcommand*\cftappendixname{\appendixname}
 
 \newcommand{\apendice}[1]{
@@ -311,7 +344,7 @@
     \begin{minipage}{.8\textwidth}
       \vspace{.5cm}\Large
       \begin{center}
-      \textbf{TFG del Grado en Ingeniería Informática}\vspace{.6cm}\\
+      \textbf{TFM del Máster Universitario en Ingeniería Informática}\vspace{.6cm}\\
       \textbf{\LARGE\@title{}}
       \end{center}
       \vspace{.2cm}
@@ -338,9 +371,9 @@
 
 
 % Datos de portada
-\title{título del TFG \\Documentación Técnica}
-\author{nombre alumno}
-\tutor{nombre tutor}
+\title{Análisis Visual de Revisiones de Código \\Documentación Técnica}
+\author{Mario Juez Gil}
+\tutor{Dr. Carlos López Nozal, Dr. Raúl Marticorena Sánchez}
 \date{\today}
 
 \begin{document}
