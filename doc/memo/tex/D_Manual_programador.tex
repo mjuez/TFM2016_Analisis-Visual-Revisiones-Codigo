@@ -2,10 +2,243 @@
 
 \section{Introducción}
 
+Este anexo está dedicado al desarrollo de la documentación técnica de programación. Se tratan aspectos como la configuración del entorno de desarrollo, compilación y ejecución del proyecto, o pruebas realizadas.
+
 \section{Estructura de directorios}
+
+El proyecto tiene la siguiente estructura de directorios:
+
+\begin{itemize}
+	\item \textbf{\texttt{/}:} la raíz del proyecto, contiene ficheros de configuración de TypeScript, Travis, y Gulp, el fichero \texttt{package.json} de node.js, el fichero \texttt{README}, la licencia y ficheros para ignorar archivos en Git y en Codebeat.
+	\item \textbf{\texttt{/doc}:} contiene toda la documentación del proyecto.
+	\item \textbf{\texttt{/doc/code}:} documentación de código fuente.
+	\item \textbf{\texttt{/doc/memo}:} memoria y anexos del proyecto.
+	\item \textbf{\texttt{/doc/memo/img}:} figuras de la memoria y los anexos.
+	\item \textbf{\texttt{/doc/memo/tex}:} ficheros \texttt{.tex}.
+	\item \textbf{\texttt{/node\_modules}:} dependencias externas del proyecto.
+	\item \textbf{\texttt{/prototypes}:} prototipos previos para la prueba de herramientas.
+	\item \textbf{\texttt{/prototypes/heroku}:} un prototipo para probar el servicio Heroku.
+	\item \textbf{\texttt{/prototypes/nodejs}:} un prototipo para probar node.js.
+	\item \textbf{\texttt{/release}:} en esta ruta se copian los ficheros generados automáticamente tras la compilación. Contiene la aplicación lista para su ejecución.
+	\item \textbf{\texttt{/src}:} código fuente del proyecto. Contiene las clases que crean el servidor web.
+	\item \textbf{\texttt{/src/app}:} logica de negocio y acceso a datos.
+	\item \textbf{\texttt{/src/app/data}:} acceso a datos (repositorios).
+	\item \textbf{\texttt{/src/app/data/filters}:} filtros para consultas MongoDB.
+	\item \textbf{\texttt{/src/app/data/schemas}:} definición de \texttt{schemas} de MongoDB.
+	\item \textbf{\texttt{/src/app/entities}:} entidades.
+	\item \textbf{\texttt{/src/app/entities/documents}:} documentos \textit{mongoose}.
+	\item \textbf{\texttt{/src/app/entities/enum}:} enumeraciones.
+	\item \textbf{\texttt{/src/app/services}:} lógica de negocio (servicios).
+	\item \textbf{\texttt{/src/app/services/tasks}:} tareas de obtención de datos.
+	\item \textbf{\texttt{/src/app/util}:} clases de utilidad.
+	\item \textbf{\texttt{/src/controllers}:} controladores de la API REST.
+	\item \textbf{\texttt{/src/routes}:} rutas de la API REST.
+	\item \textbf{\texttt{/test}:} pruebas unitarias del proyecto.
+	\item \textbf{\texttt{/test/app}:} pruebas unitarias de lógica de negocio y acceso a datos.
+	\item \textbf{\texttt{/test/app/data}:} pruebas unitarias de acceso a datos (repositorios).
+	\item \textbf{\texttt{/test/app/entities}:} pruebas unitarias de entidades.
+	\item \textbf{\texttt{/test/app/services}:} pruebas unitarias de lógica de negocio (servicios).
+	\item \textbf{\texttt{/test/app/util}:} pruebas unitarias de clases de utilidad.
+\end{itemize}
 
 \section{Manual del programador}
 
+El entorno de desarrollo debe satisfacer los siguientes requisitos mínimos:
+
+\begin{itemize}
+	\item \textbf{Node.js y npm:} la aplicación está desarrollada en Node.js y hace uso del gestor de paquetes npm.
+	\item \textbf{MongoDB:} la aplicación está preparada para trabajar con bases de datos NoSQL MongoDB. No es imprescindible tener una instancia local de MongoDB, como alternativa se pueden utilizar servicios en la nube como MongoDB Atlas o mLab.
+	\item \textbf{Git:} la aplicación utiliza el control de versiones Git. Debe estar instalado en el sistema para la descarga del código fuente, y la publicación de cambios.
+\end{itemize}
+
+De forma opcional, pero recomendable se debería contar con:
+
+\begin{itemize}
+	\item \textbf{GitHub Developer Application:} permite aumentar el límite de peticiones/hora a la API de GitHub de 60 a 5000.
+	\item \textbf{Cliente Travis CI:} permite, entre otras cosas, encriptar datos en el fichero de configuración de Travis. Requiere Ruby instalado.
+\end{itemize}
+
+\imagen{gitHubDeveloperApplication}{GitHub Developer Application.}
+
+También es necesario un editor de código. Por la experiencia de uso en el desarrollo del proyecto, se recomienda Visual Studio Code \cite{vscode}, que integra herramientas para trabajar con TypeScript y con Git.
+
+\imagen{vsCode}{Visual Studio Code.}
+
+\subsection{Contenedor de aplicación Heroku}
+
+Actualmente la aplicación se despliega en Heroku. Para desplegar la aplicación en este servicio, en primer lugar se debe crear una cuenta de usuario. Tras ello, en el panel de administración, se debe crear una aplicación.
+
+\imagen{appHeroku}{Creando una aplicación en Heroku.}
+
+Una vez creada la aplicación, se debe seleccionar lo que Heroku denomina \textit{buildpack}, concretamente el \textit{buildpack} de node.js. Gracias a esto, Heroku configura el modo de construir y ejecutar la aplicación de forma automática. Esta configuración se puede encontrar en la pestaña de ajustes de la aplicación.
+
+\imagen{buildPackHeroku}{Seleccionando un \textit{buildpack} en Heroku.}
+
+Como la aplicación se despliega a través de Travis, en Heroku no hay que hacer ninguna configuración más.
+
+\subsection{Integración continua con Travis}
+
+Gracias al uso de Travis, cada vez que se publican cambios en una de las ramas \texttt{dev} o \texttt{master}, esos cambios se despliegan automáticamente en su aplicación correspondiente en Heroku.
+
+En primer lugar es necesario obtener una cuenta de Travis. Para ello, la herramienta da la opción de utilizar el usuario de GitHub.
+
+El siguiente paso consiste en habilitar el uso de Travis en el repositorio:
+
+\imagen{conexionTravis}{Conectando el repositorio con Travis.}
+
+Finalmente se debe añadir un fichero de configuración \texttt{.travis.yml} en la raíz del repositorio.
+
+\begin{figure}[H]
+\begin{minted}[frame=single,
+               framesep=3mm,
+               linenos=true,
+               xleftmargin=21pt,
+               tabsize=4]{yaml}
+language: node_js
+node_js:
+- '7'
+branches:
+  only:
+  - master
+  - dev
+install:
+- npm install
+script:
+- npm test
+deploy:
+  provider: heroku
+  api_key:
+    secure: o8V/yYy59uVMYoxaIUBoS
+  app:
+    master: anvireco
+    dev: anvireco-dev
+\end{minted}
+\caption{Configuración de \texttt{.travis.yml}.} 
+\label{travis-yml}
+\end{figure}
+
+En este fichero se detalla lo siguiente:
+
+\begin{enumerate}
+	\item En las líneas 1-3 se indica a Travis que el lenguaje utilizado es node.js en su versión 7.
+	\item En las líneas 4-7 se indica a Travis que únicamente se debe ejecutar al actualizar las ramas \texttt{master} o \texttt{dev}. Con cualquier otra rama, por ejemplo \texttt{memo}, Travis no se lanzará.
+	\item En las líneas 8-9 se indica a Travis qué comando debe ejecutar para instalar la aplicación. En este caso \texttt{npm install} descarga las dependencias y compila la aplicación.
+	\item En las líneas 10-11 se indica a Travis qué comandos adicionales debe ejecutar. En este caso \texttt{npm test}, para pasar las pruebas unitarias.
+	\item En las líneas 12-13 se indica a Travis que debe desplegar la aplicación, concretamente en Heroku.
+	\item En las líneas 14-15 se añade la \textit{APK-KEY} de Heroku (cada usuario tiene una \textit{API-KEY}). Dicha clave se añade al fichero a través del cliente de Travis para encriptarla, con el siguiente comando: \texttt{travis encrypt \$(API-KEY) --add deploy.api\_key}.
+	\item En las líneas 16-18 se indica a Travis en qué aplicación de Heroku deben ser desplegados los cambios de una rama concreta. La rama \texttt{master} se despliega en la aplicación \texttt{anvireco}, y la rama \texttt{dev} en \texttt{anvireco-dev}.
+\end{enumerate}
+
+Una vez configurado Travis, el proceso de construcción, pruebas y despliegue queda completamente automatizado. Desde GitHub y desde la web de Travis es posible ver el estado de cada construcción.
+
+\imagen{construccionTravis}{Ejemplo de estado de construcción en Travis.}
+
+\subsection{Revisiones automáticas de código con Codebeat}
+
+Mediante el uso de Codebeat se realizan revisiones automáticas de código cada vez que se realizan cambios en la rama \texttt{master} del proyecto o cada vez que se añaden cambios a una \textit{pull request} abierta para integrar cambios en la rama \texttt{master}.
+
+Para utilizarlo es necesario obtener una cuenta de Codebeat. Para ello, la herramienta da la opción de utilizar el usuario de GitHub.
+
+A continuación se debe escoger el repositorio para el cual se desean realizar revisiones automáticas de código:
+
+\imagen{trackingCodebeat}{Selección de repositorio para realizar revisiones con Codebeat.}
+
+Tras ello, la herramienta ya está preparada para realizar revisiones de forma automática. Éstas funcionan como \textit{checks} de GitHub.
+
+\imagen{checksPullRequest}{Codebeat como \textit{check} de GitHub.}
+
+\subsection{Generación de la documentación de código}
+
+La documentación de código se genera con la herramienta TypeDoc. Situados en la raíz del proyecto, mediante el siguiente comando se guarda la documentación en la carpeta \texttt{/doc/code}:
+
+\codigo{typedoc --out doc/code/ . --exclude prototypes/}
+
+Con \texttt{--out} se indica el directorio de destino, a continuación se debe indicar el directorio donde se encuentra el proyecto, como estamos situados en la raíz, será el directorio actual (\texttt{ . }). Con \texttt{--exclude} se indica que directorios deben ser excluidos en el proceso de generación de documentación, en este caso la carpeta de prototipos.
+
 \section{Compilación, instalación y ejecución del proyecto}
 
+En primer lugar se debe descargar el código fuente de la aplicación alojado en GitHub. Bien el fichero .zip generado por GitHub, o clonando el repositorio:
+
+
+\codigo{git clone \url{https://github.com/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo.git}}
+
+
+Una vez descargada y descomprimida, es necesario situarse dentro de la carpeta que contiene el fichero \texttt{package.json}.
+
+\subsection{Configuración de variables de entorno}
+
+Las variables de configuración de la aplicación se deben definir como variables de entorno. Dependiendo del sistema operativo utilizado, la forma de declarar variables de entorno varía.
+
+Se deben declarar las siguientes variables de entorno:
+
+\begin{itemize}
+	\item \textbf{\texttt{MONGO\_CONNSTRING}:} cadena de conexión a la base de datos MongoDB (formato según \cite{connstring}).
+	\begin{itemize}
+	 	\item \textbf{Ejemplo:} \texttt{mongodb://admin:1234@127.0.0.1:27017/anvireco}
+	\end{itemize}
+	\item \textbf{\texttt{ANVIRECO\_APPNAME}:} nombre de una aplicación GitHub Developer Application \cite{devapp}.
+	\begin{itemize}
+	 	\item \textbf{Ejemplo:} Anvireco
+	\end{itemize}
+	\item \textbf{\texttt{ANVIRECO\_ID} (opcional):} \textit{client ID} de una aplicación GitHub Developer Application \cite{devapp}.
+	\begin{itemize}
+	 	\item \textbf{Ejemplo:} \texttt{00x000x00xxx0x0x0xx0}
+	\end{itemize}
+	\item \textbf{\texttt{ANVIRECO\_SECRET} (opcional):} \textit{client secret} de una aplicación GitHub Developer Application \cite{devapp}.
+	\begin{itemize}
+	 	\item \textbf{Ejemplo:} \texttt{00x000x00xxx0x0x0xx000x000x00xxx0x0x0xx0}
+	\end{itemize}
+	\item \textbf{\texttt{PORT} (opcional):} Puerto donde se va a ejecutar el servidor node.js.
+	\begin{itemize}
+	 	\item \textbf{Ejemplo:} 3000
+	\end{itemize}
+\end{itemize}
+
+Por ejemplo, las variables de entorno en Heroku se configuran en la pestaña de ajustes de la aplicación.
+
+\imagen{variablesEntornoHeroku}{Variables de entorno en Heroku.}
+
+\subsection{Instalación de dependencias}
+
+Existen dos formas de instalar las dependencias de la aplicación utilizando el gestor de paquetes \texttt{npm}:
+
+\begin{itemize}
+	\item \textbf{Entorno de producción:} instala únicamente las dependencias imprescindibles para la ejecución de la aplicación.
+	
+	\codigo{npm install --only=production}
+	
+	\item \textbf{Entorno de desarrollo:} instala todas las dependencias, incluyendo aquellas opcionales como por ejemplo las de \textit{testing}.
+	
+	\codigo{npm install}
+\end{itemize}
+
+\subsection{Compilación de ficheros TypeScript}
+
+Los ficheros TypeScript (\texttt{.ts}) dentro del directorio \texttt{src} son compilados a JavaScript (\texttt{.js}) y guardados en el directorio \texttt{release}.
+La compilación se realiza mediante un objetivo de Gulp llamado \texttt{compile}.
+
+\codigo{gulp compile}
+
+\imagen{gulpCompile}{Compilación de la aplicación.}
+
+\subsection{Ejecución de la aplicación}
+
+La aplicación se ejecuta mediante el comando \texttt{npm start}. La aplicación es accesible desde \texttt{http://localhost:puerto} donde \texttt{puerto} es el valor de la variable de entorno \texttt{PORT}.
+
+Si no se ha definido la variable de entorno \texttt{PORT}, la aplicación se desplegará por defecto en el puerto \texttt{3000} y será accesible a través de \texttt{http://localhost:3000/}.
+
+Para la ejecución de la aplicación es imprescindible la compilación previa de los ficheros TypeScript.
+
+\imagen{npmStart}{Ejecución de la aplicación.}
+
 \section{Pruebas del sistema}
+
+Las pruebas del sistema son pruebas unitarias desarrolladas con \textit{mocha}, \textit{chai}, y \textit{sinon}, las cuales son conocidas librerías te \textit{testing} para proyectos en node.js.
+
+La ejecución de las pruebas unitarias solo se puede llevar a cabo si se han instalado todas las dependencias. Para la ejecución de las pruebas no es necesario compilar los ficheros TypeScript.
+
+Mediante el comando \texttt{npm test} se ejecutan las pruebas.
+
+El proyecto tiene un conjunto de 18 pruebas unitarias dedicadas principalmente a la prueba de las clases relacionadas con las \textit{pull requests}.
+
+\imagen{tests}{Pruebas unitarias del sistema.}
