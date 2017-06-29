@@ -13,53 +13,53 @@ En esta parte se definen los diferentes requisitos de ambos subsistemas del proy
 \subsection{Requisitos funcionales del cliente web}
 
 \begin{itemize}
-	\item \textbf{RFCW-1 Solicitud de datos de un repositorio:} La aplicación debe permitir la solicitud de los datos de revisiones de un repositorio de GitHub.
-	\item \textbf{RFCW-2 Listado de repositorios:} Se deben listar todos los repositorios disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación.
-	\item \textbf{RFCW-3 Análisis visual de datos de un repositorio:} Debe existir una vista que contenga gráficos creados a partir de datos sobre las revisiones de código realizadas en un repositorio.
-	\item \textbf{RFCW-4 Descarga fichero CSV de un repositorio:} El usuario debe ser capaz de descargar un fichero \texttt{.CSV} que contenga datos sobre las \textit{pull requests} y revisiones realizadas en un repositorio concreto.
-	\item \textbf{RFCW-5 Listado de \textit{pull requests}:} Se deben listar todas las \textit{pull requests} disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación y de filtrado (por repositorio).
-	\item \textbf{RFCW-6 Análisis visual de datos de una \textit{pull request}:}  Debe existir una vista que contenga gráficos creados a partir de datos de una \textit{pull request}.
-	\item \textbf{RFCW-7 Listado de usuarios:} Se deben listar todos los usuarios disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación.
-	\item \textbf{RFCW-8 Análisis visual de datos de un usuario:} Debe existir una vista que contenga gráficos creados a partir de datos sobre las revisiones de código realizadas por un usuario (revisor).
-	\item \textbf{RFCW-9 Visualización de estado de API:} El cliente web debe mostrar un indicador con el estado actual de la API para conocer si se encuentra obteniendo datos o no.
+	\item \textbf{RFCW-1 Solicitud de datos de un repositorio:} la aplicación debe permitir la solicitud de los datos de revisiones de un repositorio de GitHub.
+	\item \textbf{RFCW-2 Listado de repositorios:} se deben listar todos los repositorios disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación.
+	\item \textbf{RFCW-3 Análisis visual de datos de un repositorio:} debe existir una vista que contenga gráficos creados a partir de datos sobre las revisiones de código realizadas en un repositorio.
+	\item \textbf{RFCW-4 Descarga fichero CSV de un repositorio:} el usuario debe ser capaz de descargar un fichero \texttt{.CSV} que contenga datos sobre las \textit{pull requests} y revisiones realizadas en un repositorio concreto.
+	\item \textbf{RFCW-5 Listado de \textit{pull requests}:} se deben listar todas las \textit{pull requests} disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación y de filtrado (por repositorio).
+	\item \textbf{RFCW-6 Análisis visual de datos de una \textit{pull request}:}  debe existir una vista que contenga gráficos creados a partir de datos de una \textit{pull request}.
+	\item \textbf{RFCW-7 Listado de usuarios:} se deben listar todos los usuarios disponibles en la aplicación. El listado debe ofrecer posibilidades de ordenación.
+	\item \textbf{RFCW-8 Análisis visual de datos de un usuario:} debe existir una vista que contenga gráficos creados a partir de datos sobre las revisiones de código realizadas por un usuario (revisor).
+	\item \textbf{RFCW-9 Visualización de estado de API:} el cliente web debe mostrar un indicador con el estado actual de la API para conocer si se encuentra obteniendo datos o no.
 \end{itemize}
 
 \subsection{Requisitos no funcionales del cliente web}
 
 \begin{itemize}
-	\item \textbf{RNFCW-1 Usabilidad:} El cliente web debe tener una interfaz intuitiva y fácil de utilizar.
-	\item \textbf{RNFCW-2 Rendimiento:} El cliente web debe evitar los refrescos de página y optimizar el número de peticiones HTTP necesarias.
-	\item \textbf{RNFCW-3 Portabilidad:} El cliente web debe funcionar correctamente en los tres principales navegadores web: Edge, Firefox y Chrome.
+	\item \textbf{RNFCW-1 Usabilidad:} el cliente web debe tener una interfaz intuitiva y fácil de utilizar.
+	\item \textbf{RNFCW-2 Rendimiento:} el cliente web debe evitar los refrescos de página y optimizar el número de peticiones HTTP necesarias.
+	\item \textbf{RNFCW-3 Portabilidad:} el cliente web debe funcionar correctamente en los tres principales navegadores web: Edge, Firefox y Chrome.
 \end{itemize}
 
 \subsection{Requisitos funcionales de la API REST}
 
 \begin{itemize}
-	\item \textbf{RFAR-1 Obtención de entidades de GitHub:} La API REST debe ser capaz de obtener todo tipo de entidad relacionada con las revisiones de código y almacenarlas para su posterior uso.
-	\item \textbf{RFAR-2 Obtención del estado del gestor de tareas:} Debe existir una ruta de la API que permita conocer el estado actual del gestor de tareas de obtención de datos.
-	\item \textbf{RFAR-3 Obtención del listado de tareas:} Debe existir una ruta en la API para obtener el listado de tareas. Dicha ruta debe contener un parámetro que permita escoger si se desean obtener todas las tareas (incluidas las completas) o únicamente las incompletas.
-	\item \textbf{RFAR-4 Obtención del listado de \textit{pull requests}:} Debe existir una ruta en la API para obtener el listado de entidades de tipo \textit{pull request}. Mediante la parametrización de la ruta se debe permitir la ordenación y filtrado (por repositorio) de la lista.
-	\item \textbf{RFAR-5 Obtención de una \textit{pull request}:} Debe existir una ruta en la API para obtener los datos de una entidad de tipo \textit{pull request}.
-	\item \textbf{RFAR-6 Obtención de estadísticas de \textit{pull requests}:} Debe existir una ruta en la API para obtener los valores medios de propiedades de una lista de \textit{pull requests} filtradas por usuario o por repositorio. Parametrizando la ruta también se debe tener acceso a estadísticas temporales para un usuario o repositorio concreto. Éstas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación de la \textit{pull request} más antigua de la lista hasta la fecha de creación más reciente de la lista.
-	\item \textbf{RFAR-7 Obtención del listado de usuarios:} Debe existir una ruta en la API para obtener el listado de entidades de tipo usuario. Mediante la parametrización de la ruta se debe permitir la ordenación de la lista.
-	\item \textbf{RFAR-8 Obtención de un usuario:} Debe existir una ruta en la API para obtener los datos de una entidad de tipo usuario.
-	\item \textbf{RFAR-9 Obtención de estadísticas de usuario:} Debe existir una ruta en la API para obtener los valores medios de propiedades de la lista de todas las entidades usuario de la aplicación.
-	\item \textbf{RFAR-10 Obtención de estadísticas de revisiones:} Debe existir una ruta en la API para obtener estadísticas sobre una lista de revisiones de un repositorio o usuario concreto. Las estadísticas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación de la revisión más antigua de la lista hasta la fecha de creación más reciente de la lista.
-	\item \textbf{RFAR-11 Obtención de estadísticas de comentarios de revisión:} Debe existir una ruta en la API para obtener estadísticas sobre una lista de comentarios de revisión de un repositorio o usuario concreto. Las estadísticas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación del comentario de revisión más antiguo de la lista hasta la fecha de creación más reciente de la lista.
-	\item \textbf{RFAR-12 Obtención del listado de repositorios:} Debe existir una ruta en la API para obtener el listado de entidades de tipo repositorio. Mediante la parametrización de la ruta se debe permitir la ordenación de la lista.
-	\item \textbf{RFAR-13 Obtención de un repositorio:} Debe existir una ruta en la API para obtener los datos de una entidad de tipo repositorio.
-	\item \textbf{RFAR-14 Obtención de estadísticas de repositorio:} Debe existir una ruta en la API para obtener los valores medios de propiedades de la lista de todas las entidades repositorio de la aplicación.
-	\item \textbf{RFAR-15 Obtención de un listado de nombres de repositorios:} Debe existir una ruta en la API para obtener el listado con todos los nombres de repositorio almacenados en la aplicación.
-	\item \textbf{RFAR-16 Obtención de un fichero CSV con datos sobre un repositorio:} Debe existir una ruta en la API para obtener un fichero \texttt{.CSV} con datos de revisiones de código y \textit{pull requests} de un repositorio concreto.
+	\item \textbf{RFAR-1 Obtención de entidades de GitHub:} la API REST debe ser capaz de obtener todo tipo de entidad relacionada con las revisiones de código y almacenarlas para su posterior uso.
+	\item \textbf{RFAR-2 Obtención del estado del gestor de tareas:} debe existir una ruta de la API que permita conocer el estado actual del gestor de tareas de obtención de datos.
+	\item \textbf{RFAR-3 Obtención del listado de tareas:} debe existir una ruta en la API para obtener el listado de tareas. Dicha ruta debe contener un parámetro que permita escoger si se desean obtener todas las tareas (incluidas las completas) o únicamente las incompletas.
+	\item \textbf{RFAR-4 Obtención del listado de \textit{pull requests}:} debe existir una ruta en la API para obtener el listado de entidades de tipo \textit{pull request}. Mediante la parametrización de la ruta se debe permitir la ordenación y filtrado (por repositorio) de la lista.
+	\item \textbf{RFAR-5 Obtención de una \textit{pull request}:} debe existir una ruta en la API para obtener los datos de una entidad de tipo \textit{pull request}.
+	\item \textbf{RFAR-6 Obtención de estadísticas de \textit{pull requests}:} debe existir una ruta en la API para obtener los valores medios de propiedades de una lista de \textit{pull requests} filtradas por usuario o por repositorio. Parametrizando la ruta también se debe tener acceso a estadísticas temporales para un usuario o repositorio concreto. Éstas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación de la \textit{pull request} más antigua de la lista hasta la fecha de creación más reciente de la lista.
+	\item \textbf{RFAR-7 Obtención del listado de usuarios:} debe existir una ruta en la API para obtener el listado de entidades de tipo usuario. Mediante la parametrización de la ruta se debe permitir la ordenación de la lista.
+	\item \textbf{RFAR-8 Obtención de un usuario:} debe existir una ruta en la API para obtener los datos de una entidad de tipo usuario.
+	\item \textbf{RFAR-9 Obtención de estadísticas de usuario:} debe existir una ruta en la API para obtener los valores medios de propiedades de la lista de todas las entidades usuario de la aplicación.
+	\item \textbf{RFAR-10 Obtención de estadísticas de revisiones:} debe existir una ruta en la API para obtener estadísticas sobre una lista de revisiones de un repositorio o usuario concreto. Las estadísticas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación de la revisión más antigua de la lista hasta la fecha de creación más reciente de la lista.
+	\item \textbf{RFAR-11 Obtención de estadísticas de comentarios de revisión:} debe existir una ruta en la API para obtener estadísticas sobre una lista de comentarios de revisión de un repositorio o usuario concreto. Las estadísticas se deben calcular en un máximo de 20 puntos temporales equidistantes desde la fecha de creación del comentario de revisión más antiguo de la lista hasta la fecha de creación más reciente de la lista.
+	\item \textbf{RFAR-12 Obtención del listado de repositorios:} debe existir una ruta en la API para obtener el listado de entidades de tipo repositorio. Mediante la parametrización de la ruta se debe permitir la ordenación de la lista.
+	\item \textbf{RFAR-13 Obtención de un repositorio:} debe existir una ruta en la API para obtener los datos de una entidad de tipo repositorio.
+	\item \textbf{RFAR-14 Obtención de estadísticas de repositorio:} debe existir una ruta en la API para obtener los valores medios de propiedades de la lista de todas las entidades repositorio de la aplicación.
+	\item \textbf{RFAR-15 Obtención de un listado de nombres de repositorios:} debe existir una ruta en la API para obtener el listado con todos los nombres de repositorio almacenados en la aplicación.
+	\item \textbf{RFAR-16 Obtención de un fichero CSV con datos sobre un repositorio:} debe existir una ruta en la API para obtener un fichero \texttt{.CSV} con datos de revisiones de código y \textit{pull requests} de un repositorio concreto.
 \end{itemize}
 
 \subsection{Requisitos no funcionales de la API REST}
 
 \begin{itemize}
-	\item \textbf{RNFAR-1 Escalabilidad:} La arquitectura de la API REST debe ser escalable para que añadir soporte a otro tipo de entidades de GitHub en el futuro resulte fácil.
-	\item \textbf{RNFAR-2 Rendimiento:} La API REST debe funcionar correctamente en una máquina con un mínimo de 500 MB de memoria RAM.
-	\item \textbf{RNFAR-3 Seguridad:} Se debe evitar encolar el mismo repositorio más de una vez, ya que en caso contrario se podrían dar casos de inanición. También se debe evitar encolar repositorios inexistentes.
-	\item \textbf{RNFAR-4 Mantenibilidad:} El código de la API debe tener una calidad mínima de 3.0 GPA para asegurar su mantenibilidad.
+	\item \textbf{RNFAR-1 Escalabilidad:} la arquitectura de la API REST debe ser escalable para que añadir soporte a otro tipo de entidades de GitHub en el futuro resulte fácil.
+	\item \textbf{RNFAR-2 Rendimiento:} la API REST debe funcionar correctamente en una máquina con un mínimo de 500 MB de memoria RAM.
+	\item \textbf{RNFAR-3 Seguridad:} se debe evitar encolar el mismo repositorio más de una vez, ya que en caso contrario se podrían dar casos de inanición. También se debe evitar encolar repositorios inexistentes.
+	\item \textbf{RNFAR-4 Mantenibilidad:} el código de la API debe tener una calidad mínima de 3.0 GPA para asegurar su mantenibilidad.
 \end{itemize}
 
 \newpage
