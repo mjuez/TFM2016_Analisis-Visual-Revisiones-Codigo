@@ -147,7 +147,7 @@ La aplicación se ejecuta mediante el comando `npm start`. La aplicación es acc
 
 ## Licencia
 
-[MIT](../../blob/master/LICENSE)
+Copyright (c) 2017 Mario Juez Gil - Licenciado bajo [licencia MIT](../../blob/master/LICENSE)
 
 ## Un proyecto para:
 
