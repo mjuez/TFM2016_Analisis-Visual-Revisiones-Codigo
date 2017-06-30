@@ -148,3 +148,7 @@ La aplicación se ejecuta mediante el comando `npm start`. La aplicación es acc
 ## Licencia
 
 [MIT](../../blob/master/LICENSE)
+
+## Un proyecto para:
+
+![Admirable y Digit](http://i.imgur.com/EFLu1oQ.jpg)
