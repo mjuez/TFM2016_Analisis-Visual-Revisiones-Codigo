@@ -23,7 +23,7 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
      * @returns a repository entity.
      */
     getRepository(owner: string, repository: string): Promise<IRepositoryEntity>;
-    
+
     /**
      * Gets a repositories page.
      * It retrieves a page from ALL repositories
@@ -35,7 +35,7 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
      * @returns a list of repositories.
      */
     getRepositoriesPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
-    
+
     /**
      * Gets a repositories page.
      * It retrieves a page from ALL repositories
@@ -46,7 +46,7 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
      * @returns a list of repositories.
      */
     getRepositoriesByNamePage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
-    
+
     /**
      * Gets a repositories page.
      * It retrieves a page from ALL repositories
@@ -57,7 +57,7 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
      * @returns a list of repositories.
      */
     getRepositoriesByReviewsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
-    
+
     /**
      * Gets a repositories page.
      * It retrieves a page from ALL repositories
@@ -69,7 +69,7 @@ export interface IRepositoryService extends IPersistenceService<IRepositoryEntit
      * @returns a list of repositories.
      */
     getRepositoriesByPullRequestsPage(page: number, direction?: number): Promise<IRepositoryEntity[]>;
-    
+
     /**
      * Gets a list of all repositories.
      * Only the full_name field is filled.
@@ -137,7 +137,7 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
      */
     public async getRepository(owner: string, repository: string): Promise<IRepositoryEntity> {
         const repo: IRepositoryRepository = this._repository;
-        return await repo.findOne({ "owner.login": owner, "name": repository });
+        return await repo.findOne({ "owner.login": new RegExp(owner, "i"), "name": new RegExp(repository, "i") });
     }
 
     /**
@@ -261,7 +261,7 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
      */
     public async getRepositoryCSVPage(owner: string, repository: string, page: number): Promise<any[]> {
         const reviewService: IReviewService = this._reviewService;
-        const filter: any = { "repository.owner": owner, "repository.name": repository };
+        const filter: any = { "repository.owner": new RegExp(owner, "i"), "repository.name": new RegExp(repository, "i") };
         const repositoryEntity: IRepositoryEntity = await this.getRepository(owner, repository);
         let dataArray: any[] = [];
 
@@ -272,10 +272,10 @@ export class RepositoryService extends AbstractPersistenceService<IRepositoryRep
             repositoryEntity.document.name, repositoryEntity.document.language, repositoryEntity.document.created_at,
             repositoryEntity.document.updated_at, reviewData.id_pull_request, reviewData.title_pull_request,
             reviewData.body_pull_request, reviewData.state_pull_request, reviewData.locked_pull_request,
-            reviewData.created_at_pull_request, reviewData.updated_at_pull_request, reviewData.closed_at_pull_request, 
-            reviewData.merged_pull_request, reviewData.mergeable_pull_request, reviewData.comments_pull_request, 
-            reviewData.reviews_pull_request, reviewData.review_comments_pull_request, reviewData.commits_pull_request, 
-            reviewData.additions_pull_request, reviewData.deletions_pull_request, reviewData.changed_files_pull_request, 
+            reviewData.created_at_pull_request, reviewData.updated_at_pull_request, reviewData.closed_at_pull_request,
+            reviewData.merged_pull_request, reviewData.mergeable_pull_request, reviewData.comments_pull_request,
+            reviewData.reviews_pull_request, reviewData.review_comments_pull_request, reviewData.commits_pull_request,
+            reviewData.additions_pull_request, reviewData.deletions_pull_request, reviewData.changed_files_pull_request,
             reviewData.state_review, reviewData.body_review, reviewData.login_reviewer];
             dataArray.push(column);
         }
