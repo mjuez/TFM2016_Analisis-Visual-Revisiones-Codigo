@@ -1,8 +1,9 @@
-# Anvireco
-
-| master build | dev build | GPA |
-|--------|--------|--------|
-|  [![travis badge](https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo.svg?branch=master)](https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo)      |    [![travis badge](https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo.svg?branch=dev)](https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo)    |	[![codebeat badge](https://codebeat.co/badges/07bbfa7d-f5dd-4c96-a20e-a48517dfa89e)](https://codebeat.co/projects/github-com-mjuez-tfm2016_analisis-visual-revisiones-codigo-master)	|
+<p align="center">
+<img src="http://i.imgur.com/ajtCabT.png" alt="Anvireco"/> <br />
+<a href="../../blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT license" /></a>
+<a href="https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo"><img src="https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo.svg?branch=master" alt="Travis build" /></a>
+<a href="https://codebeat.co/projects/github-com-mjuez-tfm2016_analisis-visual-revisiones-codigo-master"><img src="https://codebeat.co/badges/07bbfa7d-f5dd-4c96-a20e-a48517dfa89e" alt="Codebeat GPA" /></a>
+</p>
 
 ## Descripción
 
@@ -147,4 +148,8 @@ La aplicación se ejecuta mediante el comando `npm start`. La aplicación es acc
 
 ## Licencia
 
-[MIT](../../blob/master/LICENSE)
+Copyright (c) 2017 Mario Juez Gil - Licenciado bajo [licencia MIT](../../blob/master/LICENSE)
+
+## Un proyecto para:
+
+![Admirable y Digit](http://i.imgur.com/EFLu1oQ.jpg)

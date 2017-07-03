@@ -97,7 +97,7 @@ export class StatsService implements IStatsService {
      * @returns a JSON object with statistics.
      */
     public getReviewsStatsByUser = async (userLogin: string): Promise<any> => {
-        const filter: any = { "user.login": userLogin };
+        const filter: any = { "user.login": new RegExp(userLogin, "i") };
         const dateRange: any = await this.getReviewsDateRange(filter);
         return await this.getReviewsStatsBetween(dateRange, filter);
     }
@@ -111,7 +111,7 @@ export class StatsService implements IStatsService {
      * @returns a JSON object with statistics.
      */
     public getReviewsStatsByRepository = async (owner: string, name: string): Promise<any> => {
-        const filter: any = { "repository.owner": owner, "repository.name": name };
+        const filter: any = { "repository.owner": new RegExp(owner, "i"), "repository.name": new RegExp(name, "i") };
         const dateRange: any = await this.getReviewsDateRange(filter);
         return await this.getReviewsStatsBetween(dateRange, filter);
     }
@@ -124,7 +124,7 @@ export class StatsService implements IStatsService {
      * @returns a JSON object with statistics.
      */
     public getPullRequestsStatsByUser = async (userLogin: string): Promise<any> => {
-        const filter: any = { "user.login": userLogin };
+        const filter: any = { "user.login": new RegExp(userLogin, "i") };
         const dateRange: any = await this.getPullRequestsDateRange(filter);
         return await this.getPullRequestsStatsBetween(dateRange, filter);
     }
@@ -138,7 +138,7 @@ export class StatsService implements IStatsService {
      * @returns a JSON object with statistics.
      */
     public getPullRequestsStatsByRepository = async (owner: string, name: string): Promise<any> => {
-        const filter: any = { "base.repo.owner.login": owner, "base.repo.name": name };
+        const filter: any = { "base.repo.owner.login": new RegExp(owner, "i"), "base.repo.name": new RegExp(name, "i") };
         const dateRange: any = await this.getPullRequestsDateRange(filter);
         return await this.getPullRequestsStatsBetween(dateRange, filter);
     }
@@ -150,7 +150,7 @@ export class StatsService implements IStatsService {
      * @returns a JSON object with statistics.
      */
     public getReviewCommentsStatsByUser = async (userLogin: string): Promise<any> => {
-        const filter: any = { "user.login": userLogin };
+        const filter: any = { "user.login": new RegExp(userLogin, "i") };
         const dateRange: any = await this.getReviewCommentsDateRange(filter);
         return await this.getReviewCommentsStatsBetween(dateRange, filter);
     }
@@ -163,7 +163,7 @@ export class StatsService implements IStatsService {
      * @returns a JSON object with statistics.
      */
     public getReviewCommentsStatsByRepository = async (owner: string, name: string): Promise<any> => {
-        const filter: any = { "repository.owner": owner, "repository.name": name };
+        const filter: any = { "repository.owner": new RegExp(owner, "i"), "repository.name": new RegExp(name, "i") };
         const dateRange: any = await this.getReviewCommentsDateRange(filter);
         return await this.getReviewCommentsStatsBetween(dateRange, filter);
     }

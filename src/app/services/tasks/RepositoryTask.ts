@@ -95,10 +95,8 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
                 PullRequestFilterFactory.createRepository({ owner: this.entity.owner, repository: this.entity.repository });
             entity.document.pull_requests_count = await this._repositories.pull.count(pullFilter);
             let filter: Object = {
-                repository: {
-                    name: this.entity.repository,
-                    owner: this.entity.owner
-                }
+                "repository.name": new RegExp(this.entity.repository, "i"),
+                "repository.owner": new RegExp(this.entity.owner, "i"),
             };
             entity.document.reviews_count = await this._repositories.review.count(filter);
             entity.document.review_comments_count = await this._repositories.reviewComment.count(filter);

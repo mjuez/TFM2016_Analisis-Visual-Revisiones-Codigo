@@ -103,10 +103,8 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
         let reviewRepo: IReviewRepository = this._repositories.review;
         let filter: Object = {
             pull_request_number: pull.document.number,
-            repository: {
-                name: pull.document.base.repo.name,
-                owner: pull.document.base.repo.owner.login
-            }
+            "repository.name": new RegExp(pull.document.base.repo.name, "i"),
+            "repository.owner": new RegExp(pull.document.base.repo.owner.login, "i")
         }
         try {
             let reviewsCount: number = await reviewRepo.count(filter);

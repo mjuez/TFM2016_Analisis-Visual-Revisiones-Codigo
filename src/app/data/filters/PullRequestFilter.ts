@@ -8,10 +8,10 @@
 export interface SinglePullRequestFilter {
     
     /** Repository owner login. */
-    "base.repo.owner.login": string,
+    "base.repo.owner.login": RegExp,
 
     /** Repository name. */
-    "base.repo.name": string,
+    "base.repo.name": RegExp,
 
     /** Pull Request number. */
     number: number
@@ -28,10 +28,10 @@ export interface SinglePullRequestFilter {
 export interface RepositoryPullRequestFilter {
     
     /** Repository owner login. */
-    "base.repo.owner.login": string,
+    "base.repo.owner.login": RegExp,
 
     /** Repository name. */
-    "base.repo.name": string
+    "base.repo.name": RegExp
 }
 
 /**
@@ -54,8 +54,8 @@ export class PullRequestFilterFactory {
      */
     public static createSingle(filter: { owner: string, repository: string, number: number }): SinglePullRequestFilter {
         return {
-            "base.repo.owner.login": filter.owner,
-            "base.repo.name": filter.repository,
+            "base.repo.owner.login": new RegExp(filter.owner, "i"),
+            "base.repo.name": new RegExp(filter.repository, "i"),
             number: filter.number
         };
     }
@@ -71,8 +71,8 @@ export class PullRequestFilterFactory {
      */
     public static createRepository(filter: { owner: string, repository: string }): RepositoryPullRequestFilter {
         return {
-            "base.repo.owner.login": filter.owner,
-            "base.repo.name": filter.repository
+            "base.repo.owner.login": new RegExp(filter.owner, "i"),
+            "base.repo.name": new RegExp(filter.repository, "i"),
         };
     }
 }

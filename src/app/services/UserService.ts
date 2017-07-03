@@ -145,7 +145,7 @@ export class UserService extends AbstractPersistenceService<IUserRepository, IUs
      */
     public getUser = async (username: string): Promise<IUserEntity> => {
         const repo: IUserRepository = this._repository;
-        const filter: Object = { login: username };
+        const filter: Object = { login: new RegExp(username, "i") };
         return await repo.findOne(filter);
     }
 

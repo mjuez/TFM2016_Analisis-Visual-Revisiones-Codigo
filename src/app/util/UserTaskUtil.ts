@@ -74,7 +74,7 @@ export class UserTaskUtil {
         if (username === undefined) return;
         try {
             const foundUser: IUserEntity = await this._repos.user.findOne({
-                login: username,
+                login: new RegExp(username, "i"),
                 updated_on_task: taskId
             });
             if (foundUser === null) {
@@ -120,7 +120,7 @@ export class UserTaskUtil {
      * @param user  user entity to update its stats.
      */
     private async updateUserStats(user: IUserEntity): Promise<void> {
-        const filter: Object = { "user.login": user.login };
+        const filter: Object = { "user.login": new RegExp(user.login, "i") };
         try {
             const pullRequestCount: number = await this._repos.pull.count(filter);
             const reviewCommentsCount: number = await this._repos.reviewComment.count(filter);

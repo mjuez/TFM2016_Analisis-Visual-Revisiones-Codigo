@@ -3,7 +3,34 @@
  * @author Mario Juez <mario[at]mjuez.com>
  */
 
-var app = Sammy('#content', function () {
+var app = Sammy('#content', function (app) {
+
+    app.helper('getRepositoriesPage', function(page) {
+      setActiveMenuItem('repositories');
+        var container = this.$element();
+        container.load('/_repositories.html', function () {
+            var apiUrl = `/api/repos/page/${page}`;
+            loadRepositoryList(apiUrl, page, '/#/repositories/page');
+        });
+    });
+
+    app.helper('getPullRequestsPage', function(page) {
+      setActiveMenuItem('pullrequests');
+        var container = this.$element();
+        container.load('/_pullrequests.html', function () {
+            var apiUrl = `/api/pulls/page/${page}`;
+            loadPullrequestsList(apiUrl, page, '/#/pullrequests/page');
+        });
+    });
+
+    app.helper('getUsersPage', function(page) {
+      setActiveMenuItem('users');
+        var container = this.$element();
+        container.load('/_users.html', function () {
+            var apiUrl = `/api/users/page/${page}`;
+            loadUsersList(apiUrl, page, '/#/users/page');
+        });
+    });
 
     //////////
     // HOME //
@@ -34,17 +61,12 @@ var app = Sammy('#content', function () {
     });
 
     this.get('#/repositories', function () {
-        this.redirect('#/repositories/page/1');
+        this.getRepositoriesPage(1);
     });
 
     this.get('#/repositories/page/:page', function () {
-        setActiveMenuItem('repositories');
-        var container = this.$element();
         var page = this.params['page'];
-        container.load('/_repositories.html', function () {
-            var apiUrl = `/api/repos/page/${page}`;
-            loadRepositoryList(apiUrl, page, '/#/repositories/page');
-        });
+        this.getRepositoriesPage(page);
     });
 
     this.get('#/repositories/order/date/asc/page/:page', function () {
@@ -151,17 +173,12 @@ var app = Sammy('#content', function () {
     });
 
     this.get('#/pullrequests', function () {
-        this.redirect('#/pullrequests/page/1');
+        this.getPullRequestsPage(1);
     });
 
     this.get('#/pullrequests/page/:page', function () {
-        setActiveMenuItem('pullrequests');
-        var container = this.$element();
         var page = this.params['page'];
-        container.load('/_pullrequests.html', function () {
-            var apiUrl = `/api/pulls/page/${page}`;
-            loadPullrequestsList(apiUrl, page, '/#/pullrequests/page');
-        });
+        this.getPullRequestsPage(page);
     });
 
     this.get('#/pullrequests/order/date/asc/page/:page', function () {
@@ -334,17 +351,12 @@ var app = Sammy('#content', function () {
     });
 
     this.get('#/users', function () {
-        this.redirect('#/users/page/1');
+        this.getUsersPage(1);
     });
 
     this.get('#/users/page/:page', function () {
-        setActiveMenuItem('users');
-        var container = this.$element();
         var page = this.params['page'];
-        container.load('/_users.html', function () {
-            var apiUrl = `/api/users/page/${page}`;
-            loadUsersList(apiUrl, page, '/#/users/page');
-        });
+        this.getUsersPage(page);
     });
 
     this.get('#/users/order/date/asc/page/:page', function () {

@@ -35,8 +35,8 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
             await this.startTask();
             let filter: Object = {
                 repository: {
-                    name: this.entity.repository,
-                    owner: this.entity.owner
+                    name: new RegExp(this.entity.repository, "i"),
+                    owner: new RegExp(this.entity.owner, "i")
                 }
             };
             let numPages: number = await reviewCommentRepo.numPages(filter, startingFrom);
