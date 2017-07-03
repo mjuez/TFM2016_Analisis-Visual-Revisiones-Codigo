@@ -5,6 +5,16 @@
 \selectlanguage{spanish}
 \usepackage[utf8]{inputenc}
 \usepackage{placeins}
+\usepackage{float}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{amssymb}
+\usepackage{eurosym}
+\usepackage{tabularx}
+\makeatletter
+\newcommand\cellwidth{\TX@col@width}
+\makeatother
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -14,8 +24,19 @@
 % Links
 \usepackage[colorlinks]{hyperref}
 \hypersetup{
-	allcolors = {red}
+	colorlinks,
+	linkcolor={black},
+	citecolor={blue!50!black},
+	urlcolor={blue!80!black}
 }
+
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks%  save the current one
+  \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j%
+  \do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t%
+  \do\u\do\v\do\w\do\x\do\y\do\z\do\A\do\B\do\C\do\D%
+  \do\E\do\F\do\G\do\H\do\I\do\J\do\K\do\L\do\M\do\N%
+  \do\O\do\P\do\Q\do\R\do\S\do\T\do\U\do\V\do\W\do\X%
+  \do\Y\do\Z}
 
 % Ecuaciones
 \usepackage{amsmath}
@@ -23,8 +44,18 @@
 % Rutas de fichero / paquete
 \newcommand{\ruta}[1]{{\sffamily #1}}
 
+\renewcommand{\lstlistingname}{Código}
+
 % Párrafos
 \nonzeroparskip
+
+\newcommand{\codigo}[1]{
+\vspace{6pt}
+\hrule
+\texttt{#1}
+\vspace{4pt}
+\hrule
+}
 
 
 % Imagenes
@@ -91,7 +122,7 @@
 %
 % Nuevo comando para tablas pequeñas (menos de una página).
 \newcommand{\tablaSmall}[5]{%
- \begin{table}
+ \begin{table}[H]
   \begin{center}
    \rowcolors {2}{gray!35}{}
    \begin{tabular}{#2}
@@ -117,6 +148,24 @@
     #4
     \otoprule
     #5
+    \bottomrule
+   \end{tabular}
+   \caption{#1}
+   \label{tabla:#3}
+  \end{center}
+ \end{table}
+}
+
+\newcommand{\tablaSmallConPie}[6]{%
+ \begin{table}[H]
+  \begin{center}
+   \begin{tabular}{#2}
+    \toprule
+    #4
+    \otoprule
+    #5
+    \midrule
+    #6
     \bottomrule
    \end{tabular}
    \caption{#1}
@@ -268,13 +317,72 @@
   \end{center}
 }
 
+\newcommand\casoDeUso[3]{
+\def\referencia{#1}%
+\def\titulo{#2}%
+\def\imprimeTabla{#3}%
+\imprimeTabla
+}
+
+\newcommand{\tablaCasoDeUso}[9]{%
+
+\def\cuversion{#1}%
+\def\reqasoc{#2}%
+\def\descripcion{#3}%
+\def\precondicion{#4}%
+\def\acciones{#5}%
+\def\postcondicion{#6}%
+\def\excepciones{#7}%
+\def\importancia{#8}%
+\def\etiqueta{#9}%
+
+\begin{table}
+\renewcommand{\arraystretch}{1.2}%
+\begin{tabularx}{\textwidth}{l| X}
+\toprule
+\textbf{\referencia} & \textbf{\titulo} \\
+\otoprule
+\textbf{Versión} & \cuversion \\
+\textbf{Autor} & Mario Juez Gil \\
+\textbf{Requisitos asociados} & \reqasoc \\
+\textbf{Descripción} & \descripcion \\
+\textbf{Precondición} & \precondicion \\
+\textbf{Acciones} & {
+\begin{tabularx}{\cellwidth}{l X}
+\textbf{Paso} & \textbf{Acción} \\
+\otoprule
+\acciones \\
+\end{tabularx}
+} \\
+\textbf{Postcondición} & \postcondicion \\
+\textbf{Excepciones} & {
+\begin{tabularx}{\cellwidth}{l X}
+\textbf{Paso} & \textbf{Acción} \\
+\otoprule
+\excepciones \\
+\end{tabularx}
+} \\
+\textbf{Importancia} & \importancia \\
+\bottomrule
+\end{tabularx}
+\caption{\referencia \titulo{}.}
+\label{\etiqueta}
+\end{table}
+
+}
+
+\newcommand{\tablaAcciones}[2]{%
+
+
+}
+
 
 
 
 \graphicspath{ {./img/} }
 
 % Capítulos
-\chapterstyle{bianchi}
+%\chapterstyle{bianchi}
 \newcommand{\capitulo}[2]{
 	\setcounter{chapter}{#1}
 	\setcounter{section}{0}
@@ -284,7 +392,10 @@
 }
 
 % Apéndices
-\renewcommand{\appendixname}{Apéndice}
+\addto\captionsspanish{%
+  \renewcommand\appendixname{Anexo}
+  \renewcommand\appendixpagename{Anexos}
+}
 \renewcommand*\cftappendixname{\appendixname}
 
 \newcommand{\apendice}[1]{
@@ -311,7 +422,7 @@
     \begin{minipage}{.8\textwidth}
       \vspace{.5cm}\Large
       \begin{center}
-      \textbf{TFG del Grado en Ingeniería Informática}\vspace{.6cm}\\
+      \textbf{TFM del Máster Universitario en Ingeniería Informática}\vspace{.6cm}\\
       \textbf{\LARGE\@title{}}
       \end{center}
       \vspace{.2cm}
@@ -328,7 +439,7 @@
     \noindent\LARGE
     Presentado por \@author{}\\ 
     en Universidad de Burgos --- \@date{}\\
-    Tutor: \@tutor{}\\
+    Tutores: \@tutor{}\\
   }%
   \end{center}%
   \null
@@ -338,9 +449,9 @@
 
 
 % Datos de portada
-\title{título del TFG \\Documentación Técnica}
-\author{nombre alumno}
-\tutor{nombre tutor}
+\title{Análisis Visual de Revisiones de Código \\Documentación Técnica}
+\author{Mario Juez Gil}
+\tutor{Dr. Carlos López Nozal, Dr. Raúl Marticorena Sánchez}
 \date{\today}
 
 \begin{document}

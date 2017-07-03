@@ -6,26 +6,26 @@ En este apartado se recogen los aspectos más interesantes del desarrollo del pr
 
 Este proyecto tiene una duración total de 4 meses y 22 días, con inicio el 10 de febrero de 2017 y fin el 3 de julio de 2017.
 
-Como se ha utilizado la metodología ágil Scrum, el proyecto está dividido en \emph{sprints} (o iteraciones), concretamente 14. Inicialmente las iteraciones tenían una duración de 2 semanas, y a partir del sexto \emph{sprint} la periodicidad pasó a ser semanal.
+Como se ha utilizado la metodología ágil Scrum, el proyecto está dividido en \textit{sprints} (o iteraciones), concretamente 14. Inicialmente las iteraciones tenían una duración de 2 semanas, y a partir del sexto \textit{sprint} la periodicidad pasó a ser semanal.
 
 Se pueden distinguir tres fases principales:
 
 \begin{itemize}
 \tightlist
 	\item \textbf{Prototipado:} en esta fase se deciden, estudian y prueban diversas tecnologías como paso previo a la decisión de cuales utilizar en el desarrollo del producto final.
-	\item \textbf{Desarrollo de la aplicación:} se trata de la fase más importante, abarca todo el desarrollo de la aplicación que a su vez se podría dividir en dos: desarrollo de la parte \emph{backend} (API REST) y desarrollo de la parte \emph{frontend} (cliente SPA).
+	\item \textbf{Desarrollo de la aplicación:} se trata de la fase más importante, abarca todo el desarrollo de la aplicación que a su vez se podría dividir en dos: desarrollo de la parte \textit{backend} (API REST) y desarrollo de la parte \textit{frontend} (cliente SPA).
 	\item \textbf{Desarrollo de la memoria:} esta fase consiste en escribir toda la documentación relativa al proyecto (memoria y anexos).
 \end{itemize}
 
-En el siguiente gráfico se muestra el porcentaje de \emph{sprints} dedicados a cada una de las fases. Es un gráfico orientativo puesto que no hay un punto exacto en el cual termina la fase de prototipado y empieza la de desarrollo de la aplicación. Asimismo, en la fase de prototipado, una vez decididas las herramientas y tecnologías hubo avances en la fase de desarrollo de memoria.
+En el siguiente gráfico se muestra el porcentaje de \textit{sprints} dedicados a cada una de las fases. Es un gráfico orientativo puesto que no hay un punto exacto en el cual termina la fase de prototipado y empieza la de desarrollo de la aplicación. Asimismo, en la fase de prototipado, una vez decididas las herramientas y tecnologías hubo avances en la fase de desarrollo de memoria.
 
-\imagen{graficoTipoIteraciones}{Porcentaje de \emph{sprints} dedicados a cada fase.}
+\imagen{graficoTipoIteraciones}{Porcentaje de \textit{sprints} dedicados a cada fase.}
 
-\subsection{Gestión de \emph{sprints} mediante GitHub y ZenHub}
+\subsection{Gestión de \textit{sprints} mediante GitHub y ZenHub}
 
-Cada \emph{sprint} está formado por una serie de tareas concretas.
+Cada \textit{sprint} está formado por una serie de tareas concretas.
 
-Para la gestión y planificación de dichas tareas se han utilizado las \emph{issues} de GitHub junto con el \emph{plug-in} de ZenHub que permite, entre otras cosas, incluir estimaciones de tiempo.
+Para la gestión y planificación de dichas tareas se han utilizado las \textit{issues} de GitHub junto con el \textit{plug-in} de ZenHub que permite, entre otras cosas, incluir estimaciones de tiempo.
 
 \imagen{issueGitHub}{Una tarea de GitHub con ZenHub habilitado.}
 
@@ -33,22 +33,22 @@ Se utilizan tres ramas:
 
 \begin{itemize}
 \tightlist
-	\item \textbf{\emph{master}:} rama principal, contiene los últimos cambios estables.
-	\item \textbf{\emph{dev}:} rama de desarrollo, se va actualizando a medida que se realizan tareas. Es una rama inestable, la aplicación puede no tener el comportamiento esperado.
-	\item \textbf{\emph{memo}:} rama de memoria, contiene los cambios no definitivos de la documentación del proyecto.
+	\item \textbf{\textit{master}:} rama principal, contiene los últimos cambios estables.
+	\item \textbf{\textit{dev}:} rama de desarrollo, se va actualizando a medida que se realizan tareas. Es una rama inestable, la aplicación puede no tener el comportamiento esperado.
+	\item \textbf{\textit{memo}:} rama de memoria, contiene los cambios no definitivos de la documentación del proyecto.
 \end{itemize}
 
-\imagen{ramasGitHub}{Ejemplo de uso de rama \emph{dev} en GitHub.}
+\imagen{ramasGitHub}{Ejemplo de uso de rama \textit{dev} en GitHub.}
 
-El ciclo de vida de un \emph{sprint} en GitHub consiste en:
+El ciclo de vida de un \textit{sprint} en GitHub consiste en:
 
 \begin{enumerate}
-	\item Apertura de \emph{issues} (tareas) a realizar durante la iteración.
-	\item Selección de rama \emph{dev} o \emph{memo}, dependiendo del tipo de tarea que se está llevando a cabo.
+	\item Apertura de \textit{issues} (tareas) a realizar durante la iteración.
+	\item Selección de rama \textit{dev} o \textit{memo}, dependiendo del tipo de tarea que se está llevando a cabo.
 	\item Desarrollo de las diferentes tareas.
 	\item Revisión y comprobación de que los cambios satisfacen los requisitos.
-	\item Apertura de \emph{pull request} para ejecutar los \emph{checks} de integración continua y revisión automática.
-	\item Cierre de \emph{pull request} e integración de los cambios en la rama \emph{master}.
+	\item Apertura de \textit{pull request} para ejecutar los \textit{checks} de integración continua y revisión automática.
+	\item Cierre de \textit{pull request} e integración de los cambios en la rama \textit{master}.
 \end{enumerate}
 
 \section{Estableciendo la base}
@@ -74,8 +74,8 @@ El cliente de visualización de datos es una aplicación web de tipo SPA por los
 En la sección del ciclo de vida del proyecto se ha descrito el uso de diferentes ramas Git durante el desarrollo. Esto se traduce en la utilización de dos entornos diferentes e independientes donde se despliega la aplicación:
 
 \begin{itemize}
-	\item \textbf{Entorno de producción:} en este entorno se despliegan los cambios de la rama \emph{master}, es decir, la aplicación en un estado estable.
-	\item \textbf{Entorno de desarrollo:} en este entorno se despliegan los cambios de la rama \emph{dev}, es decir, la aplicación puede tener un comportamiento inestable.
+	\item \textbf{Entorno de producción:} en este entorno se despliegan los cambios de la rama \textit{master}, es decir, la aplicación en un estado estable.
+	\item \textbf{Entorno de desarrollo:} en este entorno se despliegan los cambios de la rama \textit{dev}, es decir, la aplicación puede tener un comportamiento inestable.
 \end{itemize}
 
 \imagen{entornos}{Entornos de producción y desarrollo del proyecto.}
@@ -83,16 +83,16 @@ En la sección del ciclo de vida del proyecto se ha descrito el uso de diferente
 
 \subsection{Travis y la integración continua}
 
-Mediante el uso de Travis CI, el despliegue de los cambios incluidos en las ramas \emph{dev} y \emph{master} se realiza de forma automática en su entorno correspondiente.
+Mediante el uso de Travis CI, el despliegue de los cambios incluidos en las ramas \textit{dev} y \textit{master} se realiza de forma automática en su entorno correspondiente.
 
 \imagen{integracionContinua}{Proceso de integración continua con Travis CI.}
 
 En nuestro caso concreto, Travis está configurado para realizar una serie de comprobaciones previas al despliegue en Heroku:
 
 \begin{enumerate}
-	\item Descarga e instalación de dependencias (\textcourier{npm install}).
-	\item Compilación de código TypeScript a JavaScript (\textcourier{gulp compile}).
-	\item Ejecución de pruebas unitarias (\textcourier{npm test}).
+	\item Descarga e instalación de dependencias (\texttt{npm install}).
+	\item Compilación de código TypeScript a JavaScript (\texttt{gulp compile}).
+	\item Ejecución de pruebas unitarias (\texttt{npm test}).
 \end{enumerate}
 
 Si alguno de estos pasos no se completa correctamente, el despliegue se cancela. En este caso se dice que la construcción con Travis ha fallado, y se muestra como tal en GitHub.
@@ -107,13 +107,13 @@ El funcionamiento de este proyecto requiere de una serie de valores de configura
 
 \begin{itemize}
 	\item Cadena de conexión a la base de datos.
-	\item Nombre de la aplicación \emph{GitHub Developer Application}.
-	\item Identificador de la aplicación \emph{GitHub Developer Application}.
-	\item Clave secreta de la aplicación \emph{GitHub Developer Application}.
+	\item Nombre de la aplicación \textit{GitHub Developer Application}.
+	\item Identificador de la aplicación \textit{GitHub Developer Application}.
+	\item Clave secreta de la aplicación \textit{GitHub Developer Application}.
 	\item Número de puerto (opcional, por defecto 3000).
 \end{itemize}
 
-Una posible solución para fijar el valor de las diferentes variables de configuración es mediante un fichero de configuración. Esta estrategia es común en el desarrollo de aplicaciones ASP.NET, las cuales cuentan con un fichero \textcourier{web.config} para tal propósito.
+Una posible solución para fijar el valor de las diferentes variables de configuración es mediante un fichero de configuración. Esta estrategia es común en el desarrollo de aplicaciones ASP.NET, las cuales cuentan con un fichero \texttt{web.config} para tal propósito.
 
 En nuestro caso concreto, esta estrategia no es útil por dos motivos principales:
 
@@ -152,66 +152,66 @@ Un repositorio de GitHub está formado por una serie de entidades, de las cuales
 
 \tablaSmall{Tipos de entidades de GitHub}{l c}{entidades-github}
 { Tipo de entidad & Necesaria \\}{ 
-\emph{Gists} & No \\
-\emph{Gist Comments} & No \\
-\emph{Blobs} & No \\
-\emph{Commits} & No \\
-\emph{References} & No \\
-\emph{Tags} & No \\
-\emph{Trees} & No \\
-\emph{Issues} & No \\
-\emph{Issue Comments} & No \\
-\emph{Issue Events} & No \\
-\emph{Labels} & No \\
-\emph{Milestones} & No \\
-\emph{Organizations} & No \\
-\emph{Projects} & No \\
-\emph{Pull Requests} & Sí \\
-\emph{Reviews} & Sí \\
-\emph{Review Comments} & Sí \\
-\emph{Repositories} & Si \\
-\emph{Branches} & No \\
-\emph{Commits} & No \\
-\emph{Releases} & No \\
-\emph{Users} & Sí \\
+\textit{Gists} & No \\
+\textit{Gist Comments} & No \\
+\textit{Blobs} & No \\
+\textit{Commits} & No \\
+\textit{References} & No \\
+\textit{Tags} & No \\
+\textit{Trees} & No \\
+\textit{Issues} & No \\
+\textit{Issue Comments} & No \\
+\textit{Issue Events} & No \\
+\textit{Labels} & No \\
+\textit{Milestones} & No \\
+\textit{Organizations} & No \\
+\textit{Projects} & No \\
+\textit{Pull Requests} & Sí \\
+\textit{Reviews} & Sí \\
+\textit{Review Comments} & Sí \\
+\textit{Repositories} & Si \\
+\textit{Branches} & No \\
+\textit{Commits} & No \\
+\textit{Releases} & No \\
+\textit{Users} & Sí \\
 }
 
-\subsubsection{Entidad \emph{Pull Request}}
+\subsubsection{Entidad \textit{Pull Request}}
 
-Es la entidad de mayor importancia para nuestra herramienta. Las revisiones se realizan dentro de las \emph{pull requests}.
+Es la entidad de mayor importancia para nuestra herramienta. Las revisiones se realizan dentro de las \textit{pull requests}.
 
 La obtención se realiza en dos fases:
 
 \begin{itemize}
-\item Una fase inicial a través de la cual se recuperan páginas de 100 entidades \emph{pull request} parciales (no contienen todos los datos).
-\item Otra fase en la cual se obtienen las \emph{pull request} completas una a una a partir de las parciales.
+\item Una fase inicial a través de la cual se recuperan páginas de 100 entidades \textit{pull request} parciales (no contienen todos los datos).
+\item Otra fase en la cual se obtienen las \textit{pull request} completas una a una a partir de las parciales.
 \end{itemize}
 
-\imagen{pullRequest}{Ejemplo de \emph{pull request}.}
+\imagen{pullRequest}{Ejemplo de \textit{pull request}.}
 
-Son necesarias $\lceil\frac{n}{100}\rceil + n$ peticiones, donde $n$ es el número de \emph{pull requests} del repositorio.
+Son necesarias $\lceil\frac{n}{100}\rceil + n$ peticiones, donde $n$ es el número de \textit{pull requests} del repositorio.
 
-\subsubsection{Entidad \emph{Review}}
+\subsubsection{Entidad \textit{Review}}
 
-Una \emph{pull request}, entre otros elementos, puede contener entidades de tipo \emph{Review}. Este tipo de entidad contiene un comentario general sobre los cambios realizados, y un estado de revisión que puede ser:
+Una \textit{pull request}, entre otros elementos, puede contener entidades de tipo \textit{Review}. Este tipo de entidad contiene un comentario general sobre los cambios realizados, y un estado de revisión que puede ser:
 
 \begin{itemize}
 \tightlist
-	\item \textbf{\emph{Approved}:} los cambios son aceptados por el revisor.
-	\item \textbf{\emph{Commented}:} el revisor hace un comentario sobre los cambios, pero ni los acepta ni los rechaza.
-	\item \textbf{\emph{Changes requested}:} el revisor rechaza los cambios y hace una petición de modificaciones que se deben realizar para que los cambios sean aceptados.
-	\item \textbf{\emph{Dismissed}:} es un estado especial, únicamente se puede fijar a través de la API. Descarta una revisión.
+	\item \textbf{\textit{Approved}:} los cambios son aceptados por el revisor.
+	\item \textbf{\textit{Commented}:} el revisor hace un comentario sobre los cambios, pero ni los acepta ni los rechaza.
+	\item \textbf{\textit{Changes requested}:} el revisor rechaza los cambios y hace una petición de modificaciones que se deben realizar para que los cambios sean aceptados.
+	\item \textbf{\textit{Dismissed}:} es un estado especial, únicamente se puede fijar a través de la API. Descarta una revisión.
 \end{itemize}
 
-La obtención se realiza por cada \emph{pull request}, en páginas de 100 revisiones.
+La obtención se realiza por cada \textit{pull request}, en páginas de 100 revisiones.
 
 \imagen{review}{Ejemplo de revisión aceptada.}
 
-Son necesarias $\sum_{i=1}^{n}\lceil\frac{r_{i}}{100}\rceil$ peticiones, donde $n$ es el número de \emph{pull requests} del repositorio, $i$ es la \emph{pull request} actual, y $r$ es el número de revisiones de dicha \emph{pull request}.
+Son necesarias $\sum_{i=1}^{n}\lceil\frac{r_{i}}{100}\rceil$ peticiones, donde $n$ es el número de \textit{pull requests} del repositorio, $i$ es la \textit{pull request} actual, y $r$ es el número de revisiones de dicha \textit{pull request}.
 
-\subsubsection{Entidad \emph{Review Comment}}
+\subsubsection{Entidad \textit{Review Comment}}
 
-Una revisión puede contener entidades de tipo \emph{Review Comment}. Este tipo de entidad tiene como finalidad hacer un comentario en una parte específica de los cambios realizados, por ejemplo una parte de código de un fichero.
+Una revisión puede contener entidades de tipo \textit{Review Comment}. Este tipo de entidad tiene como finalidad hacer un comentario en una parte específica de los cambios realizados, por ejemplo una parte de código de un fichero.
 
 Es posible obtener todos los comentarios de revisión de un repositorio en páginas de 100 elementos.
 
@@ -219,17 +219,17 @@ Es posible obtener todos los comentarios de revisión de un repositorio en pági
 
 Son necesarias $\lceil\frac{x}{100}\rceil$ donde $x$ es el número de comentarios de revisión que se han hecho en un repositorio.
 
-\subsubsection{Entidad \emph{User}}
+\subsubsection{Entidad \textit{User}}
 
-Tanto \emph{pull requests}, revisiones y comentarios de revisión, tienen asociada una entidad de tipo \emph{User}. Este tipo de entidad es de nuestro interés por que un usuario que realiza una revisión es un revisor.
+Tanto \textit{pull requests}, revisiones y comentarios de revisión, tienen asociada una entidad de tipo \textit{User}. Este tipo de entidad es de nuestro interés por que un usuario que realiza una revisión es un revisor.
 
-Por cada \emph{pull request}, revisión y comentario de revisión se obtiene un usuario asociado.
+Por cada \textit{pull request}, revisión y comentario de revisión se obtiene un usuario asociado.
 
 Son necesarias tantas peticiones como usuarios diferentes tengan asociados los tres tipos de entidades.
 
-\subsubsection{Entidad \emph{Repository}}
+\subsubsection{Entidad \textit{Repository}}
 
-Una entidad de tipo \emph{Repository} contiene una serie de entidades \emph{pull request}. Un repositorio incluye una serie de datos estadísticos útiles para la posterior visualización de los datos.
+Una entidad de tipo \textit{Repository} contiene una serie de entidades \textit{pull request}. Un repositorio incluye una serie de datos estadísticos útiles para la posterior visualización de los datos.
 
 Se necesita una petición.
 
@@ -274,13 +274,13 @@ Una tarea tiene la siguiente estructura (compartida por todos los tipos de tarea
 \begin{itemize}
 \tightlist
 	\item \textbf{Tipo:} tipo de tarea, depende del tipo de datos que se obtienen.
-	\item \textbf{Repositorio:} el repositorio del que obtener datos sobre revisiones. Está definido por el par \emph{login} del propietario, nombre del repositorio.
+	\item \textbf{Repositorio:} el repositorio del que obtener datos sobre revisiones. Está definido por el par \textit{login} del propietario, nombre del repositorio.
 	\item \textbf{Completada:} bandera que indica si la tarea está completada.
 	\item \textbf{Fecha de creación:} fecha de creación de la tarea. Es necesaria en la política de planificación.
 	\item \textbf{Fecha de inicio:} fecha en la cual la tarea comienza a ejecutarse.
 	\item \textbf{Fecha de fin:} fecha en la cual la tarea termina su ejecución.
 	\item \textbf{Página actual:} algunos datos se obtienen en páginas de 100 elementos. Esta propiedad permite conocer qué página se debe obtener cuando la tarea se reanuda.
-	\item \textbf{Última entidad procesada:} algunas tareas iteran sobre una lista de entidades (por ejemplo \emph{pull requests}). Esta propiedad permite saber cual fue la última entidad procesada para reanudarla a partir de ahí si fuese necesario.
+	\item \textbf{Última entidad procesada:} algunas tareas iteran sobre una lista de entidades (por ejemplo \textit{pull requests}). Esta propiedad permite saber cual fue la última entidad procesada para reanudarla a partir de ahí si fuese necesario.
 \end{itemize}
 
 \subsubsection{Tipos de tareas}
@@ -289,11 +289,11 @@ La herramienta cuenta con un total de ocho tipos de tareas diferentes, una tarea
 
 \begin{enumerate}
 \tightlist
-	\item \textbf{Principal:} obtención de todas las \emph{pull requests} del repositorio con paginación de 100 entidades por petición. Las \emph{pull request} obtenidas no contienen el conjunto de datos completo.
-	\item \textbf{\emph{Pull Requests}:} itera sobre todas las \emph{pull requests} obtenidas en la tarea anterior y las solicita una a una para obtener los datos restantes.
-	\item \textbf{Revisiones:} itera sobre todas las \emph{pull requests} obtenidas y solicita sus revisiones por páginas de 100 elementos por petición.
+	\item \textbf{Principal:} obtención de todas las \textit{pull requests} del repositorio con paginación de 100 entidades por petición. Las \textit{pull request} obtenidas no contienen el conjunto de datos completo.
+	\item \textbf{\textit{Pull Requests}:} itera sobre todas las \textit{pull requests} obtenidas en la tarea anterior y las solicita una a una para obtener los datos restantes.
+	\item \textbf{Revisiones:} itera sobre todas las \textit{pull requests} obtenidas y solicita sus revisiones por páginas de 100 elementos por petición.
 	\item \textbf{Comentarios de revisión:} obtención de todos los comentarios de revisión del repositorio con paginación de 100 entidades por petición.
-	\item \textbf{Usuarios de \emph{pull request}:} itera sobre todas las \emph{pull requests} obtenidas y solicita los usuarios creadores, de la base y de la cabeza de las mismas. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
+	\item \textbf{Usuarios de \textit{pull request}:} itera sobre todas las \textit{pull requests} obtenidas y solicita los usuarios creadores, de la base y de la cabeza de las mismas. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
 	\item \textbf{Usuarios de revisión:} itera sobre todas las revisiones obtenidas y solicita los usuarios creadores de las mismas. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
 	\item \textbf{Usuarios de comentario de revisión:} itera sobre todos los comentarios de revisión obtenidos y solicita los usuarios creadores de los mismos. Si un usuario se ha solicitado durante la ejecución de la misma tarea principal no se vuelve a solicitar.
 	\item \textbf{Repositorio:} el último tipo de tarea sirve para obtener los datos del repositorio.
@@ -303,7 +303,7 @@ No es posible crear un subconjunto de las tareas descritas anteriormente. Al cre
 
 \subsubsection{Política de planificación: FIFO}
 
-La política de planificación escogida para el gestor de tareas es la política FIFO (\emph{First Input First Output}), es decir, la tarea más prioritaria es la más antigua no completada.
+La política de planificación escogida para el gestor de tareas es la política FIFO (\textit{First Input First Output}), es decir, la tarea más prioritaria es la más antigua no completada.
 
 \imagen{pilaTareas}{Ejemplo de cola de tareas FIFO.}
 
@@ -361,7 +361,7 @@ A continuación se describe un ejemplo del funcionamiento del algoritmo donde se
 Se han encolado los siguientes repositorios:
 
 \tablaSmall{Repositorios encolados (20-06-2017).}{l r r r}{repositorios-encolados}
-{ Repositorio & \emph{Pull Requests} & Revisiones & C. revisión \\}{ 
+{ Repositorio & \textit{Pull Requests} & Revisiones & C. revisión \\}{ 
 \path{elastic/elasticsearch} & 11698 & 8410 & 45274 \\
 \path{pallets/flask} & 1139 & 243 & 722 \\
 \path{Leaflet/Leaflet} & 2198 & 241 & 615 \\
@@ -404,7 +404,7 @@ La información se muestra en tres niveles:
 
 \begin{itemize}
 	\item A nivel de repositorio.
-	\item A nivel de \emph{pull request}.
+	\item A nivel de \textit{pull request}.
 	\item A nivel de usuario.
 \end{itemize}
 
@@ -412,8 +412,8 @@ Se han utilizado tres tipos de gráficos:
 
 \begin{itemize}
 \tightlist
-	\item \textbf{Gráfico de barras:} La finalidad de este tipo de gráfico es comparar una estadística concreta de un repositorio, \emph{pull request} o usuario con el valor medio de todas las entidades almacenadas de ese tipo.
-	\item \textbf{Gráfico \emph{donut}:} La finalidad de este tipo de gráfico es comparar el porcentaje de ciertas entidades como \emph{pull request} o revisiones dependiendo de su tipo.
+	\item \textbf{Gráfico de barras:} La finalidad de este tipo de gráfico es comparar una estadística concreta de un repositorio, \textit{pull request} o usuario con el valor medio de todas las entidades almacenadas de ese tipo.
+	\item \textbf{Gráfico \textit{donut}:} La finalidad de este tipo de gráfico es comparar el porcentaje de ciertas entidades como \textit{pull request} o revisiones dependiendo de su tipo.
 	\item \textbf{Gráfico de área temporal:} La finalidad de este tipo de gráfico es mostrar  el número de entidades creadas en un periodo concreto. El gráfico se divide en un máximo de 20 periodos.
 \end{itemize}
 
@@ -428,13 +428,13 @@ A continuación se describen otros aspectos relevantes como la gestión de memor
 
 Durante el desarrollo del proyecto hemos tenido problemas de rendimiento relacionados con la memoria y el uso de la red debido al elevado número de entidades que se retornaban al solicitar un listado.
 
-Por ejemplo, al solicitar todas las \emph{pull requests} del repositorio Elasticsearch, la lista resultante contiene cerca de 12.000 entidades, las cuales tienen un tamaño aproximado de 35 MB. Mantener \emph{arrays} con esa cantidad de datos en memoria supone un problema en entornos donde los recursos son limitados (Heroku ofrece 500 MB). Asimismo, enviar esa cantidad de datos al cliente en una sola petición penaliza gravemente los tiempos de carga.
+Por ejemplo, al solicitar todas las \textit{pull requests} del repositorio Elasticsearch, la lista resultante contiene cerca de 12.000 entidades, las cuales tienen un tamaño aproximado de 35 MB. Mantener \textit{arrays} con esa cantidad de datos en memoria supone un problema en entornos donde los recursos son limitados (Heroku ofrece 500 MB). Asimismo, enviar esa cantidad de datos al cliente en una sola petición penaliza gravemente los tiempos de carga.
 
 Basándonos en el funcionamiento de la API de GitHub, se implementaron consultas a la base de datos con paginación de resultados, obteniendo páginas de un máximo 100 entidades.
 
-\subsection{\emph{Testing} y la inyección de dependencias}
+\subsection{\textit{Testing} y la inyección de dependencias}
 
-Las diferentes clases de la aplicación hacen uso del patrón de inyección de dependencias. Gracias al uso de este patrón y al uso de interfaces se reduce el acoplamiento, lo cual resulta muy útil para realizar pruebas unitarias con \emph{stubs} y \emph{mocks} (dependencias simuladas).
+Las diferentes clases de la aplicación hacen uso del patrón de inyección de dependencias. Gracias al uso de este patrón y al uso de interfaces se reduce el acoplamiento, lo cual resulta muy útil para realizar pruebas unitarias con \textit{stubs} y \textit{mocks} (dependencias simuladas).
 
 Esta estrategia permite probar el funcionamiento de un subsistema independientemente de sus dependencias externas.
 

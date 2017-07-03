@@ -2,10 +2,92 @@
 
 \section{Introducción}
 
+Este anexo describe aspectos sobre el diseño de la aplicación. Se expone el diseño de datos y el de la arquitectura utilizada.
+
 \section{Diseño de datos}
 
-\section{Diseño procedimental}
+Para modelar los datos sobre revisiones de código realizadas en repositorios de GitHub se han utilizado las siguientes entidades:
+
+\begin{itemize}
+	\item \textbf{\textit{Pull Request} (\textit{PullRequestEntity}):} se corresponde con la entidad \textit{pull request} de GitHub. Es importante por que contiene revisiones de código y comentarios de revisión.
+	\item \textbf{Repositorio (\textit{RepositoryEntity}):} se corresponde con la entidad \textit{repository} de GitHub. La mayor parte de las entidades de la aplicación están relacionadas con un repositorio.
+	\item \textbf{Revisión (\textit{ReviewEntity}):} se corresponde con la entidad \textit{review} de GitHub. Está formada por un comentario general y un estado.
+	\item \textbf{Comentario (\textit{ReviewCommentEntity}):} se corresponde con la entidad \textit{review comment} de GitHub. Contiene un comentario asociado a un cambio específico.
+	\item \textbf{Usuario (\textit{UserEntity}):} se corresponde con la entidad \textit{user} de GitHub. Es importante por que un usuario puede realizar revisiones de código, y entonces adquiere el rol de revisor.
+	\item \textbf{Tarea (\textit{TaskEntity}):} no tiene correspondencia con ninguna entidad de GitHub. Sirve para definir tareas de obtención de datos de GitHub.
+\end{itemize}
+
+\imagen{diagramaER}{Diagrama entidad-relación de datos.}
 
 \section{Diseño arquitectónico}
 
+A nivel arquitectónico, el servidor se ha dividido en tres capas (API REST, lógica de negocio y acceso a datos). El cliente web únicamente contiene las vistas de la aplicación.
 
+\imagen{capasAplicacion}{División en capas de la aplicación.}
+
+\subsection{Diseño de paquetes}
+
+En JavaScript y TypeScript no existen paquetes como tal, sin embargo las clases con cometidos y responsabilidades similares se han agrupado en directorios. 
+
+La arquitectura de la aplicación sigue la siguiente estructura de paquetes.
+
+\begin{itemize}
+	\item \textbf{\texttt{src.app}}: contiene las capas de acceso a datos y de lógica de negocio.
+	\item \textbf{\texttt{src.app.data}}: capa de acceso a datos. Contiene una serie de clases que implementan el patrón repositorio. Incluye una carpeta \texttt{filters} con filtros para consultas y otra llamada \texttt{schemas} que contiene los \textit{schemas} de las colecciones MongoDB.
+	\item \textbf{\texttt{src.app.entities}}: pertenece a la capa de lógica de negocio. Contiene las entidades, la mayor parte de ellas son \textit{POJOs}. Incluye una carpeta \texttt{documents} con documentos \textit{mongoose}, y otra llamada \texttt{enum} con enumeraciones.
+	\item \textbf{\texttt{src.app.services}}: pertenece a la capa de lógica de negocio. Contiene los servicios encargados de operaciones más complejas como la obtención y transformación de datos de revisiones desde GitHub. Incluye una carpeta \texttt{tasks} con implementaciones de los diferentes tipos de tareas de obtención de datos.
+	\item \textbf{\texttt{src.app.util}}: contiene clases de utilidad. La mayor parte de ellas están formadas por una serie de métodos estáticos que realizan operaciones sencillas y comunes a varias clases.
+	\item \textbf{\texttt{src.client}}: contiene el cliente web SPA. En la raíz se encuentran las plantillas HTML que definen el esqueleto de la aplicación.
+	\item \textbf{\texttt{src.client.css}}: contiene los ficheros \texttt{CSS} con los estilos del cliente web.
+	\item \textbf{\texttt{src.client.js}}: contiene ficheros JavaScript encargados del funcionamiento del cliente como una aplicación web \textit{Single-Page Application}. En estos ficheros se implementa la comunicación entre el cliente y la API REST.
+	\item \textbf{\texttt{src.client.favicon}}: contiene el icono de la aplicación web para diversos dispositivos.
+	\item \textbf{\texttt{src.controllers}}: capa de API REST. Contiene los controladores que gestionan las peticiones y respuestas HTTP, delegando a los servicios correspondientes.
+	\item \textbf{\texttt{src.routes}}: contiene la definición de todas las rutas o \textit{endpoints} de la API REST.
+	\item \textbf{\texttt{test.app}}: contiene las pruebas unitarias de las capas de acceso a datos y lógica de negocios. Sigue la misma estructura de carpetas que \texttt{src.app}. Los ficheros de pruebas tienen el mismo nombre que la clase que se desea probar, pero con la extensión \texttt{.test.ts}.
+\end{itemize}
+
+\imagen{diagramaPaquetes}{Diagrama de paquetes de la aplicación.}
+
+\subsection{Diseño de clases}
+
+A continuación se muestran los diagramas de clases más relevantes de la arquitectura de la aplicación.
+
+\imagen{dataClassDiagram}{Diagrama de clases de repositorios.}
+
+\imagen{entitiesClassDiagram}{Diagrama de clases de entidades.}
+
+\imagen{tasks1ClassDiagram}{Diagrama de clases de tareas (1).}
+
+\imagen{tasks2ClassDiagram}{Diagrama de clases de tareas (2).}
+
+\imagen{servicesClassDiagram}{Diagrama de clases de servicios.}
+
+\subsection{Diseño procedimental}
+
+Mediante el uso de diagramas de secuencia, se detallan los aspectos más relevantes del funcionamiento de la aplicación.
+
+El siguiente diagrama de secuencia muestra, de forma general, la interacción entre el cliente web y la API REST desarrollada en el proceso de obtención de datos para su visualización.
+
+\imagen{diagramaSecuenciaClienteApi}{Ejemplo de diagrama de secuencia cliente-API.}
+
+El diagrama de secuencia mostrado a continuación ilustra el proceso de ejecución de una tarea de obtención de datos de GitHub. En este caso necesita dos peticiones para completarse, pero con la primera petición supera el límite y la segunda retorna un error de límite superado. Se puede observar el funcionamiento del gestor de tareas ante esa situación.
+
+\imagen{diagramaSecuenciaTarea}{Ejemplo de diagrama de secuencia de ejecución de una tarea.}
+
+\subsection{Diseño de interfaces}
+
+En esta parte se muestran los prototipos de las diferentes interfaces de la aplicación web.
+
+\imagen{mockInicio}{Pantalla de inicio.}
+
+\imagen{mockListaRepos}{Pantalla de listado de repositorios.}
+
+\imagen{mockRepo}{Pantalla de análisis visual de repositorio.}
+
+\imagen{mockListaPulls}{Pantalla de listado de \textit{pull requests}.}
+
+\imagen{mockPull}{Pantalla de análisis visual de \textit{pull request}.}
+
+\imagen{mockListaUsuarios}{Pantalla de listado de usuarios.}
+
+\imagen{mockUsuario}{Pantalla de análisis visual de usuario.}
