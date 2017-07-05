@@ -437,7 +437,7 @@ function repositoryItem(repositoryData) {
                 $('<div>', {
                     class: 'description',
                     html: $('<p>', {
-                        html: repositoryData.description || '<em>Sin descripción.</em>'
+                        text: repositoryData.description || '<em>Sin descripción.</em>'
                     })
                 }),
                 ,
