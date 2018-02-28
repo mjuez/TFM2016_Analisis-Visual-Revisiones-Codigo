@@ -49,13 +49,13 @@
     "json2csv": "^3.7.3",
     "mathjs": "^3.13.3",
     "moment": "^2.18.1",
-    "mongoose": "^4.9.3",
+    "mongoose": "4.9.3",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "ts-node": "^3.0.2",
     "tslint": "^5.0.0",
     "twix": "^1.1.5",
-    "typescript": "^2.2.2"
+    "typescript": "2.2.2"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
