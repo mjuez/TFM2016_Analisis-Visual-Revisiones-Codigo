@@ -6,8 +6,8 @@
     "COPY ./src/package*.json ./",
     "RUN npm install",
     "COPY ./src .",
-    "ENV PORT 80",
-    "EXPOSE 80",
+    "ENV PORT 3030",
+    "EXPOSE 3030",
     "CMD [ \"npm\", \"start\" ]"
   ]
 }
