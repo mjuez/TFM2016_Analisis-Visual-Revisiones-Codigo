@@ -1,5 +1,6 @@
 FROM node:carbon
 WORKDIR /usr/src/app
+RUN npm i gulp
 COPY package*.json ./
 RUN npm install
 COPY . .
