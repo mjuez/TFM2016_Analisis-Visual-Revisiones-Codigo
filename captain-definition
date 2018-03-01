@@ -1,13 +1,12 @@
 {
   "schemaVersion": 1,
   "dockerfileLines": [
-    "FROM node:carbon",
+    "FROM node:alpine",
     "WORKDIR /usr/src/app",
     "RUN npm i gulp",
     "COPY ./src ./",
     "RUN npm install --unsafe-perm",
-    "ENV PORT 3030",
-    "EXPOSE 3030",
+    "ENV PORT 8080",
     "CMD [\"npm\",\"start\"]"
   ]
 }
