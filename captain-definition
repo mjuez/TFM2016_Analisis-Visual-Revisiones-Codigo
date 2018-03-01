@@ -5,7 +5,7 @@
     "WORKDIR /usr/src/app",
     "RUN npm i gulp",
     "COPY ./src ./",
-    "RUN npm install",
+    "RUN npm install --unsafe-perm",
     "ENV PORT 3030",
     "EXPOSE 3030",
     "CMD [\"npm\",\"start\"]"
