@@ -4,9 +4,8 @@
     "FROM node:carbon",
     "WORKDIR /usr/src/app",
     "RUN npm i gulp",
-    "COPY ./src/package*.json ./",
-    "RUN npm install",
     "COPY ./src ./",
+    "RUN npm install",
     "ENV PORT 3030",
     "EXPOSE 3030",
     "CMD [\"npm\",\"start\"]"
