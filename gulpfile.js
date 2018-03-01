@@ -13,7 +13,7 @@ gulp.task('build-api', () => {
 });
 
 gulp.task('build-client', () => {
-    return gulp.src('**/src/client/**/*.*')
+    return gulp.src('src/client/**/*.*')
         .pipe(gulp.dest('release/client'));
 });
 
