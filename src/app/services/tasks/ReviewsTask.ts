@@ -8,22 +8,22 @@ import { IReviewService } from "../../services/ReviewService";
 import { GitHubUtil } from "../../util/GitHubUtil";
 import { AbstractPullRequestTask } from "./AbstractPullRequestTask";
 import { IRepositories } from "../../data/IRepositories";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 
 /**
  * Reviews Task interface.
- * 
+ *
  * This task type is intended to obtain all reviews
  * from a GitHub repository. It loops all pull requests
  * and gets all reviews of each one.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IReviewsTask extends ITask { }
 
 /**
  * Reviews task implementation.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask {
@@ -33,7 +33,7 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
 
     /**
      * Creates the task instance.
-     * 
+     *
      * @param repos         Repositories list
      * @param reviewService Review service.
      * @param api           optional GitHub API.
@@ -47,7 +47,7 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
     /**
      * Process all repository pull request for
      * getting the reviews of each one.
-     * 
+     *
      * @async
      * @param pulls Pull requests list.
      */
@@ -71,7 +71,7 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
      * Makes a GitHub API Call.
      * Obtains and processes all pages of reviews in
      * a pull request.
-     * 
+     *
      * @async
      * @param pullNumber    pull request number.
      */
@@ -95,7 +95,7 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
     /**
      * Updates the reviews stats (count)
      * of a pull request.
-     * 
+     *
      * @param pull  Pull Request entity.
      */
     private async updateStats(pull: IPullRequestEntity): Promise<void> {
@@ -105,11 +105,13 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
             pull_request_number: pull.document.number,
             "repository.name": new RegExp(pull.document.base.repo.name, "i"),
             "repository.owner": new RegExp(pull.document.base.repo.owner.login, "i")
-        }
+        };
         try {
             let reviewsCount: number = await reviewRepo.count(filter);
-            console.log(`Updating pull reviews count, pull: #${pull.document.number} (${pull.document.base.repo.owner.login}/${pull.document.base.repo.name}, count: ${reviewsCount})`);
-            pull.document["reviews"] = reviewsCount;
+            console.log(`Updating pull reviews count,
+                 pull: #${pull.document.number} (${pull.document.base.repo.owner.login}/${pull.document.base.repo.name},
+                 count: ${reviewsCount})`);
+            pull.document.reviews = reviewsCount;
             await pullRepo.update(pull);
         } catch (error) {
             this.emit("db:error", error);

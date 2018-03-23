@@ -4,21 +4,21 @@ import { ReviewCommentEntity } from "../../entities/ReviewCommentEntity";
 import { IReviewCommentService } from "../../services/ReviewCommentService";
 import { GitHubUtil } from "../../util/GitHubUtil";
 import { IRepositories } from "../../data/IRepositories";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 
 /**
  * Review Comment Task interface.
- * 
+ *
  * This task type is intended to obtain all review
  * comments from a GitHub repository.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IReviewCommentsTask extends ITask { }
 
 /**
  * Review Comment task implementation.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTask {
@@ -31,7 +31,7 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
 
     /**
      * Creates the task instance.
-     * 
+     *
      * @param repositories          Repositories list.
      * @param reviewCommentService  Review comment service.
      * @param api                   optional GitHub API.
@@ -45,7 +45,7 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
 
     /**
      * Runs the review comment task.
-     * 
+     *
      * @async
      */
     public async run(): Promise<void> {
@@ -61,7 +61,7 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
     /**
      * Makes a GitHub API Call.
      * Gets all pages of review comments.
-     * 
+     *
      * @async
      */
     private async makeApiCall(): Promise<void> {
@@ -73,7 +73,8 @@ export class ReviewCommentsTask extends GitHubTask implements IReviewCommentsTas
                 direction: `asc`,
                 page: this.entity.currentPage
             });
-            await GitHubUtil.processPage(page, this.API, ReviewCommentEntity.toReviewCommentEntityArray, this._reviewCommentService, this.updateCurrentPage);
+            await GitHubUtil.processPage(page, this.API, ReviewCommentEntity.toReviewCommentEntityArray,
+                this._reviewCommentService, this.updateCurrentPage);
         } catch (error) {
             this.emitError(error);
         }

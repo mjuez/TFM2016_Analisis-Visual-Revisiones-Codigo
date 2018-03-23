@@ -3,23 +3,23 @@ import { IPullRequestEntity, PullRequestEntity } from "../../entities/PullReques
 import { AbstractPullRequestTask } from "./AbstractPullRequestTask";
 import { IPullRequestService } from "../PullRequestService";
 import { IRepositories } from "../../data/IRepositories";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 
 /**
  * Pull Requests Task interface.
- * 
+ *
  * This task type is intended to obtain all data of every
  * pull request of a repository. Is necessary because when
  * getting all pull requests paginated from GitHub API, some
  * pull request data is not provided.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IPullRequestsTask extends ITask { }
 
 /**
  * Pull Requests task implementation.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class PullRequestsTask extends AbstractPullRequestTask implements IPullRequestsTask {
@@ -29,7 +29,7 @@ export class PullRequestsTask extends AbstractPullRequestTask implements IPullRe
 
     /**
      * Creates the task instance.
-     * 
+     *
      * @param repos                 Repositories list.
      * @param pullRequestService    Pull Request service.
      * @param api                   optional GitHub API.
@@ -44,7 +44,7 @@ export class PullRequestsTask extends AbstractPullRequestTask implements IPullRe
      * Processes a pull request entity list.
      * Each pull request fires a GitHub API call for obtaining
      * all data of that pull request.
-     * 
+     *
      * @async
      * @param pulls List of pull request entities.
      * @returns if successfull processing.
@@ -69,7 +69,7 @@ export class PullRequestsTask extends AbstractPullRequestTask implements IPullRe
     /**
      * Makes a GitHub API call for obtaining all pull request
      * data given its number.
-     * 
+     *
      * @async
      * @param pullNumber Pull Request number.
      * @returns obtained pull request entity.
@@ -81,7 +81,7 @@ export class PullRequestsTask extends AbstractPullRequestTask implements IPullRe
                 repo: this.entity.repository,
                 number: pullNumber
             });
-            console.log(`[${new Date()}] - Getting pull #${pullNumber}, remaining reqs: ${pullData.meta['x-ratelimit-remaining']}`);
+            console.log(`[${new Date()}] - Getting pull #${pullNumber}, remaining reqs: ${pullData.meta["x-ratelimit-remaining"]}`);
             return PullRequestEntity.toEntity(pullData.data);
         } catch (error) {
             throw error;

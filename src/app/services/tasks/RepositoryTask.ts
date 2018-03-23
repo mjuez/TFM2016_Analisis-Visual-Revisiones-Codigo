@@ -4,21 +4,21 @@ import { RepositoryPullRequestFilter, PullRequestFilterFactory } from "../../dat
 import { IRepositoryEntity, RepositoryEntity } from "../../entities/RepositoryEntity";
 import { IRepositoryService } from "../../services/RepositoryService";
 import { IRepositories } from "../../data/IRepositories";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 
 /**
  * Repository Task interface.
- * 
+ *
  * This task type is intended to obtain a repository
  * data from GitHub.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IRepositoryTask extends ITask { }
 
 /**
  * Repository task implementation.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class RepositoryTask extends GitHubTask implements IRepositoryTask {
@@ -31,7 +31,7 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
 
     /**
      * Creates the task instance.
-     * 
+     *
      * @param repositories  Repositories list.
      * @param repoService   Repository service.
      * @param api           optional GitHub API.
@@ -47,7 +47,7 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
      * Runs the repository task.
      * Retrieves the repository data from GitHub
      * and then updates its stats.
-     * 
+     *
      * @async
      */
     public async run(): Promise<void> {
@@ -66,7 +66,7 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
     /**
      * Makes a GitHub API call.
      * Obtains repository data.
-     * 
+     *
      * @async
      */
     private async makeApiCall(): Promise<IRepositoryEntity> {
@@ -75,7 +75,8 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
                 owner: this.entity.owner,
                 repo: this.entity.repository
             });
-            console.log(`[${new Date()}] - Getting repository #${this.entity.owner}/${this.entity.repository}, remaining reqs: ${repoData.meta['x-ratelimit-remaining']}`);
+            console.log(`[${new Date()}] - Getting repository #${this.entity.owner}/${this.entity.repository},
+                 remaining reqs: ${repoData.meta["x-ratelimit-remaining"]}`);
             return RepositoryEntity.toEntity(repoData.data);
         } catch (error) {
             this.emit("api:error", error);
@@ -85,7 +86,7 @@ export class RepositoryTask extends GitHubTask implements IRepositoryTask {
     /**
      * Updates the pull requests count, reviews count
      * and review comments count of the repository.
-     * 
+     *
      * @param entity    Repository entity.
      * @returns updated repository entity.
      */
