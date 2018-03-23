@@ -27,7 +27,7 @@ import { IUserTaskUtil, UserTaskUtil } from "../../util/UserTaskUtil";
 /**
  * Task Factory.
  * Builds specific tasks from a task entity.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class TaskFactory {
@@ -40,7 +40,7 @@ export class TaskFactory {
 
     /**
      * Creates the factory.
-     * 
+     *
      * @param repositories  Repositories list.
      * @param services      Services list.
      */
@@ -51,7 +51,7 @@ export class TaskFactory {
 
     /**
      * Builds a specific task from a task entity.
-     * 
+     *
      * @async
      * @param entity    Task entity.
      * @returns A task.

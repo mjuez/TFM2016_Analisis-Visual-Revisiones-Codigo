@@ -5,17 +5,17 @@ import { AbstractUserTask } from "./AbstractUserTask";
 
 /**
  * User review comments Task interface.
- * 
+ *
  * This task type is intended to obtain the authors
  * of all review comments of a repository.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IUsersReviewCommentsTask extends ITask { }
 
 /**
  * User review comments task implementation.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersReviewCommentsTask {
@@ -25,7 +25,7 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
      * Obtains all review comments of a repository from database
      * and processes its users.
      * At the end of the task, users stats are updated.
-     * 
+     *
      * @async
      */
     public async run(): Promise<void> {
@@ -43,7 +43,7 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
             for (let page: number = 1; page <= numPages; page++) {
                 let reviewComments: IReviewCommentEntity[] = await reviewCommentRepo.retrieve({ filter, page, startingFrom });
                 let success: boolean = await this.processReviewComments(reviewComments);
-                if (!success) return;
+                if (!success) { return; }
             }
             await this._userTaskUtil.updateStats(this.entity.parentTask.document._id, this.emitError);
             await this.completeTask();
@@ -54,7 +54,7 @@ export class UsersReviewCommentsTask extends AbstractUserTask implements IUsersR
 
     /**
      * Processes the users of all review comments.
-     * 
+     *
      * @async
      * @param reviewComments    Review Comment List.
      * @returns if successfull processing.

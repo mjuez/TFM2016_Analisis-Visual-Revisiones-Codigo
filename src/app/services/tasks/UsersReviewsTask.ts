@@ -5,17 +5,17 @@ import { AbstractUserTask } from "./AbstractUserTask";
 
 /**
  * User reviews Task interface.
- * 
+ *
  * This task type is intended to obtain the authors
  * of all reviews of a repository.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IUsersReviewsTask extends ITask { }
 
 /**
  * User reviews task implementation.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsTask {
@@ -24,7 +24,7 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
      * Runs the task.
      * Obtains all reviews of a repository from database
      * and processes its users.
-     * 
+     *
      * @async
      */
     public async run(): Promise<void> {
@@ -42,7 +42,7 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
             for (let page: number = 1; page <= numPages; page++) {
                 let reviews: IReviewEntity[] = await reviewRepo.retrieve({ filter, page, startingFrom });
                 let success: boolean = await this.processReviews(reviews);
-                if (!success) return;
+                if (!success) { return; }
             }
             await this.completeTask();
         } catch (error) {
@@ -52,7 +52,7 @@ export class UsersReviewsTask extends AbstractUserTask implements IUsersReviewsT
 
     /**
      * Processes the users of all reviews.
-     * 
+     *
      * @async
      * @param reviews   Review List.
      * @returns if successfull processing.
