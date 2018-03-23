@@ -1,12 +1,12 @@
 import * as cheerio from "cheerio";
 import * as rp from "request-promise";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 import { IEntity } from "../entities/IEntity";
 import { IMultiplePersistenceService } from "../services/IPersistenceService";
 
 /**
  * GitHub Utilities.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class GitHubUtil {
@@ -14,7 +14,7 @@ export class GitHubUtil {
     /**
      * Extracts the next page number from page links string
      * obtained from GitHub API.
-     * 
+     *
      * @param link  all links for navigating pages (first, last, previous, next).
      * @returns the number of the next page or null if there is no next page.
      */
@@ -35,7 +35,7 @@ export class GitHubUtil {
      *  - Pull Request Number.
      *  - Repository owner.
      *  - Repository name.
-     * 
+     *
      * @param pullRequestLink   link string.
      * @returns an object containing the three fields.
      */
@@ -63,7 +63,7 @@ export class GitHubUtil {
      * If the response contains the description META TAG
      * means that the repository exists and is not a 404
      * error page.
-     * 
+     *
      * @async
      * @param owner         Repository owner login.
      * @param repository    Repository name.
@@ -71,15 +71,15 @@ export class GitHubUtil {
      */
     public static async checkRepository(owner: string, repository: string): Promise<boolean> {
         try {
-            const options = {
+            const options: Object = {
                 uri: `https://github.com/${owner}/${repository}`,
                 transform: (body: string) => {
                     return cheerio.load(body);
                 }
             };
-            const $ = await rp(options);
-            const description = $('meta[name="description"]').attr('content');
-            return description != undefined;
+            const $: any = await rp(options);
+            const description: any = $("meta[name=\"description\"]").attr("content");
+            return description !== undefined;
         } catch (error) {
             return false;
         }
@@ -90,7 +90,7 @@ export class GitHubUtil {
      * Builds the entities with obtained data and stores
      * them into database. It processes next pages if
      * there are more.
-     * 
+     *
      * @param page                  A page obtained from
      *                              GitHub API.
      * @param api                   GitHub API wrapper.
@@ -100,7 +100,9 @@ export class GitHubUtil {
      * @param updatePageHandler     Handler for updating the
      *                              task current page.
      */
-    public static async processPage(page: any, api: GitHubAPI, entityArrayHandler: any, service: IMultiplePersistenceService<any>, updatePageHandler: any): Promise<void> {
+    public static async processPage(page: any, api: GitHubAPI, entityArrayHandler: any,
+        service: IMultiplePersistenceService<any>, updatePageHandler: any): Promise<void> {
+
         const entities: IEntity<any>[] = entityArrayHandler(page.data);
         try {
             await service.createOrUpdateMultiple(entities);
