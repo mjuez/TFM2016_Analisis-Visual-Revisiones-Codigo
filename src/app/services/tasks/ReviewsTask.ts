@@ -81,9 +81,8 @@ export class ReviewsTask extends AbstractPullRequestTask implements IReviewsTask
                 owner: this.entity.owner,
                 repo: this.entity.repository,
                 number: pullNumber,
+                page: this.entity.currentPage,
                 per_page: 100,
-                direction: `asc`,
-                page: this.entity.currentPage
             });
             await GitHubUtil.processPage(page, this.API, ReviewEntity.toReviewEntityArray, this._reviewService, this.updateCurrentPage);
         } catch (error) {
