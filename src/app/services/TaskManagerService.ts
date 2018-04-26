@@ -21,19 +21,19 @@ import { IServices } from "./IServices";
 
 /**
  * TaskManager error interface.
- * 
+ *
  * @author Mario Juez Gil <mario[at]mjuez.com
  */
 interface TaskManagerError {
-    
+
     /** Error code. */
-    code: number,
+    code: number;
 
     /** Error message. */
-    message: Object
+    message: Object;
 
     /** Continue date. */
-    continue_at: Date
+    continue_at: Date;
 
 }
 
@@ -156,7 +156,7 @@ export class TaskManagerService implements ITaskManagerService {
 
     /**
      * Gets a list of pending tasks.
-     * 
+     *
      * @async
      * @param page  optional page number
      * @returns a list of pending tasks.
@@ -169,7 +169,7 @@ export class TaskManagerService implements ITaskManagerService {
 
     /**
      * Gets a list of all tasks.
-     * 
+     *
      * @async
      * @param page  optional page number
      * @returns a list of all tasks.
@@ -184,7 +184,7 @@ export class TaskManagerService implements ITaskManagerService {
      * A task is for retrieving all data about
      * pull requests, reviews, users, etc of a
      * specific GitHub repository.
-     * 
+     *
      * @async
      * @param owner         repository owner login.
      * @param repository    repository name.
@@ -193,7 +193,7 @@ export class TaskManagerService implements ITaskManagerService {
     public async createTask(owner: string, repository: string): Promise<boolean> {
         const isPending: boolean = await this.isPending(owner, repository);
         if (isPending) return true;
-        
+
         const exists: boolean = await GitHubUtil.checkRepository(owner, repository);
         if (exists) {
             const success: boolean = await this.saveTaskAndSubTasks(owner, repository);
@@ -208,7 +208,7 @@ export class TaskManagerService implements ITaskManagerService {
     /**
      * Checks if the pair owner/repository is
      * in any pending task.
-     * 
+     *
      * @async
      * @param owner         repository owner login.
      * @param repository    repository name.
@@ -223,7 +223,7 @@ export class TaskManagerService implements ITaskManagerService {
 
     /**
      * Saves a task and all related subtasks.
-     * 
+     *
      * @async
      * @param owner         repository owner login.
      * @param repository    repository name.
@@ -256,7 +256,7 @@ export class TaskManagerService implements ITaskManagerService {
     /**
      * Updates the current task.
      * Gets the next task (if any) and sets as current task.
-     * 
+     *
      * @async
      */
     private updateCurrentTask = async (): Promise<void> => {
@@ -290,7 +290,7 @@ export class TaskManagerService implements ITaskManagerService {
     /**
      * Handles a database error.
      * Stops the task manager and retries in one minute.
-     * 
+     *
      * @param error Database error.
      */
     private handleDBError = (error): void => {
@@ -313,7 +313,7 @@ export class TaskManagerService implements ITaskManagerService {
      * at this moment, we will retry in one minute.
      * If the error code is other (like rate limit exceed)
      * we will retry when the API tells to retry.
-     * 
+     *
      * @param error API error.
      */
     private handleAPIError = (error): void => {
@@ -324,7 +324,7 @@ export class TaskManagerService implements ITaskManagerService {
         } else {
             let continue_at: Date;
             if (error.code === 403) {
-                let milis: number = (<number>error.headers['x-ratelimit-reset']) * 1000;
+                let milis: number = (<number>error.headers["x-ratelimit-reset"]) * 1000;
                 continue_at = new Date(milis);
             } else {
                 let date: Date = new Date();
@@ -335,7 +335,7 @@ export class TaskManagerService implements ITaskManagerService {
                 code: error.code,
                 message: error.message,
                 continue_at: continue_at
-            }
+            };
             this.handleError();
         }
     }
