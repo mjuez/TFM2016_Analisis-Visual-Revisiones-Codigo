@@ -47,8 +47,7 @@ export class TaskRoutes {
         });
 
         router.post("/task/:owner/:repository", (req: express.Request, res: express.Response) => {
-            // controller.createTask(req, res);
-            res.json({ message: "task creation is disabled. we apologize for the inconvenience." });
+            controller.createTask(req, res);
         });
 
         return router;

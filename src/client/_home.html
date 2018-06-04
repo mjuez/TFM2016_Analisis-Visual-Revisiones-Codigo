@@ -1,19 +1,47 @@
 <h1 class="ui header">Pedir un repositorio a GitHub</h1>
 <div class="ui hidden divider"></div>
+<div class="ui success message hidden" id="home_success">
+    <i class="close icon"></i>
+    <div class="header">
+        Petición realizada
+    </div>
+    <p>Hemos encolado tu petición.</p>
+</div>
+<div class="ui error message hidden" id="home_fail">
+    <i class="close icon"></i>
+    <div class="header">
+        Error
+    </div>
+    <p>No se puede procesar tu petición en estos momentos.</p>
+</div>
+<div class="ui two column stackable grid">
+    <div class="column">
+        <div class="ui huge fluid input">
+            <input type="text" id="home_owner_input" placeholder="Propietario">
+        </div>
+    </div>
+    <div class="column">
+        <div class="ui huge fluid input">
+            <input type="text" id="home_repository_input" placeholder="Repositorio">
+        </div>
+    </div>
+</div>
+<div class="ui one column stackable grid">
+    <div class="column center aligned">
+        <div type="submit" class="ui huge violet button" id="home_go_button">¡Adelante!</div>
+    </div>
+</div>
+<div class="ui hidden divider"></div>
 <div class="ui icon info message">
     <i class="info icon"></i>
     <div class="content">
         <div class="header">
-            La petición de repositorios está deshabilitada.
+            ¿Por qué debo pedir un repositorio a GitHub?
         </div>
-        <p>
-            La funcionalidad de petición de repositorios software, aunque es una
-            de las principales características de esta aplicación, supone el 
-            almacenamiento de grandes cantidades de datos en nuestro servidor.
-            <br />
-            Permitir la libre obtención de nuevos repositorios saturaría el 
-            pequeño servidor de base de datos que estamos utilizando para esta
-            demo.
+        <p>Las peticiones a la API de GitHub son limitadas, lo que podría provocar que en algún momento esta aplicación no pudiese
+            ofrecer servicio.
+            <br /> Al pedir un repositorio, éste es almacenado en nuestras bases de datos permitiendo que la información
+            esté disponible en todo momento <i class="smile icon"></i>.
         </p>
     </div>
 </div>
