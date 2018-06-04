@@ -3,13 +3,13 @@ import { IRepositories } from "../../data/IRepositories";
 import { IPullRequestRepository } from "../../data/PullRequestRepository";
 import { RepositoryPullRequestFilter, PullRequestFilterFactory } from "../../data/filters/PullRequestFilter";
 import { IPullRequestEntity } from "../../entities/PullRequestEntity";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 
 /**
  * Abstract Task which implements shared functionality
  * for those tasks that loops over the pull request list
  * for obtaining data linked to a specific pull request.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export abstract class AbstractPullRequestTask extends GitHubTask {
@@ -19,7 +19,7 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
 
     /**
      * Creates the task instance.
-     * 
+     *
      * @param repos                 Repositories list.
      * @param api                   optional GitHub API.
      * @param apiAuth               optional GitHub API Authorization.
@@ -34,7 +34,7 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
      * Loops over all pull requests from a repository and processes
      * each one to obtain some kind of entities or data related with
      * the pull requests.
-     * 
+     *
      * @async
      */
     public async run(): Promise<void> {
@@ -48,7 +48,7 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
             for (let page: number = 1; page <= numPages; page++) {
                 const pulls: IPullRequestEntity[] = await pullRepo.retrieve({ filter, page, startingFrom });
                 const success: boolean = await this.processPullRequests(pulls);
-                if (!success) return;
+                if (!success) { return; }
             }
             await this.completeTask();
         } catch (error) {
@@ -60,7 +60,7 @@ export abstract class AbstractPullRequestTask extends GitHubTask {
      * Template Method.
      * Pull Requests processing for obtaining some kind
      * of entities or data related with each pull request.
-     * 
+     *
      * @param pulls Pull Request entities list.
      * @returns if successfull processing.
      */

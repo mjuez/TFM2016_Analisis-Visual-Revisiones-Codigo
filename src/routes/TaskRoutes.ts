@@ -16,7 +16,7 @@ export class TaskRoutes {
 
     /**
      * Class constructor. Injects controller and router dependencies.
-     * 
+     *
      * @param controller    Task Manager controller.
      * @param router        A express router.
      */
@@ -27,7 +27,7 @@ export class TaskRoutes {
 
     /**
      * Gets Task Manager API routes.
-     * 
+     *
      * @returns  the router.
      */
     public get routes(): express.Router {
@@ -47,7 +47,8 @@ export class TaskRoutes {
         });
 
         router.post("/task/:owner/:repository", (req: express.Request, res: express.Response) => {
-            controller.createTask(req, res);
+            // controller.createTask(req, res);
+            res.json({ message: "task creation is disabled. we apologize for the inconvenience." });
         });
 
         return router;

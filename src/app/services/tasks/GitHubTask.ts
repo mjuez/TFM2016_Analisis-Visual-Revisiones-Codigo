@@ -1,14 +1,14 @@
 import { ITask } from "./ITask";
 import { ITaskEntity } from "../../entities/TaskEntity";
 import { ITaskRepository } from "../../data/TaskRepository";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 import * as BluebirdPromise from "bluebird";
 import * as Events from "events";
 
 /**
  * Abstract Task which implements shared functionality
  * for those tasks that obtains data from GitHub API.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export abstract class GitHubTask extends Events.EventEmitter implements ITask {
@@ -45,7 +45,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     /**
      * Creates the API wrapper and authenticates to it.
-     * 
+     *
      * @param api       optional GitHub API wrapper dependency injection.
      * @param apiAuth   optional GitHub API authorization.
      */
@@ -58,9 +58,9 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
         this._api.authenticate(apiAuth);
     }
 
-    /** 
+    /**
      * Gets the GitHub API wrapper.
-     * 
+     *
      * @returns GitHub API wrapper.
      */
     public get API(): GitHubAPI {
@@ -69,7 +69,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     /**
      * Gets the task entity.
-     * 
+     *
      * @returns task entity.
      */
     public get entity(): ITaskEntity {
@@ -79,7 +79,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
     /**
      * Sets the task entity.
      * Setting the entity implies persisting it.
-     * 
+     *
      * @async
      * @param entity    task entity.
      */
@@ -94,7 +94,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     /**
      * Persists the task.
-     * 
+     *
      * @async
      */
     public async persist(): Promise<void> {
@@ -112,7 +112,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     /**
      * Updates the current page of the task.
-     * 
+     *
      * @async
      * @param pageNumber    new current page.
      */
@@ -123,7 +123,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     /**
      * Starting a task is setting the start date to now.
-     * 
+     *
      * @async
      */
     protected async startTask(): Promise<void> {
@@ -142,7 +142,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
      * Completes the task.
      * Sets the ending date and isCompleted to true.
      * Also emits a task:completed event.
-     * 
+     *
      * @async
      */
     protected async completeTask(): Promise<void> {
@@ -160,11 +160,11 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
      * Emits an error event.
      * It emits two types of error: API error,
      * and database error.
-     * 
+     *
      * @param error the error object.
      */
     protected emitError = (error: any): void => {
-        const isApiError: boolean = 'code' in error;
+        const isApiError: boolean = "code" in error;
         if (isApiError) {
             this.emit("api:error", error);
         } else {
@@ -174,7 +174,7 @@ export abstract class GitHubTask extends Events.EventEmitter implements ITask {
 
     /**
      * Runs the task.
-     * 
+     *
      * @async
      */
     public abstract async run(): Promise<void>;

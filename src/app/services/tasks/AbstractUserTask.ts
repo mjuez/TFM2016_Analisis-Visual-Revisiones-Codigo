@@ -2,12 +2,12 @@ import { GitHubTask } from "./GitHubTask";
 import { IRepositories } from "../../data/IRepositories";
 import { IUserService } from "../UserService";
 import { IUserTaskUtil } from "../../util/UserTaskUtil";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 
 /**
  * Abstract Task which implements shared functionality
  * for those tasks that obtains users from GitHub API.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export abstract class AbstractUserTask extends GitHubTask {
@@ -23,7 +23,7 @@ export abstract class AbstractUserTask extends GitHubTask {
 
     /**
      * Creates the task with the injected dependencies.
-     * 
+     *
      * @param repos         Repositories.
      * @param userService   User service.
      * @param userTaskUtil  User task utils.
@@ -42,7 +42,7 @@ export abstract class AbstractUserTask extends GitHubTask {
      * If the user was not retrieved in this task
      * it will be obtained, then the task is updated
      * to process the next one.
-     * 
+     *
      * @async
      * @param userLogin     user login.
      * @param lastProcessed id of last user processed.

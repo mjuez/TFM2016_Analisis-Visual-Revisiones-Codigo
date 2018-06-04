@@ -4,23 +4,23 @@ import { IPullRequestEntity, PullRequestEntity } from "../../entities/PullReques
 import { IPullRequestService } from "../../services/PullRequestService";
 import { GitHubUtil } from "../../util/GitHubUtil";
 import { IRepositories } from "../../data/IRepositories";
-import * as GitHubAPI from "github";
+import * as GitHubAPI from "@octokit/rest";
 
 /**
  * Main Task interface.
- * 
+ *
  * This task type is the first task. It obtains
  * all pull requests of a repository through pages
  * of 100 pull requests. The pull request data obtained
  * in this task is incomplete.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export interface IMainTask extends ITask { }
 
 /**
  * Main task implementation.
- * 
+ *
  * @author Mario Juez <mario[at]mjuez.com>
  */
 export class MainTask extends GitHubTask implements IMainTask {
@@ -33,7 +33,7 @@ export class MainTask extends GitHubTask implements IMainTask {
 
     /**
      * Creates the task instance.
-     * 
+     *
      * @param repositories  Repositories list.
      * @param pullService   Pull request service.
      * @param api           optional GitHub API.
@@ -47,7 +47,7 @@ export class MainTask extends GitHubTask implements IMainTask {
 
     /**
      * Runs the main task.
-     * 
+     *
      * @async
      */
     public async run(): Promise<void> {
@@ -63,7 +63,7 @@ export class MainTask extends GitHubTask implements IMainTask {
     /**
      * Makes a GitHub API Call.
      * Gets all pages of summarized pull requests.
-     * 
+     *
      * @async
      */
     private async makeApiCall(): Promise<void> {
@@ -85,14 +85,14 @@ export class MainTask extends GitHubTask implements IMainTask {
     /**
      * Converts the page to an array of Pull Request
      * entities, then gets and process the next page.
-     * 
+     *
      * @async
      * @param page  GitHub page.
      */
     private async processPage(page: any): Promise<void> {
         const api: GitHubAPI = this.API;
         const pullRequests: IPullRequestEntity[] = PullRequestEntity.toPullRequestEntityArray(page.data);
-        console.log(`[${new Date()}] - Getting page ${this.entity.currentPage}, remaining reqs: ${page.meta['x-ratelimit-remaining']}`);
+        console.log(`[${new Date()}] - Getting page ${this.entity.currentPage}, remaining reqs: ${page.meta["x-ratelimit-remaining"]}`);
         try {
             await this._pullService.createOrUpdateMultiple(pullRequests);
             const links: string = page.meta.link;
@@ -107,9 +107,7 @@ export class MainTask extends GitHubTask implements IMainTask {
             try {
                 const nextPage: any = await api.getNextPage(page);
                 await this.processPage(nextPage);
-            }catch(error){
-                throw error;
-            }
+            } catch(error) { throw error; }
         }
     }
 }
