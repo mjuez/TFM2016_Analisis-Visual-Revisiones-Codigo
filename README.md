@@ -3,6 +3,7 @@
 <a href="../../blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT license" /></a>
 <a href="https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo"><img src="https://travis-ci.org/mjuez/TFM2016_Analisis-Visual-Revisiones-Codigo.svg?branch=master" alt="Travis build" /></a>
 <a href="https://codebeat.co/projects/github-com-mjuez-tfm2016_analisis-visual-revisiones-codigo-master"><img src="https://codebeat.co/badges/07bbfa7d-f5dd-4c96-a20e-a48517dfa89e" alt="Codebeat GPA" /></a>
+<a href="https://zenodo.org/badge/latestdoi/69180490"><img src="https://zenodo.org/badge/69180490.svg" alt="DOI"></a>
 </p>
 
 ## Descripción
@@ -11,7 +12,7 @@ Anvireco es una herramienta para la extracción y visualización de datos sobre 
 
 ### Autor
 
-- Mario Juez - [mario@mjuez.com](mailto:mario@mjuez.com)
+- Mario Juez - [mariojg@ubu.es](mailto:mariojg@ubu.es)
 
 ### Tutores
 
