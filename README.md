@@ -5,6 +5,9 @@
 <a href="https://codebeat.co/projects/github-com-mjuez-tfm2016_analisis-visual-revisiones-codigo-master"><img src="https://codebeat.co/badges/07bbfa7d-f5dd-4c96-a20e-a48517dfa89e" alt="Codebeat GPA" /></a>
 <a href="https://zenodo.org/badge/latestdoi/69180490"><img src="https://zenodo.org/badge/69180490.svg" alt="DOI"></a>
 </p>
+<p align="center">
+    🏆 <a href="https://www.sistedes.es/premios/premios-sistedes-accenture-technology-tfg-tfm-2018" target="_BLANK">1er Premio nacional SISTEDES ACCENTURE 2018 a Mejor Trabajo Fin de Máster</a>
+</p>
 
 ## Descripción
 
